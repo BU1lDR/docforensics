@@ -122,6 +122,7 @@ def test_pdf_meta_keys(tmp_path):
     assert all(isinstance(v, str) for v in meta.values())
 
 
+@pytest.mark.ocr
 def test_read_stage_via_run_case(tmp_path):
     digital = make_pdf(tmp_path / "d.pdf").read_bytes()
     scan = pymupdf.open()
