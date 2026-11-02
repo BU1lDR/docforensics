@@ -60,6 +60,11 @@ def _word(run: list[tuple[dict, dict]], wid: str, rot: pymupdf.Matrix, scale: fl
                 font=span["font"], size=span["size"], color=f"#{span['color']:06x}")
 
 
+def page_words(page: pymupdf.Page, prefix: str, scale: float) -> list[Word]:
+    """The words of an open page's text layer, with boxes in the pixels of the page rendered at 72 * scale dpi."""
+    return [_word(run, f"{prefix}-w{k}", page.rotation_matrix, scale) for k, run in enumerate(_runs(page), 1)]
+
+
 def read_pdf_page(pdf: Path, index: int, doc_id: str, out_png: Path, dpi: int = 200) -> Page:
     """Render page `index` (0-based) to out_png and read its words. A page without a usable text layer is
     marked for OCR with no words and quality_class "poor" until the OCR step has measured it."""
@@ -70,7 +75,7 @@ def read_pdf_page(pdf: Path, index: int, doc_id: str, out_png: Path, dpi: int = 
         pix = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), alpha=False)
         pix.save(str(out_png))
         n = index + 1
-        words = [_word(run, f"{doc_id}-p{n}-w{k}", page.rotation_matrix, scale) for k, run in enumerate(_runs(page), 1)]
+        words = page_words(page, f"{doc_id}-p{n}", scale)
         usable = layer_is_usable(words) and not _mostly_invisible(page)
         return Page(n=n, width=pix.width, height=pix.height, dpi=dpi, image_path=Path(out_png).as_posix(),
                     read_mode="text-layer" if usable else "ocr", quality_class="text-layer" if usable else "poor",

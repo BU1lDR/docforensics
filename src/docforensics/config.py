@@ -20,6 +20,9 @@ class Thresholds:
     max_pages: int = 20
     max_docs: int = 10
     stage_timeout_s: float = 120.0
+    max_revisions: int = 16           # revisions of one PDF that are opened and compared
+    max_revision_runs: int = 12       # changed runs listed one by one between two revisions; more is one finding
+    max_diff_words: int = 5000        # words on a page, in either revision, that are compared
     # page-quality classes for OCR pages (docs/spike.md; refit on the dev split)
     sharp_good: float = 0.24
     sharp_poor: float = 0.18
