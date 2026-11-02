@@ -1,7 +1,7 @@
 """What every stage uses to raise a finding: ids, audit, limitations, demotion."""
 from typing import TYPE_CHECKING
 
-from .model import Case, Evidence, Finding
+from .model import Case, Evidence, Field, Finding
 
 if TYPE_CHECKING:  # pipeline imports this module; the type is only needed for annotations
     from .pipeline import Ctx
@@ -10,6 +10,11 @@ if TYPE_CHECKING:  # pipeline imports this module; the type is only needed for a
 def doc_evidence(doc_id: str, note: str = "whole document") -> Evidence:
     """Evidence that points at a whole document: page 0 and an empty box. Overlays and crops skip it."""
     return Evidence(doc=doc_id, page=0, box=(0.0, 0.0, 0.0, 0.0), note=note)
+
+
+def field_evidence(f: Field, note: str = "") -> Evidence:
+    """Evidence that points at one extracted field: where it sits and the value read there."""
+    return Evidence(doc=f.doc, page=f.page, box=f.box, note=note, field_id=f.id, value=f.value)
 
 
 def add_findings(case: Case, ctx: "Ctx", drafts: list[Finding]) -> list[Finding]:
