@@ -5,23 +5,16 @@ import stat
 
 import pytest
 
-from datagen.fictional import identity
-from datagen.layouts import money
-from datagen.layouts.statement import draw_statement
-from datagen.manipulate import d1_incremental_edit
 from docforensics.cli import main
 from docforensics.store import CaseDir, load_case
-from tests.helpers import pdf_bytes
+from tests.helpers import d1_edited_statement, pdf_bytes
 
 NEW = "9,99,999.00"
 
 
 @pytest.fixture
 def edited():
-    """A drawn statement with one credit re-typed in an incremental save."""
-    drawn = draw_statement(identity(1), rows=12, seed=1)
-    pdf, _ = d1_incremental_edit(drawn.pdf, money(next(r["credit"] for r in drawn.truth["rows"] if r["credit"])), NEW)
-    return pdf
+    return d1_edited_statement(NEW)
 
 
 def cli(tmp_path, capsys, *args):

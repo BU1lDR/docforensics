@@ -83,3 +83,15 @@ def iou(a, b):
     h = min(a[3], b[3]) - max(a[1], b[1])
     inter = max(w, 0) * max(h, 0)
     return inter / ((a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter)
+
+
+def d1_edited_statement(new: str = "9,99,999.00") -> bytes:
+    """A drawn bank statement whose first credit was re-typed in an incremental save: a revision change and a broken balance chain."""
+    from datagen.fictional import identity
+    from datagen.layouts import money
+    from datagen.layouts.statement import draw_statement
+    from datagen.manipulate import d1_incremental_edit
+
+    drawn = draw_statement(identity(1), rows=12, seed=1)
+    pdf, _ = d1_incremental_edit(drawn.pdf, money(next(r["credit"] for r in drawn.truth["rows"] if r["credit"])), new)
+    return pdf
