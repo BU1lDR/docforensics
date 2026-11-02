@@ -70,12 +70,14 @@ def guarded(ctx: Ctx, case: Case, name: str, fn: Callable[[], None], doc_id: str
 def _stage_fns() -> dict[str, Callable[[Case, Ctx], None]]:
     """The registered stages. Imports are lazy because stage modules import guarded() from here."""
     from .checks import run_checks
+    from .evidence import crop_evidence
+    from .explain import run_explain
     from .forensics import run_forensics
     from .read import read_stage
     from .understand.classify import classify_stage
     from .understand.extract import extract_stage
     return {"read": read_stage, "classify": classify_stage, "extract": extract_stage, "forensics": run_forensics,
-            "checks": run_checks}
+            "checks": run_checks, "explain": run_explain, "crops": crop_evidence}
 
 
 def _versions() -> dict[str, str]:

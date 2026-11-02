@@ -7,6 +7,12 @@ if TYPE_CHECKING:  # pipeline imports this module; the type is only needed for a
     from .pipeline import Ctx
 
 
+def quote(s: str, limit: int = 120) -> str:
+    """Document text made safe to print in a finding: one line, no control or bidi characters, cut at `limit`."""
+    s = " ".join("".join(c if c.isprintable() else " " for c in s).split())
+    return s if len(s) <= limit else s[: limit - 3] + "..."
+
+
 def doc_evidence(doc_id: str, note: str = "whole document") -> Evidence:
     """Evidence that points at a whole document: page 0 and an empty box. Overlays and crops skip it."""
     return Evidence(doc=doc_id, page=0, box=(0.0, 0.0, 0.0, 0.0), note=note)

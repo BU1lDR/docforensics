@@ -8,7 +8,7 @@ from difflib import SequenceMatcher
 import pymupdf
 
 from ..config import Thresholds
-from ..findings import doc_evidence, limitation
+from ..findings import doc_evidence, limitation, quote
 from ..model import Box, Case, Document, Evidence, Finding, Word
 from ..pipeline import Ctx
 from ..read.pdf import page_words
@@ -16,12 +16,6 @@ from ..read.pdf import page_words
 DETECTOR = "pdf_revisions"
 _END = re.compile(rb"startxref\s{1,16}(\d{1,12})\s{1,16}%%EOF")  # bounded runs: a hostile file cannot make a match slow
 _XREF = re.compile(rb"\s{0,16}(?:xref|\d{1,10}\s{1,8}\d{1,5}\s{1,8}obj)")  # a classic table, or the object of an xref stream
-
-
-def quote(s: str, limit: int = 120) -> str:
-    """Document text made safe to print in a finding: one line, no control or bidi characters, cut at `limit`."""
-    s = " ".join("".join(c if c.isprintable() else " " for c in s).split())
-    return s if len(s) <= limit else s[: limit - 3] + "..."
 
 
 def revision_ends(data: bytes) -> list[int]:
