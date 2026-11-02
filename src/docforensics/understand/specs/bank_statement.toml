@@ -1,0 +1,84 @@
+# Bank statement. Keywords are looked for in the lower-cased text of page 1; their weights must reach min_score.
+type = "bank_statement"
+min_score = 3
+
+[keywords]
+"statement of account" = 3
+"account no" = 2
+"statement period" = 1
+"opening balance" = 2
+"closing balance" = 2
+"debit" = 1
+"credit" = 1
+"bank" = 1
+
+[[fields]]
+name = "bank"
+kind = "text"
+position = "title"
+
+[[fields]]
+name = "account_holder"
+kind = "text"
+labels = ["account holder", "customer name", "account name"]
+role = "name"
+
+[[fields]]
+name = "address"
+kind = "text"
+labels = ["address", "customer address"]
+role = "address"
+
+[[fields]]
+name = "account_no"
+kind = "id"
+labels = ["account no", "account number", "a/c no"]
+role = "account"
+
+[[fields]]
+name = "period_start"
+kind = "date"
+labels = ["statement period", "period"]
+index = 0
+
+[[fields]]
+name = "period_end"
+kind = "date"
+labels = ["statement period", "period"]
+index = 1
+
+[[fields]]
+name = "opening_balance"
+kind = "amount"
+labels = ["opening balance"]
+
+[[fields]]
+name = "closing_balance"
+kind = "amount"
+labels = ["closing balance"]
+
+# The date column anchors the rows.
+[[table.columns]]
+name = "date"
+kind = "date"
+headers = ["date", "txn date", "transaction date", "value date"]
+
+[[table.columns]]
+name = "description"
+kind = "text"
+headers = ["description", "particulars", "details", "transaction details"]
+
+[[table.columns]]
+name = "debit"
+kind = "amount"
+headers = ["debit", "withdrawal", "withdrawals"]
+
+[[table.columns]]
+name = "credit"
+kind = "amount"
+headers = ["credit", "deposit", "deposits"]
+
+[[table.columns]]
+name = "balance"
+kind = "amount"
+headers = ["balance", "running balance"]

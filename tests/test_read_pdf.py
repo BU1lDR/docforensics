@@ -134,4 +134,4 @@ def test_read_stage_via_run_case(tmp_path):
     assert d1.meta["pages"] == "1" and len(d1.pages) == 1 and len(d1.pages[0].words) > 10
     assert d1.pages[0].image_path == "pages/D1-p1.png" and (cd.root / d1.pages[0].image_path).is_file()
     assert [e.data["doc"] for e in audit.events() if e.event == "doc_read"] == ["D1", "D2"]
-    assert not [f for f in out.findings if f.fclass == "processing_limitation"]
+    assert not [f for f in out.findings if f.fclass == "processing_limitation" and f.detector == "read"]

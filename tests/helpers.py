@@ -75,3 +75,11 @@ def recall(words, lines):
     got = {w.text for w in words}
     want = tokens(lines)
     return len(want & got) / len(want)
+
+
+def iou(a, b):
+    """Intersection over union of two (x0, y0, x1, y1) boxes."""
+    w = min(a[2], b[2]) - max(a[0], b[0])
+    h = min(a[3], b[3]) - max(a[1], b[1])
+    inter = max(w, 0) * max(h, 0)
+    return inter / ((a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter)

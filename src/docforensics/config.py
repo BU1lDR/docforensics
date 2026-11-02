@@ -11,6 +11,7 @@ class Thresholds:
     amount_abs: float = 1.0           # amounts match within 1 rupee ...
     amount_rel: float = 0.005         # ... or 0.5 %
     name_sim: float = 0.85
+    label_sim: float = 0.86           # fuzzy label match; "closing balance" vs "opening balance" scores 0.8, so they stay apart
     income_rel: float = 0.05
     emi_ratio_max: float = 0.5
     max_doc_age_days: int = 90

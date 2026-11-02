@@ -46,6 +46,17 @@ def parse_amount(s: str) -> Decimal | None:
     return -v if any(m[g] for g in ("neg1", "open", "neg2", "neg3")) else v
 
 
+def fmt_amount(v: Decimal) -> str | None:
+    """'52000.00', the stored form of an amount. None when cents would be lost (1.005 is not rounded) or the number is too
+    big to be money."""
+    if not v:
+        return "0.00"  # also -0.00
+    whole, _, frac = format(v, "f").partition(".")
+    if frac[2:].strip("0") or len(whole) > 15:
+        return None
+    return f"{whole}.{frac[:2].ljust(2, '0')}"
+
+
 def amount_side(s: str) -> str | None:
     """'dr' or 'cr' from a trailing Dr/Cr marker on a readable amount."""
     m = _match(s)

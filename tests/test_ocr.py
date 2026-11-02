@@ -12,7 +12,7 @@ from docforensics.ingest import create_case
 from docforensics.pipeline import run_case
 from docforensics.read.ocr import Ocr, load_image_page, split_line_box
 from docforensics.read.pdf import read_pdf_page
-from tests.helpers import SLIP_LINES, STATEMENT_LINES, lines_pdf, pdf_bytes, png_bytes, recall, render_lines
+from tests.helpers import SLIP_LINES, STATEMENT_LINES, iou, lines_pdf, pdf_bytes, png_bytes, recall, render_lines
 
 TH = Thresholds()
 ocr = pytest.mark.ocr
@@ -20,13 +20,6 @@ ocr = pytest.mark.ocr
 
 def as_array(img):
     return np.asarray(img.convert("RGB"))
-
-
-def iou(a, b):
-    w = min(a[2], b[2]) - max(a[0], b[0])
-    h = min(a[3], b[3]) - max(a[1], b[1])
-    inter = max(w, 0) * max(h, 0)
-    return inter / ((a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter)
 
 
 def scan_pdf(pages=1):
@@ -141,7 +134,7 @@ def test_scanned_pdf_pages_get_ocr_and_class(tmp_path):
     assert names.count("ocr_models") == 1 and names.index("ocr_models") < names.index("doc_read", names.index("doc_read") + 1)
     models = events[names.index("ocr_models")].data["models"]
     assert len(models) == 3 and all(len(v) == 64 for v in models.values())
-    assert not [f for f in out.findings if f.fclass == "processing_limitation"]
+    assert not [f for f in out.findings if f.fclass == "processing_limitation" and f.detector == "read"]
 
 
 def test_digital_only_case_never_starts_the_engine(tmp_path):

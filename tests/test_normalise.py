@@ -1,8 +1,8 @@
 from datetime import date
 from decimal import Decimal
 
-from docforensics.understand.normalise import (amount_in_words, amount_side, name_similarity, parse_amount, parse_date,
-                                               text_similarity)
+from docforensics.understand.normalise import (amount_in_words, amount_side, fmt_amount, name_similarity, parse_amount,
+                                               parse_date, text_similarity)
 
 RUPEE, MINUS, NBSP = chr(0x20B9), chr(0x2212), chr(0xA0)
 
@@ -33,6 +33,13 @@ def test_prefixes_and_negatives():
     assert parse_amount("4,125.50 DR") == Decimal("4125.50") and amount_side("4,125.50 DR") == "dr"
     assert amount_side("4,125.50") is None and amount_side("Descr") is None
     assert parse_amount("(1,200.00") is None  # an unclosed bracket is not a negative
+
+
+def test_fmt_amount_keeps_the_cents_or_says_none():
+    assert fmt_amount(Decimal("52000")) == "52000.00" and fmt_amount(Decimal("148034.5")) == "148034.50"
+    assert fmt_amount(Decimal("-1200")) == "-1200.00" and fmt_amount(Decimal("-0.00")) == "0.00"
+    assert fmt_amount(Decimal("1.500")) == "1.50" and fmt_amount(Decimal("1.005")) is None  # no rounding of what was read
+    assert fmt_amount(parse_amount("9" * 39)) is None and fmt_amount(Decimal("1E+30")) is None  # too big to be money; no raise
 
 
 def test_letters_in_digits_are_not_repaired():
