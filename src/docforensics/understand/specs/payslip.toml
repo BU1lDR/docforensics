@@ -1,0 +1,95 @@
+# Payslip, as drawn by layout A. The weights add to 16 and min_score is 6, so a few lines that merely mention pay stay unknown.
+type = "payslip"
+min_score = 6
+
+[keywords]
+"payslip" = 3
+"net pay" = 3
+"gross earnings" = 2
+"total deductions" = 2
+"employee id" = 2
+"pay date" = 2
+"pay month" = 1
+"deductions" = 1
+
+[[fields]]
+name = "employer"
+kind = "text"
+position = "title"
+role = "employer"
+
+[[fields]]
+name = "employee_name"
+kind = "text"
+labels = ["employee name", "name of employee"]
+role = "name"
+
+[[fields]]
+name = "employee_id"
+kind = "id"
+labels = ["employee id", "employee code", "emp id", "emp no"]
+
+[[fields]]
+name = "designation"
+kind = "text"
+labels = ["designation", "job title"]
+
+[[fields]]
+name = "bank_account"
+kind = "id"
+labels = ["bank account", "bank account no", "account number"]
+role = "account"
+
+[[fields]]
+name = "pay_month"
+kind = "text"
+labels = ["pay month", "salary month", "pay period", "for the month of"]
+
+[[fields]]
+name = "pay_date"
+kind = "date"
+labels = ["pay date", "date of payment", "payment date"]
+
+[[fields]]
+name = "gross_earnings"
+kind = "amount"
+labels = ["gross earnings", "gross pay", "gross salary", "total earnings"]
+
+[[fields]]
+name = "total_deductions"
+kind = "amount"
+labels = ["total deductions", "total deduction"]
+
+[[fields]]
+name = "net_pay"
+kind = "amount"
+labels = ["net pay", "net salary"]
+
+[[fields]]
+name = "net_pay_words"
+kind = "text"
+labels = ["amount in words", "net pay in words"]
+
+# Earnings and deductions sit side by side, so one row holds one of each. The amount paid anchors the rows.
+[table]
+prefix = "line"
+
+[[table.columns]]
+name = "earning_amount"
+kind = "amount"
+headers = ["amount paid"]
+
+[[table.columns]]
+name = "earning_name"
+kind = "text"
+headers = ["earnings"]
+
+[[table.columns]]
+name = "deduction_name"
+kind = "text"
+headers = ["deductions"]
+
+[[table.columns]]
+name = "deduction_amount"
+kind = "amount"
+headers = ["amount deducted"]

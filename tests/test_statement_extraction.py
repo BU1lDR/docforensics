@@ -49,7 +49,7 @@ def test_classify_statement_payslip_unknown(tmp_path):
     case, _ = run(tmp_path, draw_statement(identity(1)).pdf, lines_pdf(SLIP_LINES), lines_pdf(GARDEN))
     statement, slip, garden = case.documents
     assert statement.doc_type == "bank_statement" and statement.type_conf >= 0.5
-    assert slip.doc_type != "bank_statement"  # the payslip type arrives with Task 14
+    assert slip.doc_type == "unknown"  # five lines hold too little of a payslip to be called one
     assert garden.doc_type == "unknown" and garden.type_conf == 0.0
     assert classify(statement.pages, SPECS)[0] == "bank_statement" and classify([], SPECS) == ("unknown", 0.0)
 
@@ -62,7 +62,7 @@ def test_tie_between_types_is_unknown(tmp_path):
 
 
 def test_specs_load_and_a_bad_file_names_itself(tmp_path):
-    assert set(SPECS) == {"bank_statement"}
+    assert set(SPECS) == {"bank_statement", "payslip", "loan_application"}
     (tmp_path / "bad.toml").write_bytes(b'type = "x"\nmin_score = 1\nkeywords = {}\nsurprise = 1\n')
     with pytest.raises(ValueError, match="bad.toml"):
         load_specs(tmp_path)

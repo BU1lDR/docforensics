@@ -1,6 +1,8 @@
-"""Checks that compare a document with itself (design 7.4). For a bank statement: the balance chain, then the dates.
+"""Checks that compare a document with itself (design 7.4). For a bank statement: the balance chain, then the dates. For a
+payslip: the totals against the lines and each other, the amount in words, the pay date against the pay month. For a loan
+application: the weekday printed with the date against the date.
 
-The chain runs from the opening balance through the balance of every row to the closing balance. Between two balances that
+The statement's chain runs from the opening balance through the balance of every row to the closing balance. Between two balances that
 can be read, the later one must equal the earlier one plus the credits and less the debits that lie between them. One changed
 balance breaks the two stretches that meet at it, by opposite amounts, so that pair is reported once, at that balance.
 The tolerance is the absolute amount_abs only: the relative one is for comparing two documents, and 0.5 % of a large balance
@@ -15,10 +17,13 @@ from ..config import Thresholds
 from ..findings import add_findings, doc_evidence, limitation
 from ..model import Case, Document, Evidence, Field, Finding
 from ..pipeline import Ctx, guarded
-from ..understand.normalise import parse_amount
+from ..understand.normalise import amount_in_words, parse_amount, parse_month, weekday_of
 from . import inconsistency, maybe_demote
 
 BALANCE, DATES, GENERAL = "statement_balance", "statement_dates", "statement_checks"
+SLIP_SUMS, SLIP_WORDS, SLIP_DATES, SLIP_GENERAL = "payslip_sums", "payslip_words", "payslip_dates", "payslip_checks"
+APP_DATES, APP_GENERAL = "application_dates", "application_checks"
+DAY_NAMES = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 SHOWN = 6  # rows listed in a sentence before "and N more"
 
 
@@ -62,9 +67,9 @@ def _move(r: _Row) -> Decimal | None:
     return None if debit is None or credit is None else credit - debit
 
 
-def _rows_text(ns: list[int]) -> str:
+def _rows_text(ns: list[int], noun: str = "row") -> str:
     shown = ", ".join(map(str, ns[:SHOWN])) + (f" and {len(ns) - SHOWN} more" if len(ns) > SHOWN else "")
-    return f"row {shown}" if len(ns) == 1 else f"rows {shown}"
+    return f"{noun} {shown}" if len(ns) == 1 else f"{noun}s {shown}"
 
 
 def _flood(bad: int, total: int) -> bool:
@@ -72,12 +77,17 @@ def _flood(bad: int, total: int) -> bool:
     return bad >= 3 and 2 * bad > total
 
 
-def _rows(doc: Document) -> list[_Row]:
-    cols: dict[int, dict[str, Field]] = {}
+def _cells(doc: Document) -> dict[int, dict[str, Field]]:
+    """Table cells by row number, then by column name (the part of the field name after its table prefix)."""
+    out: dict[int, dict[str, Field]] = {}
     for f in doc.fields:
         if f.row is not None:
-            cols.setdefault(f.row, {})[f.name.removeprefix("txn.")] = f
-    return [_Row(n, c.get("date"), c.get("debit"), c.get("credit"), c.get("balance")) for n, c in sorted(cols.items())]
+            out.setdefault(f.row, {})[f.name.partition(".")[2]] = f
+    return dict(sorted(out.items()))
+
+
+def _rows(doc: Document) -> list[_Row]:
+    return [_Row(n, c.get("date"), c.get("debit"), c.get("credit"), c.get("balance")) for n, c in _cells(doc).items()]
 
 
 # --- the balance chain
@@ -236,7 +246,115 @@ def check_statement(doc: Document, th: Thresholds) -> list[Finding]:
     return out
 
 
-WITHIN_CHECKS: dict[str, Callable[[Document, Thresholds], list[Finding]]] = {"bank_statement": check_statement}
+# --- a payslip
+
+def _net_finding(h: dict[str, Field], tol: Decimal) -> list[Finding]:
+    gross, ded, net = (_amount(h.get(k)) for k in ("gross_earnings", "total_deductions", "net_pay"))
+    if None in (gross, ded, net) or abs(net - (gross - ded)) <= tol:
+        return []
+    detail = (f"Net pay is {_inr(net)}. Gross earnings of {_inr(gross)} less total deductions of {_inr(ded)} give "
+              f"{_inr(gross - ded)}, a difference of {_inr(net - (gross - ded))}. Tolerance: {_inr(tol)}.")
+    return [inconsistency(SLIP_SUMS, "arithmetic", "Net pay does not equal gross earnings less total deductions", detail,
+                          [(h["net_pay"], "net pay in question"), (h["gross_earnings"], "gross earnings"),
+                           (h["total_deductions"], "total deductions")])]
+
+
+def _listed_findings(h: dict[str, Field], lines: dict[int, dict[str, Field]], tol: Decimal) -> list[Finding]:
+    """Each printed total against the lines listed under it. A blank cell counts as zero; an unreadable one leaves that sum unchecked."""
+    out = []
+    for name, col, noun, title in (("gross_earnings", "earning_amount", "earning", "Gross earnings do not equal the earnings listed"),
+                                   ("total_deductions", "deduction_amount", "deduction",
+                                    "Total deductions do not equal the deductions listed")):
+        total, cells = _amount(h.get(name)), {n: c[col] for n, c in lines.items() if col in c}
+        parts = [_flow(c) for c in cells.values()]
+        if total is None or not cells or None in parts:
+            continue
+        listed = sum(parts, Decimal(0))
+        if abs(total - listed) <= tol:
+            continue
+        label = name.replace("_", " ")
+        detail = (f"{_cap(label)} are {_inr(total)}. The {noun}s listed in {_rows_text(list(cells), 'line')} add up to "
+                  f"{_inr(listed)}, a difference of {_inr(total - listed)}. Tolerance: {_inr(tol)}.")
+        out.append(inconsistency(SLIP_SUMS, "arithmetic", title, detail, [(h[name], f"{label} in question")]
+                                 + [(c, f"{noun} in line {n}") for n, c in cells.items() if c.value is not None]))
+    return out
+
+
+def _words_finding(h: dict[str, Field], tol: Decimal) -> list[Finding]:
+    net, w = _amount(h.get("net_pay")), h.get("net_pay_words")
+    spoken = amount_in_words(w.value) if w is not None and w.value else None
+    if net is None or spoken is None or abs(net - spoken) <= tol:
+        return []
+    detail = (f"Net pay is {_inr(net)} in figures. The amount written in words reads as {_inr(spoken)}, a difference of "
+              f"{_inr(net - spoken)}. Tolerance: {_inr(tol)}.")
+    return [inconsistency(SLIP_WORDS, "arithmetic", "Net pay in words does not match net pay in figures", detail,
+                          [(h["net_pay"], "net pay in figures"), (w, "net pay in words")])]
+
+
+def _pay_date_finding(h: dict[str, Field]) -> list[Finding]:
+    """The pay date falls in the pay month or the month after it (a salary is paid for the month just ended)."""
+    pm, pd = h.get("pay_month"), h.get("pay_date")
+    month, day = (parse_month(pm.value) if pm is not None and pm.value else None), _day(pd)
+    if month is None or day is None or 0 <= day.year * 12 + day.month - (month[0] * 12 + month[1]) <= 1:
+        return []
+    detail = (f"The pay date is {day:%d/%m/%Y} and the pay month is {month[1]:02d}/{month[0]}. A salary is expected to be "
+              "paid in its pay month or the month after it.")
+    return [inconsistency(SLIP_DATES, "arithmetic", "Pay date is not in the pay month or the month after", detail,
+                          [(pd, "pay date"), (pm, "pay month")])]
+
+
+def _slip_gaps(h: dict[str, Field], lines: dict[int, dict[str, Field]]) -> list[str]:
+    """What the checks needed and could not read."""
+    out = [label for name, label in (("gross_earnings", "gross earnings"), ("total_deductions", "total deductions"),
+                                     ("net_pay", "net pay")) if _amount(h.get(name)) is None]
+    w, pm = h.get("net_pay_words"), h.get("pay_month")
+    if w is None or not w.value or amount_in_words(w.value) is None:
+        out.append("net pay in words")
+    if pm is None or not pm.value or parse_month(pm.value) is None:
+        out.append("pay month")
+    if _day(h.get("pay_date")) is None:
+        out.append("pay date")
+    if not lines:
+        out.append("the earnings and deductions table")
+    for col, label in (("earning_amount", "earning amount"), ("deduction_amount", "deduction amount")):
+        if bad := [n for n, c in lines.items() if _flow(c.get(col)) is None]:
+            out.append(f"{label} in {_rows_text(bad, 'line')}")
+    return out
+
+
+def check_payslip(doc: Document, th: Thresholds) -> list[Finding]:
+    h = {f.name: f for f in doc.fields if f.row is None}
+    lines, tol = _cells(doc), Decimal(str(th.amount_abs))
+    out = _net_finding(h, tol) + _listed_findings(h, lines, tol) + _words_finding(h, tol) + _pay_date_finding(h)
+    if gaps := _slip_gaps(h, lines):
+        out.append(limitation(SLIP_GENERAL, "Cannot fully verify this payslip",
+                              "These values are missing or unreadable, so what depends on them could not be checked: "
+                              + "; ".join(gaps) + ".", [doc_evidence(doc.id, "values the checks needed")]))
+    return out
+
+
+# --- a loan application
+
+def check_application(doc: Document, th: Thresholds) -> list[Finding]:
+    """The weekday printed with the date against the date. No weekday printed means nothing to compare. A numeric date that
+    reads two ways has low confidence, so a mismatch there is shown by maybe_demote as a possible misreading."""
+    d = next((f for f in doc.fields if f.name == "application_date" and f.row is None), None)
+    day = _day(d)
+    if day is None:
+        return [limitation(APP_GENERAL, "Cannot fully verify this application",
+                           "These values are missing or unreadable, so what depends on them could not be checked: "
+                           "application date.", [doc_evidence(doc.id, "values the checks needed")])]
+    printed = weekday_of(d.raw)
+    if printed is None or printed == day.weekday():
+        return []
+    detail = (f"The application date is {day:%d/%m/%Y}, which fell on a {DAY_NAMES[day.weekday()]}. The weekday printed "
+              f"with it is {DAY_NAMES[printed]}.")
+    return [inconsistency(APP_DATES, "arithmetic", "Weekday does not match the application date", detail,
+                          [(d, "application date")])]
+
+
+WITHIN_CHECKS: dict[str, Callable[[Document, Thresholds], list[Finding]]] = {
+    "bank_statement": check_statement, "payslip": check_payslip, "loan_application": check_application}
 
 
 def run_within_checks(case: Case, ctx: Ctx) -> None:

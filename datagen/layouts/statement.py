@@ -3,10 +3,10 @@ continuation pages. Amounts are whole paise inside, so nothing here depends on f
 import calendar
 import random
 from datetime import datetime, time, timedelta
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 
 from ..fictional import Identity
-from . import Drawn, Sheet, money
+from . import Drawn, Sheet, money, norm
 
 COLS = ("date", "description", "debit", "credit", "balance")
 HEADS = dict(zip(COLS, ("Date", "Description", "Debit", "Credit", "Balance")))
@@ -26,19 +26,6 @@ def _p(paise: int) -> str:
 
 def _m(paise: int) -> str:
     return money(Decimal(paise).scaleb(-2))
-
-
-def _norm(kind: str, text: str) -> str | None:
-    """What a reader should make of drawn text: the stored form of an amount or a date, None when it is neither."""
-    try:
-        if kind == "amount":
-            v = Decimal(text.replace(",", ""))
-            return f"{v:.2f}" if v.is_finite() else None
-        if kind == "date":
-            return datetime.strptime(text, "%d/%m/%Y").date().isoformat()
-    except (InvalidOperation, ValueError):
-        return None
-    return text
 
 
 def _check(over: dict[str, str], rows: int) -> None:
@@ -100,7 +87,7 @@ def draw_statement(ident: Identity, layout: str = "A", rows: int = 12, seed: int
              "closing_balance": _m(closing)}
     for k in fields:
         if k in over:
-            shown[k], fields[k] = over[k], _norm(KIND[k], over[k])
+            shown[k], fields[k] = over[k], norm(KIND[k], over[k])
 
     sheet = Sheet(f"{ident.bank} Statement Service 4.2", created)
     sheet.new_page()
@@ -135,7 +122,7 @@ def draw_statement(ident: Identity, layout: str = "A", rows: int = 12, seed: int
                 "credit": _m(amt) if kind == "credit" else None, "balance": _m(bal)}
         for col in COLS:
             if (key := f"{col}@{i}") in over:
-                text[col], row[col] = over[key], _norm("amount" if col in ("debit", "credit", "balance") else col, over[key])
+                text[col], row[col] = over[key], norm("amount" if col in ("debit", "credit", "balance") else col, over[key])
             if text[col] is not None:
                 x, align = X[col]
                 sheet.text(x, y, text[col], 9, align=align, key=key)

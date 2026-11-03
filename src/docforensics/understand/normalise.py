@@ -18,8 +18,11 @@ _AMOUNT = re.compile(
     r"\s*(?P<neg3>-)?\s*(?(open)\))\s*(?:/-)?\s*(?P<side>dr|cr)?\.?", re.I | re.A)
 _NUMDATE = re.compile(r"(\d{1,4})([/.-])(\d{1,2})\2(\d{1,4})", re.A)
 _DMY = re.compile(r"(\d{1,2})(?:st|nd|rd|th)?[\s/.-]+([a-z]+)\.?[\s/.,-]*(\d{4}|\d{2})", re.I | re.A)
-_MDY = re.compile(r"([a-z]+)\.?\s*(\d{1,2})(?:st|nd|rd|th)?\s*,?\s*(\d{4}|\d{2})", re.I | re.A)
+_MDY = re.compile(r"([a-z]+)\.?\s*(\d{1,2})(?:st|nd|rd|th)?[\s,]+(\d{4}|\d{2})", re.I | re.A)  # a separator before the year: 'April 2026' is no day
+_NUM_MONTH = re.compile(r"(\d{1,2})[/.-](\d{4})", re.A)
+_MONTH_YEAR = re.compile(r"([a-z]+)\.?[\s,/.-]*(\d{4}|\d{2})", re.I | re.A)
 _MONTHS = "january february march april may june july august september october november december".split()
+_WEEKDAYS = "monday tuesday wednesday thursday friday saturday sunday".split()
 
 _ONES = {w: i for i, w in enumerate("one two three four five six seven eight nine".split(), 1)}
 _TEENS = {w: i for i, w in enumerate(
@@ -81,12 +84,40 @@ def _month(word: str) -> int | None:
     return next((i for i, m in enumerate(_MONTHS, 1) if len(w) >= 3 and m.startswith(w)), None)
 
 
+def _lead_weekday(t: str) -> tuple[int | None, str]:
+    """'Mon 03 Nov 2025' -> (0, '03 Nov 2025'), Monday first. Only one weekday word, and only with something after it."""
+    first, _, rest = t.partition(" ")
+    w = first.strip(".,").lower()
+    wd = next((i for i, d in enumerate(_WEEKDAYS) if len(w) >= 3 and d.startswith(w)), None)
+    return (wd, rest.strip()) if wd is not None and rest.strip() else (None, t)
+
+
+def weekday_of(s: str) -> int | None:
+    """The weekday printed in front of a readable date (0 = Monday), or None: none printed, or the date after it cannot be read."""
+    wd, rest = _lead_weekday(" ".join(s.split()))
+    return wd if wd is not None and parse_date(rest)[0] else None
+
+
+def parse_month(s: str) -> tuple[int, int] | None:
+    """(year, month) from 'April 2026', 'Apr-26' or '04/2026'. Anything with a day in it is not a month."""
+    t = " ".join(s.split())
+    if len(t) > MAX_LEN:
+        return None
+    if m := _NUM_MONTH.fullmatch(t):
+        return (int(m[2]), int(m[1])) if 1 <= int(m[1]) <= 12 else None
+    if (m := _MONTH_YEAR.fullmatch(t)) and (month := _month(m[1])):
+        return _year(m[2]), month
+    return None
+
+
 def parse_date(s: str) -> tuple[date | None, bool]:
     """(date, ambiguous). Day comes first: 04/05/2026 is 4 May and ambiguous, as it also reads 5 April. A month over 12 is
-    not read as month-first: 03/13/2026 is (None, False). Year-first and month-name dates are never ambiguous."""
+    not read as month-first: 03/13/2026 is (None, False). Year-first and month-name dates are never ambiguous. A weekday
+    in front ('Mon 03 Nov 2025') is set aside; weekday_of reads it."""
     t = " ".join(s.split())
     if len(t) > MAX_LEN:
         return None, False
+    t = _lead_weekday(t)[1]
     if m := _NUMDATE.fullmatch(t):
         a, _, b, c = m.groups()
         if len(a) == 4 and len(c) <= 2:  # 2026-03-12

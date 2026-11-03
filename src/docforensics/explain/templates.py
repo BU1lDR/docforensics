@@ -59,6 +59,45 @@ TEMPLATES: dict[tuple[str, str], tuple[str, list[str]]] = {
         f"{_LIMIT} The dates could not be checked here, or a difference was found that could not be trusted because a date was "
         "unreadable, ambiguous or read with low confidence. Whether the dates are in order is unknown.",
         _UNCHECKED),
+    ("payslip_sums", "inconsistency"): (
+        "Totals printed on the payslip do not agree with each other, or with the lines listed under them, by more than the "
+        "stated tolerance. An edited figure would cause this, and so would a misread digit, a line that was not read, or a "
+        "layout these checks do not assume.",
+        ["Compare the marked cells with the page, digit by digit.",
+         "Add the lines up by hand and work the net pay out from the two totals.",
+         "If the difference holds, ask the employer for a payslip issued directly."]),
+    ("payslip_sums", "processing_limitation"): (
+        f"{_LIMIT} The totals could not be checked here, or a difference was found that could not be trusted because a figure "
+        "was unreadable or read with low confidence. Whether the payslip adds up is unknown.",
+        _UNCHECKED),
+    ("payslip_words", "inconsistency"): (
+        "The net pay written in words and the net pay in figures differ by more than the stated tolerance. An edited figure or "
+        "edited words would cause this, and so would a misread digit or word.",
+        ["Compare the figure and the words with the page.",
+         "If they differ, ask the employer which of the two is meant."]),
+    ("payslip_words", "processing_limitation"): (
+        f"{_LIMIT} The amount in words could not be compared with the figure here, or a difference was found that could not be "
+        "trusted because one of them was unreadable or read with low confidence. Whether they agree is unknown.",
+        _UNCHECKED),
+    ("payslip_dates", "inconsistency"): (
+        "The pay date falls outside the pay month and the month after it. A late or early payroll run would cause this, and so "
+        "would a changed date or month, a misread digit, or a date written in a different convention (dates are read day first, "
+        "DD/MM/YYYY).",
+        ["Compare the pay date and the pay month with the page.",
+         "Check the payment against the bank statement, which records when the salary arrived."]),
+    ("payslip_dates", "processing_limitation"): (
+        f"{_LIMIT} The pay date could not be compared with the pay month here, or a difference was found that could not be "
+        "trusted because a date was unreadable, ambiguous or read with low confidence. Whether they agree is unknown.",
+        _UNCHECKED),
+    ("application_dates", "inconsistency"): (
+        "The weekday printed with the application date is not the weekday that date fell on. A slip when the form was filled "
+        "in would cause this, and so would a changed date or weekday, or a misread digit.",
+        ["Compare the date and the weekday with the page.",
+         "Ask the applicant or the lender for the date the application was received."]),
+    ("application_dates", "processing_limitation"): (
+        f"{_LIMIT} The weekday could not be compared with the date here, or a difference was found that could not be trusted "
+        "because the date was unreadable, ambiguous or read with low confidence. Whether they agree is unknown.",
+        _UNCHECKED),
 }
 
 

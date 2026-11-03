@@ -2,13 +2,18 @@
 pixels the reader reports, computed from the font metrics (they match the text layer to about 0.1 px)."""
 from dataclasses import dataclass
 from datetime import datetime
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 import pymupdf
 
 PX = 200 / 72
 PAGE = (595, 842)  # A4 in points
 _FONT = {False: ("helv", pymupdf.Font("helv")), True: ("hebo", pymupdf.Font("hebo"))}
+MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+DAYS = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")  # fixed names: strftime would follow the machine's language
+_ONES = ("", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
+         "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen")
+_TENS = ("", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety")
 
 
 @dataclass
@@ -27,6 +32,47 @@ def money(v) -> str:
     if head:
         groups.insert(0, head)
     return f"{'-' if Decimal(v) < 0 else ''}{','.join(groups + [whole[-3:]])}.{frac}"
+
+
+def _under_hundred(n: int) -> str:
+    return _ONES[n] if n < 20 else _TENS[n // 10] + (f" {_ONES[n % 10]}" if n % 10 else "")
+
+
+def words(n: int) -> str:
+    """'Rupees Forty Seven Thousand Two Hundred Only': whole rupees in the Indian system (crore, lakh, thousand), written
+    here without the reader's code so the two can disagree."""
+    if not 0 <= n < 10**9:
+        raise ValueError(f"cannot write {n} in words")
+    parts = []
+    for name, size in (("Crore", 10**7), ("Lakh", 10**5), ("Thousand", 10**3)):
+        q, n = divmod(n, size)
+        if q:
+            parts.append(f"{_under_hundred(q)} {name}")
+    h, n = divmod(n, 100)
+    if h:
+        parts.append(f"{_ONES[h]} Hundred")
+    if n:
+        parts.append(_under_hundred(n))
+    return f"Rupees {' '.join(parts) or 'Zero'} Only"
+
+
+def norm(kind: str, text: str, date_fmt: str | tuple[str, ...] = "%d/%m/%Y") -> str | None:
+    """What a reader should make of drawn text: the stored form of an amount, or of a date in the first of date_fmt that fits;
+    None when it is neither. Other kinds come back as drawn."""
+    try:
+        if kind == "amount":
+            v = Decimal(text.replace(",", ""))
+            return f"{v:.2f}" if v.is_finite() else None
+        if kind == "date":
+            for fmt in (date_fmt,) if isinstance(date_fmt, str) else date_fmt:
+                try:
+                    return datetime.strptime(text, fmt).date().isoformat()
+                except ValueError:
+                    pass
+            return None
+    except InvalidOperation:
+        return None
+    return text
 
 
 class Sheet:
@@ -60,6 +106,10 @@ class Sheet:
         top, bottom = (y - font.ascender * size) * PX, (y - font.descender * size) * PX
         for k, (x0, x1) in spans.items():
             self.boxes[k] = [self.doc.page_count, round(x0 * PX, 2), round(top, 2), round(x1 * PX, 2), round(bottom, 2)]
+
+    def region(self, key: str, x0: float, y0: float, x1: float, y1: float) -> None:
+        """The box of something drawn that is not text (a stamp, a signature), given in points."""
+        self.boxes[key] = [self.doc.page_count, round(x0 * PX, 2), round(y0 * PX, 2), round(x1 * PX, 2), round(y1 * PX, 2)]
 
     def pdf(self) -> bytes:
         data = self.doc.tobytes()

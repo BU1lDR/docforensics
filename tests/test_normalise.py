@@ -2,7 +2,7 @@ from datetime import date
 from decimal import Decimal
 
 from docforensics.understand.normalise import (amount_in_words, amount_side, fmt_amount, name_similarity, parse_amount,
-                                               parse_date, text_similarity)
+                                               parse_date, parse_month, text_similarity, weekday_of)
 
 RUPEE, MINUS, NBSP = chr(0x20B9), chr(0x2212), chr(0xA0)
 
@@ -52,7 +52,7 @@ def test_absurd_input_is_none_not_an_error():
     assert amount_in_words("one " * 500) is None
     for odd in ODD:  # only ASCII digits and letters are read; nothing raises
         assert parse_amount(odd) is None and amount_side(odd) is None and amount_in_words(odd) is None
-        assert parse_date(odd) == (None, False)
+        assert parse_date(odd) == (None, False) and parse_month(odd) is None and weekday_of(odd) is None
         assert 0.0 <= name_similarity(odd, "Meera") <= 1.0 and 0.0 <= text_similarity(odd, "x") <= 1.0
 
 
@@ -74,6 +74,33 @@ def test_month_name_dates():
         assert parse_date(s) == want, s
     assert parse_date("5 Sept 2026") == (date(2026, 9, 5), False) and parse_date("05-Sep-2026") == (date(2026, 9, 5), False)
     assert parse_date("12 Foo 2026") == (None, False) and parse_date("12 Ja 2026") == (None, False)
+
+
+def test_a_month_and_year_is_not_a_date():
+    for s in ("April 2026", "Apr 2026", "April, 2026", "Apr-26", "April 26", "Sept2026"):  # "April 2026" was once read as 20 April 2026
+        assert parse_date(s) == (None, False), s
+    assert parse_date("Apr 5, 26") == (date(2026, 4, 5), False) and parse_date("April 05,2026") == (date(2026, 4, 5), False)
+
+
+def test_weekday_before_a_date_is_set_aside_and_readable():
+    want = (date(2025, 11, 3), False)  # a Monday
+    for s in ("Mon 03 Nov 2025", "Monday, 3 November 2025", "mon. 3rd Nov 2025", "Mon  03-Nov-25", "MON 2025-11-03", "Mon November 3, 2025"):
+        assert parse_date(s) == want, s
+        assert weekday_of(s) == 0, s
+    assert weekday_of("Tue 03 Nov 2025") == 1 and weekday_of("Sun 03 Nov 2025") == 6 and weekday_of("Thurs 03 Nov 2025") == 3
+    assert weekday_of("Weds 03 Nov 2025") is None
+    assert weekday_of("03 Nov 2025") is None and weekday_of("Mon") is None and weekday_of("Mon 31 Nov 2025") is None
+    assert weekday_of("Mo 03 Nov 2025") is None and parse_date("Mo 03 Nov 2025") == (None, False)
+    assert parse_date("Mon") == (None, False) and parse_date("Mon Tue 03 Nov 2025") == (None, False)
+    assert parse_date("Mon 04/05/2026") == (date(2026, 5, 4), True)  # still ambiguous with a weekday in front
+
+
+def test_month_and_year():
+    assert parse_month("April 2026") == parse_month("Apr-2026") == parse_month("APR 2026") == parse_month("04/2026") == (2026, 4)
+    assert parse_month("Sept 2026") == (2026, 9) and parse_month("December, 2025") == (2025, 12) and parse_month("4-2026") == (2026, 4)
+    assert parse_month("Apr-26") == (2026, 4) and parse_month("04.2026") == (2026, 4)
+    for bad in ("13/2026", "00/2026", "April", "2026", "Foo 2026", "Ap 2026", "12 April 2026", "April 2026 and more", ""):
+        assert parse_month(bad) is None, bad
 
 
 def test_two_digit_year_pivot():

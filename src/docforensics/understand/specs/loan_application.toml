@@ -1,0 +1,62 @@
+# Personal loan application, as drawn by layout A. The weights add to 15 and min_score is 6.
+type = "loan_application"
+min_score = 6
+
+[keywords]
+"loan application" = 4
+"applicant" = 2
+"loan amount" = 2
+"tenure" = 2
+"monthly income" = 2
+"existing emi" = 2
+"application date" = 2
+"employer" = 1
+
+[[fields]]
+name = "application_date"
+kind = "date"
+labels = ["application date", "date of application"]
+
+[[fields]]
+name = "applicant_name"
+kind = "text"
+labels = ["applicant name", "name of applicant"]
+role = "name"
+
+[[fields]]
+name = "address"
+kind = "text"
+labels = ["residential address", "address"]
+role = "address"
+
+[[fields]]
+name = "employer"
+kind = "text"
+labels = ["employer", "employer name"]
+role = "employer"
+
+[[fields]]
+name = "account_no"
+kind = "id"
+labels = ["salary account number", "account number", "salary account no", "account no"]
+role = "account"
+
+[[fields]]
+name = "declared_monthly_income"
+kind = "amount"
+labels = ["declared monthly income", "monthly income", "gross monthly income"]
+
+[[fields]]
+name = "existing_emi"
+kind = "amount"
+labels = ["existing emi"]
+
+[[fields]]
+name = "loan_amount"
+kind = "amount"
+labels = ["loan amount"]
+
+[[fields]]
+name = "tenure_months"
+kind = "amount"
+labels = ["tenure in months", "tenure", "loan tenure"]

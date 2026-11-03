@@ -46,10 +46,10 @@ def _day_first_proven(doc: Document) -> bool:
 
 
 def _date_runs(words: list[Word]) -> list[list[Word]]:
-    """The runs of 1-3 words that read as a date, left to right."""
+    """The runs of 1-4 words that read as a date, left to right. Four is a weekday and a date: 'Mon 03 Nov 2025'."""
     out, i = [], 0
     while i < len(words):
-        for n in (3, 2, 1):
+        for n in (4, 3, 2, 1):
             if i + n <= len(words) and parse_date(text_of(words[i:i + n]))[0] is not None:
                 out.append(words[i:i + n])
                 i += n
