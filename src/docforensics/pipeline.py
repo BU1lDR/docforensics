@@ -91,8 +91,10 @@ def _versions() -> dict[str, str]:
     return out
 
 
-def run_case(cd: CaseDir, th: Thresholds | None = None, stages: dict[str, Callable] | None = None) -> Case:
-    """Run the stages present, in STAGE_ORDER. `stages` replaces the registered ones (tests inject fakes)."""
+def run_case(cd: CaseDir, th: Thresholds | None = None, stages: dict[str, Callable] | None = None,
+             on_stage: Callable[[str], None] | None = None) -> Case:
+    """Run the stages present, in STAGE_ORDER. `stages` replaces the registered ones (tests inject fakes); `on_stage` is told each
+    stage's name just before it starts (the review app shows it as progress)."""
     th = th or Thresholds()
     case = load_case(cd)
     ctx = Ctx(cd, AuditLog(cd.audit_path), th)
@@ -102,6 +104,8 @@ def run_case(cd: CaseDir, th: Thresholds | None = None, stages: dict[str, Callab
         fn = fns.get(name)
         if fn is None:
             continue
+        if on_stage:
+            on_stage(name)
         ctx.audit.append("system", "stage_start", {"stage": name})
         t0 = time.monotonic()
         # a stage may spend up to stage_timeout_s on each document, so the outer limit scales with the case

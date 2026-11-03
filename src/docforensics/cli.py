@@ -1,4 +1,4 @@
-"""Command line (design 7.8): run a case, trace a finding to its place in the source file, check the audit trail.
+"""Command line (design 7.8): run a case, trace a finding to its place in the source file, check the audit trail, serve the review desk.
 Everything printed that came from a document goes through quote(): one line, no control or bidi characters."""
 import argparse
 import hashlib
@@ -137,6 +137,15 @@ def _verify(args: argparse.Namespace) -> int:
     return 0
 
 
+def _serve(args: argparse.Namespace) -> int:
+    import uvicorn  # only this command needs the web stack
+
+    from .web.app import HOST, create_app
+    print(f"Review desk: http://{HOST}:{args.port}/   (cases are kept in {args.data}; Ctrl+C stops it)")
+    uvicorn.run(create_app(Path(args.data), _thresholds(args.config)), host=HOST, port=args.port, log_level="warning")
+    return 0
+
+
 def _parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="docforensics", description="Document forensics: findings for a human reviewer, each traced to its source.")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -151,7 +160,11 @@ def _parser() -> argparse.ArgumentParser:
     verify = sub.add_parser("verify-audit", help="check that a case's audit trail has not been changed")
     verify.add_argument("case")
     verify.set_defaults(fn=_verify)
-    for s in (run, trace, verify):
+    serve = sub.add_parser("serve", help="open the review desk in a browser (127.0.0.1 only)")
+    serve.add_argument("--port", type=int, default=8000)
+    serve.add_argument("--config", metavar="TOML", help="thresholds to use instead of the defaults")
+    serve.set_defaults(fn=_serve)
+    for s in (run, trace, verify, serve):
         s.add_argument("--data", default="data", metavar="DIR", help="where cases are kept (default: data)")
     return p
 

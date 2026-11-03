@@ -89,3 +89,11 @@ def test_stages_run_in_the_fixed_order(tmp_path):
     stages = {name: (lambda c, x, n=name: seen.append(n)) for name in reversed(STAGE_ORDER)}
     run_case(cd, TH, stages=stages)
     assert seen == list(STAGE_ORDER)
+
+
+def test_run_case_reports_each_stage_before_it_starts(tmp_path):
+    _, cd, _ = two_docs(tmp_path)
+    seen = []
+    run_case(cd, TH, stages={"read": lambda c, x: seen.append("ran read"), "checks": lambda c, x: seen.append("ran checks")},
+             on_stage=seen.append)
+    assert seen == ["read", "ran read", "checks", "ran checks"]

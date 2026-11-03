@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document review desk</title>
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/app.js" defer></script>
+</head>
+<body>
+<header>
+  <h1>Document review desk</h1>
+  <p id="caseline">No case open. Choose documents on the Documents tab to start one.</p>
+  <p class="notice">Everything here is for a human reviewer. A finding is something to look at, not a conclusion about a document or a person. The readings come from software and can be wrong.</p>
+</header>
+
+<main>
+  <section id="viewer" aria-label="Page viewer">
+    <div class="bar">
+      <label>Document <select id="doc-select" disabled></select></label>
+      <button type="button" id="prev" disabled>Previous page</button>
+      <span id="pageno">No page</span>
+      <button type="button" id="next" disabled>Next page</button>
+      <label>Zoom <input type="range" id="zoom" min="20" max="200" step="5" value="50"></label>
+      <button type="button" id="fit">Fit width</button>
+    </div>
+    <fieldset class="layers">
+      <legend>Show on the page</legend>
+      <label><input type="checkbox" id="layer-words"> Words</label>
+      <label><input type="checkbox" id="layer-fields" checked> Extracted fields</label>
+      <label><input type="checkbox" id="layer-findings" checked> Findings</label>
+    </fieldset>
+    <p id="legend" class="legend"></p>
+    <div id="page" class="pagebox" tabindex="0"></div>
+  </section>
+
+  <section id="side" aria-label="Review">
+    <div role="tablist" aria-label="Sections">
+      <button type="button" role="tab" id="btn-documents" data-tab="documents" aria-controls="tab-documents" aria-selected="true">Documents</button>
+      <button type="button" role="tab" id="btn-findings" data-tab="findings" aria-controls="tab-findings" aria-selected="false">Findings</button>
+      <button type="button" role="tab" id="btn-clusters" data-tab="clusters" aria-controls="tab-clusters" aria-selected="false">Clusters</button>
+      <button type="button" role="tab" id="btn-audit" data-tab="audit" aria-controls="tab-audit" aria-selected="false">Audit trail</button>
+      <button type="button" role="tab" id="btn-capabilities" data-tab="capabilities" aria-controls="tab-capabilities" aria-selected="false">Capabilities</button>
+      <button type="button" role="tab" id="btn-dossier" data-tab="dossier" aria-controls="tab-dossier" aria-selected="false">Dossier</button>
+    </div>
+
+    <div id="tab-documents" role="tabpanel" aria-labelledby="btn-documents">
+      <form id="upload">
+        <label for="files">Documents to analyse together (PDF, PNG or JPEG)</label>
+        <input type="file" id="files" multiple accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">
+        <button type="submit" id="go">Analyse</button>
+        <p class="hint">Files stay on this machine. A file that is too large, too long or not a PDF or image is listed with the reason, and the rest are still analysed.</p>
+      </form>
+      <div id="docs"></div>
+      <div id="fields"></div>
+    </div>
+
+    <div id="tab-findings" role="tabpanel" aria-labelledby="btn-findings" hidden>
+      <div id="findings"></div>
+      <div id="detail"></div>
+    </div>
+
+    <div id="tab-clusters" role="tabpanel" aria-labelledby="btn-clusters" hidden>
+      <div id="clusters"></div>
+    </div>
+
+    <div id="tab-audit" role="tabpanel" aria-labelledby="btn-audit" hidden>
+      <div id="audit"></div>
+    </div>
+
+    <div id="tab-capabilities" role="tabpanel" aria-labelledby="btn-capabilities" hidden>
+      <div id="caps"></div>
+    </div>
+
+    <div id="tab-dossier" role="tabpanel" aria-labelledby="btn-dossier" hidden>
+      <div id="dossier"></div>
+    </div>
+  </section>
+</main>
+
+<p id="message" role="status" aria-live="polite"></p>
+</body>
+</html>

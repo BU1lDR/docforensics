@@ -29,3 +29,5 @@ pythonpath = ["src", "."]
 testpaths = ["tests"]
 addopts = "-q"
 markers = ["ocr: loads the OCR engine (slow, 1-2 s per page)"]
+# FastAPI's TestClient still wraps httpx and Starlette now says so on import; this is the only warning let through, and only that one.
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient` is deprecated:starlette.exceptions.StarletteDeprecationWarning"]

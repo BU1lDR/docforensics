@@ -69,7 +69,7 @@ def _document(d: Document) -> dict:
                         "page": f.page, "box": _round(f.box), "row": f.row, "role": f.role, "note": f.note} for f in d.fields]}
 
 
-def _audit(ctx: Ctx) -> dict:
+def audit_view(ctx: Ctx) -> dict:
     """The trail as it stands now, whether its chain holds, and its length and last hash (the anchor). A missing or empty trail is a
     problem: every case starts with an event."""
     ok, bad = ctx.audit.verify()
@@ -119,7 +119,7 @@ def dossier_dict(case: Case, ctx: Ctx) -> dict:
             "explanations": [{"finding": r["id"], "explanation": r["explanation"], "source": r["explanation_source"]} for r in anomalies],
             "further_verification": [{"step": s, "findings": ids} for s, ids in steps.items()],
             "limitations": of("processing_limitation")},
-        "appendices": {"audit_trail": _audit(ctx), "capabilities": caps["capabilities"],
+        "appendices": {"audit_trail": audit_view(ctx), "capabilities": caps["capabilities"],
                        "limitations": {"limitations": caps["limitations"], "assumptions": caps["assumptions"]}},
     }
     d["integrity"] = {"json_sha256": _sha(_canon(d)), "method": METHOD}
