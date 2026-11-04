@@ -18,6 +18,7 @@ from ..audit import AuditLog
 from ..capabilities import load_capabilities
 from ..config import Thresholds
 from ..dossier import audit_view, build_dossier
+from ..explain.llm import OllamaClient
 from ..ingest import create_case
 from ..model import Status
 from ..pipeline import Ctx, run_case
@@ -49,7 +50,7 @@ def _parts(url: str):
         return None
 
 
-def create_app(data_root: Path | str, th: Thresholds | None = None) -> FastAPI:
+def create_app(data_root: Path | str, th: Thresholds | None = None, llm: OllamaClient | None = None) -> FastAPI:
     th = th or Thresholds()
     data_root = Path(data_root)
     app = FastAPI(title="docforensics review", docs_url=None, redoc_url=None, openapi_url=None)  # the docs page loads its code from a CDN
@@ -93,7 +94,7 @@ def create_app(data_root: Path | str, th: Thresholds | None = None) -> FastAPI:
         job = jobs[cd.id]
         with run_lock:
             try:
-                run_case(cd, th, on_stage=lambda name: job.update(stage=name))
+                run_case(cd, th, on_stage=lambda name: job.update(stage=name), llm=llm)
                 jobs[cd.id] = {"status": "done", "stage": ""}
             except Exception as e:
                 error = f"{type(e).__name__}: {e}"[:300]

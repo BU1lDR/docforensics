@@ -259,7 +259,7 @@ def test_case_is_withheld_while_processing(tmp_path, monkeypatch):
     gate, inside = threading.Event(), threading.Event()
     real = web.run_case
 
-    def slow(cd, th=None, stages=None, on_stage=None):
+    def slow(cd, th=None, stages=None, on_stage=None, llm=None):
         on_stage("read")
         inside.set()
         gate.wait(30)
@@ -286,7 +286,7 @@ def test_case_is_withheld_while_processing(tmp_path, monkeypatch):
 
 
 def test_a_crashed_run_is_reported_as_failed(tmp_path, monkeypatch):
-    def boom(cd, th=None, stages=None, on_stage=None):
+    def boom(cd, th=None, stages=None, on_stage=None, llm=None):
         raise RuntimeError("disk full")
 
     monkeypatch.setattr(web, "run_case", boom)

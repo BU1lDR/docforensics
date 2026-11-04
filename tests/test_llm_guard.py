@@ -12,9 +12,9 @@ import pytest
 
 from docforensics.audit import AuditLog
 from docforensics.config import Thresholds
-from docforensics.explain import run_explain
-from docforensics.explain.guard import check, guard
-from docforensics.explain.llm import SCHEMA, LLMError, OllamaClient, explain_cluster
+from docforensics.explain import reason, run_explain
+from docforensics.explain.guard import _VERDICT, check, guard
+from docforensics.explain.llm import MAX_TOKENS, SCHEMA, SYSTEM, LLMError, OllamaClient, explain_cluster
 from docforensics.explain.templates import explain_finding
 from docforensics.ingest import create_case
 from docforensics.model import Case, Document, Evidence, Field, Finding, Page, Word
@@ -73,6 +73,12 @@ def test_guard_rejects_a_verdict():
     for word in ("fraud", "forged", "a fake", "counterfeit", "tampered with", "falsified", "fabricated", "doctored"):
         assert guard({"text": f"This is {word} on D2.", "cites": ["F-001"]}, IDS, EVIDENCE) is False, word
     assert check({"text": "This is fraudulent.", "cites": ["F-001"]}, IDS, EVIDENCE) == "verdict wording"
+
+
+def test_the_prompts_do_not_use_the_words_the_guard_rejects():
+    """A small model repeats what it is told not to say ("without implying forgery or fraud"), and the guard then drops its wording. So the
+    prompts say what to leave out without using the words."""
+    assert not _VERDICT.search(SYSTEM) and not _VERDICT.search(reason.SYSTEM)
 
 
 def test_guard_needs_a_citation_and_the_exact_shape():
@@ -151,6 +157,7 @@ def test_chat_json_sends_the_request_the_design_asks_for(stub):
     (path, sent), = s.seen
     assert path == "/api/chat" and sent["model"] == "qwen-test" and sent["stream"] is False
     assert sent["format"] == SCHEMA and sent["keep_alive"] == 0 and sent["options"]["temperature"] == 0
+    assert sent["options"]["num_predict"] == MAX_TOKENS  # a reply that never ends is cut here, not left to run until the client gives up
     assert sent["messages"] == [{"role": "system", "content": "SYSTEM TEXT"}, {"role": "user", "content": "USER TEXT"}]
 
 
@@ -159,6 +166,7 @@ def test_chat_json_sends_the_request_the_design_asks_for(stub):
     (500, {"message": {"content": json.dumps(GOOD)}}),
     (200, {"message": {"content": "not json at all"}}),
     (200, {"message": {"content": "[1, 2]"}}),
+    (200, {"message": {"content": json.dumps(GOOD)[:40]}, "done_reason": "length"}),  # cut at the token limit
     (200, {"unexpected": "shape"}),
     (200, b"\xff\xfe not utf-8"),
 ])
@@ -217,6 +225,7 @@ class Fake:
     """The stand-in for OllamaClient: replies with what it was given, or fails, and keeps the prompts it received."""
 
     model = "fake-model:1b"
+    timeout = 100.0  # what OllamaClient has: the longest one call may take
 
     def __init__(self, reply):
         self.reply, self.calls = reply, []
@@ -334,7 +343,8 @@ def test_only_a_cluster_headline_is_worded_by_the_model(ctx):
     case, client = built(), Fake(WORDING)
     ctx.llm = client
     explained(case, ctx)
-    assert len(client.calls) == 1 and '"id":"F-003"' in client.calls[0][1].replace(" ", "")
+    worded = [c for c in client.calls if c[2] == SCHEMA]  # the reading of the whole case is another call (test_reason.py)
+    assert len(worded) == 1 and '"id":"F-003"' in worded[0][1].replace(" ", "")
     f1, f2, head = case.findings
     assert (head.explanation_source, f1.explanation_source, f2.explanation_source) == ("llm", "template", "template")
     assert head.explanation.startswith(WORDING["text"])
@@ -380,5 +390,5 @@ def test_a_full_run_hands_the_client_to_the_explain_stage(tmp_path):
     save_case(case, cd)
     client = Fake(WORDING)
     done = run_case(cd, th, stages={"explain": run_explain}, llm=client)  # the stage alone, over a case that already has a cluster
-    assert len(client.calls) == 1 and done.findings[2].explanation_source == "llm"
+    assert len([c for c in client.calls if c[2] == SCHEMA]) == 1 and done.findings[2].explanation_source == "llm"
     assert run_case(cd, th, stages={"explain": run_explain}).findings[2].explanation_source == "template"  # no client: no model

@@ -8,6 +8,7 @@ from pathlib import Path
 
 from .audit import AuditLog
 from .config import Thresholds
+from .explain.llm import DEFAULT_MODEL, OllamaClient
 from .findings import quote
 from .ingest import create_case
 from .model import Case, Document, Evidence
@@ -54,10 +55,37 @@ def _case_dir(args: argparse.Namespace) -> CaseDir:
         raise UsageError(f"no such case in {args.data}: {e}")
 
 
+def _llm(args: argparse.Namespace) -> OllamaClient | None:
+    """The client for --llm / --llm-model, or None. A run asked to use the model that cannot is stopped here, before anything is made,
+    so it is not mistaken for a run that did."""
+    if not (args.llm or args.llm_model):
+        return None
+    model = args.llm_model or DEFAULT_MODEL
+    client = OllamaClient(model)
+    if not client.digest():  # Ollama lists the models it has; no digest means it is not running, or does not have this one
+        name = quote(model, 80)
+        raise UsageError(f"the language model {name} is not available from Ollama on this computer. Start Ollama and run: ollama pull {name}")
+    return client
+
+
+def _reading(case: Case, llm: OllamaClient) -> None:
+    r = case.reasoning
+    if r is None:
+        print(f"Language model {quote(llm.model, 80)}: no reading of the case was kept (llm_wording and llm_reasoning in the audit trail say why)")
+        return
+    print(f"Reading of the case by {quote(r.model, 80)}: inference from the findings above, not a finding and not a verdict")
+    if r.summary:
+        print(f"  {quote(r.summary, 1200)}")
+    for x in r.relations:
+        print(f"  {quote(x.a, 20)} and {quote(x.b, 20)} ({quote(x.kind, 20)}): {quote(x.reason, 300)}")
+    print("  Reading order: " + ", ".join(quote(i, 20) for i in r.order))
+
+
 def _run(args: argparse.Namespace) -> int:
     th = _thresholds(args.config)
+    llm = _llm(args)
     case, cd, _ = create_case(args.data, _inputs(args.paths, th), th)
-    case = run_case(cd, th)
+    case = run_case(cd, th, llm=llm)
     print(f"Case {case.id}  ({cd.root})")
     for d in case.documents:
         print(f"  {d.id}  {d.doc_type}  {len(d.pages)} page(s)  {quote(d.filename, 80)}")
@@ -66,6 +94,9 @@ def _run(args: argparse.Namespace) -> int:
         print(f"  {f.id}  {f.fclass:<22}  {quote(f.title, 120)}")
     if case.findings:
         print("  " + ", ".join(f"{n} {c}" for c, n in Counter(f.fclass for f in case.findings).items()))
+    if llm is not None:
+        _reading(case, llm)
+    if case.findings:
         print(f"Follow one to the source file: docforensics trace {case.id} {case.findings[0].id} --data {args.data}")
     return 0 if case.documents else 1
 
@@ -141,8 +172,9 @@ def _serve(args: argparse.Namespace) -> int:
     import uvicorn  # only this command needs the web stack
 
     from .web.app import HOST, create_app
+    th, llm = _thresholds(args.config), _llm(args)
     print(f"Review desk: http://{HOST}:{args.port}/   (cases are kept in {args.data}; Ctrl+C stops it)")
-    uvicorn.run(create_app(Path(args.data), _thresholds(args.config)), host=HOST, port=args.port, log_level="warning")
+    uvicorn.run(create_app(Path(args.data), th, llm), host=HOST, port=args.port, log_level="warning")
     return 0
 
 
@@ -164,6 +196,10 @@ def _parser() -> argparse.ArgumentParser:
     serve.add_argument("--port", type=int, default=8000)
     serve.add_argument("--config", metavar="TOML", help="thresholds to use instead of the defaults")
     serve.set_defaults(fn=_serve)
+    for s in (run, serve):
+        s.add_argument("--llm", action="store_true", help=f"also use the local language model {DEFAULT_MODEL} through Ollama (its output is "
+                       "labelled inference, and it cannot remove or confirm a finding)")
+        s.add_argument("--llm-model", metavar="NAME", help="use this Ollama model instead of the default (implies --llm)")
     for s in (run, trace, verify, serve):
         s.add_argument("--data", default="data", metavar="DIR", help="where cases are kept (default: data)")
     return p
