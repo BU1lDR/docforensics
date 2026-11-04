@@ -21,7 +21,8 @@ from ..dossier import audit_view, build_dossier
 from ..ingest import create_case
 from ..model import Status
 from ..pipeline import Ctx, run_case
-from ..store import CaseDir, load_case, save_case
+from ..review import MAX_NOTE, apply_review
+from ..store import CaseDir, load_case
 
 HOST = "127.0.0.1"
 STATIC = Path(__file__).with_name("static")
@@ -38,7 +39,7 @@ INTERRUPTED = "interrupted: the analysis did not finish (the server may have sto
 class Review(BaseModel):
     model_config = ConfigDict(extra="forbid")
     status: Status | None = None
-    note: str | None = Field(None, max_length=2000)
+    note: str | None = Field(None, max_length=MAX_NOTE)
 
 
 def _parts(url: str):
@@ -145,21 +146,14 @@ def create_app(data_root: Path | str, th: Thresholds | None = None) -> FastAPI:
     @app.post("/api/cases/{case_id}/findings/{finding_id}/review")
     def review(case_id: str, finding_id: str, body: Review):
         cd = settled(case_id)
-        if body.status is None and body.note is None:
-            raise HTTPException(422, "give a status, a note, or both")
         with edit_lock:
             case = load_case(cd)
-            f = next((f for f in case.findings if f.id == finding_id), None)
-            if f is None:
+            try:
+                return apply_review(case, Ctx(cd, AuditLog(cd.audit_path), th), finding_id, body.status, body.note)
+            except KeyError:
                 raise HTTPException(404, "no such finding")
-            before = f.status
-            if body.status is not None:
-                f.status = body.status
-            if body.note is not None:
-                f.note = body.note
-            save_case(case, cd)
-            AuditLog(cd.audit_path).append("reviewer", "reviewer_action", {"finding": f.id, "from": before, "to": f.status, "note": body.note})
-        return f
+            except ValueError as e:  # nothing was changed
+                raise HTTPException(422, str(e))
 
     @app.get("/api/cases/{case_id}/pages/{doc}/{n:int}.png")
     def page(case_id: str, doc: str, n: int):
