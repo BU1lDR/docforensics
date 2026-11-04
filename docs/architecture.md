@@ -1,0 +1,87 @@
+# Architecture
+
+docforensics runs a case (the documents submitted together) through nine stages and writes an audit trail beside it. It runs on one computer with no network access: the OCR models are inside the RapidOCR package, and the only other program it can talk to is an optional language model on the same machine.
+
+```mermaid
+flowchart TD
+    cli["Command line<br/>run, trace, verify-audit, serve"]
+    desk["Review desk<br/>FastAPI, 127.0.0.1 only<br/>upload, page viewer, findings, reviewer actions"]
+    ingest["ingest<br/>type from the first bytes, size and page limits,<br/>stored read-only under the sha256 of the content"]
+    cli --> ingest
+    desk --> ingest
+    ingest --> read
+
+    subgraph pipeline["Pipeline (run_case): each stage runs under guarded(), so a failed or stuck stage becomes a limitation"]
+        read["read<br/>render pages, find words with boxes<br/>text layer of a digital PDF, RapidOCR for a scan"]
+        classify["classify<br/>keyword weights on page 1 give a document type, or unknown"]
+        extract["extract<br/>fields and table cells from a spec per type,<br/>each with a confidence and a location"]
+        forensics["forensics<br/>digital: revisions, covered text, fonts, metadata<br/>scans: image grain, placement<br/>case: signature shape"]
+        checks["checks<br/>within a document, across documents, context rules"]
+        link["link<br/>group findings that share a field, a place or a value"]
+        explain["explain<br/>fixed templates per detector and class"]
+        crops["crops<br/>a marked crop of every cited box"]
+        dossier["dossier<br/>dossier.html and dossier.json"]
+        read --> classify --> extract --> forensics --> checks --> link --> explain --> crops --> dossier
+    end
+
+    llm["Optional local model<br/>Ollama on this computer only<br/>words cluster headlines, behind a guard"]
+    llm -.-> explain
+    casefolder[("Case folder<br/>files, pages, crops, case.json")]
+    audit[("audit trail<br/>hash-chained events")]
+    pipeline --> casefolder
+    pipeline -.-> audit
+    desk -->|"reviewer actions"| casefolder
+    desk -.->|"reviewer actions"| audit
+    dossier --> report["Investigation dossier"]
+```
+
+## Stages
+
+| Stage | Code | What it does | What it leaves behind |
+|---|---|---|---|
+| ingest | [ingest.py](../src/docforensics/ingest.py) | Names the type of each file from its first bytes (PDF, PNG, JPEG), applies the size, page and document limits, and stores the file under the sha256 of its content. A file that fails becomes a limitation with a reason | `files/`, the document list |
+| read | [read/](../src/docforensics/read/) | Renders every page at a stated resolution and locates its words. A digital PDF is read from its text layer (with font, size and colour), a scan or an image with RapidOCR. Scanned pages get a quality class from their sharpness | `pages/`, words with boxes |
+| classify | [understand/classify.py](../src/docforensics/understand/classify.py) | Keyword weights over page 1 give a document type. A page that fits no type, or two equally, stays `unknown` | document type |
+| extract | [understand/](../src/docforensics/understand/) | Reads header fields by their label and table cells by their column heading, using a TOML spec per document type. A field that cannot be found is kept, empty, at confidence 0 | fields: value, confidence, location |
+| forensics | [forensics/](../src/docforensics/forensics/) | One detector per kind of trace, each on its own under `guarded()`. Digital PDFs: saved revisions, covered or hidden text, fonts of figures and dates, file metadata. Scans: image grain and placement of words. Across the case: signature shape | observations and limitations |
+| checks | [checks/](../src/docforensics/checks/) | Within a document: balance chain, dates, totals, net pay against its words, weekday. Across documents: name, address, employer, account, net pay against the bank, income, dates, duplicates, producing software. Context rules against a synthetic reference | inconsistencies, observations, limitations |
+| link | [link.py](../src/docforensics/link.py) | Groups findings that cite the same field, lie on the same place of a page, or concern the same name, address, employer or account. A group with two or more independent kinds of check gets a headline finding | clusters |
+| explain | [explain/](../src/docforensics/explain/) | Fixed wording per detector and class, with next steps. If a local model is given, it words the headline of each cluster instead, when the guard accepts what it says | explanation, next steps, source of the wording |
+| crops | [evidence.py](../src/docforensics/evidence.py) | Cuts out the part of the page that each finding cites and outlines the cited box | `crops/` |
+| dossier | [dossier.py](../src/docforensics/dossier.py) | Writes the dossier twice from one dict: `dossier.json` for machines and a self-contained `dossier.html` (crops embedded, no script, nothing fetched). It records the length and last hash of the audit trail | `dossier.html`, `dossier.json` |
+
+A stage that raises an error, or does not finish in its time limit, is written to the audit trail and shown as a limitation. The run goes on with what it has. A step stuck in native code is abandoned, not killed.
+
+## Findings
+
+- Every finding has a class: **observation** (something seen, which unaltered documents can show too), **inconsistency** (two things that should agree do not, by a stated measure and tolerance), **potential manipulation** (only the headline of a cluster: independent kinds of check point at one place, which is a priority for review and not a probability) or **processing limitation** (a step could not run in full, so what it would have shown is unknown).
+- Every finding carries evidence: the document, the page (0 for the document as a whole), the box in pixels of the page rendered at its stated resolution, and where it applies the value and a crop. `trace` also prints the box in points and checks the stored file against its sha256.
+- The tool states no conclusion about authenticity or intent. The explanation names what was measured and what else could cause it. A reviewer can mark a finding open, needing verification, confirmed by the reviewer or dismissed, and add a note; nothing the tool does moves a finding to confirmed, and each action is an audit event.
+
+## What is deterministic, and what is not
+
+Digits, arithmetic, dates, revision differences and shapes are measured by code, not by a model. The explanation of a finding is fixed wording from [explain/templates.py](../src/docforensics/explain/templates.py).
+
+The one place a model can take part is the headline wording of a cluster, and only if one is given to the run. It is given structured findings (ids, kinds of check, titles, the values the checks used), never page text, a finding's detail or a box. Its answer is used only if [explain/guard.py](../src/docforensics/explain/guard.py) accepts it: it must cite only the ids it was given, state no number or date that those findings do not hold, and pass no verdict. Otherwise the template wording stays. Where it is used it is labelled "AI-generated wording (inference)", and each attempt, accepted or not, is an audit event. The client talks to a loopback address and refuses any other host. At this build the commands do not switch it on, and no real model has been run against it; see the capability table in the [README](../README.md).
+
+## Case folder and audit trail
+
+```
+data/cases/C-<date>-<time>-<4 hex>/
+    files/         the original files, named by sha256, read-only
+    pages/         D1-p1.png, D1-p2.png, ...
+    crops/         F-001-1.png, ... (finding, evidence)
+    case.json      documents, pages, words, fields, findings, reviewer actions
+    audit.jsonl    one JSON event per line, each carrying the hash of the one before
+    dossier.html
+    dossier.json
+```
+
+There is no database. [audit.py](../src/docforensics/audit.py) hashes each event together with the previous hash, so editing or removing a line breaks the chain from that point on; `verify-audit` checks it. Truncating the end of the file cannot be seen from the file alone, which is why the dossier records the trail's length and last hash as an outside anchor.
+
+## Trust boundaries
+
+- The review desk binds `127.0.0.1`, answers only requests whose Host is a loopback name, refuses a write whose Origin differs, and sends a content security policy that forbids loading anything from elsewhere. Names in a URL are validated before any path is built from them.
+- Uploaded files are typed by their first bytes, limited in size, pages and number, and stored by hash, so a user-supplied file name never becomes a path.
+- Text taken from a document reaches the dossier HTML only after control and bidirectional characters are stripped and it is escaped, reaches the review desk page as text and never as markup, and reaches the terminal through one-line quoting.
+- Files are opened by PDF and image parsers in the same process as the tool. There are limits on size, pages and time, and there is no sandbox. That is a stated limitation, see [limitations](limitations.md).
