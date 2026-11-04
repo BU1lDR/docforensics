@@ -117,6 +117,6 @@ class Sheet:
         self.boxes[key] = [self.doc.page_count, round(x0 * PX, 2), round(y0 * PX, 2), round(x1 * PX, 2), round(y1 * PX, 2)]
 
     def pdf(self) -> bytes:
-        data = self.doc.tobytes()
+        data = self.doc.tobytes(no_new_id=True)  # no random trailer ID: the same seed gives the same bytes
         self.doc.close()
         return data

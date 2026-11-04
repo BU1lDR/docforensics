@@ -36,7 +36,7 @@ def incremental(pdf: bytes, edit: Callable[[pymupdf.Page], object], page: int = 
         path.write_bytes(pdf)
         with pymupdf.open(path) as doc:  # an incremental save needs the original file, not a stream
             edit(doc[page])
-            doc.saveIncr()
+            doc.save(path, incremental=True, encryption=pymupdf.PDF_ENCRYPT_KEEP, no_new_id=True)  # saveIncr() would write a random /ID
         return path.read_bytes()
 
 
@@ -102,7 +102,7 @@ def _rewritten(pdf: bytes, edit: Callable[[pymupdf.Page], object], page: int = 0
     """The PDF saved afresh after edit(page): unlike `incremental`, no earlier revision stays inside the file."""
     with pymupdf.open(stream=pdf, filetype="pdf") as doc:
         edit(doc[page])
-        return doc.tobytes()
+        return doc.tobytes(no_new_id=True)
 
 
 def _cover_and_write(pg: pymupdf.Page, old: str, new: str, alt: dict[str, Path] | None = None) -> list[float]:
@@ -140,7 +140,7 @@ def d4_metadata_edit(pdf: bytes, producer: str, mod_date: str) -> tuple[bytes, M
     """D4: the producer and the modification date of the file set to these (`mod_date` as PDF writes it, D:YYYYMMDDHHMMSS+05'30')."""
     with pymupdf.open(stream=pdf, filetype="pdf") as doc:
         doc.set_metadata({**{k: v for k, v in doc.metadata.items() if v}, "producer": producer, "modDate": mod_date})
-        out = doc.tobytes()
+        out = doc.tobytes(no_new_id=True)
     return out, Manipulation("D4", note=f"producer set to {producer!r} and modification date to {mod_date}")
 
 
@@ -262,3 +262,9 @@ def c5_other_mark(ident: Identity, kind: str, strength: str, other: Identity) ->
     if strength == "large" and other.bank == ident.bank:
         raise ValueError("another bank's mark is needed: the other identity has the same bank")
     return replace(ident, **{kind: other.bank if strength == "large" else f"{ident.bank}/edit"})
+
+
+METHODS: dict[str, Callable] = {"D1": d1_incremental_edit, "D2": d2_cover_retype, "D3": d3_near_font_retype, "D4": d4_metadata_edit,
+                                "D5": d5_paste_image, "S1": s1_splice, "S2": s2_erase_retype, "C1": c1_consistent_change,
+                                "C2": c2_cross_document, "C3": c3_duplicate, "C4": c4_other_hand, "C5": c5_other_mark}
+TEST_ONLY = {"D3", "S2"}  # the held-out split only: the dev split never shows these two to the detectors being tuned

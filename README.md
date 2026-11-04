@@ -158,7 +158,7 @@ At run time the tool calls no hosted AI service. The only model that can take pa
 | python-multipart (`python-multipart`) | 0.0.33 | Apache-2.0 | reads uploads |
 | pytest (`pytest`) | 9.2.0 | MIT | tests |
 | httpx (`httpx`) | 0.28.1 | BSD-3-Clause | the test client for the review desk |
-| psutil (`psutil`) | 7.2.2 | BSD-3-Clause | pinned for development; no code in this repository imports it yet |
+| psutil (`psutil`) | 7.2.2 | BSD-3-Clause | development only: `evaluation/run_eval.py` reads the peak memory of an evaluation run from it |
 
 Versions are those pinned in `requirements.txt` and `requirements-dev.txt`; licences are those the packages declare at those versions.
 
