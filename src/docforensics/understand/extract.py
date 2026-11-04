@@ -10,7 +10,7 @@ from ..findings import add_findings, doc_evidence, limitation
 from ..model import Box, Case, Document, Field, Word
 from ..pipeline import Ctx, guarded
 from .confidence import field_conf
-from .layout import Line, find_phrase, issuer_line, lines_of, similar, text_of, union
+from .layout import Line, find_phrase, issuer_line, lines_of, similar, straightened, text_of, unturned, union
 from .normalise import fmt_amount, parse_amount, parse_date
 from .specs import ColumnSpec, FieldSpec, TableSpec, TypeSpec, load_specs
 
@@ -97,7 +97,9 @@ def _label_value(line: Line) -> tuple[str, list[Word]] | None:
 class _Extractor:
     def __init__(self, doc: Document, th: Thresholds):
         self.doc, self.th = doc, th
-        self.lines = {p.n: lines_of(p) for p in doc.pages}
+        straight = {p.n: straightened(p) for p in doc.pages}  # a scan is read as the page would stand upright
+        self.lines = {n: lines_of(page) for n, (page, _) in straight.items()}
+        self.turn = {n: deg for n, (_, deg) in straight.items()}
         self.page_class = {p.n: p.quality_class for p in doc.pages}
         self.dayfirst = _day_first_proven(doc)
         self.ids = count(1)
@@ -140,12 +142,12 @@ class _Extractor:
         return None if line is None else (line, [], line.words, TITLE_SCORE)
 
     def labelled(self, fs: FieldSpec) -> tuple[Line, list[Word], list[Word], float] | None:
-        best = None  # (line, (start, count, similarity)); the first of equals wins: earliest page, topmost line
-        for p in self.doc.pages:
+        best = None  # (line, (start, count, similarity)); the closest wins, then the one that spans more words ('Employer Name' is
+        for p in self.doc.pages:  # 'employer' with 'Name' left over for a value), then the earliest page and topmost line
             for line in self.lines[p.n]:
                 for label in fs.labels:
                     hit = find_phrase(line.words, label, self.th.label_sim)
-                    if hit and (best is None or hit[2] > best[1][2]):
+                    if hit and (best is None or (hit[2], hit[1]) > (best[1][2], best[1][1])):
                         best = (line, hit)
         if best is None:
             return None
@@ -267,6 +269,18 @@ class _Extractor:
                 out += [self.cell(tb, col, p.n, line, row, heads, cells) for col in tb.columns]
         return out
 
+    def restore(self, fields: list[Field]) -> list[Field]:
+        """Boxes back to where the words stand on the page as given: a field with words takes the box around them, one without
+        (a missing value, an empty cell) takes the box around its place on the straightened page."""
+        pages = {p.n: p for p in self.doc.pages}
+        words = {w.id: w for p in self.doc.pages for w in p.words}
+        for f in fields:
+            if f.word_ids:
+                f.box = union(words[i].box for i in f.word_ids)
+            elif self.turn.get(f.page) and any(f.box):
+                f.box = unturned(f.box, pages[f.page], self.turn[f.page])
+        return fields
+
     # --- unknown types
 
     def generic(self) -> list[Field]:
@@ -288,9 +302,9 @@ class _Extractor:
 def extract_document(doc: Document, spec: TypeSpec | None, th: Thresholds) -> list[Field]:
     ex = _Extractor(doc, th)
     if spec is None:
-        return ex.generic()
+        return ex.restore(ex.generic())
     out = [ex.header(fs) for fs in spec.fields]
-    return out + (ex.table(spec.table) if spec.table else [])
+    return ex.restore(out + (ex.table(spec.table) if spec.table else []))
 
 
 def _extract(doc: Document, spec: TypeSpec | None, ctx: Ctx) -> None:

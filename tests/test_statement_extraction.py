@@ -184,6 +184,14 @@ def test_value_below_the_label(tmp_path):
     assert extract_document(far, spec, TH)[0].value is None  # a line far below is not the label's value
 
 
+def test_of_two_equal_labels_the_longer_wins(tmp_path):
+    """'Employer Name' reads as 'employer' in one word as well as 'employer name' in two: taking the short one left 'Name' as the value."""
+    spec = TypeSpec(type="t", min_score=1, keywords={"employer": 1},
+                    fields=[FieldSpec(name="employer", kind="text", labels=["employer", "employer name"])])
+    doc = run(tmp_path, lines_pdf([(72, 100, "Employer Name", 11), (200, 100, "Harborview Test Pvt Ltd", 11)]))[0].documents[0]
+    assert extract_document(doc, spec, TH)[0].value == "Harborview Test Pvt Ltd"
+
+
 def test_continuation_page_without_header_uses_previous_columns(tmp_path):
     drawn = draw_statement(identity(6), rows=70, seed=6)
     with pymupdf.open(stream=drawn.pdf, filetype="pdf") as pdf:

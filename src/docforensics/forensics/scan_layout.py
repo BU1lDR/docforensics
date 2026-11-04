@@ -14,10 +14,10 @@ import numpy as np
 from ..findings import doc_evidence, limitation, quote
 from ..model import Case, Document, Evidence, Finding, Word
 from ..pipeline import Ctx
+from ..understand.layout import MIN_WORDS, page_turn, upright  # noqa: F401 (re-exported: signature and the tests take them from here)
 
 DETECTOR = "scan_layout"
 LISTED = 12         # words named in one finding; the rest are counted
-MIN_WORDS = 12      # words a page needs before its rows can be found
 _MIN_GROUP = 4      # words in a row, or figures in a column, that make a line to measure against
 # The usual spread of differences is never taken below these (px; 1.5 times as much on a degraded page), so with layout_k = 4 a
 # difference must be 6, 10 and 10 px. Set from the largest differences on genuine simulated statements (docs/spike.md, Task 17).
@@ -26,36 +26,8 @@ _ROW_TOL = 0.25     # words are in one row when their centres lie within this ma
 _ROW_REACH = 0.6    # a word is measured against the nearest row when it lies within this many median word heights of it
 _COLUMN_TOL = 5.0   # px: figures are in one column when their right edges lie this close to the column's median
 _COLUMN_REACH = 40.0
-_SEARCH_DEG = 10.0  # the largest turn looked for, either way; one beyond it is not found, and the search then ends anywhere
 MAX_TURN = 2.9      # degrees: a page turned by more than this is not compared. The fits were made on turns of 0.5 to 2
 _AMOUNT = re.compile(r"^[\d,]*\d\.\d\d$")
-
-
-def _sharp(v: np.ndarray) -> float:
-    """How sharply the values pile up: the sum of the squared counts of 3 px bins, over three offsets of the bins."""
-    return sum(float((np.bincount(((v - v.min() + o) // 3).astype(int)) ** 2).sum()) for o in (0, 1, 2))
-
-
-def page_turn(words: list[Word], width: float, height: float) -> float:
-    """The turn of the page in degrees (anticlockwise is positive): the one under which the word centres fall into the sharpest rows."""
-    b = np.array([w.box for w in words], dtype=float)
-    x, y = (b[:, 0] + b[:, 2]) / 2 - width / 2, (b[:, 1] + b[:, 3]) / 2 - height / 2
-    angles = np.arange(-_SEARCH_DEG, _SEARCH_DEG + 1e-9, 0.05)
-    score = [_sharp(x * math.sin(math.radians(a)) + y * math.cos(math.radians(a))) for a in angles]
-    return float(angles[int(np.argmax(score))])
-
-
-def _upright(words: list[Word], width: float, height: float, deg: float) -> tuple[np.ndarray, ...]:
-    """Centre along the row, centre across it, width and height of each word as it would stand on a page that is not turned. The
-    reader's box is the box around the word's turned quadrilateral, so width and height are recovered from it."""
-    t = math.radians(deg)
-    c, s = math.cos(t), abs(math.sin(t))
-    b = np.array([w.box for w in words], dtype=float)
-    x, y = (b[:, 0] + b[:, 2]) / 2 - width / 2, (b[:, 1] + b[:, 3]) / 2 - height / 2
-    big_w, big_h = b[:, 2] - b[:, 0], b[:, 3] - b[:, 1]
-    d = c * c - s * s
-    return (x * c - y * math.sin(t), x * math.sin(t) + y * c,
-            np.maximum((c * big_w - s * big_h) / d, 1.0), np.maximum((c * big_h - s * big_w) / d, 1.0))
 
 
 def _offsets(key: np.ndarray, tol: float, reach: float) -> tuple[np.ndarray, np.ndarray]:
@@ -99,7 +71,7 @@ def layout_consistency(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
         if abs(deg) > MAX_TURN:
             issues.append(f"page {pg.n} is turned by {deg:+.1f} degrees, more than the {MAX_TURN:g} that is compared, so its rows were not trusted")
             continue
-        u, v, wd, ht = _upright(words, pg.width, pg.height, deg)
+        u, v, wd, ht = upright(words, pg.width, pg.height, deg)
         scale = 1.5 if pg.quality_class == "degraded" else 1.0  # a degraded page is read less exactly
         med = float(np.median(ht))
         off_v, row = _offsets(v, _ROW_TOL * med, _ROW_REACH * med)
