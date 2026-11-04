@@ -17,6 +17,7 @@ WHAT = {"D1": "incremental PDF edit", "D2": "white cover, retyped (same font)", 
 EXPECT = {"D4": ("pdf_meta", "cross_producer"), "C3": ("cross_duplicate",), "C4": ("signature",), "C5": ("mark",)}  # C1 and C2: any cross_* check
 MEDIA = ("digital", "mild", "150dpi", "120dpi")
 SCANNED = "scan"
+CLASSES = ("good", "degraded", "poor")  # the quality class of a page read by OCR
 
 
 def iou(a, b) -> float:
@@ -141,6 +142,7 @@ def score(manifest: dict, cases: dict[str, Case], timings: dict[str, float], pea
     by_detector, by_fclass, by_limit = Counter(), Counter(), Counter()
     extraction: dict = defaultdict(Counter)
     classification: dict = defaultdict(Counter)
+    page_quality: dict = defaultdict(Counter)
     seconds = {"digital": [0.0, 0], SCANNED: [0.0, 0]}
     for entry in manifest["cases"]:
         name, case = entry["case"], cases.get(entry["case"])
@@ -164,6 +166,8 @@ def score(manifest: dict, cases: dict[str, Case], timings: dict[str, float], pea
             names = {d.id: d.filename for d in case.documents}
             off_target += [{"case": name, "detector": f.detector, "fclass": f.fclass, "title": _text(f.title), "medium": entry["medium"],
                             "docs": sorted({names.get(e.doc, e.doc) for e in f.evidence})} for f in flags if not any(e.doc in ids for e in f.evidence)]
+        for d in case.documents:
+            page_quality[entry["medium"]].update(p.quality_class for p in d.pages if p.read_mode == "ocr")
         by_file = {d.filename: d for d in case.documents}
         for td in entry["docs"]:
             doc = by_file.get(td["file"])
@@ -193,6 +197,7 @@ def score(manifest: dict, cases: dict[str, Case], timings: dict[str, float], pea
         "extraction": rows,
         "low_conf": low_conf,
         "classification": {m: {"n": b["n"], "correct": b["correct"]} for m, b in classification.items()},
+        "page_quality": {m: {"pages": sum(n.values()), **{k: n[k] for k in CLASSES}} for m, n in page_quality.items() if n},
         "seconds_per_page": {k: s / p for k, (s, p) in seconds.items() if p},
         "peak_rss_mb": peak_rss_mb,
         "errors": errors,
@@ -312,6 +317,21 @@ def format_report(res: dict) -> str:
     if not res["off_target"]:
         add("- none")
     add("")
+    if res["page_quality"]:
+        th = Thresholds()
+        add("## Scanned pages by quality class")
+        add("")
+        add("The class is set by the sharpness of the page alone, before any OCR, and it decides what the pipeline says from the page: a value read from a "
+            f"degraded page is capped at confidence {th.rel_degraded:.2f}, from a poor page at {th.rel_poor:.2f} (a good page: {th.rel_good:.2f}), under the "
+            f"{res['low_conf']:g} below which a value is doubted; a conflict that cites a degraded or poor scanned page is shown as a limitation to verify, "
+            "not as a finding; the scan and mark checks skip a poor page. A change that was not found on a scan may therefore sit on a page the pipeline had "
+            "already set aside.")
+        add("")
+        add("| medium | pages | good | degraded | poor |")
+        add("|---|---|---|---|---|")
+        for m, b in sorted(res["page_quality"].items(), key=lambda kv: MEDIA.index(kv[0]) if kv[0] in MEDIA else 9):
+            add(f"| {m} | {b['pages']} | {b['good']} | {b['degraded']} | {b['poor']} |")
+        add("")
     add("## Extraction on documents nobody changed")
     add("")
     add("| layout | medium | kind | values | correct | wrong | wrong, trusted | missing | accuracy |")

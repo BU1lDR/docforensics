@@ -153,6 +153,27 @@ def test_the_report_lists_every_miss_and_false_flag_and_uses_no_verdict_word():
     assert "IoU" in text and not VERDICT.search(text)
 
 
+def scanned(c, *classes_of_each_document):
+    """Give the documents of case c scanned pages (read by OCR) of the quality classes listed, one tuple of classes per document."""
+    for d, classes in zip(c.documents, classes_of_each_document):
+        d.pages = [Page(n=n, width=1654, height=2339, read_mode="ocr", quality_class=k) for n, k in enumerate(classes, 1)]
+    return c
+
+
+def test_the_report_counts_scanned_pages_by_quality_class_and_medium():
+    files = ["01_statement.pdf", "02_payslip.pdf"]
+    manifest = {"split": "dev", "cases": [entry(n, [STATEMENT, SLIP], medium=m, genuine=True) for n, m in
+                                          (("q1", "150dpi"), ("q2", "150dpi"), ("q3", "mild"), ("q4", "digital"), ("q5", "120dpi"))]}
+    cases = {"q1": scanned(case("q1", files), ("good", "good"), ("degraded",)), "q2": scanned(case("q2", files), ("good",), ("poor",)),
+             "q3": scanned(case("q3", files), ("good",), ("good",)), "q4": case("q4", files)}  # q4 has text-layer pages, q5 never ran
+    res = score(manifest, cases, {})
+    assert res["page_quality"] == {"mild": {"pages": 2, "good": 2, "degraded": 0, "poor": 0},
+                                   "150dpi": {"pages": 5, "good": 3, "degraded": 1, "poor": 1}}  # no row for digital or for a case that did not run
+    text = format_report(res)
+    assert "| mild | 2 | 2 | 0 | 0 |" in text and "| 150dpi | 5 | 3 | 1 | 1 |" in text and not VERDICT.search(text)
+    assert text.index("| mild | 2 |") < text.index("| 150dpi | 5 |")  # in the order of the media, not alphabetical
+
+
 def test_splits_are_disjoint():
     dev, test = plan_cases("dev", 60, 0), plan_cases("test", 60, 0)
     assert not {c["seed"] for c in dev} & {c["seed"] for c in test}
