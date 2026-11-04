@@ -1,8 +1,8 @@
 """Issuer marks (design 8, C5). Documents of one issuer should carry the same logo, right of the issuer's name, and the same stamp,
-above a caption. Which documents are of one issuer is read from the line that names it, the tallest line of page 1 that reads as a
-name: documents whose lines read alike (`text_sim`) are of one. Where a mark is, is data: the spec of each document type says whether
-the document carries a logo and lists the captions printed under its stamp. A window, sized by a word height so that it follows the
-resolution of the page, is turned into a mask of ink, straightened by the turn of its page, cut to its bounding box and scaled to a
+above a caption. Which documents are of one issuer is read from the line that names it, the topmost line of page 1 that reads as a
+name among those about as tall (within 15 %) as the tallest: documents whose lines read alike (`text_sim`) are of one. Where a mark
+is, is data: the spec of each document type says whether the document carries a logo and lists the captions printed under its
+stamp. A window, sized by a word height so that it follows the resolution of the page, is turned into a mask of ink, straightened by the turn of its page, cut to its bounding box and scaled to a
 fixed canvas. Two canvases differ when more than `logo_dist` or `stamp_dist` percent of the ink of the one lies farther than _REACH px
 from the ink of the other, at the best slide of one over the other; a stamp is pressed by hand, so for stamps also at the best turn of
 one of them within 8 degrees. That compares shapes. It does not say who issued the document, and the limits were fitted on synthetic
@@ -11,6 +11,7 @@ A mismatch is an inconsistency for a reviewer to look at; a mark that could not 
 from dataclasses import dataclass
 from itertools import combinations
 
+import cv2
 import numpy as np
 
 from ..findings import doc_evidence, limitation
@@ -18,7 +19,7 @@ from ..model import Case, Document, Evidence, Finding
 from ..pipeline import Ctx
 from ..understand.layout import Line, issuer_line, lines_of, similar, text_of, union
 from ..understand.specs import TypeSpec, load_specs
-from .signature import canvas, distance, find_caption, ink, label, page_image
+from .signature import canvas, distance, find_caption, ink, label, page_image, strays_out
 
 DETECTOR = "mark"
 _SIZE = (128, 128)  # (width, height) in px that a cut mark is scaled to
@@ -30,6 +31,8 @@ _TURNS = {"logo": (0.0,), "stamp": tuple(float(r) for r in range(-8, 9, 2))}  # 
 _AREA = {"logo": (0.2, 4.5, -1.5, 1.5), "stamp": (-1.2, 10.0, -10.5, -0.1)}
 _MAX_SHARE = 0.3    # ink share of the window above which it is printed matter and not a mark (ponytail: a mark that fills its window fails here)
 _MIN_INK = 0.25     # ink, in squares of a word height, below which there is no mark: the genuine marks have 0.63 or more
+_ERASE = 0.1      # word heights: how far past the box of a word of text its pixels are erased from a logo window
+_TOUCH = 3        # px: erased text this close to the ink of a logo touches it, and a line of text ending this close to the logo's right edge ends inside it
 
 
 @dataclass
@@ -63,11 +66,27 @@ def _locate(kind: str, doc: Document, spec: TypeSpec, line: Line, ctx: Ctx) -> _
     if x1 - x0 < 0.5 * (right - left) * u or y1 - y0 < 0.5 * (bottom - top) * u:
         return f"too little of page {pg.n} lies around the {kind} to hold it"
     mask = ink(gray[y0:y1, x0:x1])
+    text, lines = np.zeros(mask.shape, bool), []  # the pixels of the words of other lines that reach into a logo window, per line
+    if kind == "logo":  # under a short name the line beneath it runs on into the window: its words are text and not the logo
+        pad = int(_ERASE * u)
+        for other in lines_of(pg):
+            if other.box != line.box and other.box[0] < anchor[0]:
+                t = np.zeros(mask.shape, bool)
+                for w in other.words:
+                    bx0, by0, bx1, by1 = (int(v) for v in w.box)
+                    t[max(by0 - y0 - pad, 0):max(by1 - y0 + pad, 0), max(bx0 - x0 - pad, 0):max(bx1 - x0 + pad, 0)] = True
+                text |= t
+                lines.append((t, int(other.box[2]) + pad - x0))
+    erased, mask = mask & text, mask & ~text
+    if mask.sum() > _MAX_SHARE * mask.size:
+        return f"the area for the {kind} on page {pg.n} is mostly ink, which a {kind} is not"
+    mask = strays_out(mask)
     ys, xs = np.nonzero(mask)
     if ys.size < _MIN_INK * u * u:
         return f"no ink was found where the {kind} should be on page {pg.n}"
-    if ys.size > _MAX_SHARE * mask.size:
-        return f"the area for the {kind} on page {pg.n} is mostly ink, which a {kind} is not"
+    near = cv2.dilate(mask.astype(np.uint8), np.ones((2 * _TOUCH + 1,) * 2, np.uint8)).astype(bool)
+    if any((erased & t & near).any() and end < xs.max() + _TOUCH for t, end in lines):  # a line that stops inside the logo cuts it differently in each document
+        return f"text of another line ends inside the {kind} on page {pg.n}, so what is the {kind} and what is the text cannot be told apart"
     if xs.min() == 0 or xs.max() == mask.shape[1] - 1 or ys.min() == 0 or ys.max() == mask.shape[0] - 1:
         return f"ink on page {pg.n} reaches the edge of the area for the {kind}, so the {kind} may be cut off"
     return _Mark(doc, pg.n, (float(x0 + xs.min()), float(y0 + ys.min()), float(x0 + xs.max() + 1), float(y0 + ys.max() + 1)), mask, turn)
@@ -104,11 +123,13 @@ def compare_marks(case: Case, ctx: Ctx) -> list[Finding]:
         else:
             groups.append([(doc, line)])
     out: list[Finding] = []
+    paired: set[str] = set()  # the kinds of which two documents of one issuer were compared
     for g in groups:
         for kind in ("logo", "stamp"):
             asking = [(d, ln) for d, ln in g if getattr(specs[d.doc_type], kind)]
             if len(asking) < 2:
                 continue
+            paired.add(kind)
             found: list[_Mark] = []
             for d, ln in asking:
                 got = _locate(kind, d, specs[d.doc_type], ln, ctx)
@@ -134,6 +155,10 @@ def compare_marks(case: Case, ctx: Ctx) -> list[Finding]:
                                f"only. It does not say who issued either document: a {kind} varies from impression to impression, a scan can "
                                f"blur a fine {kind}, and the limit was set on synthetic marks.",
                         evidence=[Evidence(doc=m.doc.id, page=m.page, box=m.box, note=f"{kind} on page {m.page}") for m in (a, b)]))
+    for kind in ("logo", "stamp"):  # two documents carry this mark but none shares its issuer line with another: nothing was compared
+        asking = [(d, ln) for g in groups for d, ln in g if getattr(specs[d.doc_type], kind)]
+        if len(asking) >= 2 and kind not in paired:
+            issues += [(d, kind, f'no other document has an issuer line like "{text_of(ln.words)}", so it was not compared') for d, ln in asking]
     if len(candidates) >= 2 and issues:
         out.append(limitation(DETECTOR, "Issuer marks only partly compared",
                               "Marks were not compared everywhere: " + "; ".join(f"{label(d)}, {what}: {why}" for d, what, why in issues) + ".",
