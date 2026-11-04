@@ -206,8 +206,14 @@ def _ratio(a: str, b: str) -> float:
     return SequenceMatcher(None, a, b, autojunk=False).ratio()
 
 
+def plain(s: str) -> str:
+    """Lower-case letters and digits with single spaces between words: two writings of a value that differ in case, spacing or
+    punctuation only have the same plain form. Order, titles and initials are kept."""
+    return " ".join(re.findall(r"[^\W_]+", unicodedata.normalize("NFKC", s).casefold()))
+
+
 def _name_tokens(s: str) -> list[str]:
-    return [t for t in re.findall(r"[^\W_]+", unicodedata.normalize("NFKC", s).casefold()) if t not in _TITLES]
+    return [t for t in plain(s).split() if t not in _TITLES]
 
 
 def _expand(ts: list[str], other: list[str]) -> list[str]:

@@ -59,9 +59,10 @@ def fld(doc, name, value, role="", conf=0.95, kind="text", words=1):
                  word_ids=[f"{doc}-w{i}" for i in range(words)], page=1, box=(10.0, 10.0, 100.0, 30.0), role=role)
 
 
-def document(id, doc_type, *fields, meta=None, quality="text-layer"):
+def document(id, doc_type, *fields, meta=None, quality="text-layer", read_mode="text-layer"):
     return Document(id=id, sha256=id, filename=f"{id}.pdf", stored_path="", doc_type=doc_type, type_conf=1.0,
-                    pages=[Page(n=1, width=1654, height=2339, quality_class=quality)], fields=list(fields), meta=meta or {})
+                    pages=[Page(n=1, width=1654, height=2339, quality_class=quality, read_mode=read_mode)], fields=list(fields),
+                    meta=meta or {})
 
 
 def built(*docs):
@@ -114,6 +115,7 @@ def test_c2_a_changed_name_is_pinned_on_the_document_that_differs(tmp_path):
     case = run(tmp_path, stmt.pdf, slip.pdf, app.pdf)
     (f,) = case.findings
     assert (f.detector, f.fclass, f.family) == ("cross_name", "inconsistency", "cross_document") and len(f.evidence) == 3
+    assert f.title.startswith("Mismatch:")  # far apart, not a near miss
     assert hit(f.evidence[0], "D2", slip, "employee_name")  # it disagrees with both others, so it comes first
     assert cites(f, "D1", stmt, "account_holder") and cites(f, "D3", app, "applicant_name")
     assert "0.85" in f.detail  # the limit is printed
@@ -216,11 +218,120 @@ def test_an_unreadable_value_is_a_gap_and_not_a_pass_or_a_conflict(tmp_path, qua
     assert gap.fclass == "processing_limitation" and "name" in gap.detail and "D2" in gap.detail
 
 
-@pytest.mark.parametrize("other, flagged", [("Meera K. Varghes", False), ("Varghese, Meera K.", False),
-                                            ("M. Varghese", False), ("Meera K. Kulkarni", True)])
-def test_names_match_by_similarity_and_the_limit_is_known(tmp_path, other, flagged):
-    case = check(tmp_path, pair("Meera K. Varghese", other))
-    assert bool(by(case, "cross_name")) is flagged  # one wrong letter passes at 0.85: a stated limit, see the limitations
+# --- near misses are graded (design 7.4): pass, written differently (observation), Minor mismatch, Mismatch
+
+def graded(case, detector):
+    """[(fclass, title)] of the findings of one detector."""
+    return [(f.fclass, f.title) for f in by(case, detector)]
+
+
+@pytest.mark.parametrize("other", ["MEERA K. VARGHESE", "Meera K Varghese", "meera  k.  varghese", "Meera K. Varghese"])
+def test_names_that_differ_only_in_case_spacing_or_punctuation_pass(tmp_path, other):
+    assert not by(check(tmp_path, pair("Meera K. Varghese", other)), "cross_name")
+
+
+@pytest.mark.parametrize("other", ["Meera K. Varghes", "Meera K. Varghse", "Mera K. Varghese", "Meera K. Varghesee"])
+def test_one_character_name_difference_is_flagged_minor(tmp_path, other):
+    (f,) = by(check(tmp_path, pair("Meera K. Varghese", other)), "cross_name")
+    assert (f.fclass, f.family) == ("inconsistency", "cross_document") and f.title.startswith("Minor mismatch:")
+    assert "similarity 0.9" in f.detail and "0.85" in f.detail  # the measure and the limit are printed
+    assert [e.doc for e in f.evidence] == ["D1", "D2"] and {e.field_id for e in f.evidence} == {"D1-employee_name", "D2-applicant_name"}
+
+
+@pytest.mark.parametrize("other", ["M. K. Varghese", "Varghese, Meera K.", "Dr. Meera K. Varghese", "Meera Varghese K"])
+def test_initials_only_difference_is_an_observation(tmp_path, other):
+    (f,) = by(check(tmp_path, pair("Meera K. Varghese", other)), "cross_name")
+    assert (f.fclass, f.family) == ("observation", "cross_document") and "written differently" in f.title
+    assert "mismatch" not in f.title.lower()  # nothing is called a mismatch here
+
+
+@pytest.mark.parametrize("other", ["M. Varghese", "Meera Varghese"])
+def test_a_name_with_a_word_left_out_is_a_minor_mismatch_and_not_a_form_difference(tmp_path, other):
+    assert graded(check(tmp_path, pair("Meera K. Varghese", other)), "cross_name") == [
+        ("inconsistency", "Minor mismatch: name differs between documents")]
+
+
+@pytest.mark.parametrize("other", ["Meera K. Kulkarni", "Rohan T. Kulkarni"])
+def test_names_further_apart_than_the_limit_are_a_plain_mismatch(tmp_path, other):
+    assert graded(check(tmp_path, pair("Meera K. Varghese", other)), "cross_name") == [
+        ("inconsistency", "Mismatch: name differs between documents")]
+
+
+def test_each_grade_is_its_own_finding_and_the_one_that_differs_most_comes_first(tmp_path):
+    case = built(document("D1", "bank_statement", fld("D1", "account_holder", "Meera K. Varghese", "name")),
+                 document("D2", "payslip", fld("D2", "employee_name", "Rohan T. Kulkarni", "name")),
+                 document("D3", "loan_application", fld("D3", "applicant_name", "Meera K. Varghes", "name")))
+    check(tmp_path, case)
+    major, minor = by(case, "cross_name")
+    assert major.title.startswith("Mismatch:") and minor.title.startswith("Minor mismatch:")
+    assert [e.doc for e in major.evidence] == ["D2", "D1", "D3"]  # D2 differs from both others
+    assert [e.doc for e in minor.evidence] == ["D1", "D3"] and "D2" not in minor.detail
+
+
+@pytest.mark.parametrize("other, expected", [
+    ("FLAT 12 ROSE COURT MILL ROAD BHOPAL 462001", []),
+    ("Bhopal 462001, Flat 12, Rose Court, Mill Road", [("observation", "Address is written differently in the documents")]),
+    ("Flat 12, Rose Court, Mill Rd, Bhopal 462001", [("inconsistency", "Minor mismatch: address differs between documents")]),
+    ("Flat 12, Rose Cort, Mill Road, Bhopal 462001", [("inconsistency", "Minor mismatch: address differs between documents")]),
+    ("Flat 21, Rose Court, Mill Road, Bhopal 462001", [("inconsistency", "Mismatch: address differs between documents")]),  # a number changed
+    ("Flat 12, Lotus Heights, Hill Street, Pune 411001", [("inconsistency", "Mismatch: address differs between documents")])])
+def test_addresses_are_graded(tmp_path, other, expected):
+    case = check(tmp_path, pair("Flat 12, Rose Court, Mill Road, Bhopal 462001", other, "address", ("address", "address")))
+    assert graded(case, "cross_address") == expected
+
+
+@pytest.mark.parametrize("other, expected", [
+    ("HARBORVIEW TEST PVT LTD", []),
+    ("Harborview Test Private Limited", [("observation", "Employer is written differently in the documents")]),
+    ("Harborview Test", [("observation", "Employer is written differently in the documents")]),
+    ("Harborview Tst Pvt Ltd", [("inconsistency", "Minor mismatch: employer differs between documents")]),
+    ("Ironwood Test Pvt Ltd", [("inconsistency", "Mismatch: employer differs between documents")])])
+def test_employers_are_graded_and_the_legal_form_is_only_a_form(tmp_path, other, expected):
+    case = check(tmp_path, pair("Harborview Test Pvt Ltd", other, "employer", ("employer", "employer")))
+    assert graded(case, "cross_employer") == expected
+
+
+def test_an_account_number_is_the_same_or_a_mismatch_with_no_minor_grade(tmp_path):
+    case = check(tmp_path, pair("TST-1234567890", "TST-1234567891", "account", ("bank_account", "account_no")))
+    assert graded(case, "cross_account") == [("inconsistency", "Mismatch: account number differs between documents")]
+
+
+@pytest.mark.parametrize("quality, read_mode, said", [("good", "ocr", True), ("text-layer", "text-layer", False)])
+def test_a_minor_name_mismatch_on_a_scan_says_one_letter_may_be_a_misreading(tmp_path, quality, read_mode, said):
+    case = built(document("D1", "payslip", fld("D1", "employee_name", "Meera K. Varghese", "name")),
+                 document("D2", "loan_application", fld("D2", "applicant_name", "Meera K. Varghes", "name"),
+                          quality=quality, read_mode=read_mode))
+    check(tmp_path, case)
+    (f,) = by(case, "cross_name")
+    assert f.fclass == "inconsistency" and f.title.startswith("Minor mismatch:")  # a good scan is still trusted
+    assert ("misreading" in f.detail) is said
+
+
+def test_a_minor_mismatch_read_from_a_degraded_scan_is_a_possible_extraction_error(tmp_path):
+    case = built(document("D1", "payslip", fld("D1", "employee_name", "Meera K. Varghese", "name")),
+                 document("D2", "loan_application", fld("D2", "applicant_name", "Meera K. Varghes", "name"),
+                          quality="degraded", read_mode="ocr"))
+    check(tmp_path, case)
+    (f,) = by(case, "cross_name")
+    assert f.fclass == "processing_limitation" and f.title.startswith("Possible extraction error, verify: Minor mismatch:")
+
+
+def test_c2_one_letter_dropped_from_a_name_is_a_minor_mismatch_pinned_on_the_slip(tmp_path):
+    ident = identity(1)
+    stmt, slip, app = trio(ident, 1, slip=c2_cross_document(ident, "name", ident.name[:-1]))
+    case = run(tmp_path, stmt.pdf, slip.pdf, app.pdf)
+    (f,) = case.findings
+    assert (f.detector, f.fclass) == ("cross_name", "inconsistency") and f.title.startswith("Minor mismatch:")
+    assert hit(f.evidence[0], "D2", slip, "employee_name") and cites(f, "D1", stmt, "account_holder") and cites(f, "D3", app, "applicant_name")
+
+
+def test_c2_the_same_name_written_surname_first_is_an_observation_only(tmp_path):
+    ident = identity(1)
+    first, initial, last = ident.name.split()
+    stmt, slip, app = trio(ident, 1, slip=c2_cross_document(ident, "name", f"{last.rstrip('.')}, {first} {initial}"))
+    case = run(tmp_path, stmt.pdf, slip.pdf, app.pdf)
+    (f,) = case.findings
+    assert (f.detector, f.fclass) == ("cross_name", "observation") and hit(f.evidence[0], "D2", slip, "employee_name")
 
 
 @pytest.mark.parametrize("other, flagged", [("XXXXXX7890", False), ("tst-1234567890", False), ("XXXX XXXX 7890", False),

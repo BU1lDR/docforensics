@@ -39,6 +39,12 @@ def test_every_finding_is_explained_with_next_steps_and_no_verdict(detector, fcl
     assert not VERDICT.search(text) and not any(VERDICT.search(s) for s in steps)
 
 
+@pytest.mark.parametrize("detector", ["cross_name", "cross_address", "cross_employer"])
+def test_a_difference_in_form_only_has_its_own_explanation_that_calls_it_ordinary(detector):
+    text, steps = TEMPLATES[(detector, "observation")]
+    assert text != TEMPLATES[("*", "observation")][0] and "ordinary" in text and steps and not VERDICT.search(text)
+
+
 def test_no_verdict_words_in_any_template():
     for (detector, fclass), (text, steps) in TEMPLATES.items():
         assert not VERDICT.search(text) and not any(VERDICT.search(s) for s in steps), (detector, fclass)

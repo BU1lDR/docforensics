@@ -154,11 +154,32 @@ def _across(detector: str, differs: str, steps: list[str], unknown: str) -> dict
     return {(detector, "inconsistency"): (differs, steps), (detector, "processing_limitation"): (f"{_LIMIT} {unknown}", _UNCHECKED)}
 
 
+TEMPLATES.update({
+    ("cross_name", "observation"): (
+        "The name in two or more documents has the same words written differently: in another order, with a title added or left "
+        "out, or with an initial standing for a name. People write their own name in different ways on different documents, so "
+        "this has ordinary causes. The tool records it because the documents do not carry the name in one form.",
+        ["Compare the marked names with each page.",
+         "Check that an initial stands for the same name in both documents."]),
+    ("cross_address", "observation"): (
+        "The address in two or more documents has the same parts in another order. Addresses are often laid out in a different "
+        "order on different documents, so this has ordinary causes. The tool records it because the documents do not carry the "
+        "address in one form.",
+        ["Compare the marked addresses with each page, part by part.",
+         "Check that the numbers belong to the same parts in both."]),
+    ("cross_employer", "observation"): (
+        "The employer named in two or more documents is the same apart from its legal form (words such as Pvt, Ltd, Private or "
+        "Limited, present in one and left out or spelt another way in another). Companies are often written with or without it, "
+        "so this has ordinary causes.",
+        ["Compare the marked employer names with each page.",
+         "Check that the document is not naming a different company with the same core name."]),
+})
 TEMPLATES.update(_across(
     "cross_name",
     "The name read from two or more documents is not the same by the measure the finding states. A different person would cause "
     "this, and so would a name written another way that the comparison does not recognise (a spelling, a nickname, an "
-    "abbreviation), or a misread letter.",
+    "abbreviation, a word left out), or a misread letter. A finding titled 'Minor mismatch' is a near miss: names that are close "
+    "but not identical, which a typing slip or a misread letter would also give.",
     ["Compare the marked names with each page.",
      "Confirm the spelling with the issuer of the document that differs."],
     "The names could not be compared here, or a difference was found that could not be trusted because a name was unreadable or "
@@ -167,7 +188,8 @@ TEMPLATES.update(_across(
     "cross_address",
     "The address read from two or more documents is not the same by the measure the finding states: the text is not alike enough, "
     "or a number in it (a flat, house or postal number) differs. A move would cause this, and so would an older address on a "
-    "re-issued document, an address written another way, or a misread digit.",
+    "re-issued document, an address written another way, or a misread digit. A finding titled 'Minor mismatch' is a near miss: "
+    "the same numbers and text that is close but not identical, such as an abbreviation or a typing slip.",
     ["Compare the marked addresses with each page, number by number.",
      "Ask which address is current and confirm it with the issuer."],
     "The addresses could not be compared here, or a difference was found that could not be trusted because an address was "
@@ -175,8 +197,9 @@ TEMPLATES.update(_across(
 TEMPLATES.update(_across(
     "cross_employer",
     "The employer named in two or more documents is not the same by the measure the finding states. Words such as Pvt and Ltd "
-    "are ignored. A change of employer would cause this, and so would a trading name or abbreviation in one document and the "
-    "registered name in another, or a misread word.",
+    "are put aside. A change of employer would cause this, and so would a trading name or abbreviation in one document and the "
+    "registered name in another, or a misread word. A finding titled 'Minor mismatch' is a near miss: names that are close but "
+    "not identical, which a typing slip or a misread letter would also give.",
     ["Compare the marked employer names with each page.",
      "Ask the employer which name it uses for payroll."],
     "The employer names could not be compared here, or a difference was found that could not be trusted because a name was "

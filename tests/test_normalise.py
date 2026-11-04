@@ -2,7 +2,7 @@ from datetime import date
 from decimal import Decimal
 
 from docforensics.understand.normalise import (amount_in_words, amount_side, fmt_amount, name_similarity, parse_amount,
-                                               parse_date, parse_month, text_similarity, weekday_of)
+                                               parse_date, parse_month, plain, text_similarity, weekday_of)
 
 RUPEE, MINUS, NBSP = chr(0x20B9), chr(0x2212), chr(0xA0)
 
@@ -129,6 +129,13 @@ def test_name_similarity_tolerates_order_title_initial():
     assert name_similarity("Dr. Meera Varghese", "meera varghese") == 1.0
     assert name_similarity("", "Meera") == 0.0 and name_similarity("Mrs", "Mr") == 0.0
     assert name_similarity("Meera Varghese", "Anil Rao") == name_similarity("Anil Rao", "Meera Varghese")
+
+
+def test_plain_keeps_lower_case_letters_and_digits_and_nothing_else():
+    assert plain("  Flat 12,  Rose-Court.\n") == "flat 12 rose court"
+    assert plain(chr(0xFF2D) + chr(0xFF25) + chr(0xFF25) + chr(0xFF32) + chr(0xFF21)) == "meera"  # full-width capitals fold
+    assert plain("") == "" and plain("-- , .") == ""
+    assert plain("Dr. Meera") != plain("Meera")  # titles are a form of the name, kept here
 
 
 def test_text_similarity_ignores_case_and_spacing():

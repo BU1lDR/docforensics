@@ -10,10 +10,10 @@ from decimal import Decimal
 from itertools import combinations
 
 from ..config import Thresholds
-from ..findings import add_findings, doc_evidence, limitation
+from ..findings import add_findings, doc_evidence, field_evidence, limitation
 from ..model import Case, Document, Field, Finding
 from ..pipeline import Ctx
-from ..understand.normalise import _month, name_similarity, text_similarity
+from ..understand.normalise import _month, name_similarity, plain, text_similarity
 from . import collect, inconsistency, maybe_demote, observation, poor_page, usable
 from .within import SHOWN, _amount, _cells, _day, _flow, _inr
 
@@ -78,19 +78,32 @@ def _core(employer: str) -> str:
     return " ".join([w for w in words if w not in _LEGAL] or words)
 
 
-def _same_name(a: str, b: str, th: Thresholds) -> tuple[bool, str]:
-    s = name_similarity(a, b)
-    return s >= th.name_sim, f"similarity {s:.2f}"
+SAME, FORM, MINOR, MAJOR = "same", "form", "minor", "major"  # how two writings of one value compare, from alike to far apart
 
 
-def _same_address(a: str, b: str, th: Thresholds) -> tuple[bool, str]:
-    s, same = text_similarity(a, b), re.findall(r"\d+", a) == re.findall(r"\d+", b)  # a changed flat number is a small change in text
-    return s >= th.text_sim and same, f"text similarity {s:.2f}" + ("" if same else ", the numbers in them differ")
+def _grade(identical: bool, form_only: bool, near: bool) -> str:
+    return SAME if identical else FORM if form_only else MINOR if near else MAJOR
 
 
-def _same_employer(a: str, b: str, th: Thresholds) -> tuple[bool, str]:
+def _same_name(a: str, b: str, th: Thresholds) -> tuple[str, str]:
+    s = name_similarity(a, b)  # 1.0 only when the words are the same once order, titles and initials are put aside
+    return _grade(plain(a) == plain(b) != "", s == 1.0, s >= th.name_sim), f"similarity {s:.2f}"
+
+
+def _parts(address: str) -> list[str]:
+    """The comma-separated parts of an address, each in plain form, in a fixed order."""
+    return sorted(p for p in map(plain, re.split(r"[,;\n|]", address)) if p)
+
+
+def _same_address(a: str, b: str, th: Thresholds) -> tuple[str, str]:
+    s, nums = text_similarity(a, b), re.findall(r"\d+", a) == re.findall(r"\d+", b)  # a changed flat number is a small change in text
+    return (_grade(plain(a) == plain(b) != "", _parts(a) == _parts(b) != [], nums and s >= th.text_sim),
+            f"text similarity {s:.2f}" + ("" if nums else ", the numbers in them differ"))
+
+
+def _same_employer(a: str, b: str, th: Thresholds) -> tuple[str, str]:
     s = text_similarity(_core(a), _core(b))
-    return s >= th.text_sim, f"text similarity {s:.2f}"
+    return _grade(plain(a) == plain(b) != "", _core(a) == _core(b) != "", s >= th.text_sim), f"text similarity {s:.2f}"
 
 
 def _tail(short: str, full: str) -> bool:
@@ -98,28 +111,39 @@ def _tail(short: str, full: str) -> bool:
     return len(t) >= 3 and full.endswith(t)
 
 
-def _same_account(a: str, b: str, th: Thresholds) -> tuple[bool, str]:
+def _same_account(a: str, b: str, th: Thresholds) -> tuple[str, str]:  # a number has no near miss: it matches or it does not
     x, y = (re.sub(r"[^A-Z0-9]", "", s.upper()) for s in (a, b))
-    return x == y or _tail(x, y) or _tail(y, x), "the numbers do not match"
+    return SAME if x == y or _tail(x, y) or _tail(y, x) else MAJOR, "the numbers do not match"
 
 
-ROLES = {  # role: (label, detector, same(a, b, th) -> (same, how alike), the limit as it is printed in the finding)
+ROLES = {  # role: (label, detector, grade(a, b, th) -> (SAME | FORM | MINOR | MAJOR, how alike), the limit as it is printed in the finding)
     "name": ("Name", "cross_name", _same_name,
-             lambda th: f"Names count as the same at a similarity of {th.name_sim:g} or more; order, case, titles and punctuation are ignored."),
+             lambda th: "Case, spacing and punctuation are ignored; the same words in another order, with other titles or with "
+                        f"initials are reported as written differently. Names with a similarity of {th.name_sim:g} or more that are "
+                        "still not identical are a minor mismatch; names further apart are a mismatch."),
     "address": ("Address", "cross_address", _same_address,
-                lambda th: f"Addresses count as the same at a text similarity of {th.text_sim:g} or more when the numbers in them are the same; case and spacing are ignored."),
+                lambda th: "Case, spacing and punctuation are ignored; the same comma-separated parts in another order are reported "
+                           f"as written differently. A text similarity of {th.text_sim:g} or more with the same numbers is a minor "
+                           "mismatch; a lower similarity, or other numbers, is a mismatch."),
     "employer": ("Employer", "cross_employer", _same_employer,
-                 lambda th: f"Employers count as the same at a text similarity of {th.text_sim:g} or more; words such as Pvt and Ltd are ignored."),
+                 lambda th: "Case, spacing and punctuation are ignored, and words such as Pvt and Ltd are put aside and reported as "
+                            f"written differently. A text similarity of {th.text_sim:g} or more between the rest is a minor "
+                            "mismatch; a lower one is a mismatch."),
     "account": ("Account number", "cross_account", _same_account,
-                lambda th: "Account numbers count as the same when they are equal, or when the visible end (at least 3 characters) of a masked or short number is the end of the other."),
+                lambda th: "Account numbers count as the same when they are equal, or when the visible end (at least 3 characters) of "
+                           "a masked or short number is the end of the other; any other difference is a mismatch."),
 }
+SCAN_CAVEAT = (" One of the values was read from a scan, and a single letter can be a misreading by the OCR: check the picture before "
+               "taking this for a different spelling.")
 
 
 def check_roles(case: Case, th: Thresholds) -> list[Finding]:
-    """Per role, every readable pair of documents. One finding per role lists the pairs that differ and cites the fields in them,
-    the one that differs from most of the others first."""
+    """Per role, every readable pair of documents, graded (design 7.4): a pair that differs in form only makes an observation, a
+    near miss a "Minor mismatch" and anything further apart a "Mismatch". Per role and grade one finding lists the pairs and cites
+    the fields in them, the one that differs from most of the others first."""
     out: list[Finding] = []
-    for role, (label, detector, same, limit) in ROLES.items():
+    scans = {(d.id, p.n) for d in case.documents for p in d.pages if p.read_mode == "ocr"}
+    for role, (label, detector, grade, limit) in ROLES.items():
         have = [(d, f) for d in case.documents for f in [next((f for f in d.fields if f.role == role and f.row is None), None)] if f]
         if len(have) < 2:  # nothing to compare it with
             continue
@@ -129,21 +153,31 @@ def check_roles(case: Case, th: Thresholds) -> list[Finding]:
                 ok.append((d, f))
             else:
                 out.append(gap(f"the {label.lower()} in {_who(d)} could not be read", d.id))
-        bad = []
+        found: dict[str, list[tuple[int, int, str]]] = {MAJOR: [], MINOR: [], FORM: []}
         for i, j in combinations(range(len(ok)), 2):
-            alike, how = same(ok[i][1].value, ok[j][1].value, th)
-            if not alike:
-                bad.append((i, j, how))
-        if not bad:
-            continue
-        hits = Counter(k for i, j, _ in bad for k in (i, j))
-        order = sorted(hits, key=lambda k: (-hits[k], k))
-        listed = "; ".join(f"{_who(ok[i][0])} and {_who(ok[j][0])}: {how}" for i, j, how in bad[:SHOWN])
-        if len(bad) > SHOWN:
-            listed += f"; and {len(bad) - SHOWN} more"
-        out.append(inconsistency(detector, "cross_document", f"{label} differs between documents",
-                                 f"The {label.lower()} differs between {listed}. {limit(th)}",
-                                 [(ok[k][1], f"{label.lower()} in {_who(ok[k][0])}") for k in order]))
+            g, how = grade(ok[i][1].value, ok[j][1].value, th)
+            if g != SAME:
+                found[g].append((i, j, how))
+        noun = label.lower()
+        for g, bad in found.items():
+            if not bad:
+                continue
+            hits = Counter(k for i, j, _ in bad for k in (i, j))
+            order = sorted(hits, key=lambda k: (-hits[k], k))
+            listed = "; ".join(f"{_who(ok[i][0])} and {_who(ok[j][0])}" + ("" if g == FORM else f": {how}") for i, j, how in bad[:SHOWN])
+            if len(bad) > SHOWN:
+                listed += f"; and {len(bad) - SHOWN} more"
+            cited = [(ok[k][1], f"{noun} in {_who(ok[k][0])}") for k in order]
+            if g == FORM:
+                out.append(observation(detector, "cross_document", f"{label} is written differently in the documents",
+                                       f"The {noun} has the same words, written differently, in {listed}. {limit(th)}",
+                                       [field_evidence(f, note) for f, note in cited], conf=min(f.conf for f, _ in cited)))
+                continue
+            detail = f"The {noun} differs{' slightly' if g == MINOR else ''} between {listed}. {limit(th)}"
+            if g == MINOR and any((f.doc, f.page) in scans for f, _ in cited):
+                detail += SCAN_CAVEAT
+            out.append(inconsistency(detector, "cross_document", f"{'Minor mismatch' if g == MINOR else 'Mismatch'}: {noun} differs between documents",
+                                     detail, cited))
     return out
 
 
