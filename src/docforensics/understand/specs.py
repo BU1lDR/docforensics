@@ -39,6 +39,8 @@ class TypeSpec(_Spec):
     fields: list[FieldSpec]
     table: TableSpec | None = None
     signature: list[str] = []  # captions printed under the signature, in the wordings this type is known to use; none: not looked for
+    logo: bool = False  # a logo is printed right of the issuer's name; False: not looked for
+    stamp: list[str] = []  # captions printed under the stamp, in the wordings this type is known to use; none: not looked for
 
 
 def load_specs(extra_dir: Path | str | None = None) -> dict[str, TypeSpec]:

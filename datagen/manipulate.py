@@ -1,6 +1,6 @@
 """Manipulations applied to a genuine PDF (design 8). Each returns the changed file and a Manipulation: what was done and where,
 in the 200-DPI pixels the reader reports and with pages counted from 1. That record is the truth the detectors are scored on.
-C1 to C4 act on the identity or on the list of files instead of on a PDF: a document is drawn from the changed identity, so
+C1 to C5 act on the identity or on the list of files instead of on a PDF: a document is drawn from the changed identity, so
 what differs is one document's content against the others', and there is no box to record."""
 import io
 import re
@@ -250,3 +250,15 @@ def c3_duplicate(files: list[bytes]) -> list[bytes]:
 def c4_other_hand(ident: Identity, other: Identity) -> Identity:
     """C4: one document signed in another person's hand. Draw that document from the result and the rest from `ident`."""
     return replace(ident, hand=other.name)
+
+
+def c5_other_mark(ident: Identity, kind: str, strength: str, other: Identity) -> Identity:
+    """C5: one document carries another mark: its "logo" or its "stamp", changed "large" (the design of `other`'s bank) or "small" (the
+    own design with one thing changed: a ring less in a stamp, one point of a logo moved a tenth). Draw that document from the result."""
+    if kind not in ("logo", "stamp"):
+        raise ValueError(f"C5 changes the logo or the stamp, not {kind!r}")
+    if strength not in ("large", "small"):
+        raise ValueError(f"C5 changes a mark large or small, not {strength!r}")
+    if strength == "large" and other.bank == ident.bank:
+        raise ValueError("another bank's mark is needed: the other identity has the same bank")
+    return replace(ident, **{kind: other.bank if strength == "large" else f"{ident.bank}/edit"})

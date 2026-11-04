@@ -1,6 +1,8 @@
 # Bank statement. Keywords are looked for in the lower-cased text of page 1; their weights must reach min_score.
 type = "bank_statement"
 min_score = 3
+logo = true  # right of the bank's name
+stamp = ["bank seal"]  # the caption under the drawn stamp
 
 [keywords]
 "statement of account" = 3

@@ -258,6 +258,17 @@ TEMPLATES.update(_across(
      "Ask the signatory, or whoever issued the document that differs, to confirm who signed it."],
     "The signatures could not be compared in full here, because a caption was not found, no ink lay above it, a page was too poor "
     "or too much turned to straighten, or the area held printed matter. Whether the signatures agree is unknown."))
+TEMPLATES.update(_across(
+    "mark",
+    "The logo or the stamp on one document is not the same shape as the one on another document of the same issuer, by the measure the "
+    "finding states. A mark of another issuer would cause this, and so would a form re-issued with a changed mark, a stamp pressed "
+    "askew or only in part, a scan or photograph that blurs a fine mark, or printed matter that lies over it. The comparison reads "
+    "shapes only: it does not say who issued the document, and a mark copied from another document would pass it.",
+    ["Open each mark and compare the two by eye, at full size.",
+     "Ask the issuer to confirm that it issued the document that differs, and in which form."],
+    "The marks could not be compared in full here, because a page was too poor or too much turned to straighten, the line that names "
+    "the issuer or the caption of a stamp was not found, no ink lay where the mark should be, or the area held printed matter. "
+    "Whether the marks agree is unknown."))
 TEMPLATES.update({
     ("cross_duplicate", "observation"): (
         "The same file was submitted more than once, with identical content. It may be an accidental second upload, or one document "

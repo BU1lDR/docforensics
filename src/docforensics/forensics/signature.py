@@ -14,7 +14,7 @@ import numpy as np
 from PIL import Image
 
 from ..findings import doc_evidence, limitation
-from ..model import Case, Document, Evidence, Finding
+from ..model import Case, Document, Evidence, Finding, Page, Word
 from ..pipeline import Ctx
 from ..understand.layout import find_phrase, lines_of, union
 from ..understand.specs import load_specs
@@ -37,40 +37,43 @@ class _Sig:
     canvas: np.ndarray                       # the cut and scaled ink, padded by _SHIFT so that it can slide
 
 
-def _label(d: Document) -> str:
+def label(d: Document) -> str:
     return f"{d.id} ({d.doc_type.replace('_', ' ')})"
 
 
-def _ink(gray: np.ndarray) -> np.ndarray:
+def ink(gray: np.ndarray) -> np.ndarray:
     """Marks that are darker than the paper around them by more than 50 grey levels, without the specks."""
     paper = cv2.medianBlur(gray, 31).astype(np.int16)
     marks = (gray.astype(np.int16) < paper - 50).astype(np.uint8)
-    n, label, stats, _ = cv2.connectedComponentsWithStats(marks, connectivity=8)
-    return np.isin(label, [i for i in range(1, n) if stats[i, cv2.CC_STAT_AREA] >= _SPECK])
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(marks, connectivity=8)
+    return np.isin(lab, [i for i in range(1, n) if stats[i, cv2.CC_STAT_AREA] >= _SPECK])
 
 
-def _canvas(ink: np.ndarray, turn: float) -> np.ndarray:
-    """The ink turned back by the page's turn (anticlockwise is positive), cut to its box and scaled to the canvas."""
-    m = np.pad(ink.astype(np.float32), 60)
-    if turn:
-        r = cv2.getRotationMatrix2D((m.shape[1] / 2, m.shape[0] / 2), -turn, 1.0)
+def canvas(mask: np.ndarray, turn: float, size: tuple[int, int], shift: int, rot: float = 0.0) -> np.ndarray:
+    """The ink turned back by the turn of its page (anticlockwise is positive) and by `rot` degrees more, cut to its box and scaled
+    to `size` (width, height), padded by `shift` px so that it can slide."""
+    m = np.pad(mask.astype(np.float32), 60)
+    ang = -(turn + rot)
+    if ang:
+        r = cv2.getRotationMatrix2D((m.shape[1] / 2, m.shape[0] / 2), ang, 1.0)
         m = cv2.warpAffine(m, r, (m.shape[1], m.shape[0]), flags=cv2.INTER_LINEAR)
     ys, xs = np.nonzero(m > 0.5)
     crop = (m[ys.min():ys.max() + 1, xs.min():xs.max() + 1] > 0.5).astype(np.float32)
-    return np.pad(cv2.resize(crop, _CANVAS, interpolation=cv2.INTER_AREA) > 0.3, _SHIFT)
+    return np.pad(cv2.resize(crop, size, interpolation=cv2.INTER_AREA) > 0.3, shift)
 
 
-def _distance(a: np.ndarray, b: np.ndarray) -> float:
-    """Percent of the ink of the one that lies farther than _REACH px from the ink of the other (the larger of the two shares), at the
-    slide of one over the other, within _SHIFT px, where it is smallest."""
+def distance(a: np.ndarray, b: np.ndarray, reach: float, shift: int) -> float:
+    """Percent of the ink of the one that lies farther than `reach` px from the ink of the other (the larger of the two shares), at the
+    slide of one over the other, within `shift` px, where it is smallest."""
     pa, pb = np.argwhere(a), np.argwhere(b)
     da, db = (cv2.distanceTransform((~c).astype(np.uint8), cv2.DIST_L2, 3) for c in (a, b))
-    return min(100 * max((db[pa[:, 0] + dy, pa[:, 1] + dx] > _REACH).mean(), (da[pb[:, 0] - dy, pb[:, 1] - dx] > _REACH).mean())
-               for dy, dx in product(range(-_SHIFT, _SHIFT + 1), repeat=2))
+    return min(100 * max((db[pa[:, 0] + dy, pa[:, 1] + dx] > reach).mean(), (da[pb[:, 0] - dy, pb[:, 1] - dx] > reach).mean())
+               for dy, dx in product(range(-shift, shift + 1), repeat=2))
 
 
-def _locate(doc: Document, captions: list[str], ctx: Ctx) -> _Sig | str:
-    """The signature of a document, or the reason it could not be compared."""
+def find_caption(doc: Document, captions: list[str], what: str, ctx: Ctx) -> tuple[Page, list[Word]] | str:
+    """The page and the words of the caption of `what` (the best match of any wording in `captions`, on a page that is not poor;
+    of equals the lowest on the latest page), or the reason there is none."""
     poor = [p.n for p in doc.pages if p.quality_class == "poor"]
     best = None
     for pg in doc.pages:
@@ -82,10 +85,13 @@ def _locate(doc: Document, captions: list[str], ctx: Ctx) -> _Sig | str:
                 if hit and (best is None or (hit[2], pg.n, line.box[1]) > best[0]):
                     best = ((hit[2], pg.n, line.box[1]), pg, line.words[hit[0]:hit[0] + hit[1]])
     if best is None:
-        return f"page {poor[0]} is of poor quality (class poor), so its signature was not compared" if poor else "the caption of the signature was not found"
-    _, pg, words = best
-    box = union(w.box for w in words)
-    u = float(np.median([w.box[3] - w.box[1] for w in words]))
+        return f"page {poor[0]} is of poor quality (class poor), so its {what} was not compared" if poor else f"the caption of the {what} was not found"
+    return best[1], best[2]
+
+
+def page_image(pg: Page, ctx: Ctx) -> tuple[np.ndarray, float] | str:
+    """The grey image of the page and the turn of the page in degrees (0 for a text-layer page), or the reason the page cannot be
+    straightened."""
     turn = 0.0
     if pg.read_mode == "ocr":
         if len(pg.words) < MIN_WORDS:
@@ -94,21 +100,35 @@ def _locate(doc: Document, captions: list[str], ctx: Ctx) -> _Sig | str:
         if abs(turn) > MAX_TURN:
             return f"page {pg.n} is turned by {turn:+.1f} degrees, more than the {MAX_TURN:g} that is compared, so it was not straightened"
     with Image.open(ctx.cd.root / pg.image_path) as im:
-        gray = np.asarray(im.convert("L"))
+        return np.asarray(im.convert("L")), turn
+
+
+def _locate(doc: Document, captions: list[str], ctx: Ctx) -> _Sig | str:
+    """The signature of a document, or the reason it could not be compared."""
+    got = find_caption(doc, captions, "signature", ctx)
+    if isinstance(got, str):
+        return got
+    pg, words = got
+    box = union(w.box for w in words)
+    u = float(np.median([w.box[3] - w.box[1] for w in words]))
+    seen = page_image(pg, ctx)
+    if isinstance(seen, str):
+        return seen
+    gray, turn = seen
     left, right, top = _AREA
     x0, x1 = max(int(box[0] + left * u), 0), min(int(box[0] + right * u), gray.shape[1])
     y0, y1 = max(int(box[1] + top * u), 0), min(int(box[1]), gray.shape[0])
     if x1 - x0 < 8 * u or y1 - y0 < 4 * u:
         return f"too little of page {pg.n} lies above the caption to hold a signature"
-    ink = _ink(gray[y0:y1, x0:x1])
-    ys, xs = np.nonzero(ink)
+    mask = ink(gray[y0:y1, x0:x1])
+    ys, xs = np.nonzero(mask)
     if ys.size < 0.25 * u * u:
         return f"no ink was found above the caption on page {pg.n}"
-    if ys.size > _MAX_SHARE * ink.size:
+    if ys.size > _MAX_SHARE * mask.size:
         return f"the area above the caption on page {pg.n} is mostly ink, which a signature is not"
-    if xs.min() == 0 or xs.max() == ink.shape[1] - 1 or ys.min() == 0:
+    if xs.min() == 0 or xs.max() == mask.shape[1] - 1 or ys.min() == 0:
         return f"ink on page {pg.n} reaches the edge of the area above the caption, so the signature may be cut off"
-    return _Sig(doc, pg.n, (float(x0 + xs.min()), float(y0 + ys.min()), float(x0 + xs.max() + 1), float(y0 + ys.max() + 1)), _canvas(ink, turn))
+    return _Sig(doc, pg.n, (float(x0 + xs.min()), float(y0 + ys.min()), float(x0 + xs.max() + 1), float(y0 + ys.max() + 1)), canvas(mask, turn, _CANVAS, _SHIFT))
 
 
 def compare_signatures(case: Case, ctx: Ctx) -> list[Finding]:
@@ -132,15 +152,15 @@ def compare_signatures(case: Case, ctx: Ctx) -> list[Finding]:
             found.append(got)
     out: list[Finding] = []
     for a, b in combinations(found, 2):
-        dist = _distance(a.canvas, b.canvas)
+        dist = distance(a.canvas, b.canvas, _REACH, _SHIFT)
         differs = bool(dist > th.signature_dist)
         ctx.audit.append("system", "signature_compared", {"docs": [a.doc.id, b.doc.id], "pages": [a.page, b.page], "distance": round(dist, 2),
                                                           "limit": th.signature_dist, "differs": differs})
         if differs:
             out.append(Finding(
                 fclass="inconsistency", detector=DETECTOR, family="cross_document",
-                title=f"Signature differs between {_label(a.doc)} and {_label(b.doc)}",
-                detail=f"The signature above the caption on page {a.page} of {_label(a.doc)} and the one on page {b.page} of {_label(b.doc)} are not "
+                title=f"Signature differs between {label(a.doc)} and {label(b.doc)}",
+                detail=f"The signature above the caption on page {a.page} of {label(a.doc)} and the one on page {b.page} of {label(b.doc)} are not "
                        f"the same shape. Each was straightened by the turn of its page, cut to its ink and scaled to {_CANVAS[0]} x {_CANVAS[1]} px; "
                        f"{dist:.1f} % of the ink of the one then lies more than {_REACH} px from the ink of the other, at the best placement of one "
                        f"over the other within {_SHIFT} px. The limit is {th.signature_dist:g} %. This compares shapes only. It does not say who "
@@ -149,6 +169,6 @@ def compare_signatures(case: Case, ctx: Ctx) -> list[Finding]:
                 evidence=[Evidence(doc=s.doc.id, page=s.page, box=s.box, note=f"signature on page {s.page}") for s in (a, b)]))
     if asked >= 2 and issues:
         out.append(limitation(DETECTOR, "Signatures only partly compared",
-                              "Signatures were not compared everywhere: " + "; ".join(f"{_label(d)}: {why}" for d, why in issues) + ".",
+                              "Signatures were not compared everywhere: " + "; ".join(f"{label(d)}: {why}" for d, why in issues) + ".",
                               [doc_evidence(d.id, "signature not compared") for d, _ in issues]))
     return out

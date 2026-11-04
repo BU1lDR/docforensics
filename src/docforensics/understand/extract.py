@@ -10,7 +10,7 @@ from ..findings import add_findings, doc_evidence, limitation
 from ..model import Box, Case, Document, Field, Word
 from ..pipeline import Ctx, guarded
 from .confidence import field_conf
-from .layout import Line, find_phrase, lines_of, similar, text_of, union
+from .layout import Line, find_phrase, issuer_line, lines_of, similar, text_of, union
 from .normalise import fmt_amount, parse_amount, parse_date
 from .specs import ColumnSpec, FieldSpec, TableSpec, TypeSpec, load_specs
 
@@ -136,7 +136,7 @@ class _Extractor:
 
     def title(self) -> tuple[Line, list[Word], list[Word], float] | None:
         lines = self.lines.get(self.doc.pages[0].n, []) if self.doc.pages else []
-        line = max(lines, key=lambda ln: ln.height, default=None)  # the first of equals: the topmost
+        line = issuer_line(lines)  # the tallest line that reads as a name, the topmost of equals
         return None if line is None else (line, [], line.words, TITLE_SCORE)
 
     def labelled(self, fs: FieldSpec) -> tuple[Line, list[Word], list[Word], float] | None:

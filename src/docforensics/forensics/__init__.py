@@ -6,6 +6,7 @@ from collections.abc import Callable
 from ..findings import add_findings
 from ..model import Case, Document, Finding
 from ..pipeline import Ctx, guarded
+from .marks import compare_marks
 from .pdf_fonts import font_outliers
 from .pdf_meta import metadata_observations
 from .pdf_overlay import covered_or_hidden_text
@@ -29,6 +30,7 @@ def run_forensics(case: Case, ctx: Ctx) -> None:
                        doc_id=doc.id):
                 add_findings(case, ctx, drafts)
                 ctx.audit.append("system", "doc_forensics", {"doc": doc.id, "detector": det.__name__, "findings": len(drafts)})
-    drafts = []  # signatures are compared across the documents, so once for the case
-    if guarded(ctx, case, "forensics.compare_signatures", lambda: drafts.extend(compare_signatures(case, ctx))):
-        add_findings(case, ctx, drafts)
+    for compare in (compare_signatures, compare_marks):  # signatures and marks are compared across the documents, so once for the case
+        drafts = []
+        if guarded(ctx, case, f"forensics.{compare.__name__}", lambda compare=compare, drafts=drafts: drafts.extend(compare(case, ctx))):
+            add_findings(case, ctx, drafts)

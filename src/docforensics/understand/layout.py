@@ -51,6 +51,12 @@ def find_phrase(words: list[Word], phrase: str, floor: float) -> tuple[int, int,
     return best
 
 
+def issuer_line(lines: list[Line]) -> Line | None:
+    """The tallest line that reads as a name (three letters or digits at least; the first of equals: the topmost), so a
+    stray character that a logo or a stamp was read as does not become the issuer. None if no line qualifies."""
+    return max((ln for ln in lines if sum(c.isalnum() for c in text_of(ln.words)) >= 3), key=lambda ln: ln.height, default=None)
+
+
 def _centre(w: Word) -> float:
     return (w.box[1] + w.box[3]) / 2
 

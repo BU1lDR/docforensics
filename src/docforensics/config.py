@@ -26,6 +26,8 @@ class Thresholds:
     noise_ratio_lo: float = 0.5       # a word whose background noise is below this share of the page's median is noted
     noise_ratio_hi: float = 2.0       # ... or above this multiple of it
     signature_dist: float = 9.4       # two signatures differ when more than this % of the ink of either lies far from the other's ink; the geometric mean of 6.1 (largest genuine pair on the dev split) and 14.5 (smallest pair of other hands), docs/spike.md
+    logo_dist: float = 10.5           # two logos differ when more than this % of the ink of either lies far from the other's ink; the geometric mean of 8.5 (largest genuine pair over four scan levels) and 13.1 (nearest pair of other designs but one: two designs of the six, 0.3 apart, are not told apart at any limit), docs/spike.md
+    stamp_dist: float = 3.0           # the same for stamps, one of them turned to its best fit within 8 degrees; the geometric mean of 1.6 (largest genuine pair) and 5.8 (smallest pair of other designs), docs/spike.md
     # limits (design 7.10)
     max_file_bytes: int = 10_000_000
     max_pages: int = 20
