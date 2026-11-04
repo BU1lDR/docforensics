@@ -101,6 +101,118 @@ TEMPLATES: dict[tuple[str, str], tuple[str, list[str]]] = {
 }
 
 
+def _across(detector: str, differs: str, steps: list[str], unknown: str) -> dict[tuple[str, str], tuple[str, list[str]]]:
+    """The two entries every check across documents needs: what a difference may mean, and what an unreadable input leaves unknown."""
+    return {(detector, "inconsistency"): (differs, steps), (detector, "processing_limitation"): (f"{_LIMIT} {unknown}", _UNCHECKED)}
+
+
+TEMPLATES.update(_across(
+    "cross_name",
+    "The name read from two or more documents is not the same by the measure the finding states. A different person would cause "
+    "this, and so would a name written another way that the comparison does not recognise (a spelling, a nickname, an "
+    "abbreviation), or a misread letter.",
+    ["Compare the marked names with each page.",
+     "Confirm the spelling with the issuer of the document that differs."],
+    "The names could not be compared here, or a difference was found that could not be trusted because a name was unreadable or "
+    "read with low confidence. Whether the names agree is unknown."))
+TEMPLATES.update(_across(
+    "cross_address",
+    "The address read from two or more documents is not the same by the measure the finding states: the text is not alike enough, "
+    "or a number in it (a flat, house or postal number) differs. A move would cause this, and so would an older address on a "
+    "re-issued document, an address written another way, or a misread digit.",
+    ["Compare the marked addresses with each page, number by number.",
+     "Ask which address is current and confirm it with the issuer."],
+    "The addresses could not be compared here, or a difference was found that could not be trusted because an address was "
+    "unreadable or read with low confidence. Whether the addresses agree is unknown."))
+TEMPLATES.update(_across(
+    "cross_employer",
+    "The employer named in two or more documents is not the same by the measure the finding states. Words such as Pvt and Ltd "
+    "are ignored. A change of employer would cause this, and so would a trading name or abbreviation in one document and the "
+    "registered name in another, or a misread word.",
+    ["Compare the marked employer names with each page.",
+     "Ask the employer which name it uses for payroll."],
+    "The employer names could not be compared here, or a difference was found that could not be trusted because a name was "
+    "unreadable or read with low confidence. Whether they agree is unknown."))
+TEMPLATES.update(_across(
+    "cross_account",
+    "The account numbers read from two or more documents do not match. A masked number matches when its visible end (at least "
+    "three characters) is the end of the other number. A different account would cause this, and so would a misread digit.",
+    ["Compare the marked account numbers with each page, digit by digit.",
+     "Confirm the account with the bank."],
+    "The account numbers could not be compared here, or a difference was found that could not be trusted because a number was "
+    "unreadable or read with low confidence. Whether they agree is unknown."))
+TEMPLATES.update(_across(
+    "cross_payer",
+    "None of the salary or payroll credits on the bank statement names a payer that shares a word with the employer named in the "
+    "other document. A different employer would cause this, and so would a payer written another way (a trading name, an "
+    "abbreviation, a group company), a payer the statement does not name, or a misread word. The comparison is a heuristic.",
+    ["Compare the employer and the credit descriptions with each page.",
+     "Ask the employer which legal name pays the salary."],
+    "The employer could not be compared with the payer of the salary here, or a difference was found that could not be trusted "
+    "because a word was unreadable or read with low confidence. Whether they agree is unknown."))
+TEMPLATES.update(_across(
+    "cross_net_pay",
+    "The net pay on the payslip is not found among the credits on the bank statement for the month it was paid, within the "
+    "stated tolerance. A different amount paid would cause this, and so would a payslip whose figures were changed together, a "
+    "part payment or a payment in several credits, a payslip that does not belong to this account, or a misread digit.",
+    ["Compare the net pay and the nearest credit with each page, digit by digit.",
+     "Ask the employer for the payment record and the bank for a statement issued directly."],
+    "The net pay could not be matched to a credit here, or a difference was found that could not be trusted because a figure "
+    "was unreadable or read with low confidence. Whether the payslip and the statement agree is unknown."))
+TEMPLATES.update(_across(
+    "cross_income",
+    "The monthly income declared on the application differs from the gross earnings on the payslip by more than the stated "
+    "tolerance. A changed figure in either document would cause this, and so would income from another source that the "
+    "application includes, a different month, or a misread digit.",
+    ["Compare the declared income and the gross earnings with each page.",
+     "Ask the applicant how the declared income is made up."],
+    "The declared income could not be compared with the gross earnings here, or a difference was found that could not be trusted "
+    "because a figure was unreadable or read with low confidence. Whether they agree is unknown."))
+TEMPLATES.update(_across(
+    "cross_dates",
+    "One or more documents are dated after the application they were submitted with. A wrongly entered or changed date would "
+    "cause this, and so would an application filled in earlier than it was submitted, a document re-issued afterwards, a date "
+    "written in a different convention (dates are read day first, DD/MM/YYYY), or a misread digit.",
+    ["Compare the marked dates with each page.",
+     "Ask the applicant and the lender when each document was received."],
+    "The dates could not be compared here, or a difference was found that could not be trusted because a date was unreadable, "
+    "ambiguous or read with low confidence. Whether the documents are dated in order is unknown."))
+TEMPLATES.update({
+    ("cross_duplicate", "observation"): (
+        "The same file was submitted more than once, with identical content. It may be an accidental second upload, or one document "
+        "offered in two roles. The tool does not say which.",
+        ["Check whether the document was meant to appear more than once.",
+         "Remove the extra copy and run the case again if it was not."]),
+    ("cross_producer", "observation"): (
+        "Documents of different kinds name the same producing software and were created within a few minutes of each other. "
+        "Ordinary workflows do this too: one office system issuing both, or one print-to-PDF tool used for everything. On its own "
+        "it is a pointer for the reviewer, not a conclusion about the documents.",
+        ["Ask where each document came from and how it reached the applicant.",
+         "Weigh it together with any other findings that cite the same documents."]),
+    ("cross_checks", "processing_limitation"): (
+        f"{_LIMIT} Some comparisons across documents could not be made, because a document was not submitted, was not recognised or "
+        "could not be read, or because a date or value they depend on was unavailable. What those comparisons would have shown is "
+        "unknown.",
+        _UNCHECKED),
+    ("context_emi", "observation"): (
+        "The monthly obligations on the application are a larger share of the declared income than the reference limit the finding "
+        "states. That limit is a synthetic, illustrative value, not a lending standard, and interest is ignored. Many ordinary "
+        "applications are above such a limit.",
+        ["Check the declared income, the existing instalments, the loan amount and the tenure against the page.",
+         "Treat it as context for the reviewer's own assessment."]),
+    ("context_emi", "processing_limitation"): (
+        f"{_LIMIT} The rule on monthly obligations could not be applied, because a figure it needs was unreadable, read with low "
+        "confidence, or not a usable number. Whether the obligations are within the reference limit is unknown.",
+        _UNCHECKED),
+    ("context_age", "observation"): (
+        "A document is dated further before the application than the reference limit the finding states. That limit is a "
+        "synthetic, illustrative value, not a lending standard. Documents are often older for ordinary reasons, such as a "
+        "statement kept from an earlier month.",
+        ["Check the date of the document against the page.",
+         "Ask for a more recent document if the lender requires one."]),
+})
+
+
 def _join(items: list[str]) -> str:
     return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
 

@@ -1,12 +1,40 @@
 """Checks (design 7.4): functions over the fields extracted from a case, each returning draft findings. An input that is
 missing or unreadable is reported as a limitation, never passed over, and the tolerance a check used is printed in its
 finding."""
+from collections.abc import Callable
+
 from ..config import Thresholds
 from ..findings import demote, field_evidence
 from ..model import Case, Field, Finding
-from ..pipeline import Ctx
+from ..pipeline import Ctx, guarded
 
 DOUBTFUL = ("degraded", "poor")  # page classes whose OCR digits cannot back a conflict on their own
+
+
+def observation(detector: str, family: str, title: str, detail: str, evidence: list, conf: float = 1.0) -> Finding:
+    """Something worth the reviewer's attention that is neither a conflict nor a limit of the analysis."""
+    return Finding(fclass="observation", detector=detector, family=family, title=title, detail=detail, conf=conf,
+                   evidence=evidence)
+
+
+def poor_page(case: Case, f: Field) -> bool:
+    """The field was read from a page whose quality was too poor for any value on it to be trusted."""
+    return any(p.n == f.page and p.quality_class == "poor" for d in case.documents if d.id == f.doc for p in d.pages)
+
+
+def usable(case: Case, f: Field) -> bool:
+    return f.value is not None and not poor_page(case, f)
+
+
+def collect(case: Case, ctx: Ctx, checks: list[Callable[[Case, Thresholds], list[Finding]]]) -> list[Finding]:
+    """Run each check(case, th) under guarded() and return the drafts of those that finished. One that fails or times out
+    is already a limitation by then, and the others still run."""
+    drafts: list[Finding] = []
+    for check in checks:
+        got: list[Finding] = []  # its own list: a check abandoned after a timeout cannot add to the result later
+        if guarded(ctx, case, check.__name__, lambda check=check, got=got: got.extend(check(case, ctx.th))):
+            drafts += got
+    return drafts
 
 
 def inconsistency(detector: str, family: str, title: str, detail: str, cited: list[tuple[Field, str]]) -> Finding:
@@ -33,5 +61,9 @@ def maybe_demote(case: Case, f: Finding, th: Thresholds) -> Finding:
 
 
 def run_checks(case: Case, ctx: Ctx) -> None:
-    from .within import run_within_checks  # lazy: within imports the helpers above
-    run_within_checks(case, ctx)
+    from .context import run_context_rules  # lazy: these import the helpers above
+    from .cross import run_cross_checks
+    from .within import run_within_checks
+    run_within_checks(case, ctx)  # inside each document, then across them, then against reference limits
+    run_cross_checks(case, ctx)
+    run_context_rules(case, ctx)

@@ -16,7 +16,7 @@ from docforensics.model import Case, Document, Evidence, Field, Finding, Page
 from docforensics.pipeline import Ctx, run_case
 from docforensics.understand.extract import extract_document
 from docforensics.understand.specs import load_specs
-from tests.helpers import iou, lines_pdf
+from tests.helpers import iou, lines_pdf, within_only
 
 TH = Thresholds()
 SPEC = load_specs()["bank_statement"]
@@ -47,7 +47,7 @@ def run(tmp_path, *pdfs, th=TH, scan=None):
             page.read_mode, page.quality_class = "ocr", scan
         doc.fields = extract_document(doc, SPEC, th)
         run_checks(case, Ctx(cd, audit, th))
-    return case
+    return within_only(case)
 
 
 def on(e, drawn, key):

@@ -85,6 +85,13 @@ def iou(a, b):
     return inter / ((a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter)
 
 
+def within_only(case):
+    """The case without the findings of the checks across documents and of the context rules, for tests that are about what one
+    document's own checks say. Those two have their own tests (test_cross.py); within-document ids are unchanged because they run first."""
+    case.findings = [f for f in case.findings if not f.detector.startswith(("cross_", "context_"))]
+    return case
+
+
 def d1_edited_statement(new: str = "9,99,999.00") -> bytes:
     """A drawn bank statement whose first credit was re-typed in an incremental save: a revision change and a broken balance chain."""
     from datagen.fictional import identity

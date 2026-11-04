@@ -14,7 +14,7 @@ from docforensics.ingest import create_case
 from docforensics.pipeline import run_case
 from docforensics.understand.classify import classify
 from docforensics.understand.specs import load_specs
-from tests.helpers import iou
+from tests.helpers import iou, within_only
 
 TH = Thresholds()
 SPECS = load_specs()
@@ -23,7 +23,7 @@ SLIP_COLS = ("earning_name", "earning_amount", "deduction_name", "deduction_amou
 
 def run(tmp_path, *pdfs):
     case, cd, _ = create_case(tmp_path / "data", [(f"d{i}.pdf", p) for i, p in enumerate(pdfs, 1)], TH)
-    return run_case(cd, TH)
+    return within_only(run_case(cd, TH))
 
 
 def header(doc):

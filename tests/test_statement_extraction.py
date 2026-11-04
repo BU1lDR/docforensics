@@ -14,7 +14,7 @@ from docforensics.understand import specs as specs_module
 from docforensics.understand.classify import classify
 from docforensics.understand.extract import extract_document
 from docforensics.understand.specs import FieldSpec, TypeSpec, load_specs
-from tests.helpers import SLIP_LINES, iou, lines_pdf, png_bytes
+from tests.helpers import SLIP_LINES, iou, lines_pdf, png_bytes, within_only
 
 TH = Thresholds()
 SPECS = load_specs()
@@ -34,7 +34,7 @@ def period_pdf(period: str) -> bytes:
 
 def run(tmp_path, *pdfs):
     case, cd, audit = create_case(tmp_path / "data", [(f"d{i}.pdf", p) for i, p in enumerate(pdfs, 1)], TH)
-    return run_case(cd, TH), audit
+    return within_only(run_case(cd, TH)), audit
 
 
 def header(doc):

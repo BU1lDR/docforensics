@@ -12,7 +12,7 @@ from docforensics.ingest import create_case
 from docforensics.pipeline import run_case
 from docforensics.read.ocr import Ocr, load_image_page, split_line_box
 from docforensics.read.pdf import read_pdf_page
-from tests.helpers import SLIP_LINES, STATEMENT_LINES, iou, lines_pdf, pdf_bytes, png_bytes, recall, render_lines
+from tests.helpers import SLIP_LINES, STATEMENT_LINES, iou, lines_pdf, pdf_bytes, png_bytes, recall, render_lines, within_only
 
 TH = Thresholds()
 ocr = pytest.mark.ocr
@@ -111,7 +111,7 @@ def test_transparent_png_keeps_its_text(tmp_path):
 def test_image_bomb_gives_limitation_not_crash(tmp_path, monkeypatch, limit):
     case, cd, audit = create_case(tmp_path / "data", [("scan.png", png_bytes())], TH)
     monkeypatch.setattr(Image, "MAX_IMAGE_PIXELS", limit)
-    out = run_case(cd, TH)
+    out = within_only(run_case(cd, TH))  # the notice that one document cannot be compared with another is not what this is about
     lims = [f for f in out.findings if f.fclass == "processing_limitation"]
     assert out.documents[0].pages == [] and len(lims) == 1 and lims[0].evidence[0].doc == "D1"
     assert "DecompressionBombError" in lims[0].detail

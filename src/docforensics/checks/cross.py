@@ -1,0 +1,391 @@
+"""Checks across documents (design 7.4). What is compared is decided by what a field is (its role) or by the type of the
+document, never by what the documents say. A comparison that cannot be made, because a document is missing, a value is
+unreadable or a date has no statement to match, is a gap. All the gaps of a run are reported once, together, as one
+limitation, so one missing document is not repeated as a limitation per check. Finding text holds only document ids, type
+labels, numbers, dates and scores, never the documents' own words: the evidence carries those."""
+import re
+from collections import Counter
+from datetime import datetime, timedelta, timezone
+from decimal import Decimal
+from itertools import combinations
+
+from ..config import Thresholds
+from ..findings import add_findings, doc_evidence, limitation
+from ..model import Case, Document, Field, Finding
+from ..pipeline import Ctx
+from ..understand.normalise import _month, name_similarity, text_similarity
+from . import collect, inconsistency, maybe_demote, observation, poor_page, usable
+from .within import SHOWN, _amount, _cells, _day, _flow, _inr
+
+GAPS, PAYER, NET_PAY, INCOME, DATES = "cross_checks", "cross_payer", "cross_net_pay", "cross_income", "cross_dates"
+DUPLICATE, PRODUCER = "cross_duplicate", "cross_producer"
+TYPES = {"bank_statement": "bank statement", "payslip": "payslip", "loan_application": "loan application"}
+DATED = {"bank_statement": ("period_end", "period end"), "payslip": ("pay_date", "pay date")}  # the date a document is of
+NEEDS = (  # (types on one side, types on the other, what is left uncompared when only one side was submitted)
+    (("payslip",), ("bank_statement",), "net pay was not compared with the credits on a bank statement"),
+    (("loan_application",), ("payslip",), "declared income was not compared with payslip gross earnings"),
+    (("loan_application",), ("bank_statement", "payslip"), "the application date was not compared with the dates of the other documents"),
+)
+
+
+def _who(d: Document) -> str:
+    return f"{d.id} ({TYPES.get(d.doc_type, 'document')})"
+
+
+def _docs(docs: list[Document]) -> str:
+    return ", ".join(_who(d) for d in docs)
+
+
+def _of(case: Case, doc_type: str) -> list[Document]:
+    return [d for d in case.documents if d.doc_type == doc_type and d.fields]
+
+
+def _header(doc: Document, name: str) -> Field | None:
+    return next((f for f in doc.fields if f.name == name and f.row is None), None)
+
+
+def gap(text: str, *docs: str) -> Finding:
+    """One comparison that could not be made: what is left unchecked and why, and the documents it concerns."""
+    return limitation(GAPS, text, "", [doc_evidence(d, "not compared in full") for d in docs])
+
+
+def fold(gaps: list[Finding], detector: str, title: str, lead: str) -> Finding:
+    """All the gaps as one limitation: `lead`, then what each gap says (once), and one whole-document pointer per document."""
+    docs = dict.fromkeys(e.doc for g in gaps for e in g.evidence)
+    return limitation(detector, title, f"{lead}: {'; '.join(dict.fromkeys(g.title for g in gaps))}.",
+                      [doc_evidence(d, "not checked in full") for d in docs])
+
+
+def _read(case: Case, doc: Document, name: str, label: str, gaps: list[Finding], parse=_amount, min_conf: float = 0.0):
+    """(field, parsed value) for a header field that can be used. If it cannot, None, and a gap says which one."""
+    f = _header(doc, name)
+    x = parse(f) if f is not None and usable(case, f) else None
+    why = "could not be read" if x is None else "was read with low confidence" if f.conf < min_conf else ""
+    if why:
+        gaps.append(gap(f"the {label} in {_who(doc)} {why}", doc.id))
+        return None
+    return f, x
+
+
+# --- fields that stand for the same thing in different documents (the extractor gives each its role)
+
+_LEGAL = {"pvt", "ltd", "private", "limited", "inc", "llc", "llp", "co", "corp", "corporation", "company", "plc", "pty", "gmbh"}
+
+
+def _core(employer: str) -> str:
+    """The employer's words without the legal form ('Pvt Ltd'); the whole name if nothing else is left."""
+    words = re.findall(r"[a-z0-9]+", employer.casefold())
+    return " ".join([w for w in words if w not in _LEGAL] or words)
+
+
+def _same_name(a: str, b: str, th: Thresholds) -> tuple[bool, str]:
+    s = name_similarity(a, b)
+    return s >= th.name_sim, f"similarity {s:.2f}"
+
+
+def _same_address(a: str, b: str, th: Thresholds) -> tuple[bool, str]:
+    s, same = text_similarity(a, b), re.findall(r"\d+", a) == re.findall(r"\d+", b)  # a changed flat number is a small change in text
+    return s >= th.text_sim and same, f"text similarity {s:.2f}" + ("" if same else ", the numbers in them differ")
+
+
+def _same_employer(a: str, b: str, th: Thresholds) -> tuple[bool, str]:
+    s = text_similarity(_core(a), _core(b))
+    return s >= th.text_sim, f"text similarity {s:.2f}"
+
+
+def _tail(short: str, full: str) -> bool:
+    t = short.lstrip("X")  # the visible end of a masked number
+    return len(t) >= 3 and full.endswith(t)
+
+
+def _same_account(a: str, b: str, th: Thresholds) -> tuple[bool, str]:
+    x, y = (re.sub(r"[^A-Z0-9]", "", s.upper()) for s in (a, b))
+    return x == y or _tail(x, y) or _tail(y, x), "the numbers do not match"
+
+
+ROLES = {  # role: (label, detector, same(a, b, th) -> (same, how alike), the limit as it is printed in the finding)
+    "name": ("Name", "cross_name", _same_name,
+             lambda th: f"Names count as the same at a similarity of {th.name_sim:g} or more; order, case, titles and punctuation are ignored."),
+    "address": ("Address", "cross_address", _same_address,
+                lambda th: f"Addresses count as the same at a text similarity of {th.text_sim:g} or more when the numbers in them are the same; case and spacing are ignored."),
+    "employer": ("Employer", "cross_employer", _same_employer,
+                 lambda th: f"Employers count as the same at a text similarity of {th.text_sim:g} or more; words such as Pvt and Ltd are ignored."),
+    "account": ("Account number", "cross_account", _same_account,
+                lambda th: "Account numbers count as the same when they are equal, or when the visible end (at least 3 characters) of a masked or short number is the end of the other."),
+}
+
+
+def check_roles(case: Case, th: Thresholds) -> list[Finding]:
+    """Per role, every readable pair of documents. One finding per role lists the pairs that differ and cites the fields in them,
+    the one that differs from most of the others first."""
+    out: list[Finding] = []
+    for role, (label, detector, same, limit) in ROLES.items():
+        have = [(d, f) for d in case.documents for f in [next((f for f in d.fields if f.role == role and f.row is None), None)] if f]
+        if len(have) < 2:  # nothing to compare it with
+            continue
+        ok = []
+        for d, f in have:
+            if usable(case, f):
+                ok.append((d, f))
+            else:
+                out.append(gap(f"the {label.lower()} in {_who(d)} could not be read", d.id))
+        bad = []
+        for i, j in combinations(range(len(ok)), 2):
+            alike, how = same(ok[i][1].value, ok[j][1].value, th)
+            if not alike:
+                bad.append((i, j, how))
+        if not bad:
+            continue
+        hits = Counter(k for i, j, _ in bad for k in (i, j))
+        order = sorted(hits, key=lambda k: (-hits[k], k))
+        listed = "; ".join(f"{_who(ok[i][0])} and {_who(ok[j][0])}: {how}" for i, j, how in bad[:SHOWN])
+        if len(bad) > SHOWN:
+            listed += f"; and {len(bad) - SHOWN} more"
+        out.append(inconsistency(detector, "cross_document", f"{label} differs between documents",
+                                 f"The {label.lower()} differs between {listed}. {limit(th)}",
+                                 [(ok[k][1], f"{label.lower()} in {_who(ok[k][0])}") for k in order]))
+    return out
+
+
+# --- the employer against whoever paid the salary
+
+_GENERIC = {"neft", "imps", "rtgs", "upi", "ach", "ecs", "salary", "sal", "payroll", "credit", "cr", "transfer", "from", "for", "by",
+            "to", "ref", "utr", "inr"}
+_NOT_A_NAME = {"the", "messrs", "m", "s"}
+
+
+def _payer_words(description: str) -> list[str]:
+    """What is left of a credit description once transfer terms, month names and short words are dropped."""
+    return [w for w in re.findall(r"[a-z]+", description.lower()) if len(w) > 2 and w not in _GENERIC and not _month(w)]
+
+
+def check_payer(case: Case, th: Thresholds) -> list[Finding]:
+    """The first word of an employer, against the payer words of the statement's salary or payroll credits. Heuristic: a trading
+    name or an abbreviation that shares no word with the payer is flagged, which the limitations say."""
+    stmts = _of(case, "bank_statement")
+    out: list[Finding] = []
+    for d in case.documents if stmts else ():
+        emp = next((f for f in d.fields if f.role == "employer" and f.row is None), None)
+        if emp is None:
+            continue
+        first = next((w for w in re.findall(r"[a-z]+", _core(emp.value)) if w not in _NOT_A_NAME), None) if usable(case, emp) else None
+        if first is None:
+            out.append(gap(f"the employer in {_who(d)} could not be read", d.id))
+            continue
+        for st in stmts:
+            rows = []
+            for cell in _cells(st).values():
+                f = cell.get("description")
+                if f is not None and usable(case, f) and re.search(r"salary|payroll", f.value.lower()) and (words := _payer_words(f.value)):
+                    rows.append((f, words))
+            if not rows:
+                out.append(gap(f"no salary credit in {_who(st)} names a payer, so the employer in {_who(d)} was not compared with one", d.id, st.id))
+                continue
+            best = max(text_similarity(first, w) for _, words in rows for w in words)
+            if best >= th.text_sim:
+                continue
+            detail = (f"The employer in {_who(d)} shares no word with the payer in the {len(rows)} salary or payroll credit "
+                      f"description{'s' if len(rows) != 1 else ''} of {_who(st)}; the closest word scores {best:.2f}. The payer is "
+                      "the words of a description left once transfer terms, month names and words of two letters or fewer are dropped. "
+                      f"Words count as the same at a text similarity of {th.text_sim:g} or more.")
+            out.append(inconsistency(PAYER, "cross_document", "Employer is not the payer of the salary credits", detail,
+                                     [(emp, f"employer in {_who(d)}"), *[(f, f"credit description, row {f.row}") for f, _ in rows[:SHOWN]]]))
+    return out
+
+
+# --- amounts and dates between document types
+
+def check_net_pay(case: Case, th: Thresholds) -> list[Finding]:
+    """Each payslip's net pay against the credits of the statements whose period holds its pay date. Every positive credit is a
+    candidate, with the tolerance of amount_abs or amount_rel of the larger amount. A pay date outside every period read is a
+    gap, not a conflict: a statement for another month looks exactly like it."""
+    slips, stmts = _of(case, "payslip"), _of(case, "bank_statement")
+    out: list[Finding] = []  # findings and gaps together
+    if not slips or not stmts:  # check_inputs says which is missing
+        return out
+    periods = []
+    for st in stmts:
+        start, end = (_read(case, st, n, "statement period", out, _day) for n in ("period_start", "period_end"))
+        if start and end:
+            periods.append((st, start[1], end[1]))
+    floor, rel = Decimal(str(th.amount_abs)), Decimal(str(th.amount_rel))
+    for slip in slips:
+        net, paid = _read(case, slip, "net_pay", "net pay", out), _read(case, slip, "pay_date", "pay date", out, _day)
+        if not (net and paid):
+            continue
+        cover = [st for st, a, b in periods if a <= paid[1] <= b]
+        if not cover:
+            out.append(gap(f"the pay date in {_who(slip)} is outside the period of every bank statement that could be read, so its "
+                           "net pay was not compared with a credit", slip.id, *(st.id for st in stmts)))
+            continue
+        credits, unread = [], 0
+        for st in cover:
+            for cell in _cells(st).values():
+                f = cell.get("credit")
+                x = None if f is None or poor_page(case, f) else _flow(f)
+                if x is None:
+                    unread += 1
+                elif x > 0:
+                    credits.append((x, f, cell.get("description")))
+        want = net[1]
+
+        def tol(x: Decimal) -> Decimal:
+            return max(floor, rel * max(x, want))
+
+        if any(abs(x - want) <= tol(x) for x, _, _ in credits):
+            continue
+        if unread or not credits:
+            what = f"{unread} credit cell{'s' if unread != 1 else ''} in {_docs(cover)} could not be read" if unread \
+                else f"no credit was found in {_docs(cover)} for the pay date"
+            out.append(gap(f"{what}, so the net pay in {_who(slip)} was not matched to a credit", slip.id, *(st.id for st in cover)))
+            continue
+        salary = [c for c in credits if c[2] is not None and c[2].value and re.search(r"salary|payroll", c[2].value.lower())]
+        x, f, _ = min(salary or credits, key=lambda c: abs(c[0] - want))
+        detail = (f"The net pay in {_who(slip)} is {_inr(want)}. No credit in {_docs(cover)} is within the tolerance of it; the nearest "
+                  f"is {_inr(x)} in row {f.row}, a difference of {_inr(abs(x - want))}. Tolerance: {_inr(tol(x))} "
+                  f"({th.amount_rel:.1%} of the larger amount, at least {_inr(floor)}).")
+        out.append(inconsistency(NET_PAY, "cross_document", "Net pay does not match a credit on the bank statement", detail,
+                                 [(net[0], "net pay"), (f, f"nearest credit, row {f.row}")]))
+    return out
+
+
+def check_income(case: Case, th: Thresholds) -> list[Finding]:
+    """Declared monthly income on an application against the gross earnings of each payslip, within income_rel."""
+    apps, slips = _of(case, "loan_application"), _of(case, "payslip")
+    out: list[Finding] = []
+    if not apps or not slips:
+        return out
+    limit = Decimal(str(th.income_rel))
+    for app in apps:
+        income = _read(case, app, "declared_monthly_income", "declared monthly income", out)
+        for slip in slips:
+            gross = _read(case, slip, "gross_earnings", "gross earnings", out)
+            if not (income and gross):
+                continue
+            if gross[1] <= 0:
+                out.append(gap(f"the gross earnings in {_who(slip)} are not a positive amount", slip.id))
+                continue
+            diff = abs(income[1] - gross[1]) / gross[1]
+            if diff <= limit:
+                continue
+            detail = (f"The declared monthly income in {_who(app)} is {_inr(income[1])} and the gross earnings in {_who(slip)} are "
+                      f"{_inr(gross[1])}, a difference of {diff:.1%}. Tolerance: {th.income_rel:.0%} of the gross earnings.")
+            out.append(inconsistency(INCOME, "cross_document", "Declared income differs from the payslip gross earnings", detail,
+                                     [(income[0], "declared monthly income"), (gross[0], "gross earnings")]))
+    return out
+
+
+def check_application_dates(case: Case, th: Thresholds) -> list[Finding]:
+    """Documents submitted with an application cannot be dated after it: a statement's period end, a payslip's pay date."""
+    apps = _of(case, "loan_application")
+    others = [d for t in DATED for d in _of(case, t)]
+    out: list[Finding] = []
+    if not apps or not others:
+        return out
+    for app in apps:
+        when = _read(case, app, "application_date", "application date", out, _day)
+        late = []
+        for d in others:
+            name, label = DATED[d.doc_type]
+            got = _read(case, d, name, label, out, _day)
+            if got and when and got[1] > when[1]:
+                late.append((d, label, *got))
+        if late:
+            listed = "; ".join(f"the {label} in {_who(d)} is {day:%d/%m/%Y}" for d, label, _, day in late)
+            out.append(inconsistency(DATES, "cross_document", "Application is dated before documents submitted with it",
+                                     f"The application date in {_who(app)} is {when[1]:%d/%m/%Y}, and {listed}. These documents are "
+                                     "dated after the application.",
+                                     [(when[0], "application date"), *[(f, f"{label} in {_who(d)}") for d, label, f, _ in late]]))
+    return out
+
+
+# --- the files themselves
+
+def check_duplicates(case: Case, th: Thresholds) -> list[Finding]:
+    """The same bytes submitted twice."""
+    groups: dict[str, list[Document]] = {}
+    for d in case.documents:
+        groups.setdefault(d.sha256, []).append(d)
+    return [observation(DUPLICATE, "metadata", "The same file was submitted more than once",
+                        f"{_docs(docs)} are the same file: their SHA-256 digests are equal.",
+                        [doc_evidence(d.id, "same file") for d in docs])
+            for docs in groups.values() if len(docs) > 1]
+
+
+_PDF_DATE = re.compile(r"D:(\d{14})(?:([+-])(\d{2})'?(\d{2})'?|Z)?")
+
+
+def _created(d: Document) -> datetime | None:
+    """The creation time from the PDF's metadata, with its offset; no offset is read as UTC. Anything else is None."""
+    m = _PDF_DATE.match(d.meta.get("creationDate", ""))
+    if not m:
+        return None
+    try:
+        off = timedelta(hours=int(m[3] or 0), minutes=int(m[4] or 0))
+        return datetime.strptime(m[1], "%Y%m%d%H%M%S").replace(tzinfo=timezone(-off if m[2] == "-" else off))
+    except ValueError:
+        return None
+
+
+def check_producer(case: Case, th: Thresholds) -> list[Finding]:
+    """Documents of different kinds made by the same software within same_tool_minutes of each other. Missing or unreadable
+    metadata is skipped: most scans carry none."""
+    by_tool: dict[str, list[tuple[Document, datetime]]] = {}
+    for d in case.documents:
+        tool, made = d.meta.get("producer", "").strip(), _created(d)
+        if tool and made:
+            by_tool.setdefault(tool, []).append((d, made))
+    out, limit = [], timedelta(minutes=th.same_tool_minutes)
+    for group in by_tool.values():
+        close = [(a, b) for a, b in combinations(group, 2) if a[0].doc_type != b[0].doc_type and abs(a[1] - b[1]) <= limit]
+        if not close:
+            continue
+        ids = dict.fromkeys(d.id for pair in close for d, _ in pair)
+        docs = [d for d, _ in group if d.id in ids]
+        apart = max(abs(a[1] - b[1]) for a, b in close).total_seconds() / 60
+        out.append(observation(PRODUCER, "metadata", "Documents of different kinds come from the same software, created minutes apart",
+                               f"{_docs(docs)} name the same producing software and were created at most {apart:.0f} minutes apart "
+                               f"(limit {th.same_tool_minutes}).", [doc_evidence(d.id, "same producing software") for d in docs]))
+    return out
+
+
+def check_inputs(case: Case, th: Thresholds) -> list[Finding]:
+    """What was not submitted, or not understood, and so what could not be compared."""
+    out = []
+    for d in case.documents:
+        if d.doc_type not in TYPES:
+            out.append(gap(f"{d.id} was not recognised as a bank statement, payslip or loan application", d.id))
+        elif not d.fields:
+            out.append(gap(f"no field could be read from {_who(d)}", d.id))
+    have = {t for t in TYPES if _of(case, t)}
+    for a, b, what in NEEDS:
+        in_a, in_b = have & set(a), have & set(b)
+        if bool(in_a) != bool(in_b):
+            lacking, present = (a, b) if not in_a else (b, a)
+            out.append(gap(f"no {' or '.join(TYPES[t] for t in lacking)} was submitted, so {what}",
+                           *(d.id for t in present for d in _of(case, t))))
+    return out
+
+
+CROSS_CHECKS = [check_inputs, check_roles, check_payer, check_net_pay, check_income, check_application_dates, check_duplicates,
+                check_producer]
+
+
+def run_cross_checks(case: Case, ctx: Ctx) -> None:
+    n = len(case.documents)
+    if n == 0:
+        return
+    if n == 1:
+        add_findings(case, ctx, [limitation(
+            GAPS, "Cannot check across documents: one document submitted",
+            "Only one document was submitted, so no comparison with another document could run. The checks inside the document "
+            "were still applied.", [doc_evidence(case.documents[0].id, "the only document")])])
+        return
+    drafts = collect(case, ctx, CROSS_CHECKS)  # the module's list, read now
+    gaps = [f for f in drafts if f.detector == GAPS]
+    found = [f for f in drafts if f.detector != GAPS]
+    if gaps:
+        found.append(fold(gaps, GAPS, "Some cross-document comparisons could not be made",
+                          "These comparisons could not be made in full, so what depends on them is unchecked"))
+    ctx.audit.append("system", "cross_checked", {"documents": n, "findings": len(found)})
+    add_findings(case, ctx, [maybe_demote(case, f, ctx.th) for f in found])

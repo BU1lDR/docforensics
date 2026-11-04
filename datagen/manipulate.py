@@ -1,12 +1,16 @@
 """Manipulations applied to a genuine PDF (design 8). Each returns the changed file and a Manipulation: what was done and where,
-in the 200-DPI pixels the reader reports and with pages counted from 1. That record is the truth the detectors are scored on."""
+in the 200-DPI pixels the reader reports and with pages counted from 1. That record is the truth the detectors are scored on.
+C1 to C3 act on the identity or on the list of files instead of on a PDF: a document is drawn from the changed identity, so
+what differs is one document's content against the others', and there is no box to record."""
 import tempfile
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from datetime import date
 from pathlib import Path
 
 import pymupdf
 
+from .fictional import Identity
 from .layouts import PX
 
 
@@ -70,3 +74,30 @@ def d1_incremental_edit(pdf: bytes, old: str, new: str, page: int = 0) -> tuple[
     box: list[float] = []
     out = incremental(pdf, lambda pg: box.extend(retype(pg, old, new)), page)
     return out, Manipulation("D1", page=page + 1, box=box, note=f"{old!r} replaced by {new!r} in an incremental save")
+
+
+def c1_consistent_change(ident: Identity, **changes: int) -> Identity:
+    """C1: the pay figures changed together, so the payslip adds up on its own. Draw the payslip from the result and the
+    statement and the application from the original identity."""
+    if not changes or set(changes) - {"monthly_gross", "deductions"}:
+        raise ValueError("C1 changes monthly_gross and/or deductions, and nothing else")
+    return replace(ident, **changes)
+
+
+def c2_cross_document(ident: Identity, field: str, new: str) -> Identity:
+    """C2: one document drawn with another name, employer, address or month (`new` is an ISO first-of-month date for a month)."""
+    if field not in ("name", "employer", "address", "month"):
+        raise ValueError(f"C2 changes name, employer, address or month, not {field!r}")
+    if field != "month":
+        return replace(ident, **{field: new})
+    day = date.fromisoformat(new)
+    if day.day != 1:
+        raise ValueError("a month is given as the first day of the month")
+    return replace(ident, month=day)
+
+
+def c3_duplicate(files: list[bytes]) -> list[bytes]:
+    """C3: the first file submitted a second time, as the last."""
+    if not files:
+        raise ValueError("there is no file to submit twice")
+    return [*files, files[0]]
