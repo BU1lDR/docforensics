@@ -98,9 +98,10 @@ def ai_reading(case: Case, events: list[dict]) -> dict:
         asked = [e["data"] for e in events if e["event"] == "llm_reasoning"]
         if not asked:
             return {"status": "none", "note": "No language model was used for this case."}
-        why = asked[-1].get("reason") or "nothing it said passed the checks"
-        return {"status": "none", "note": f"A local language model ({asked[-1].get('model', '')}) was asked to read this case and none of "
-                                          f"its reading was kept: {why}."}
+        why, model = asked[-1].get("reason") or "nothing it said passed the checks", asked[-1].get("model", "")
+        if why.startswith("skipped"):  # the stage ran out of time before it made the call
+            return {"status": "none", "note": f"A local language model ({model}) was turned on for this case but did not read it ({why})."}
+        return {"status": "none", "note": f"A local language model ({model}) was asked to read this case and none of its reading was kept: {why}."}
     return {"status": "kept", "source": r.source, "model": r.model, "summary": r.summary, "relations": [x.model_dump() for x in r.relations],
             "order": r.order if r.order != _tool_order(case) else [], "rejected": [{"part": p, "reason": why} for p, why in r.rejected]}
 

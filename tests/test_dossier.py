@@ -346,6 +346,13 @@ def test_a_reading_that_was_asked_for_and_not_kept_says_why(tmp_path):
     assert html.escape(a["note"]) in ctx.cd.dossier_html.read_text(encoding="utf-8")
 
 
+def test_a_reading_that_was_skipped_does_not_claim_the_model_was_asked(tmp_path):
+    case, ctx = fresh(tmp_path)
+    ctx.audit.append("system", "llm_reasoning", {"model": "qwen3:4b", "accepted": False, "reason": "skipped: time budget"})
+    note = dossier_dict(case, ctx)["investigation_summary"]["ai_reading"]["note"]
+    assert "qwen3:4b" in note and "skipped: time budget" in note and "was asked" not in note and "did not read" in note
+
+
 def test_text_in_the_models_reading_is_escaped(tmp_path):
     case, ctx = two_findings(tmp_path)
     case.reasoning = Reasoning(model=XSS, summary=XSS, relations=[Relation(a="F-001", b="F-002", kind="same_value", reason=XSS)],
