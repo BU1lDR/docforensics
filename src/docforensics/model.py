@@ -97,11 +97,29 @@ class Document(_Base):
     meta: dict[str, str] = {}
 
 
+class Relation(_Base):
+    a: str  # finding ids
+    b: str
+    kind: str
+    reason: str
+
+
+class Reasoning(_Base):
+    """A local model's reading of a whole case, after the guard: inference, kept apart from what the detectors found."""
+    source: Literal["llm"] = "llm"
+    model: str = ""
+    summary: str = ""
+    relations: list[Relation] = []
+    order: list[str] = []  # every finding of the case once, in the order a reviewer could read them
+    rejected: list[tuple[str, str]] = []  # what the guard dropped, and why
+
+
 class Case(_Base):
     id: str
     created: str  # UTC ISO
     documents: list[Document] = []
     findings: list[Finding] = []
+    reasoning: Reasoning | None = None
 
 
 class AuditEvent(_Base):

@@ -10,6 +10,7 @@ const CLASS_LABEL = {
   processing_limitation: "Limitation of the analysis",
 };
 const SOURCE_LABEL = {template: "Template wording", llm: "AI-generated wording (inference)"};
+const READING_LABEL = "AI reading of the case (inference)";
 const STATUS_LABEL = {
   open: "Open",
   needs_verification: "Needs verification",
@@ -615,7 +616,6 @@ function renderClusters() {
   for (const f of findingsOf()) if (f.cluster) groups.set(f.cluster, [...(groups.get(f.cluster) || []), f]);
   if (!groups.size) {
     box.append(h("p", {class: "empty"}, "No findings in this case are grouped into clusters. Grouping findings by shared evidence is listed on the Capabilities tab, with its status."));
-    return;
   }
   const byId = new Map(findingsOf().map((x) => [x.id, x]));
   for (const [id, members] of groups) {
@@ -626,6 +626,30 @@ function renderClusters() {
       head && head.explanation ? h("p", {}, head.explanation) : null,
       h("ul", {class: "plain"}, members.map((f) => h("li", {}, findingButton(f))))));
   }
+  box.append(aiReading(byId));
+}
+
+// What a local model made of the whole case: inference, shown apart from the clusters the checks formed. It changes no finding.
+function aiReading(byId) {
+  const r = data().reasoning;
+  if (!r) {
+    return h("section", {}, h("h3", {}, READING_LABEL),
+      h("p", {class: "empty"}, "No language-model reading is part of this case: none was asked for, or nothing it said passed the checks. The audit trail (event llm_reasoning) says which."));
+  }
+  const chip = (id) => (byId.has(id)
+    ? h("button", {type: "button", class: "chip", click: () => selectFinding(id)}, `${id}: ${byId.get(id).title}`)
+    : h("span", {class: "chip"}, id));
+  return h("section", {}, h("h3", {}, READING_LABEL),
+    h("p", {class: "label"}, `Written by the local model ${r.model} from the findings. It does not change, add or remove a finding, and it is not evidence.`),
+    h("p", {}, r.summary || "The model gave no summary that passed the checks."),
+    h("h4", {}, `Relations the model suggests (${r.relations.length})`),
+    r.relations.length
+      ? h("ul", {class: "plain"}, r.relations.map((x) => h("li", {}, chip(x.a), chip(x.b), h("span", {class: "tag"}, x.kind), ` ${x.reason}`)))
+      : h("p", {class: "empty"}, "None."),
+    r.rejected.length
+      ? h("details", {}, h("summary", {}, `Dropped by the checks (${r.rejected.length})`),
+        h("ul", {}, r.rejected.map(([part, why]) => h("li", {}, `${part}: ${why}`))))
+      : null);
 }
 
 function renderDossier() {

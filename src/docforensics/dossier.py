@@ -30,6 +30,7 @@ NOTICE = ("Every item in this dossier is for a human reviewer to examine. Nothin
 CLASS_LABEL = {"observation": "Observation", "inconsistency": "Inconsistency",
                "potential_manipulation": "Potential manipulation (for review)", "processing_limitation": "Limitation of the analysis"}
 SOURCE_LABEL = {"template": "Template wording", "llm": "AI-generated wording (inference)"}
+READING_LABEL = "AI reading of the case (inference)"
 METHOD = "sha256 of this document without this block, as JSON with sorted keys, compact separators and ASCII escapes"
 
 
@@ -83,9 +84,31 @@ def audit_view(ctx: Ctx) -> dict:
             "chain_ok": problem is None, "problem": problem}
 
 
+def _tool_order(case: Case) -> list[str]:
+    """The order the tool itself reads the findings in: highest review priority first, clusters and limitations left out."""
+    return [f.id for f in sorted((f for f in case.findings if f.detector != "link" and f.fclass != "processing_limitation"),
+                                 key=lambda f: (-f.review_priority, f.id))]
+
+
+def ai_reading(case: Case, events: list[dict]) -> dict:
+    """What a local model made of the whole case, or why there is none. It is inference, kept apart from the findings, and it changes
+    none of them. The model's order is given only where it differs from the tool's."""
+    r = case.reasoning
+    if r is None:
+        asked = [e["data"] for e in events if e["event"] == "llm_reasoning"]
+        if not asked:
+            return {"status": "none", "note": "No language model was used for this case."}
+        why = asked[-1].get("reason") or "nothing it said passed the checks"
+        return {"status": "none", "note": f"A local language model ({asked[-1].get('model', '')}) was asked to read this case and none of "
+                                          f"its reading was kept: {why}."}
+    return {"status": "kept", "source": r.source, "model": r.model, "summary": r.summary, "relations": [x.model_dump() for x in r.relations],
+            "order": r.order if r.order != _tool_order(case) else [], "rejected": [{"part": p, "reason": why} for p, why in r.rejected]}
+
+
 def dossier_dict(case: Case, ctx: Ctx) -> dict:
     docs = {d.id: d for d in case.documents}
     rows = [_finding_row(f, docs) for f in case.findings]
+    trail = audit_view(ctx)
 
     def of(*classes: str) -> list[dict]:
         return [r for r in rows if r["class"] in classes]
@@ -118,8 +141,8 @@ def dossier_dict(case: Case, ctx: Ctx) -> dict:
                          for r in anomalies],
             "explanations": [{"finding": r["id"], "explanation": r["explanation"], "source": r["explanation_source"]} for r in anomalies],
             "further_verification": [{"step": s, "findings": ids} for s, ids in steps.items()],
-            "limitations": of("processing_limitation")},
-        "appendices": {"audit_trail": audit_view(ctx), "capabilities": caps["capabilities"],
+            "limitations": of("processing_limitation"), "ai_reading": ai_reading(case, trail["events"])},
+        "appendices": {"audit_trail": trail, "capabilities": caps["capabilities"],
                        "limitations": {"limitations": caps["limitations"], "assumptions": caps["assumptions"]}},
     }
     d["integrity"] = {"json_sha256": _sha(_canon(d)), "method": METHOD}
@@ -240,6 +263,21 @@ def _traceability(d: dict) -> str:
             f'<h3>Documents</h3>{docs}<h3>Places cited</h3>{trace}')
 
 
+def _reading(d: dict) -> str:
+    a = d["investigation_summary"]["ai_reading"]
+    head = f"<h3>{esc(READING_LABEL)}</h3>"
+    if a["status"] != "kept":
+        return f'{head}<p class="none">{esc(a["note"])}</p>'
+    rel = _table(["Finding", "Finding", "Kind", "Reason"], [[_link(x["a"]), _link(x["b"]), x["kind"], x["reason"]] for x in a["relations"]])
+    order = f'<h4>Reading order the model suggests</h4><p>{", ".join(_link(i) for i in a["order"])}</p>' if a["order"] else ""
+    dropped = ("<details><summary>Dropped by the checks</summary><ul>" + "".join(f"<li>{esc(x['part'] + ': ' + x['reason'])}</li>" for x in a["rejected"])
+               + "</ul></details>") if a["rejected"] else ""
+    return (f'{head}<p class="meta">Written by the local model {esc(a["model"])} from the findings. It is a reading, not a finding: it does not '
+            f'change, add or remove any finding, and it is not evidence.</p>'
+            f'<p>{esc(a["summary"]) if a["summary"] else "The model gave no summary that passed the checks."}</p>'
+            f'<h4>Relations the model suggests</h4>{rel}{order}{dropped}')
+
+
 def _summary(d: dict, cd: CaseDir) -> str:
     s = d["investigation_summary"]
     anomalies = _table(["Finding", "Class", "Title", "Weakest-reading confidence", "Status"],
@@ -253,7 +291,7 @@ def _summary(d: dict, cd: CaseDir) -> str:
     verify = _table(["Step", "Findings"], [[v["step"], Raw(", ".join(_link(i) for i in v["findings"]))] for v in s["further_verification"]])
     none = '<p class="none">None.</p>'
     return (f'<h3>Anomalies for review</h3>{anomalies}<h3>Evidence</h3>{evidence or none}<h3>Explanations</h3>{why or none}'
-            f'<h3>Further verification</h3>{verify}<h3>Limitations of this analysis</h3>{_cards(s["limitations"], cd)}')
+            f'<h3>Further verification</h3>{verify}<h3>Limitations of this analysis</h3>{_cards(s["limitations"], cd)}{_reading(d)}')
 
 
 def _audit_section(d: dict) -> str:

@@ -10,10 +10,10 @@ import pytest
 
 from docforensics.audit import AuditLog
 from docforensics.config import Thresholds
-from docforensics.dossier import build_dossier, dossier_dict
+from docforensics.dossier import READING_LABEL, build_dossier, dossier_dict
 from docforensics.findings import add_findings
 from docforensics.ingest import create_case
-from docforensics.model import Evidence, Field, Finding
+from docforensics.model import Evidence, Field, Finding, Reasoning, Relation
 from docforensics.pipeline import Ctx, run_case
 from tests.helpers import d1_edited_statement, pdf_bytes, png_bytes
 
@@ -51,7 +51,7 @@ def test_sections_follow_ps2_order(ran):
     d = dossier_dict(case, ctx)
     assert list(d) == SECTIONS + ["appendices", "integrity"]
     assert list(d["appendices"]) == ["audit_trail", "capabilities", "limitations"]
-    assert list(d["investigation_summary"]) == ["anomalies", "evidence", "explanations", "further_verification", "limitations"]
+    assert list(d["investigation_summary"]) == ["anomalies", "evidence", "explanations", "further_verification", "limitations", "ai_reading"]
     page = ctx.cd.dossier_html.read_text(encoding="utf-8")
     assert re.findall(r'<section id="([a-z_]+)"', page) == SECTIONS + APPENDICES
 
@@ -281,3 +281,75 @@ def test_a_finding_in_a_cluster_points_at_its_headline(ran):
     for f in members:
         card = re.search(rf'<article class="[a-z_]+" id="{f.id}">(.*?)</article>', page, re.S).group(1)
         assert f'href="#{f.cluster}"' in card, f.id
+
+
+def two_findings(tmp_path):
+    """A case with F-001 (priority 1) and F-002 (priority 2): the tool reads F-002 first."""
+    case, ctx = fresh(tmp_path)
+    add_findings(case, ctx, [
+        Finding(fclass="inconsistency", detector="statement_balance", family="arithmetic", title="t1", review_priority=1,
+                evidence=[Evidence(doc="D1", page=1, box=BOX)]),
+        Finding(fclass="inconsistency", detector="payslip_sums", family="arithmetic", title="t2", review_priority=2,
+                evidence=[Evidence(doc="D1", page=1, box=BOX)])])
+    return case, ctx
+
+
+def reading(**kw):
+    return Reasoning(model="qwen3:4b", summary="F-001 and F-002 both cite 52000.00.", relations=[
+        Relation(a="F-001", b="F-002", kind="same_value", reason="Both cite 52000.00.")], **kw)
+
+
+def test_without_a_model_the_reading_says_so(ran):
+    case, ctx = ran
+    note = "No language model was used for this case."
+    assert dossier_dict(case, ctx)["investigation_summary"]["ai_reading"] == {"status": "none", "note": note}
+    page = ctx.cd.dossier_html.read_text(encoding="utf-8")
+    assert page.count(READING_LABEL) == 1 and note in page
+
+
+def test_the_models_reading_is_inference_and_changes_no_finding(tmp_path):
+    case, ctx = two_findings(tmp_path)
+    before = dossier_dict(case, ctx)
+    case.reasoning = reading(order=["F-002", "F-001"], rejected=[("relation", "unknown id")])
+    d = dossier_dict(case, ctx)
+    a = d["investigation_summary"]["ai_reading"]
+    assert (a["status"], a["source"], a["model"]) == ("kept", "llm", "qwen3:4b")
+    assert a["summary"] == "F-001 and F-002 both cite 52000.00."
+    assert a["relations"] == [{"a": "F-001", "b": "F-002", "kind": "same_value", "reason": "Both cite 52000.00."}]
+    assert a["rejected"] == [{"part": "relation", "reason": "unknown id"}]
+    for k in ("extracted_information", "contextual_analysis", "visual_forensic_findings", "evidence_and_traceability"):
+        assert d[k] == before[k], k  # the reading adds a block of its own and touches nothing the checks found
+    rest = lambda x: {k: v for k, v in x["investigation_summary"].items() if k != "ai_reading"}
+    assert rest(d) == rest(before) and d["overview"]["counts"] == before["overview"]["counts"]
+    build_dossier(case, ctx)
+    page = ctx.cd.dossier_html.read_text(encoding="utf-8")
+    assert page.count(READING_LABEL) == 1 and "qwen3:4b" in page and "Both cite 52000.00." in page and "relation: unknown id" in page
+    assert not VERDICT.search(page)
+
+
+def test_the_models_order_is_shown_only_when_it_differs_from_the_tools(tmp_path):
+    case, ctx = two_findings(tmp_path)
+    case.reasoning = reading(order=["F-002", "F-001"])  # the tool's own order
+    assert dossier_dict(case, ctx)["investigation_summary"]["ai_reading"]["order"] == []
+    case.reasoning = reading(order=["F-001", "F-002"])
+    assert dossier_dict(case, ctx)["investigation_summary"]["ai_reading"]["order"] == ["F-001", "F-002"]
+    build_dossier(case, ctx)
+    assert "Reading order the model suggests" in ctx.cd.dossier_html.read_text(encoding="utf-8")
+
+
+def test_a_reading_that_was_asked_for_and_not_kept_says_why(tmp_path):
+    case, ctx = fresh(tmp_path)
+    ctx.audit.append("system", "llm_reasoning", {"model": "qwen3:4b", "accepted": False, "reason": "unavailable: ConnectError"})
+    a = dossier_dict(case, ctx)["investigation_summary"]["ai_reading"]
+    assert a["status"] == "none" and "qwen3:4b" in a["note"] and "unavailable: ConnectError" in a["note"]
+    build_dossier(case, ctx)
+    assert html.escape(a["note"]) in ctx.cd.dossier_html.read_text(encoding="utf-8")
+
+
+def test_text_in_the_models_reading_is_escaped(tmp_path):
+    case, ctx = two_findings(tmp_path)
+    case.reasoning = Reasoning(model=XSS, summary=XSS, relations=[Relation(a="F-001", b="F-002", kind="same_value", reason=XSS)],
+                               order=["F-001", "F-002"], rejected=[(XSS, XSS)])
+    build_dossier(case, ctx)
+    page = ctx.cd.dossier_html.read_text(encoding="utf-8")
+    assert XSS not in page and "<script" not in page.lower() and html.escape(XSS) in page
