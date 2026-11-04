@@ -75,6 +75,17 @@ TEMPLATES: dict[tuple[str, str], tuple[str, list[str]]] = {
         f"{_LIMIT} The image grain of some scanned words could not be compared, so a changed word may exist among them and would "
         "not have been shown.",
         _UNCHECKED),
+    ("scan_layout", "observation"): (
+        "Some words on a scanned page sit out of line with the text around them: a word higher or lower than the rest of its row, a "
+        "figure whose right edge does not line up with its column, or a figure of another size than the page's other figures. A piece "
+        "taken from a scan that was turned differently, or text typed over an erased place, would look like this. A crease, a curled "
+        "page or a misread box would too, so this has ordinary causes and does not show what was done.",
+        ["Look at the marked words in the original picture, at full size, with a straight edge along the row or the column.",
+         "Ask the issuer for the original document or another scan of the same page."]),
+    ("scan_layout", "processing_limitation"): (
+        f"{_LIMIT} The placement of some scanned words could not be compared, so a word set out of line may exist among them and "
+        "would not have been shown.",
+        _UNCHECKED),
     ("statement_balance", "inconsistency"): (
         "The running balance printed on the statement does not follow from the amounts printed on its rows, by more than the "
         "stated tolerance. An edited figure would cause this, and so would a misread digit, a row that was not read, or a layout "

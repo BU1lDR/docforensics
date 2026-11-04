@@ -13,6 +13,15 @@ DPI = 200
 LEVELS = {"mild": (1.0, 0.6, 5, 0.06, 85), "150dpi": (0.75, 1.0, 15, 0.15, 50), "120dpi": (0.6, 1.3, 25, 0.25, 35)}
 
 
+def _angle(rng: np.random.Generator) -> float:
+    return float(rng.uniform(0.5, 2.0) * rng.choice((-1, 1)))
+
+
+def turn(seed: int) -> float:
+    """The degrees `simulate_scan` turns the page by for this seed (anticlockwise when positive): the first draws of its generator."""
+    return _angle(np.random.default_rng(seed))
+
+
 def simulate_scan(pdf: bytes, level: str, seed: int, page: int = 0) -> bytes:
     """Page `page` (0-based) of the PDF as a JPEG scan at 200 dpi, turned by 0.5 to 2 degrees one way or the other."""
     keep, blur, sigma, shade, quality = LEVELS[level]
@@ -21,7 +30,7 @@ def simulate_scan(pdf: bytes, level: str, seed: int, page: int = 0) -> bytes:
         png = doc[page].get_pixmap(dpi=DPI).tobytes("png")
     im = Image.open(io.BytesIO(png)).convert("L")
     w, h = im.size
-    im = im.rotate(float(rng.uniform(0.5, 2.0) * rng.choice((-1, 1))), resample=Image.BICUBIC, fillcolor=255)
+    im = im.rotate(_angle(rng), resample=Image.BICUBIC, fillcolor=255)
     if keep < 1:
         im = im.resize((int(w * keep), int(h * keep)), Image.BILINEAR).resize((w, h), Image.BILINEAR)
     yy, xx = np.mgrid[0:h, 0:w]
