@@ -25,6 +25,7 @@ _CANVAS = (192, 64)        # (width, height) in px that a cut signature is scale
 _REACH = 6                 # px on the canvas: ink farther than this from the other signature's ink is unmatched
 _SHIFT = 4                 # px on the canvas: one signature may slide this far over the other, either way and in each direction
 _SPECK = 12                # px: smaller marks are noise, not ink
+_STRAY = 0.1               # a piece of ink under this share of the largest piece, outside the box of the bigger ones, is a stray mark
 _AREA = (-0.8, 17.0, -6.6)  # left, right and top of the area searched, in caption word heights from the caption's left edge and top; its bottom is the caption's top
 _MAX_SHARE = 0.15          # ink share of the area above which it is printed matter and not a signature (ponytail: a heavy signature in a small area fails here)
 
@@ -42,11 +43,28 @@ def label(d: Document) -> str:
 
 
 def ink(gray: np.ndarray) -> np.ndarray:
-    """Marks that are darker than the paper around them by more than 50 grey levels, without the specks."""
-    paper = cv2.medianBlur(gray, 31).astype(np.int16)
+    """Marks that are darker than the paper by more than 50 grey levels, without the specks (pieces under 12 px). The paper is the
+    median of the 31 px around a pixel, so it follows the lighting; where that median is itself more than 50 levels darker than the
+    median of the whole area, the 31 px lie inside a mark wider than 15 px, and the paper is the median of the area."""
+    local, area = cv2.medianBlur(gray, 31).astype(np.int16), int(np.median(gray))
+    paper = np.where(local < area - 50, area, local)
     marks = (gray.astype(np.int16) < paper - 50).astype(np.uint8)
     n, lab, stats, _ = cv2.connectedComponentsWithStats(marks, connectivity=8)
     return np.isin(lab, [i for i in range(1, n) if stats[i, cv2.CC_STAT_AREA] >= _SPECK])
+
+
+def strays_out(mask: np.ndarray) -> np.ndarray:
+    """The mask without its stray marks: pieces under a tenth of the largest piece that stick out of the box of the bigger ones, and
+    would stretch the box a mark is cut to. Call it after the check that the area is not mostly ink: a crowd of pieces is printed
+    matter, and must not be thinned to a mark first."""
+    n, lab, st, _ = cv2.connectedComponentsWithStats(mask.astype(np.uint8), connectivity=8)
+    if n < 2:
+        return mask
+    area, x0, y0 = st[1:, cv2.CC_STAT_AREA], st[1:, cv2.CC_STAT_LEFT], st[1:, cv2.CC_STAT_TOP]
+    x1, y1 = x0 + st[1:, cv2.CC_STAT_WIDTH], y0 + st[1:, cv2.CC_STAT_HEIGHT]
+    big = area >= _STRAY * area.max()
+    within = (x0 >= x0[big].min()) & (y0 >= y0[big].min()) & (x1 <= x1[big].max()) & (y1 <= y1[big].max())
+    return np.isin(lab, np.flatnonzero(big | within) + 1)
 
 
 def canvas(mask: np.ndarray, turn: float, size: tuple[int, int], shift: int, rot: float = 0.0) -> np.ndarray:
@@ -121,11 +139,12 @@ def _locate(doc: Document, captions: list[str], ctx: Ctx) -> _Sig | str:
     if x1 - x0 < 8 * u or y1 - y0 < 4 * u:
         return f"too little of page {pg.n} lies above the caption to hold a signature"
     mask = ink(gray[y0:y1, x0:x1])
+    if mask.sum() > _MAX_SHARE * mask.size:
+        return f"the area above the caption on page {pg.n} is mostly ink, which a signature is not"
+    mask = strays_out(mask)
     ys, xs = np.nonzero(mask)
     if ys.size < 0.25 * u * u:
         return f"no ink was found above the caption on page {pg.n}"
-    if ys.size > _MAX_SHARE * mask.size:
-        return f"the area above the caption on page {pg.n} is mostly ink, which a signature is not"
     if xs.min() == 0 or xs.max() == mask.shape[1] - 1 or ys.min() == 0:
         return f"ink on page {pg.n} reaches the edge of the area above the caption, so the signature may be cut off"
     return _Sig(doc, pg.n, (float(x0 + xs.min()), float(y0 + ys.min()), float(x0 + xs.max() + 1), float(y0 + ys.max() + 1)), canvas(mask, turn, _CANVAS, _SHIFT))

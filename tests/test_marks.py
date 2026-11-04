@@ -224,6 +224,48 @@ def test_a_stamp_with_one_ring_less_is_found(tmp_path):
     assert f.title.startswith("Stamp differs")
 
 
+def speck_beside(drawn, kind, gap, side=4):
+    """The page with a black speck (side x side px) `gap` px right of the ink of this mark, level with its middle: pixels of the 200-dpi page."""
+    _, x0, y0, x1, y1 = drawn.truth["boxes"][kind]
+    mid = (y0 + y1) / 2
+    return blacken(drawn.pdf, (x1 + gap, mid - side / 2, x1 + gap + side, mid + side / 2))
+
+
+@pytest.mark.parametrize("side", [4, 8])
+@pytest.mark.parametrize("kind, gap", [("logo", 70), ("stamp", 20)])
+def test_a_speck_in_the_window_beside_a_genuine_mark_does_not_make_it_differ(tmp_path, kind, gap, side):
+    st, ap = pair()
+    case, events = run(tmp_path, ("a.pdf", speck_beside(st, kind, gap, side)), ("b.pdf", ap.pdf))
+    assert case.findings == []
+    (done,) = compared(events, kind)
+    assert done["differs"] is False and done["distance"] < 2, done
+
+
+def with_logo(drawn, draw):
+    """The PDF with the area of the logo whited out and `draw(page, rect)` drawn in its place (rect in points)."""
+    with pymupdf.open(stream=drawn.pdf, filetype="pdf") as d:
+        _, x0, y0, x1, y1 = drawn.truth["boxes"]["logo"]
+        r = pymupdf.Rect(x0 / PX, y0 / PX, x1 / PX, y1 / PX)
+        d[0].draw_rect(pymupdf.Rect(r.x0 - 1, r.y0 - 1, r.x1 + 1, r.y1 + 1), color=None, fill=(1, 1, 1))
+        draw(d[0], r)
+        return d.tobytes()
+
+
+FILLED = {  # logos with ink wider than the paper estimate's window: a solid disc, and a ring whose stroke is 20 px
+    "disc": lambda page, r: page.draw_circle(r.tl + (r.br - r.tl) / 2, r.width / 2 - 1, color=None, fill=(0.05, 0.1, 0.3)),
+    "wide ring": lambda page, r: page.draw_circle(r.tl + (r.br - r.tl) / 2, r.width / 2 - 10 / PX - 1, color=(0.05, 0.1, 0.3), width=20 / PX),
+}
+
+
+@pytest.mark.parametrize("shape", FILLED)
+def test_a_filled_logo_is_found_and_compared_like_a_drawn_one(tmp_path, shape):
+    st, ap = pair()
+    case, events = run(tmp_path, ("a.pdf", with_logo(st, FILLED[shape])), ("b.pdf", with_logo(ap, FILLED[shape])))
+    assert case.findings == []  # the logos were found (no limitation) and are alike (no inconsistency)
+    (done,) = compared(events, "logo")
+    assert done["differs"] is False and done["distance"] < 2, done
+
+
 def test_one_marked_document_has_nothing_to_compare_and_says_nothing(tmp_path):
     case, events = run(tmp_path, ("a.pdf", pair()[0].pdf))
     assert mark_findings(case) == [] and compared(events) == []
@@ -311,6 +353,33 @@ def test_a_page_with_no_line_to_take_for_the_issuer_is_a_limitation(tmp_path):
     assert compared(ctx.audit.events()) == []
 
 
+@pytest.mark.parametrize("bank", ["SBI", "HDFC", "ICICI", "Canara", "Merid"])
+def test_a_short_issuer_name_does_not_pull_the_line_under_it_into_the_logo_window(tmp_path, bank):
+    st, ap = pair(bank)  # under a short name the subtitle ("Statement of Account", "Personal Loan Application") runs on past the whole logo
+    case, events = run(tmp_path, ("a.pdf", st.pdf), ("b.pdf", ap.pdf))
+    assert case.findings == []
+    (done,) = compared(events, "logo")
+    assert done["differs"] is False and done["distance"] < 2, done
+
+
+@pytest.mark.parametrize("bank", ["Axis Bank", "Meridian Te"])
+def test_a_line_that_stops_inside_the_logo_is_a_limitation_and_not_a_difference(tmp_path, bank):
+    st, ap = pair(bank)  # the subtitle of the statement ends under the logo, the one of the application past it: the two cut it differently
+    case, events = run(tmp_path, ("a.pdf", st.pdf), ("b.pdf", ap.pdf))
+    one_limitation(case, "D1", "ends inside the logo")
+    assert compared(events, "logo") == []
+
+
+def test_two_marked_documents_that_name_different_issuers_are_one_limitation_and_not_silence(tmp_path):
+    ident = identity(1)
+    st = draw_statement(replace(ident, bank="Axis Bank"), seed=1)
+    ap = draw_application(replace(ident, bank="Axis Bank Ltd.", stamp=OTHER), seed=31)  # a stamp of another bank too: nothing said so far
+    case, events = run(tmp_path, ("a.pdf", st.pdf), ("b.pdf", ap.pdf))
+    f = one_limitation(case, "D1", "no other document has an issuer line like")
+    assert "D2" in f.detail and "Axis Bank Ltd." in f.detail and {e.doc for e in f.evidence} == {"D1", "D2"}, f.detail
+    assert compared(events) == []
+
+
 def test_a_scan_with_too_few_words_to_find_its_turn_is_a_limitation(tmp_path):
     case, ctx = read_only(tmp_path, pdfs(*pair()))
     page = case.documents[0].pages[0]
@@ -349,3 +418,18 @@ def test_scans_are_straightened_and_compared_like_digital_pages(tmp_path, la, lb
                 with Image.open(io.BytesIO(files[angle - 1][1])) as im:
                     want = to_scan_frame(want, im.size, angle)
             assert iou(e.box, want) > 0.6, (kind, e.doc, e.box, want)
+
+
+@ocr
+@pytest.mark.parametrize("la, lb", [("mild", "150dpi"), ("120dpi", None)])
+def test_a_short_issuer_name_is_handled_in_scans_like_on_digital_pages(tmp_path, la, lb):
+    st, ap = pair("SBI")  # its subtitles run on past the whole logo: compared, with the words under it erased
+    case, events = run(tmp_path / "clear", *scan_files(st, ap, la, lb))
+    assert case.findings == []
+    (done,) = compared(events, "logo")
+    assert done["differs"] is False and done["distance"] < 5, done
+
+    st, ap = pair("Axis Bank")  # the subtitle of the statement stops under the logo: not compared, and no difference reported
+    case, events = run(tmp_path / "cut", *scan_files(st, ap, la, lb))
+    one_limitation(case, "D1", "ends inside the logo")
+    assert compared(events, "logo") == []

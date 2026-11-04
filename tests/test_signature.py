@@ -165,6 +165,18 @@ def blacken(pdf, *boxes):
         return d.tobytes()
 
 
+@pytest.mark.parametrize("side", [4, 8])
+def test_a_speck_beside_a_signature_does_not_make_one_hand_differ(tmp_path, side):
+    app, slip = drawn_pair(1)
+    _, x0, y0, x1, y1 = app.truth["boxes"]["signature"]
+    mid = (y0 + y1) / 2
+    marked = blacken(app.pdf, (x1 + 60, mid - side / 2, x1 + 60 + side, mid + side / 2))  # clear of the signature, inside the area searched
+    case, events = run(tmp_path, ("a.pdf", marked), ("b.pdf", slip.pdf))
+    assert signature_findings(case) == []
+    (done,) = compared(events)
+    assert done["differs"] is False and done["distance"] < 3, done
+
+
 def only_limitation(case, events, doc, phrase):
     (f,) = signature_findings(case)
     assert (f.fclass, f.title) == ("processing_limitation", "Signatures only partly compared"), f.title
