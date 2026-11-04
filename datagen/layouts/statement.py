@@ -5,8 +5,9 @@ import random
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 
+from .. import marks
 from ..fictional import Identity
-from . import Drawn, Sheet, money, norm
+from . import Drawn, Sheet, money, norm, text_width
 
 COLS = ("date", "description", "debit", "credit", "balance")
 HEADS = dict(zip(COLS, ("Date", "Description", "Debit", "Credit", "Balance")))
@@ -91,7 +92,9 @@ def draw_statement(ident: Identity, layout: str = "A", rows: int = 12, seed: int
 
     sheet = Sheet(f"{ident.bank} Statement Service 4.2", created)
     sheet.new_page()
+    pressing = random.Random(f"statement/{ident.account_no}/{seed}/marks")  # its own stream: the other draws do not move
     sheet.text(40, 62, shown["bank"], 16, bold=True, key="bank")
+    marks.logo(sheet, ident.logo or ident.bank, pressing, 40 + text_width(shown["bank"], 16, True) + 14, 40)
     sheet.text(40, 80, "Statement of Account", 11)
     for y, label, name in ((108, "Account Holder", "account_holder"), (122, "Address", "address"),
                            (136, "Account No", "account_no")):
@@ -103,6 +106,7 @@ def draw_statement(ident: Identity, layout: str = "A", rows: int = 12, seed: int
     for y, label, name in ((164, "Opening Balance", "opening_balance"), (178, "Closing Balance", "closing_balance")):
         sheet.text(40, y, label, 9)
         sheet.text(150, y, shown[name], 9, bold=True, key=name)
+    marks.seal(sheet, ident.stamp or ident.bank, pressing, 480, 192, "Bank Seal")
     for col in COLS:
         x, align = X[col]
         sheet.text(x, 206, over.get(f"head.{col}", HEADS[col]), 9, bold=True, align=align)

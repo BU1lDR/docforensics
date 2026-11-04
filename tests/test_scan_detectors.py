@@ -111,8 +111,8 @@ def test_flat_erased_patch_fires_noise_residual(tmp_path):
     found = [f for f in run(tmp_path / "b", edited).findings if f.detector == "scan_noise" and f.fclass == "observation"]
     print([e.note for f in found for e in f.evidence])
     assert len(found) == 1 and "less" in found[0].detail
-    assert any(e.page == 1 and e.box[0] >= box[0] and e.box[2] <= box[2] + 4 and e.box[1] >= box[1] and e.box[3] <= box[3] + 4
-               for e in found[0].evidence)  # a word lying in the patch is named
+    assert any(e.page == 1 and e.box[0] >= box[0] - 4 and e.box[2] <= box[2] + 4 and e.box[1] >= box[1] - 4 and e.box[3] <= box[3] + 4
+               for e in found[0].evidence)  # a word lying in the patch is named (a detected box is good to a few pixels, whatever else is on the page)
 
 
 @ocr

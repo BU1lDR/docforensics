@@ -31,6 +31,8 @@ class Identity:
     tenure_months: int
     existing_emi: int
     hand: str = ""  # whose hand signs the documents drawn from this identity; empty is the person's own (manipulation C4 sets it)
+    logo: str = ""  # whose logo the documents carry: a bank's name, or "<bank>/edit"; empty is the bank's own (manipulation C5 sets it)
+    stamp: str = ""  # whose stamp, likewise
 
     @property
     def net_pay(self) -> int:

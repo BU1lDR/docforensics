@@ -3,9 +3,9 @@ signature. The date is printed with its weekday ('Mon 03 Nov 2025'), which is wh
 import random
 from datetime import datetime, time, timedelta
 
-from .. import signatures
+from .. import marks, signatures
 from ..fictional import Identity
-from . import DAYS, MONTHS, Drawn, Sheet, money, norm
+from . import DAYS, MONTHS, Drawn, Sheet, money, norm, text_width
 
 # drawn top to bottom from y = 108 in steps of 14: field name -> (label, kind); values start at x = 200
 FIELDS = {"application_date": ("Application Date", "date"), "applicant_name": ("Applicant Name", "text"),
@@ -43,7 +43,9 @@ def draw_application(ident: Identity, layout: str = "A", seed: int = 0, override
 
     sheet = Sheet(f"{ident.bank.split()[0]} LoanDesk Forms 3.0", created)
     sheet.new_page()
+    pressing = random.Random(f"application/{ident.account_no}/{seed}/marks")  # its own stream: the other draws do not move
     sheet.text(40, 62, ident.bank, 16, bold=True)
+    marks.logo(sheet, ident.logo or ident.bank, pressing, 40 + text_width(ident.bank, 16, True) + 14, 40)
     sheet.text(40, 80, "Personal Loan Application", 11)
     for y, (name, (label, _)) in zip(range(108, 108 + 14 * len(FIELDS), 14), FIELDS.items()):
         sheet.text(40, y, label, 9)
@@ -51,5 +53,6 @@ def draw_application(ident: Identity, layout: str = "A", seed: int = 0, override
     sheet.text(40, 262, DECLARATION, 8)
     signatures.draw(sheet, ident.hand or ident.name, random.Random(f"application/{ident.account_no}/{seed}/signature"), 400, 748)
     sheet.text(400, 748, "Applicant Signature", 8)
+    marks.seal(sheet, ident.stamp or ident.bank, pressing, 40, 748, "For Bank Use")
     truth = {"type": "loan_application", "layout": layout, "fields": fields, "rows": [], "boxes": sheet.boxes, "overridden": over}
     return Drawn(sheet.pdf(), truth)

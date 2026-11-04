@@ -34,6 +34,11 @@ def money(v) -> str:
     return f"{'-' if Decimal(v) < 0 else ''}{','.join(groups + [whole[-3:]])}.{frac}"
 
 
+def text_width(s: str, size: float, bold: bool = False) -> float:
+    """The width in points of s set in the layouts' font."""
+    return _FONT[bold][1].text_length(s, fontsize=size)
+
+
 def _under_hundred(n: int) -> str:
     return _ONES[n] if n < 20 else _TENS[n // 10] + (f" {_ONES[n % 10]}" if n % 10 else "")
 
@@ -94,7 +99,7 @@ class Sheet:
         name, font = _FONT[bold]
 
         def width(t: str) -> float:
-            return font.text_length(t, fontsize=size)
+            return text_width(t, size, bold)
 
         if align == "right":
             x -= width(s)
