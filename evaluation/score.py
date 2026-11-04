@@ -4,6 +4,7 @@ the only code that reads the manifest. The counting rules below are fixed before
 import re
 from collections import Counter, defaultdict
 
+from docforensics.config import Thresholds
 from docforensics.model import Case, Finding
 from docforensics.understand.specs import load_specs
 
@@ -83,8 +84,9 @@ def _outcome(entry: dict, m: dict, case: Case | None, errors: dict[str, str]) ->
     return o
 
 
-def _extraction(entry: dict, td: dict, doc, spec, extraction: dict) -> None:
-    """Every value the truth of a document holds against the field the pipeline extracted for it (by name and, in a table, row)."""
+def _extraction(entry: dict, td: dict, doc, spec, extraction: dict, low_conf: float) -> None:
+    """Every value the truth of a document holds against the field the pipeline extracted for it (by name and, in a table, row). A wrong
+    value is also counted as trusted when its confidence is at or above `low_conf`: nothing warned of it."""
     look: dict = {}
     for f in doc.fields:
         if (f.name, f.row) not in look or (look[(f.name, f.row)].value is None and f.value is not None):
@@ -105,6 +107,7 @@ def _extraction(entry: dict, td: dict, doc, spec, extraction: dict) -> None:
             b["correct"] += 1
         else:
             b["wrong"] += 1
+            b["trusted_wrong"] += f.conf >= low_conf
 
 
 def _method_rows(outcomes: list[dict]) -> dict:
@@ -128,8 +131,9 @@ def _method_rows(outcomes: list[dict]) -> dict:
 
 
 def score(manifest: dict, cases: dict[str, Case], timings: dict[str, float], peak_rss_mb: float | None = None,
-          errors: dict[str, str] | None = None) -> dict:
+          errors: dict[str, str] | None = None, low_conf: float | None = None) -> dict:
     errors = errors or {}
+    low_conf = Thresholds().low_conf if low_conf is None else low_conf
     specs = load_specs()
     counts = {"cases": len(manifest["cases"]), "genuine_cases": 0, "manipulated_cases": 0, "no_result": 0}
     outcomes, off_target, false_flags = [], [], []
@@ -165,7 +169,7 @@ def score(manifest: dict, cases: dict[str, Case], timings: dict[str, float], pea
             doc = by_file.get(td["file"])
             classification[entry["medium"]].update(n=1, correct=bool(doc and doc.doc_type == td["type"]))
             if doc is not None and td["truth_valid"] and td["type"] in specs:
-                _extraction(entry, td, doc, specs[td["type"]], extraction)
+                _extraction(entry, td, doc, specs[td["type"]], extraction, low_conf)
         if name in timings:
             kind = "digital" if entry["medium"] == "digital" else SCANNED
             seconds[kind][0] += timings[name]
@@ -175,8 +179,8 @@ def score(manifest: dict, cases: dict[str, Case], timings: dict[str, float], pea
         b = by_medium.setdefault(o["medium"], {"n": 0, "found": 0})
         b["n"] += 1
         b["found"] += o["found"]
-    rows = [{"layout": k[0], "medium": k[1], "kind": k[2], "n": b["n"], "correct": b["correct"], "wrong": b["wrong"], "missing": b["missing"],
-             "accuracy": b["correct"] / b["n"]} for k, b in sorted(extraction.items(), key=lambda kv: (kv[0][0], MEDIA.index(kv[0][1]) if kv[0][1] in MEDIA else 9, kv[0][2]))]
+    rows = [{"layout": k[0], "medium": k[1], "kind": k[2], "n": b["n"], "correct": b["correct"], "wrong": b["wrong"], "trusted_wrong": b["trusted_wrong"],
+             "missing": b["missing"], "accuracy": b["correct"] / b["n"]} for k, b in sorted(extraction.items(), key=lambda kv: (kv[0][0], MEDIA.index(kv[0][1]) if kv[0][1] in MEDIA else 9, kv[0][2]))]
     return {
         "counts": counts,
         "methods": _method_rows(outcomes),
@@ -187,6 +191,7 @@ def score(manifest: dict, cases: dict[str, Case], timings: dict[str, float], pea
                     "by_detector": dict(by_detector), "by_fclass": dict(by_fclass), "limitation_titles": dict(by_limit)},
         "off_target": off_target,
         "extraction": rows,
+        "low_conf": low_conf,
         "classification": {m: {"n": b["n"], "correct": b["correct"]} for m, b in classification.items()},
         "seconds_per_page": {k: s / p for k, (s, p) in seconds.items() if p},
         "peak_rss_mb": peak_rss_mb,
@@ -200,7 +205,7 @@ A change is **found** when the pipeline raised a finding that is an observation,
 - for a change with a place on a page (D1, D2, D3, D5, S1, S2): cites the changed document, on the changed page, with a box that overlaps the changed box at an IoU (intersection over union) of at least 0.1. It is **located** at an IoU of at least 0.5. The IoU shown is the best of the document's findings, 0 for a miss;
 - for a change without one: comes from a detector expected for that change (D4: pdf_meta or cross_producer; C1 and C2: any cross_* check; C3: cross_duplicate; C4: signature; C5: mark) and cites the changed document (for a duplicate, either copy).
 
-A limitation is never a find. A case that produced no result is a miss. On a genuine case every such finding is a flag, counted per document; its limitations are counted apart. A flag in a changed case that cites no changed document is listed as off target; it is not counted against the pipeline, because a cross-document check may rightly cite only the other document of a pair. Extraction is scored on documents nobody changed, value by value (amounts, dates and ids exactly, text up to case and spacing), by the name of the field and, in a table, its row number. A value the pipeline did not extract counts as missing."""
+A limitation is never a find. A case that produced no result is a miss. On a genuine case every such finding is a flag, counted per document; its limitations are counted apart. A flag in a changed case that cites no changed document is listed as off target; it is not counted against the pipeline, because a cross-document check may rightly cite only the other document of a pair. Extraction is scored on documents nobody changed, value by value (amounts, dates and ids exactly, text up to case and spacing), by the name of the field and, in a table, its row number. A value the pipeline did not extract counts as missing. A wrong value is **trusted** when its confidence is at or above the limit below which the pipeline doubts a value (0.6): nothing warned of it."""
 
 LIMITS = """\
 - The documents are synthetic and drawn by one generator. The dev and test splits share its six logo and stamp designs and its lists of names, addresses and employers, so the dev figures say little about styles the generator cannot draw. The test split adds a second layout (B) and two kinds of change (D3, S2) that the dev split never shows. Layout B was drawn after the spec files were final: about half of its labels, column headings and captions are wordings the spec files do not list (so a value under one is reported missing, not guessed), and it prints dates as 03-Nov-2026 without a weekday. It was written and read once, on digital drawings, before the test split was built; that read showed one defect in label matching (a label that is the start of a longer listed one, \"Employer\" in \"Employer Name\", left the rest of the label as the value), which was fixed; nothing else was changed for B.
@@ -309,10 +314,10 @@ def format_report(res: dict) -> str:
     add("")
     add("## Extraction on documents nobody changed")
     add("")
-    add("| layout | medium | kind | values | correct | wrong | missing | accuracy |")
-    add("|---|---|---|---|---|---|---|---|")
+    add("| layout | medium | kind | values | correct | wrong | wrong, trusted | missing | accuracy |")
+    add("|---|---|---|---|---|---|---|---|---|")
     for r in res["extraction"]:
-        add(f"| {r['layout']} | {r['medium']} | {r['kind']} | {r['n']} | {r['correct']} | {r['wrong']} | {r['missing']} | {r['accuracy'] * 100:.1f} % |")
+        add(f"| {r['layout']} | {r['medium']} | {r['kind']} | {r['n']} | {r['correct']} | {r['wrong']} | {r['trusted_wrong']} | {r['missing']} | {r['accuracy'] * 100:.1f} % |")
     if res["errors"]:
         add("")
         add(f"## Cases that raised an error ({len(res['errors'])})")

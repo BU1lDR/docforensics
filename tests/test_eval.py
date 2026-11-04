@@ -117,10 +117,10 @@ def test_extraction_classification_and_time_are_scored_by_layout_and_medium():
     slip["docs"][0]["fields"] = {"net_pay": "47200.00", "gross_earnings": "52000.00", "employee_name": "Meera K. Varghese"}
     slip["docs"][0]["rows"] = [{"earning_name": "Basic", "earning_amount": "30000.00", "deduction_name": None, "deduction_amount": None}]
     scan = entry("e2", [STATEMENT], medium="mild", layout="B", genuine=True)
-    scan["docs"][0]["fields"] = {"opening_balance": "1000.00"}
+    scan["docs"][0]["fields"] = {"opening_balance": "1000.00", "closing_balance": "2000.00"}
 
-    def f(i, name, value, kind, row=None):
-        return Field(id=f"F{i}", doc="D1", name=name, raw=str(value), value=value, kind=kind, conf=0.9, page=1, box=(0, 0, 1, 1), row=row)
+    def f(i, name, value, kind, row=None, conf=0.9):
+        return Field(id=f"F{i}", doc="D1", name=name, raw=str(value), value=value, kind=kind, conf=conf, page=1, box=(0, 0, 1, 1), row=row)
 
     got = case("e1", ["02_payslip.pdf", "03_application.pdf"])
     got.documents[0].doc_type = "payslip"
@@ -129,14 +129,17 @@ def test_extraction_classification_and_time_are_scored_by_layout_and_medium():
                                f(3, "line.earning_name", "Basic", "text", 1), f(4, "line.earning_amount", "30000.00", "amount", 1)]
     got2 = case("e2", ["01_statement.pdf"], pages=2)
     got2.documents[0].doc_type = "bank_statement"
-    got2.documents[0].fields = [f(5, "opening_balance", "1000.00", "amount")]
+    got2.documents[0].fields = [f(5, "opening_balance", "1000.00", "amount"), f(6, "closing_balance", "2900.00", "amount", conf=0.3)]
     res = score({"split": "dev", "cases": [slip, scan]}, {"e1": got, "e2": got2}, {"e1": 3.0, "e2": 8.0}, peak_rss_mb=512.0)
     rows = {(r["layout"], r["medium"], r["kind"]): r for r in res["extraction"]}
     amount = rows[("A", "digital", "amount")]
     assert (amount["n"], amount["correct"], amount["wrong"], amount["missing"]) == (3, 2, 1, 0)  # net pay and the cell right, gross wrong
+    assert amount["trusted_wrong"] == 1  # ... and read at confidence 0.9, so nothing warned of it
     text = rows[("A", "digital", "text")]
     assert (text["n"], text["correct"], text["missing"]) == (2, 1, 1)  # the cell right, the name never read
-    assert rows[("B", "mild", "amount")]["accuracy"] == 1.0
+    mild = rows[("B", "mild", "amount")]
+    assert (mild["n"], mild["correct"], mild["wrong"], mild["trusted_wrong"], mild["accuracy"]) == (2, 1, 1, 0, 0.5)  # wrong, but at 0.3: doubted
+    assert "wrong, trusted" in format_report(res) and res["low_conf"] == 0.6
     assert (res["classification"]["digital"]["n"], res["classification"]["digital"]["correct"]) == (2, 1)
     assert res["seconds_per_page"] == {"digital": pytest.approx(1.5), "scan": pytest.approx(4.0)}
     assert res["peak_rss_mb"] == 512.0

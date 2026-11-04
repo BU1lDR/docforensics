@@ -62,7 +62,7 @@ def evaluate(split: str, n: int, start: int, out_dir, keep=None, th: Thresholds 
             except Exception as e:  # one case that cannot finish must not hide the rest
                 errors[entry["case"]] = f"{type(e).__name__}: {e}"
             timings[entry["case"]] = time.perf_counter() - t0
-        res = score(manifest, results, timings, peak_rss_mb(), errors)
+        res = score(manifest, results, timings, peak_rss_mb(), errors, th.low_conf)
         seeds = [e["seed"] for e in manifest["cases"]]
         res["run"] = {"split": split, "start": start, "cases": n, "seeds": (min(seeds, default=0), max(seeds, default=0)),
                       "date": datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z"), "commit": _git("rev-parse", "--short", "HEAD") or "unknown",
