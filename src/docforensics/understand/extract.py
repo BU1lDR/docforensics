@@ -138,7 +138,7 @@ class _Extractor:
 
     def title(self) -> tuple[Line, list[Word], list[Word], float] | None:
         lines = self.lines.get(self.doc.pages[0].n, []) if self.doc.pages else []
-        line = issuer_line(lines)  # the tallest line that reads as a name, the topmost of equals
+        line = issuer_line(lines)  # the topmost of the lines about as tall as the tallest that reads as a name
         return None if line is None else (line, [], line.words, TITLE_SCORE)
 
     def labelled(self, fs: FieldSpec) -> tuple[Line, list[Word], list[Word], float] | None:

@@ -139,6 +139,13 @@ def test_the_issuer_line_is_the_tallest_line_that_reads_as_a_name_and_not_a_stra
     assert issuer_line([]) is None
 
 
+def test_a_line_about_as_tall_below_the_issuer_line_does_not_take_its_place():
+    """On a 150-dpi scan the box of the one word "Payslip" (descenders) was 55 px, the one of the employer line above it 50 px."""
+    page = line_page(("Northwind Test", 50.0), ("Payslip", 55.0), ("Totals", 20.0))
+    assert text_of(issuer_line(lines_of(page)).words) == "Northwind Test"
+    assert text_of(issuer_line(lines_of(line_page(("Halcyon", 30), ("Statement of Account", 40)))).words) == "Statement of Account"  # a line much taller still wins
+
+
 def test_a_stray_character_taller_than_the_name_does_not_become_the_issuer_of_a_statement():
     page = line_page(("入", 70), ("Halcyon", 40), ("Statement", 20))
     doc = Document(id="D1", sha256="0", filename="a.png", stored_path="a.png", doc_type="bank_statement", pages=[page])

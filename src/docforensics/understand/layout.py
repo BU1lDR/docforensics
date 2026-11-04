@@ -58,10 +58,16 @@ def find_phrase(words: list[Word], phrase: str, floor: float) -> tuple[int, int,
     return best
 
 
+_AS_TALL = 0.15  # a line this much shorter than the tallest counts as about as tall: the box of a short word with descenders (Payslip) can beat a longer line
+
+
 def issuer_line(lines: list[Line]) -> Line | None:
-    """The tallest line that reads as a name (three letters or digits at least; the first of equals: the topmost), so a
-    stray character that a logo or a stamp was read as does not become the issuer. None if no line qualifies."""
-    return max((ln for ln in lines if sum(c.isalnum() for c in text_of(ln.words)) >= 3), key=lambda ln: ln.height, default=None)
+    """The topmost line that reads as a name (three letters or digits at least) among those about as tall as the tallest such line,
+    so a stray character that a logo or a stamp was read as does not become the issuer, and neither does a subtitle that a scan's
+    boxes made as tall as the name above it. None if no line qualifies."""
+    named = [ln for ln in lines if sum(c.isalnum() for c in text_of(ln.words)) >= 3]
+    tall = max((ln.height for ln in named), default=0.0)
+    return next((ln for ln in named if ln.height >= (1 - _AS_TALL) * tall), None)
 
 
 def _centre(w: Word) -> float:

@@ -1,8 +1,8 @@
 """Issuer marks (design 8, C5). Documents of one issuer should carry the same logo, right of the issuer's name, and the same stamp,
-above a caption. Which documents are of one issuer is read from the line that names it, the tallest line of page 1 that reads as a
-name: documents whose lines read alike (`text_sim`) are of one. Where a mark is, is data: the spec of each document type says whether
-the document carries a logo and lists the captions printed under its stamp. A window, sized by a word height so that it follows the
-resolution of the page, is turned into a mask of ink, straightened by the turn of its page, cut to its bounding box and scaled to a
+above a caption. Which documents are of one issuer is read from the line that names it, the topmost line of page 1 that reads as a
+name among those about as tall (within 15 %) as the tallest: documents whose lines read alike (`text_sim`) are of one. Where a mark
+is, is data: the spec of each document type says whether the document carries a logo and lists the captions printed under its
+stamp. A window, sized by a word height so that it follows the resolution of the page, is turned into a mask of ink, straightened by the turn of its page, cut to its bounding box and scaled to a
 fixed canvas. Two canvases differ when more than `logo_dist` or `stamp_dist` percent of the ink of the one lies farther than _REACH px
 from the ink of the other, at the best slide of one over the other; a stamp is pressed by hand, so for stamps also at the best turn of
 one of them within 8 degrees. That compares shapes. It does not say who issued the document, and the limits were fitted on synthetic
