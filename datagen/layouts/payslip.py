@@ -4,6 +4,7 @@ import math
 import random
 from datetime import datetime, time, timedelta
 
+from .. import signatures
 from ..fictional import Identity
 from . import MONTHS, Drawn, Sheet, money, norm, words
 
@@ -109,5 +110,7 @@ def draw_payslip(ident: Identity, layout: str = "A", seed: int = 0, overrides: d
     sheet.text(40, 790, "This is a computer generated payslip.", 8)
     _stamp(sheet, rng)
     sheet.text(440, 756, "Authorised Signatory", 8)
+    signatures.draw(sheet, ident.hand or ident.name, random.Random(f"payslip/{ident.employee_id}/{seed}/signature"), 40, 756)
+    sheet.text(40, 756, "Employee Signature", 8)
     truth = {"type": "payslip", "layout": layout, "fields": fields, "rows": table, "boxes": sheet.boxes, "overridden": over}
     return Drawn(sheet.pdf(), truth)

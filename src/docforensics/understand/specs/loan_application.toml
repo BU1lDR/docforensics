@@ -1,6 +1,7 @@
 # Personal loan application, as drawn by layout A. The weights add to 15 and min_score is 6.
 type = "loan_application"
 min_score = 6
+signature = ["applicant signature", "signature of applicant", "borrower signature"]  # the captions under the drawn signature
 
 [keywords]
 "loan application" = 4

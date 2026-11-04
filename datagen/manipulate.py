@@ -1,6 +1,6 @@
 """Manipulations applied to a genuine PDF (design 8). Each returns the changed file and a Manipulation: what was done and where,
 in the 200-DPI pixels the reader reports and with pages counted from 1. That record is the truth the detectors are scored on.
-C1 to C3 act on the identity or on the list of files instead of on a PDF: a document is drawn from the changed identity, so
+C1 to C4 act on the identity or on the list of files instead of on a PDF: a document is drawn from the changed identity, so
 what differs is one document's content against the others', and there is no box to record."""
 import io
 import re
@@ -230,6 +230,8 @@ def c2_cross_document(ident: Identity, field: str, new: str) -> Identity:
     """C2: one document drawn with another name, employer, address or month (`new` is an ISO first-of-month date for a month)."""
     if field not in ("name", "employer", "address", "month"):
         raise ValueError(f"C2 changes name, employer, address or month, not {field!r}")
+    if field == "name":  # the document says another name; whoever signed it is still the person
+        return replace(ident, name=new, hand=ident.hand or ident.name)
     if field != "month":
         return replace(ident, **{field: new})
     day = date.fromisoformat(new)
@@ -243,3 +245,8 @@ def c3_duplicate(files: list[bytes]) -> list[bytes]:
     if not files:
         raise ValueError("there is no file to submit twice")
     return [*files, files[0]]
+
+
+def c4_other_hand(ident: Identity, other: Identity) -> Identity:
+    """C4: one document signed in another person's hand. Draw that document from the result and the rest from `ident`."""
+    return replace(ident, hand=other.name)

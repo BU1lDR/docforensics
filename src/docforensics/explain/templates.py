@@ -225,6 +225,16 @@ TEMPLATES.update(_across(
      "Ask the applicant and the lender when each document was received."],
     "The dates could not be compared here, or a difference was found that could not be trusted because a date was unreadable, "
     "ambiguous or read with low confidence. Whether the documents are dated in order is unknown."))
+TEMPLATES.update(_across(
+    "signature",
+    "The signature on one document is not the same shape as the signature on another, by the measure the finding states. A "
+    "different hand would cause this, and so would one person signing in a different way on different occasions, a pen of another "
+    "kind, a scan or photograph that distorts the strokes, or marks that lie over the signature. The comparison reads shapes only: "
+    "it does not say who signed, and a signature copied from another document would pass it.",
+    ["Open each signature and compare the two by eye, at full size.",
+     "Ask the signatory, or whoever issued the document that differs, to confirm who signed it."],
+    "The signatures could not be compared in full here, because a caption was not found, no ink lay above it, a page was too poor "
+    "or too much turned to straighten, or the area held printed matter. Whether the signatures agree is unknown."))
 TEMPLATES.update({
     ("cross_duplicate", "observation"): (
         "The same file was submitted more than once, with identical content. It may be an accidental second upload, or one document "

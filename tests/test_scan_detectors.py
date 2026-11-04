@@ -210,6 +210,19 @@ def test_page_turn_is_found_from_the_words(tmp_path, tilt):
     assert page_turn(doc.pages[0].words, 1600, 2200) == pytest.approx(tilt, abs=0.1)
 
 
+@pytest.mark.parametrize("tilt", [4.5, -6.0, 9.0])
+def test_page_turn_is_found_beyond_the_turn_that_is_compared(tmp_path, tilt):
+    _, doc, _, _ = grid(tmp_path, tilt)
+    assert page_turn(doc.pages[0].words, 1600, 2200) == pytest.approx(tilt, abs=0.1)
+
+
+@pytest.mark.parametrize("tilt", [3.5, 4.5, -6.0, 9.0])
+def test_a_page_turned_more_than_is_compared_is_a_limitation_whatever_the_turn(tmp_path, tilt):
+    case, doc, ctx, _ = grid(tmp_path, tilt)
+    (f,) = layout_consistency(case, doc, ctx)
+    assert (f.fclass, f.family) == ("processing_limitation", "limitation") and "turned by" in f.detail
+
+
 @pytest.mark.parametrize("tilt", [0.0, 1.5, -2.5])
 def test_words_in_line_on_a_turned_page_give_no_finding(tmp_path, tilt):
     case, doc, ctx, _ = grid(tmp_path, tilt)

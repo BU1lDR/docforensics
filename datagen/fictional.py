@@ -30,6 +30,7 @@ class Identity:
     loan_amount: int
     tenure_months: int
     existing_emi: int
+    hand: str = ""  # whose hand signs the documents drawn from this identity; empty is the person's own (manipulation C4 sets it)
 
     @property
     def net_pay(self) -> int:

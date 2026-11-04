@@ -3,6 +3,7 @@ uneven lighting, loss of resolution, blur, noise and JPEG. The levels are the la
 the effective resolution after the loss. The ladder was fitted on this generator, so it says how the tool copes with these scans
 and nothing yet about real ones."""
 import io
+import math
 
 import numpy as np
 import pymupdf
@@ -20,6 +21,17 @@ def _angle(rng: np.random.Generator) -> float:
 def turn(seed: int) -> float:
     """The degrees `simulate_scan` turns the page by for this seed (anticlockwise when positive): the first draws of its generator."""
     return _angle(np.random.default_rng(seed))
+
+
+def to_scan_frame(box: list[float], size: tuple[int, int], seed: int) -> list[float]:
+    """A box of the 200-dpi page, as it lies on the scan this seed makes: the box around its four turned corners. `size` is the
+    scan's (width, height), which is the page's, since the levels lose resolution and keep the pixel grid."""
+    t = math.radians(turn(seed))
+    c, s = math.cos(t), math.sin(t)
+    cx, cy = size[0] / 2, size[1] / 2
+    pts = [(cx + (x - cx) * c + (y - cy) * s, cy - (x - cx) * s + (y - cy) * c) for x in (box[0], box[2]) for y in (box[1], box[3])]
+    xs, ys = zip(*pts)
+    return [min(xs), min(ys), max(xs), max(ys)]
 
 
 def simulate_scan(pdf: bytes, level: str, seed: int, page: int = 0) -> bytes:

@@ -3,6 +3,7 @@ signature. The date is printed with its weekday ('Mon 03 Nov 2025'), which is wh
 import random
 from datetime import datetime, time, timedelta
 
+from .. import signatures
 from ..fictional import Identity
 from . import DAYS, MONTHS, Drawn, Sheet, money, norm
 
@@ -14,20 +15,6 @@ FIELDS = {"application_date": ("Application Date", "date"), "applicant_name": ("
           "tenure_months": ("Tenure in Months", "amount")}
 DATE_FORMATS = ("%a %d %b %Y", "%d %b %Y")  # with the weekday, and without it
 DECLARATION = "I declare that the particulars given above are true and complete to the best of my knowledge."
-
-
-def _signature(sheet: Sheet, rng: random.Random) -> None:
-    """A signature as strokes: a seeded scrawl and an underline. No text, so nothing can sit beneath it."""
-    x, pts = 400.0, []
-    for _ in range(9):
-        pts.append((x, 710 + rng.uniform(-18, 14)))
-        x += rng.uniform(9, 15)
-    under = [(pts[0][0], 726.0), (pts[-1][0], 722.0)]
-    ink = (0.1, 0.1, 0.5)
-    sheet.page.draw_polyline(pts, color=ink, width=1.1)
-    sheet.page.draw_line(*under, color=ink, width=0.8)
-    xs, ys = zip(*pts, *under)
-    sheet.region("signature", min(xs) - 1, min(ys) - 1, max(xs) + 1, max(ys) + 1)
 
 
 def draw_application(ident: Identity, layout: str = "A", seed: int = 0, overrides: dict[str, str] | None = None) -> Drawn:
@@ -62,7 +49,7 @@ def draw_application(ident: Identity, layout: str = "A", seed: int = 0, override
         sheet.text(40, y, label, 9)
         sheet.text(200, y, shown[name], 9, bold=True, key=name)
     sheet.text(40, 262, DECLARATION, 8)
-    _signature(sheet, rng)
+    signatures.draw(sheet, ident.hand or ident.name, random.Random(f"application/{ident.account_no}/{seed}/signature"), 400, 748)
     sheet.text(400, 748, "Applicant Signature", 8)
     truth = {"type": "loan_application", "layout": layout, "fields": fields, "rows": [], "boxes": sheet.boxes, "overridden": over}
     return Drawn(sheet.pdf(), truth)

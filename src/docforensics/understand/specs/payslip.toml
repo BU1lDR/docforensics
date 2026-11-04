@@ -1,6 +1,7 @@
 # Payslip, as drawn by layout A. The weights add to 16 and min_score is 6, so a few lines that merely mention pay stay unknown.
 type = "payslip"
 min_score = 6
+signature = ["employee signature", "signature of employee"]  # the captions under the drawn signature
 
 [keywords]
 "payslip" = 3

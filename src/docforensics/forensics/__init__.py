@@ -12,6 +12,7 @@ from .pdf_overlay import covered_or_hidden_text
 from .pdf_revisions import revision_diff
 from .scan_layout import layout_consistency
 from .scan_noise import noise_residual
+from .signature import compare_signatures
 
 Detector = Callable[[Case, Document, Ctx], list[Finding]]
 DIGITAL_DETECTORS: list[Detector] = [revision_diff, covered_or_hidden_text, font_outliers, metadata_observations]
@@ -28,3 +29,6 @@ def run_forensics(case: Case, ctx: Ctx) -> None:
                        doc_id=doc.id):
                 add_findings(case, ctx, drafts)
                 ctx.audit.append("system", "doc_forensics", {"doc": doc.id, "detector": det.__name__, "findings": len(drafts)})
+    drafts = []  # signatures are compared across the documents, so once for the case
+    if guarded(ctx, case, "forensics.compare_signatures", lambda: drafts.extend(compare_signatures(case, ctx))):
+        add_findings(case, ctx, drafts)

@@ -38,6 +38,7 @@ class TypeSpec(_Spec):
     keywords: dict[str, float]
     fields: list[FieldSpec]
     table: TableSpec | None = None
+    signature: list[str] = []  # captions printed under the signature, in the wordings this type is known to use; none: not looked for
 
 
 def load_specs(extra_dir: Path | str | None = None) -> dict[str, TypeSpec]:

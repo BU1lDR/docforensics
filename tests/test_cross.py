@@ -182,7 +182,7 @@ def test_the_manipulators_refuse_what_they_cannot_change():
                 lambda: c3_duplicate([])):
         with pytest.raises(ValueError):
             bad()
-    assert c2_cross_document(ident, "name", "A B") == dataclasses.replace(ident, name="A B")
+    assert c2_cross_document(ident, "name", "A B") == dataclasses.replace(ident, name="A B", hand=ident.name)  # the signature stays the person's own
 
 
 # --- what is not there, or not trustworthy: never a silent pass

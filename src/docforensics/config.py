@@ -25,6 +25,7 @@ class Thresholds:
     layout_k: float = 4.0             # a word whose baseline or height is this many robust deviations from its row's median is noted
     noise_ratio_lo: float = 0.5       # a word whose background noise is below this share of the page's median is noted
     noise_ratio_hi: float = 2.0       # ... or above this multiple of it
+    signature_dist: float = 9.4       # two signatures differ when more than this % of the ink of either lies far from the other's ink; the geometric mean of 6.1 (largest genuine pair on the dev split) and 14.5 (smallest pair of other hands), docs/spike.md
     # limits (design 7.10)
     max_file_bytes: int = 10_000_000
     max_pages: int = 20

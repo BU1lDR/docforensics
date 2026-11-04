@@ -26,7 +26,8 @@ _ROW_TOL = 0.25     # words are in one row when their centres lie within this ma
 _ROW_REACH = 0.6    # a word is measured against the nearest row when it lies within this many median word heights of it
 _COLUMN_TOL = 5.0   # px: figures are in one column when their right edges lie this close to the column's median
 _COLUMN_REACH = 40.0
-_SEARCH_DEG = 3.0   # the largest turn looked for, either way
+_SEARCH_DEG = 10.0  # the largest turn looked for, either way; one beyond it is not found, and the search then ends anywhere
+MAX_TURN = 2.9      # degrees: a page turned by more than this is not compared. The fits were made on turns of 0.5 to 2
 _AMOUNT = re.compile(r"^[\d,]*\d\.\d\d$")
 
 
@@ -95,8 +96,8 @@ def layout_consistency(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
             issues.append(f"page {pg.n} has {len(words)} words, fewer than the {MIN_WORDS} needed to find its rows")
             continue
         deg = page_turn(words, pg.width, pg.height)
-        if abs(deg) > _SEARCH_DEG - 0.1:
-            issues.append(f"page {pg.n} is turned by {deg:+.1f} degrees or more, as far as the search goes, so its rows were not trusted")
+        if abs(deg) > MAX_TURN:
+            issues.append(f"page {pg.n} is turned by {deg:+.1f} degrees, more than the {MAX_TURN:g} that is compared, so its rows were not trusted")
             continue
         u, v, wd, ht = _upright(words, pg.width, pg.height, deg)
         scale = 1.5 if pg.quality_class == "degraded" else 1.0  # a degraded page is read less exactly
