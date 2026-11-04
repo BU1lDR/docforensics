@@ -5,6 +5,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from importlib import metadata
+from typing import TYPE_CHECKING
 
 from . import __version__
 from .audit import AuditLog
@@ -12,6 +13,9 @@ from .config import Thresholds
 from .findings import add_findings, doc_evidence, limitation
 from .model import Case
 from .store import CaseDir, load_case, save_case
+
+if TYPE_CHECKING:  # the explain package imports this module; the type is only needed for annotations
+    from .explain.llm import OllamaClient
 
 STAGE_ORDER = ("read", "classify", "extract", "forensics", "checks", "link", "explain", "crops", "dossier")
 _LIBS = ("pymupdf", "rapidocr", "onnxruntime", "numpy", "opencv-python-headless", "pillow", "pydantic")
@@ -22,6 +26,7 @@ class Ctx:
     cd: CaseDir
     audit: AuditLog
     th: Thresholds
+    llm: "OllamaClient | None" = None  # the optional local language model (design 7.7); None means template wording only
 
 
 class _Timeout(Exception):
@@ -93,12 +98,12 @@ def _versions() -> dict[str, str]:
 
 
 def run_case(cd: CaseDir, th: Thresholds | None = None, stages: dict[str, Callable] | None = None,
-             on_stage: Callable[[str], None] | None = None) -> Case:
+             on_stage: Callable[[str], None] | None = None, llm: "OllamaClient | None" = None) -> Case:
     """Run the stages present, in STAGE_ORDER. `stages` replaces the registered ones (tests inject fakes); `on_stage` is told each
-    stage's name just before it starts (the review app shows it as progress)."""
+    stage's name just before it starts (the review app shows it as progress); `llm` is the optional local model, off by default."""
     th = th or Thresholds()
     case = load_case(cd)
-    ctx = Ctx(cd, AuditLog(cd.audit_path), th)
+    ctx = Ctx(cd, AuditLog(cd.audit_path), th, llm)
     fns = _stage_fns() if stages is None else stages
     ctx.audit.append("system", "run_started", {"tool": "docforensics", "version": __version__, "libs": _versions()})
     for name in STAGE_ORDER:
