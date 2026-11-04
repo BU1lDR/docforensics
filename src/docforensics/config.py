@@ -36,7 +36,7 @@ class Thresholds:
     max_revisions: int = 16           # revisions of one PDF that are opened and compared
     max_revision_runs: int = 12       # changed runs listed one by one between two revisions; more is one finding
     max_diff_words: int = 5000        # words on a page, in either revision, that are compared
-    # page-quality classes for OCR pages (docs/spike.md; refit on the dev split)
+    # page-quality classes for OCR pages (docs/spike.md; checked on the dev split in Task 19 and kept)
     sharp_good: float = 0.24
     sharp_poor: float = 0.18
     rel_good: float = 0.95

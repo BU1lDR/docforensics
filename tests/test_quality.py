@@ -5,7 +5,7 @@ from docforensics.config import Thresholds
 from docforensics.read.quality import quality_class, reliability, sharpness
 from tests.helpers import SLIP_LINES, STATEMENT_LINES, render_lines
 
-TH = Thresholds(sharp_good=0.24, sharp_poor=0.18)  # the spike's starting values; Task 19 refits the defaults
+TH = Thresholds(sharp_good=0.24, sharp_poor=0.18)  # the spike values; Task 19 checked them on the dev split and kept them
 
 
 def gray(img, blur=0.0):
