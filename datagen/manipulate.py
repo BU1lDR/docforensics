@@ -2,13 +2,18 @@
 in the 200-DPI pixels the reader reports and with pages counted from 1. That record is the truth the detectors are scored on.
 C1 to C3 act on the identity or on the list of files instead of on a PDF: a document is drawn from the changed identity, so
 what differs is one document's content against the others', and there is no box to record."""
+import io
+import re
 import tempfile
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from datetime import date
 from pathlib import Path
 
+import cv2
+import numpy as np
 import pymupdf
+from PIL import Image
 
 from .fictional import Identity
 from .layouts import PX
@@ -161,6 +166,56 @@ def d5_paste_image(pdf: bytes, old: str, new: str, page: int = 0) -> tuple[bytes
 
     out = _rewritten(pdf, edit, page)
     return out, Manipulation("D5", page=page + 1, box=box, note=f"a picture of {new!r} placed over {old!r}")
+
+
+# --- scans: S1 and S2 act on a finished scan (a JPEG at 200 DPI) and end with one more JPEG save at quality 85
+
+def _gray(jpeg: bytes) -> np.ndarray:
+    return np.asarray(Image.open(io.BytesIO(jpeg)).convert("L")).copy()
+
+
+def _jpeg(a: np.ndarray) -> bytes:
+    out = io.BytesIO()
+    Image.fromarray(a).save(out, "JPEG", quality=85)
+    return out.getvalue()
+
+
+def _inside(a: np.ndarray, box: list[float]) -> tuple[int, int, int, int]:
+    x0, y0, x1, y1 = box
+    return max(int(round(x0)), 0), max(int(round(y0)), 0), min(int(round(x1)), a.shape[1]), min(int(round(y1)), a.shape[0])
+
+
+def s1_splice(scan: bytes, donor_scan: bytes, box: list[float]) -> tuple[bytes, Manipulation]:
+    """S1: the same place on another scan of the same size pasted into `box` (200-DPI px of the scan)."""
+    a, donor = _gray(scan), _gray(donor_scan)
+    if donor.shape != a.shape:
+        raise ValueError("the donor scan must be the same size as the scan")
+    x0, y0, x1, y1 = _inside(a, box)
+    a[y0:y1, x0:x1] = donor[y0:y1, x0:x1]
+    return _jpeg(a), Manipulation("S1", page=1, box=[float(v) for v in box], note="the same place on another scan pasted in")
+
+
+def s2_erase_retype(scan: bytes, box: list[float], new_text: str) -> tuple[bytes, Manipulation]:
+    """S2: `box` filled in from its surroundings (cv2.inpaint) and `new_text` written in it: drawn by PyMuPDF in Helvetica, to the
+    right edge of the box when it is a number (as the columns of figures are) and to the left edge otherwise, then blurred a little."""
+    a = _gray(scan)
+    x0, y0, x1, y1 = _inside(a, box)
+    mask = np.zeros_like(a)
+    mask[y0:y1, x0:x1] = 255
+    a = cv2.inpaint(a, mask, 3, cv2.INPAINT_TELEA)
+    w, h = x1 - x0, y1 - y0
+    wpt, hpt = w * 72 / 200, h * 72 / 200
+    size = hpt * 0.85
+    gap = 1.0
+    x = wpt - gap - pymupdf.Font("helv").text_length(new_text, fontsize=size) if re.fullmatch(r"[\d,.\s-]+", new_text) else gap
+    with pymupdf.open() as scratch:
+        pg = scratch.new_page(width=wpt, height=hpt)
+        pg.insert_text((x, hpt * 0.75), new_text, fontname="helv", fontsize=size)
+        pix = pg.get_pixmap(dpi=200, colorspace=pymupdf.csGRAY)
+    patch = np.frombuffer(pix.samples, np.uint8).reshape(pix.height, pix.stride)[:, :pix.width]
+    patch = cv2.GaussianBlur(cv2.resize(patch, (w, h)), (0, 0), 0.8)
+    a[y0:y1, x0:x1] = (a[y0:y1, x0:x1].astype(np.float32) * patch / 255).astype(np.uint8)  # black text on the filled-in paper
+    return _jpeg(a), Manipulation("S2", page=1, box=[float(v) for v in box], note=f"the box erased and {new_text!r} written in it")
 
 
 def c1_consistent_change(ident: Identity, **changes: int) -> Identity:

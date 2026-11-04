@@ -10,10 +10,11 @@ from .pdf_fonts import font_outliers
 from .pdf_meta import metadata_observations
 from .pdf_overlay import covered_or_hidden_text
 from .pdf_revisions import revision_diff
+from .scan_noise import noise_residual
 
 Detector = Callable[[Case, Document, Ctx], list[Finding]]
 DIGITAL_DETECTORS: list[Detector] = [revision_diff, covered_or_hidden_text, font_outliers, metadata_observations]
-SCAN_DETECTORS: list[Detector] = []
+SCAN_DETECTORS: list[Detector] = [noise_residual]
 
 
 def run_forensics(case: Case, ctx: Ctx) -> None:

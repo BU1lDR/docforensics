@@ -65,6 +65,16 @@ TEMPLATES: dict[tuple[str, str], tuple[str, list[str]]] = {
         "can write the file can write this record, so it neither proves nor rules out a change to the content.",
         ["Ask the issuer how and when the document was made and whether it was saved again.",
          "Compare the dates in the file record with the dates printed on the document."]),
+    ("scan_noise", "observation"): (
+        "Some words on a scanned page have a different image grain from the rest of the page: less where paper was filled in or "
+        "smoothed, more where a piece came from a scan made differently. Uneven lighting, a second JPEG save, a stamp or a fold can "
+        "change the grain as well, so this has ordinary causes and does not show what was done.",
+        ["Look at the marked words in the original picture, at full size, beside their neighbours.",
+         "Ask the issuer for the original document or another scan of the same page."]),
+    ("scan_noise", "processing_limitation"): (
+        f"{_LIMIT} The image grain of some scanned words could not be compared, so a changed word may exist among them and would "
+        "not have been shown.",
+        _UNCHECKED),
     ("statement_balance", "inconsistency"): (
         "The running balance printed on the statement does not follow from the amounts printed on its rows, by more than the "
         "stated tolerance. An edited figure would cause this, and so would a misread digit, a row that was not read, or a layout "

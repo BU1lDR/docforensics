@@ -22,6 +22,9 @@ class Thresholds:
     image_max_page_fraction: float = 0.5  # an image covering less of a text page than this is noted (a whole-page image is a scan)
     mod_after_create_s: int = 60      # a file modified this long after it was created is noted
     max_page_objects: int = 5000      # text runs or drawn shapes on one page that the digital detectors examine; more is a limitation
+    layout_k: float = 4.0             # a word whose baseline or height is this many robust deviations from its row's median is noted
+    noise_ratio_lo: float = 0.5       # a word whose background noise is below this share of the page's median is noted
+    noise_ratio_hi: float = 2.0       # ... or above this multiple of it
     # limits (design 7.10)
     max_file_bytes: int = 10_000_000
     max_pages: int = 20
