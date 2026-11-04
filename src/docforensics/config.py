@@ -40,6 +40,8 @@ class Thresholds:
     rel_good: float = 0.95
     rel_degraded: float = 0.5
     rel_poor: float = 0.2
+    # linking (design 7.6)
+    link_overlap: float = 0.5         # two boxes, or a box and a field, are the same place when this share of the smaller one lies inside the other
 
     @classmethod
     def from_toml(cls, path: Path | str) -> "Thresholds":

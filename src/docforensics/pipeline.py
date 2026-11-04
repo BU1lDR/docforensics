@@ -74,11 +74,12 @@ def _stage_fns() -> dict[str, Callable[[Case, Ctx], None]]:
     from .evidence import crop_evidence
     from .explain import run_explain
     from .forensics import run_forensics
+    from .link import link_findings
     from .read import read_stage
     from .understand.classify import classify_stage
     from .understand.extract import extract_stage
     return {"read": read_stage, "classify": classify_stage, "extract": extract_stage, "forensics": run_forensics,
-            "checks": run_checks, "explain": run_explain, "crops": crop_evidence, "dossier": dossier_stage}
+            "checks": run_checks, "link": link_findings, "explain": run_explain, "crops": crop_evidence, "dossier": dossier_stage}
 
 
 def _versions() -> dict[str, str]:

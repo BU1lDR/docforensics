@@ -187,6 +187,7 @@ def _card(r: dict, cd: CaseDir) -> str:
     steps = "<ul>" + "".join(f"<li>{esc(s)}</li>" for s in r["next_steps"]) + "</ul>" if r["next_steps"] else ""
     note = f"<p>Reviewer note: {esc(r['reviewer_note'])}</p>" if r["reviewer_note"] else ""
     rel = f"<p>Related: {', '.join(_link(x) for x in r['related'])}</p>" if r["related"] else ""
+    rel += f"<p>Grouped under {_link(r['cluster'])}.</p>" if r["cluster"] else ""
     ev = "<ol>" + "".join(_evidence_item(r["id"], e, cd) for e in r["evidence"]) + "</ol>" if r["evidence"] else \
         '<p class="none">No evidence location is recorded.</p>'
     return (f'<article class="{esc(r["class"])}" id="{esc(r["id"])}"><h4><span class="tag">{esc(CLASS_LABEL[r["class"]])}</span> '

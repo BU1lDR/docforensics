@@ -84,12 +84,12 @@ def test_classes_live_in_separate_sections(ran):
     d = dossier_dict(case, ctx)
     by = lambda c: [f.id for f in case.findings if f.fclass == c]
     ids = lambda rows: [r["id"] for r in rows]
-    assert by("observation") and by("inconsistency")  # the run produced both
+    assert by("observation") and by("inconsistency") and by("potential_manipulation")  # the run produced all three (the linker made the last)
     assert ids(d["visual_forensic_findings"]["observations"]) == by("observation")
     assert ids(d["contextual_analysis"]["inconsistencies"]) == by("inconsistency")
+    assert ids(d["contextual_analysis"]["potential_manipulation"]) == by("potential_manipulation")
     assert ids(d["investigation_summary"]["limitations"]) == by("processing_limitation")
-    assert d["contextual_analysis"]["potential_manipulation"] == []
-    assert ids(d["investigation_summary"]["anomalies"]) == by("inconsistency")  # an observation is not an anomaly
+    assert ids(d["investigation_summary"]["anomalies"]) == by("potential_manipulation") + by("inconsistency")  # an observation is not an anomaly
 
 
 def test_potential_manipulation_is_kept_apart_from_inconsistencies(ran):
@@ -99,10 +99,12 @@ def test_potential_manipulation_is_kept_apart_from_inconsistencies(ran):
                                  title="Candidate for review", evidence=[Evidence(doc="D1", page=1, box=BOX)]))
     d = dossier_dict(case, ctx)
     inc = [f.id for f in case.findings if f.fclass == "inconsistency"]
-    assert [r["id"] for r in d["contextual_analysis"]["potential_manipulation"]] == ["F-900"]
+    pm = [f.id for f in case.findings if f.fclass == "potential_manipulation"]
+    assert len(pm) == 2 and pm[-1] == "F-900"  # the headline the linker made for the real run, then the one added here
+    assert [r["id"] for r in d["contextual_analysis"]["potential_manipulation"]] == pm
     assert [r["id"] for r in d["contextual_analysis"]["inconsistencies"]] == inc
     assert [(a["id"], a["class"]) for a in d["investigation_summary"]["anomalies"]] == \
-        [("F-900", "potential_manipulation")] + [(i, "inconsistency") for i in inc]
+        [(i, "potential_manipulation") for i in pm] + [(i, "inconsistency") for i in inc]
 
 
 def test_summary_carries_evidence_explanations_and_steps(ran):
@@ -233,7 +235,10 @@ def test_anomalies_are_ordered_by_class_then_review_priority(ran):
         case.findings.append(Finding(id=fid, fclass=fclass, detector="x", family="cluster", title="t", review_priority=priority,
                                      evidence=[Evidence(doc="D1", page=1, box=BOX)]))
     order = [a["id"] for a in dossier_dict(case, ctx)["investigation_summary"]["anomalies"]]
-    assert order[:3] == ["F-903", "F-902", "F-901"]  # candidates first, then the higher review priority
+    added = [i for i in order if i in ("F-901", "F-902", "F-903")]  # the real run has its own candidate and conflicts, with priorities of their own
+    assert added == ["F-903", "F-902", "F-901"]  # candidates first, then the higher review priority
+    real_head = next(f for f in case.findings if f.detector == "link")
+    assert order.index(real_head.id) < order.index("F-903")  # a candidate of priority 2 comes before one of priority 1
 
 
 def test_llm_wording_is_labelled_as_inference(tmp_path):
@@ -265,3 +270,14 @@ def test_overview_states_the_notice_and_counts_add_up(ran):
     c = o["counts"]
     assert c["findings"] == len(case.findings) == c["observations"] + c["inconsistencies"] + c["potential_manipulation"] + c["limitations"]
     assert c["documents"] == len(case.documents) == len(o["documents"])
+
+
+def test_a_finding_in_a_cluster_points_at_its_headline(ran):
+    case, ctx = ran
+    page = ctx.cd.dossier_html.read_text(encoding="utf-8")
+    heads = {f.id for f in case.findings if f.detector == "link"}
+    members = [f for f in case.findings if f.cluster]
+    assert heads and members and {f.cluster for f in members} <= heads
+    for f in members:
+        card = re.search(rf'<article class="[a-z_]+" id="{f.id}">(.*?)</article>', page, re.S).group(1)
+        assert f'href="#{f.cluster}"' in card, f.id
