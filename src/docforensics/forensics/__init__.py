@@ -6,10 +6,13 @@ from collections.abc import Callable
 from ..findings import add_findings
 from ..model import Case, Document, Finding
 from ..pipeline import Ctx, guarded
+from .pdf_fonts import font_outliers
+from .pdf_meta import metadata_observations
+from .pdf_overlay import covered_or_hidden_text
 from .pdf_revisions import revision_diff
 
 Detector = Callable[[Case, Document, Ctx], list[Finding]]
-DIGITAL_DETECTORS: list[Detector] = [revision_diff]
+DIGITAL_DETECTORS: list[Detector] = [revision_diff, covered_or_hidden_text, font_outliers, metadata_observations]
 SCAN_DETECTORS: list[Detector] = []
 
 

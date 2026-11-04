@@ -166,8 +166,8 @@ def test_too_many_revisions_are_not_opened(tmp_path):
 
 def test_a_page_too_large_to_compare_is_said_not_skipped(tmp_path):
     th = Thresholds(max_diff_words=200)
-    crowded = lines_pdf([(10, 20 + 3 * i, "a " * 60, 1) for i in range(10)])  # 600 words on one page
-    (lim,) = run(tmp_path, add_line(crowded, "added"), th=th).findings
+    crowded = lines_pdf([(10, 20 + 3 * i, "a " * 60, 1) for i in range(10)])  # 600 words on one page, set at 1 pt: the overlay detector notes that too
+    (lim,) = [f for f in run(tmp_path, add_line(crowded, "added"), th=th).findings if f.detector == "pdf_revisions"]
     assert lim.fclass == "processing_limitation" and "page 1" in lim.detail and "200" in lim.detail
 
 

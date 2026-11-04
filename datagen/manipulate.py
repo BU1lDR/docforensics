@@ -76,6 +76,93 @@ def d1_incremental_edit(pdf: bytes, old: str, new: str, page: int = 0) -> tuple[
     return out, Manipulation("D1", page=page + 1, box=box, note=f"{old!r} replaced by {new!r} in an incremental save")
 
 
+ARIAL = {"helv": Path("C:/Windows/Fonts/arial.ttf"), "hebo": Path("C:/Windows/Fonts/arialbd.ttf")}  # generator only, never shipped; D3 needs them
+
+
+def _geometry(page: pymupdf.Page, old: str) -> tuple[pymupdf.Point, dict, pymupdf.Rect]:
+    """The one place `old` stands as whole words: the origin of its first character, the span it is in, and its box in points."""
+    hits = _find(page, old)
+    if len(hits) != 1:
+        raise ValueError(f"{old!r} must stand exactly once on the page; found {len(hits)}")
+    chars, span = hits[0]
+    box = pymupdf.Rect(chars[0]["origin"][0], min(c["bbox"][1] for c in chars), max(c["bbox"][2] for c in chars), max(c["bbox"][3] for c in chars))
+    return pymupdf.Point(chars[0]["origin"]), span, box
+
+
+def _px(r: pymupdf.Rect) -> list[float]:
+    return [round(v * PX, 2) for v in (r.x0, r.y0, r.x1, r.y1)]
+
+
+def _rewritten(pdf: bytes, edit: Callable[[pymupdf.Page], object], page: int = 0) -> bytes:
+    """The PDF saved afresh after edit(page): unlike `incremental`, no earlier revision stays inside the file."""
+    with pymupdf.open(stream=pdf, filetype="pdf") as doc:
+        edit(doc[page])
+        return doc.tobytes()
+
+
+def _cover_and_write(pg: pymupdf.Page, old: str, new: str, alt: dict[str, Path] | None = None) -> list[float]:
+    """Draw a white rectangle over `old`, which stays in the file underneath, and write `new` over it at the same place, size and
+    colour: in the page's own face, or in the file of the same face in `alt`. Returns the box of `new` in 200-DPI px."""
+    origin, span, box = _geometry(pg, old)
+    face = "hebo" if "bold" in span["font"].lower() else "helv"
+    if alt:
+        pg.insert_font(fontname="alt", fontfile=str(alt[face]))
+        width = pymupdf.Font(fontfile=str(alt[face])).text_length(new, fontsize=span["size"])
+    else:
+        width = pymupdf.Font(face).text_length(new, fontsize=span["size"])
+    pg.draw_rect(pymupdf.Rect(box.x0 - 0.5, box.y0, max(box.x1, box.x0 + width) + 0.5, box.y1), color=None, fill=(1, 1, 1))
+    pg.insert_text(origin, new, fontname="alt" if alt else face, fontsize=span["size"], color=pymupdf.sRGB_to_pdf(span["color"]))
+    return _px(pymupdf.Rect(box.x0, box.y0, box.x0 + width, box.y1))
+
+
+def d2_cover_retype(pdf: bytes, old: str, new: str, page: int = 0) -> tuple[bytes, Manipulation]:
+    """D2: `old` hidden under a white rectangle and `new` written over it in the same font. The old text is still in the file."""
+    box: list[float] = []
+    out = _rewritten(pdf, lambda pg: box.extend(_cover_and_write(pg, old, new)), page)
+    return out, Manipulation("D2", page=page + 1, box=box, note=f"{old!r} covered by a white rectangle and {new!r} written over it in the same font")
+
+
+def d3_near_font_retype(pdf: bytes, old: str, new: str, page: int = 0) -> tuple[bytes, Manipulation]:
+    """D3: as D2, but `new` is written in Arial, which looks like the Helvetica the layouts use."""
+    if not all(p.is_file() for p in ARIAL.values()):
+        raise FileNotFoundError("D3 needs Arial and Arial Bold from the Windows fonts folder")
+    box: list[float] = []
+    out = _rewritten(pdf, lambda pg: box.extend(_cover_and_write(pg, old, new, ARIAL)), page)
+    return out, Manipulation("D3", page=page + 1, box=box, note=f"{old!r} covered by a white rectangle and {new!r} written over it in Arial")
+
+
+def d4_metadata_edit(pdf: bytes, producer: str, mod_date: str) -> tuple[bytes, Manipulation]:
+    """D4: the producer and the modification date of the file set to these (`mod_date` as PDF writes it, D:YYYYMMDDHHMMSS+05'30')."""
+    with pymupdf.open(stream=pdf, filetype="pdf") as doc:
+        doc.set_metadata({**{k: v for k, v in doc.metadata.items() if v}, "producer": producer, "modDate": mod_date})
+        out = doc.tobytes()
+    return out, Manipulation("D4", note=f"producer set to {producer!r} and modification date to {mod_date}")
+
+
+def _text_png(text: str, face: str, size: float, rect: pymupdf.Rect, origin: pymupdf.Point) -> bytes:
+    """`text` as a picture the size of `rect`, black on white, standing where it would on the page."""
+    with pymupdf.open() as scratch:
+        pg = scratch.new_page(width=rect.width, height=rect.height)
+        pg.insert_text((origin.x - rect.x0, origin.y - rect.y0), text, fontname=face, fontsize=size)
+        return pg.get_pixmap(dpi=300).tobytes("png")
+
+
+def d5_paste_image(pdf: bytes, old: str, new: str, page: int = 0) -> tuple[bytes, Manipulation]:
+    """D5: a picture of `new` placed over `old`, which stays in the file underneath."""
+    box: list[float] = []
+
+    def edit(pg: pymupdf.Page) -> None:
+        origin, span, b = _geometry(pg, old)
+        face = "hebo" if "bold" in span["font"].lower() else "helv"
+        width = pymupdf.Font(face).text_length(new, fontsize=span["size"])
+        rect = pymupdf.Rect(b.x0 - 1, b.y0 - 1, max(b.x1, b.x0 + width) + 1, b.y1 + 1)
+        pg.insert_image(rect, stream=_text_png(new, face, span["size"], rect, origin))
+        box.extend(_px(rect))
+
+    out = _rewritten(pdf, edit, page)
+    return out, Manipulation("D5", page=page + 1, box=box, note=f"a picture of {new!r} placed over {old!r}")
+
+
 def c1_consistent_change(ident: Identity, **changes: int) -> Identity:
     """C1: the pay figures changed together, so the payslip adds up on its own. Draw the payslip from the result and the
     statement and the application from the original identity."""

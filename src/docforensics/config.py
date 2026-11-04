@@ -17,6 +17,11 @@ class Thresholds:
     max_doc_age_days: int = 90
     text_sim: float = 0.8             # an address or employer written twice matches when the text is at least this alike
     same_tool_minutes: int = 10       # documents of different kinds made by the same software this close together are noted
+    font_size_delta_pt: float = 0.5   # a value set this much larger or smaller than the others beside it is noted
+    tiny_text_pt: float = 2.0         # text set smaller than this cannot be read by eye and is noted
+    image_max_page_fraction: float = 0.5  # an image covering less of a text page than this is noted (a whole-page image is a scan)
+    mod_after_create_s: int = 60      # a file modified this long after it was created is noted
+    max_page_objects: int = 5000      # text runs or drawn shapes on one page that the digital detectors examine; more is a limitation
     # limits (design 7.10)
     max_file_bytes: int = 10_000_000
     max_pages: int = 20

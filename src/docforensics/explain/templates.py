@@ -38,6 +38,33 @@ TEMPLATES: dict[tuple[str, str], tuple[str, list[str]]] = {
         f"{_LIMIT} The saved revisions of this PDF could not be compared in full, so a change made by a later save may exist "
         "and would not have been shown.",
         _UNCHECKED),
+    ("pdf_overlay", "observation"): (
+        "The file draws a filled shape or a picture over text that is still stored in the file, or it stores text in a way that "
+        "keeps it from being seen (invisible, too small to read, or outside the page). Panels, redactions, logos, stamps and "
+        "forms being filled in all do this, and so does a figure that was covered and typed over. The file does not say which.",
+        ["Compare the marked place on the page with the text that lies under it.",
+         "Check whether the covered text is a figure, date or name that other findings depend on.",
+         "Ask the issuer for a copy sent directly by them and compare it with this one."]),
+    ("pdf_overlay", "processing_limitation"): (
+        f"{_LIMIT} Some pages could not be examined for text under shapes or pictures, or for hidden text, so such content may "
+        "exist and would not have been shown.",
+        _UNCHECKED),
+    ("pdf_fonts", "observation"): (
+        "A figure or date is set in a different font, size or colour from the figures beside it. Documents are often put together "
+        "by more than one program, and a total or a note may be set differently on purpose, so this has ordinary causes. Font names "
+        "are those the file gives: two faces that look alike to the eye, such as Arial and Helvetica, have different names.",
+        ["Compare the marked value with its neighbours on the page.",
+         "Check whether the value is one that other findings depend on, such as a balance, a salary or a date."]),
+    ("pdf_fonts", "processing_limitation"): (
+        f"{_LIMIT} Some pages could not be compared in full for the fonts of their figures, so a figure set in a different font "
+        "may exist and would not have been shown.",
+        _UNCHECKED),
+    ("pdf_meta", "observation"): (
+        "The file's own record of how it was made, which program is named as its producer or creator and when it was created and "
+        "last modified, shows something the reviewer may want to know. Saving a file again is common and harmless, and anyone who "
+        "can write the file can write this record, so it neither proves nor rules out a change to the content.",
+        ["Ask the issuer how and when the document was made and whether it was saved again.",
+         "Compare the dates in the file record with the dates printed on the document."]),
     ("statement_balance", "inconsistency"): (
         "The running balance printed on the statement does not follow from the amounts printed on its rows, by more than the "
         "stated tolerance. An edited figure would cause this, and so would a misread digit, a row that was not read, or a layout "
