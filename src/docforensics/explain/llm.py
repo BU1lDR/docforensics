@@ -21,7 +21,10 @@ MAX_REPLY = 1_000_000
 # One reply is cut at this many tokens: a small model under a JSON schema can write on without end (one call of the benchmark ran 600 s
 # unanswered). At the 8 tokens/s measured on this laptop, 1024 tokens take about 130 s, inside the client's timeout.
 MAX_TOKENS = 1024
-DEFAULT_MODEL = "qwen3:4b-instruct-2507-q4_K_M"  # provisional until the benchmark: Apache-2.0 licence, 4.0B parameters, 2.4 GB at 4 bits
+# phi4-mini: MIT licence, 3.8B parameters, 2.5 GB at 4 bits. On 24 development headline prompts, CPU only, the guard accepted 18 of its wordings at
+# 17 s a call; qwen3:4b-instruct-2507-q4_K_M (Apache-2.0) got 13 at 26 s. Reading a whole case it is the weaker of the two: it kept 9 of 26
+# relations (qwen3: 19 of 23) and twice wrote on without end (once until MAX_TOKENS cut it). One run each on a small sample, so the order could change.
+DEFAULT_MODEL = "phi4-mini:3.8b"
 SCHEMA = {"type": "object", "properties": {"text": {"type": "string"}, "cites": {"type": "array", "items": {"type": "string"}}},
           "required": ["text", "cites"], "additionalProperties": False}
 SYSTEM = (
@@ -44,7 +47,7 @@ class LLMError(RuntimeError):
 class OllamaClient:
     """Ollama on this computer. chat_json asks for one JSON object at temperature 0, and the model unloads afterwards."""
 
-    def __init__(self, model: str, host: str = "127.0.0.1", port: int = 11434, timeout: float = 180.0) -> None:  # 180 s: the longest call measured took 83 s
+    def __init__(self, model: str, host: str = "127.0.0.1", port: int = 11434, timeout: float = 180.0) -> None:  # 180 s: the longest answered call took 112 s, and one cut at MAX_TOKENS 140 s
         try:
             loopback = ipaddress.ip_address(host).is_loopback  # an address, not a name: nothing is looked up
         except ValueError:

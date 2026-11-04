@@ -53,6 +53,11 @@ def test_the_schema_asks_for_the_three_parts_and_offers_only_the_kinds_the_promp
     assert all(kind in SYSTEM for kind in KINDS)
 
 
+def test_the_schema_bounds_both_arrays_so_that_a_model_that_repeats_itself_has_to_stop():
+    # phi4-mini wrote the same relation over and over until the reply was cut at the token limit, and the whole reading was lost
+    assert SCHEMA["properties"]["relations"]["maxItems"] == RELATIONS and SCHEMA["properties"]["review_order"]["maxItems"] == FINDINGS
+
+
 # --- what of it is used
 
 def test_a_faithful_reply_is_kept_whole_and_audited(ctx):

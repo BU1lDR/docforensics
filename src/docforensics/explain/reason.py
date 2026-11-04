@@ -18,12 +18,13 @@ if TYPE_CHECKING:
 FINDINGS = 16  # findings in the prompt: a small model reads a short prompt better, and the rest follow in their own order
 RELATIONS = 8  # relations read from the reply
 KINDS = ("same_value", "same_field", "same_document", "follows_from")
+# Both arrays are bounded: a small model under a schema can repeat one item until the token limit cuts the reply, and then the whole reading is lost.
 SCHEMA = {"type": "object", "properties": {
     "summary": {"type": "string"},
-    "relations": {"type": "array", "items": {"type": "object", "properties": {
+    "relations": {"type": "array", "maxItems": RELATIONS, "items": {"type": "object", "properties": {
         "a": {"type": "string"}, "b": {"type": "string"}, "kind": {"type": "string", "enum": list(KINDS)}, "reason": {"type": "string"}},
         "required": ["a", "b", "kind", "reason"], "additionalProperties": False}},
-    "review_order": {"type": "array", "items": {"type": "string"}}},
+    "review_order": {"type": "array", "maxItems": FINDINGS, "items": {"type": "string"}}},
     "required": ["summary", "relations", "review_order"], "additionalProperties": False}
 SYSTEM = (
     "You help a human reviewer read what a document-checking tool found. The user message is JSON: the documents of one case, its "
