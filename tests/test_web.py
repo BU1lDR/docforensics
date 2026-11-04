@@ -13,9 +13,10 @@ from docforensics import cli
 from docforensics.audit import AuditLog
 from docforensics.capabilities import load_capabilities
 from docforensics.config import Thresholds
-from docforensics.dossier import CLASS_LABEL, SOURCE_LABEL
+from docforensics.dossier import CLASS_LABEL, READING_LABEL, SOURCE_LABEL
 from docforensics.ingest import create_case
-from docforensics.store import CASE_ID_RE
+from docforensics.model import Reasoning, Relation
+from docforensics.store import CASE_ID_RE, CaseDir, load_case, save_case
 from docforensics.web import app as web
 from docforensics.web.app import HOST, STATIC, create_app
 from tests.helpers import d1_edited_statement, pdf_bytes
@@ -160,7 +161,7 @@ def test_ui_loads_nothing_from_outside_and_has_no_inline_code():
 
 def test_ui_labels_match_the_dossier_and_say_no_verdict():
     js = (STATIC / "app.js").read_text(encoding="utf-8")
-    for label in [*CLASS_LABEL.values(), *SOURCE_LABEL.values()]:
+    for label in [*CLASS_LABEL.values(), *SOURCE_LABEL.values(), READING_LABEL]:
         assert label in js, label
     for p in STATIC.iterdir():
         assert not VERDICT.search(p.read_text(encoding="utf-8")), p.name
@@ -344,6 +345,22 @@ def test_crop_names_are_validated(case):
     assert r.status_code == 200 and r.headers["content-type"] == "image/png" and r.content == crop.read_bytes()
     for name in ("..%2Fcase.json", "..%5Ccase.json", "case.json", "F-001-1.PNG", f"{crop.name}%00", "F-999-9.png", "%2e%2e%2fcase.json"):
         assert client.get(f"/api/cases/{cid}/crops/{name}").status_code == 404, name
+
+
+def test_a_model_reading_saved_with_the_case_reaches_the_page_and_the_dossier(case):
+    client, cid, data = case
+    assert client.get(f"/api/cases/{cid}").json()["case"]["reasoning"] is None
+    assert client.get(f"/api/cases/{cid}/dossier.json").json()["investigation_summary"]["ai_reading"]["status"] == "none"
+    cd = CaseDir.open(data, cid)
+    saved = load_case(cd)
+    a, b = saved.findings[0].id, saved.findings[1].id
+    saved.reasoning = Reasoning(model="qwen3:4b", summary=f"Read {a} first.", relations=[Relation(a=a, b=b, kind="same_field", reason="Same field.")])
+    save_case(saved, cd)
+    got = client.get(f"/api/cases/{cid}").json()["case"]["reasoning"]
+    assert (got["source"], got["model"], got["relations"][0]["kind"]) == ("llm", "qwen3:4b", "same_field")
+    shown = client.get(f"/api/cases/{cid}/dossier.json").json()["investigation_summary"]["ai_reading"]
+    assert shown["status"] == "kept" and shown["summary"] == f"Read {a} first."
+    assert READING_LABEL in client.get(f"/api/cases/{cid}/dossier").text
 
 
 def test_capabilities_are_served_from_the_one_matrix(case):
