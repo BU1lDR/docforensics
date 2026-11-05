@@ -23,6 +23,7 @@ MAX_ITEMS = 20  # items of a reply that are looked at
 CAP = 0.9       # of the doubt limit: the most confidence a field the model read can have
 GUARD = 1.1     # a call that has not ended after this multiple of the client's own timeout is abandoned
 HOW = ("exact", "normalised", "fuzzy")
+NUMBER = re.compile(r"(?m)^\s*\d{1,3}\s*[:.)]\s*")  # the "N: " a line was shown with, which models copy into the words they cite
 SKIPPED = "skipped: time budget"
 FAILED_BEFORE = "skipped: the model failed earlier in this case"
 SCHEMA = {"type": "object", "properties": {"items": {"type": "array", "items": {
@@ -179,7 +180,7 @@ class ModelReader:
             return "no label"
         if len(label) > 40 or len(label.split()) > 6:  # as long as a label may be on the generic path
             return "label too long"
-        src = ground(it["source_text"], words, ex.th.label_sim)
+        src = ground(it["source_text"], words, ex.th.label_sim) or ground(NUMBER.sub("", it["source_text"]), words, ex.th.label_sim)
         if src is None:
             return "source text not found on the page"
         val = ground(it["value"], src.words, ex.th.label_sim)

@@ -141,6 +141,29 @@ def test_a_value_that_is_elsewhere_on_the_page_is_not_taken_for_the_line_it_cite
     assert ev.data["dropped"] == [{"label": "Reference", "reason": "value not inside its source text"}]
 
 
+def test_the_line_numbers_a_model_copies_into_its_source_text_are_not_part_of_the_words(tmp_path):
+    """phi4-mini copied the 'N: ' it was shown in front of nearly every source text (measured, ext-dev): such an item is not lost for it."""
+    numbered = {"items": [
+        {"label": "Prepared by", "value": "Rohan Iyer", "source_text": "5: Prepared by Rohan Iyer"},
+        {"label": "Validity", "value": "30 days", "source_text": "6: Valid for 30 days"},
+        {"label": "Delivery date", "value": "12/05/2026", "source_text": "6: Valid for 30 days\n7: Delivery on or before 12/05/2026 at site"},  # two lines
+        {"label": "Branch", "value": "Pune", "source_text": "9: Branch: Pune"}]}  # a number in front does not make a line the page lacks
+    case, audit = run(tmp_path, lines_pdf(SHEET), llm=Fake(numbered))
+    read = by_name(case.documents[0])
+    assert set(read) == {"prepared_by", "validity", "delivery_date"} and read["prepared_by"].raw == "Rohan Iyer"
+    assert read["delivery_date"].value == "2026-05-12" and read["validity"].raw == "30 days"
+    (ev,) = [e for e in audit.events() if e.event == "llm_extraction"]
+    assert ev.data["dropped"] == [{"label": "Branch", "reason": "source text not found on the page"}]
+
+
+def test_a_source_text_that_the_page_holds_as_given_is_not_changed(tmp_path):
+    """A page that really has '12: 30 pm' on a line: the text as the model gave it is looked for first."""
+    sheet = [(72, 100, "Opening 12: 30 pm daily", 11), (72, 130, "Counter 4 is open", 11)]
+    reply = {"items": [{"label": "Opening", "value": "12: 30 pm", "source_text": "12: 30 pm"}]}
+    case, _ = run(tmp_path, lines_pdf(sheet), llm=Fake(reply))
+    assert [f.raw for f in by_name(case.documents[0]).values()] == ["12: 30 pm"]
+
+
 def test_without_the_model_nothing_changes(tmp_path):
     case, audit = run(tmp_path, lines_pdf(SHEET))
     assert not any(f.model_read for d in case.documents for f in d.fields)
