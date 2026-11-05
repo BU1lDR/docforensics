@@ -1,8 +1,8 @@
 {
  "overview": {
-  "case": "C-20261105-065135-500f",
-  "created": "2026-11-05T06:51:35+00:00",
-  "generated": "2026-11-05T06:51:36+00:00",
+  "case": "C-20261105-081924-a120",
+  "created": "2026-11-05T08:19:24+00:00",
+  "generated": "2026-11-05T08:19:27+00:00",
   "tool": {
    "name": "docforensics",
    "version": "0.1.0"
@@ -4718,11 +4718,11 @@
    "events": [
     {
      "seq": 1,
-     "ts": "2026-11-05T06:51:35.161+00:00",
+     "ts": "2026-11-05T08:19:24.870+00:00",
      "actor": "system",
      "event": "case_created",
      "data": {
-      "case": "C-20261105-065135-500f",
+      "case": "C-20261105-081924-a120",
       "thresholds": {
        "low_conf": 0.6,
        "amount_abs": 1.0,
@@ -4761,11 +4761,11 @@
       }
      },
      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-     "hash": "9600862820b0506489f886a2f49fe17f0291d74f5315d6af36327ae9015fbfc4"
+     "hash": "c6e820be3cd36c760c66f51493f02c651e4454911c14b8ab1b6e7b1fc96bef64"
     },
     {
      "seq": 2,
-     "ts": "2026-11-05T06:51:35.171+00:00",
+     "ts": "2026-11-05T08:19:24.892+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -4775,12 +4775,12 @@
       "size": 38236,
       "type": "pdf"
      },
-     "prev_hash": "9600862820b0506489f886a2f49fe17f0291d74f5315d6af36327ae9015fbfc4",
-     "hash": "d735bebfa9b71c31004a5e8751a5f3fc9db55af4b5b54b187d13341252e67166"
+     "prev_hash": "c6e820be3cd36c760c66f51493f02c651e4454911c14b8ab1b6e7b1fc96bef64",
+     "hash": "e99a7e0cde39821a98ffc4241c84caa3f0b440e5a485e5a23a768570bf8d1ba5"
     },
     {
      "seq": 3,
-     "ts": "2026-11-05T06:51:35.178+00:00",
+     "ts": "2026-11-05T08:19:24.917+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -4790,12 +4790,12 @@
       "size": 9719,
       "type": "pdf"
      },
-     "prev_hash": "d735bebfa9b71c31004a5e8751a5f3fc9db55af4b5b54b187d13341252e67166",
-     "hash": "147b15cec73c1a585e1270b87c3469dec3dec84d8688d860e2686845c200b17f"
+     "prev_hash": "e99a7e0cde39821a98ffc4241c84caa3f0b440e5a485e5a23a768570bf8d1ba5",
+     "hash": "82b7764a4562e241d24c18dd0defe61b210a9933b0818bc42b91f4a8511e4695"
     },
     {
      "seq": 4,
-     "ts": "2026-11-05T06:51:35.185+00:00",
+     "ts": "2026-11-05T08:19:24.931+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -4805,12 +4805,12 @@
       "size": 8471,
       "type": "pdf"
      },
-     "prev_hash": "147b15cec73c1a585e1270b87c3469dec3dec84d8688d860e2686845c200b17f",
-     "hash": "060152e6042d52f11c622aff134b1ed4f348fa0a2f068b49655d9dc5019fd4ca"
+     "prev_hash": "82b7764a4562e241d24c18dd0defe61b210a9933b0818bc42b91f4a8511e4695",
+     "hash": "5553314addfd25763ea3b3dc76a7f53743ce9185a51320a271da022d0ab4764d"
     },
     {
      "seq": 5,
-     "ts": "2026-11-05T06:51:35.379+00:00",
+     "ts": "2026-11-05T08:19:25.438+00:00",
      "actor": "system",
      "event": "run_started",
      "data": {
@@ -4827,23 +4827,23 @@
        "pydantic": "2.14.2"
       }
      },
-     "prev_hash": "060152e6042d52f11c622aff134b1ed4f348fa0a2f068b49655d9dc5019fd4ca",
-     "hash": "4cc9683c5633106b8877e3fe14b7d1d5e570591510d171a80590b4327484879d"
+     "prev_hash": "5553314addfd25763ea3b3dc76a7f53743ce9185a51320a271da022d0ab4764d",
+     "hash": "d5c9964e3da18d9d646fe4ecd2f79610556bb053019111b6c12c05c6d94ac2bf"
     },
     {
      "seq": 6,
-     "ts": "2026-11-05T06:51:35.387+00:00",
+     "ts": "2026-11-05T08:19:25.454+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "read"
      },
-     "prev_hash": "4cc9683c5633106b8877e3fe14b7d1d5e570591510d171a80590b4327484879d",
-     "hash": "5bb02a196b027a3f7c89f01fffa62de5f92fb9f7685b09d7db610df89ff34468"
+     "prev_hash": "d5c9964e3da18d9d646fe4ecd2f79610556bb053019111b6c12c05c6d94ac2bf",
+     "hash": "080b18e62add40aa2b13d657d4493e19342dca4400bbab7d8ae1330ad1f6481e"
     },
     {
      "seq": 7,
-     "ts": "2026-11-05T06:51:35.539+00:00",
+     "ts": "2026-11-05T08:19:25.707+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -4852,12 +4852,12 @@
       "kind": "pdf-digital",
       "words": 223
      },
-     "prev_hash": "5bb02a196b027a3f7c89f01fffa62de5f92fb9f7685b09d7db610df89ff34468",
-     "hash": "0ad08020593578a5181d07dc7e867663e4da2f57121f2a5010e355ff2d6e8477"
+     "prev_hash": "080b18e62add40aa2b13d657d4493e19342dca4400bbab7d8ae1330ad1f6481e",
+     "hash": "6a4ef1775410038ec44e6720fe23d16fd241bda31de80c720a3f7d536de76ad2"
     },
     {
      "seq": 8,
-     "ts": "2026-11-05T06:51:35.608+00:00",
+     "ts": "2026-11-05T08:19:25.828+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -4866,12 +4866,12 @@
       "kind": "pdf-digital",
       "words": 85
      },
-     "prev_hash": "0ad08020593578a5181d07dc7e867663e4da2f57121f2a5010e355ff2d6e8477",
-     "hash": "0bf97dec8fc32c6a3ebe30583f122c59e29142f9a331f7220bb0fdab7b576995"
+     "prev_hash": "6a4ef1775410038ec44e6720fe23d16fd241bda31de80c720a3f7d536de76ad2",
+     "hash": "fcb055dc5f57d56350b002aa83281a1a4492a3ab09573bacdd14848945003dc8"
     },
     {
      "seq": 9,
-     "ts": "2026-11-05T06:51:35.700+00:00",
+     "ts": "2026-11-05T08:19:25.943+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -4880,38 +4880,38 @@
       "kind": "pdf-digital",
       "words": 72
      },
-     "prev_hash": "0bf97dec8fc32c6a3ebe30583f122c59e29142f9a331f7220bb0fdab7b576995",
-     "hash": "8b38f98eb4087b969b195ff349528b0917b62a8150dee4e8a99bf378a9ce7051"
+     "prev_hash": "fcb055dc5f57d56350b002aa83281a1a4492a3ab09573bacdd14848945003dc8",
+     "hash": "62207bf2b5c706b044b1e1a546246424954a3421d1e6b42291cf4d19a131d9ed"
     },
     {
      "seq": 10,
-     "ts": "2026-11-05T06:51:35.706+00:00",
+     "ts": "2026-11-05T08:19:25.952+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "read",
       "ok": true,
-      "seconds": 0.313,
+      "seconds": 0.5,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "8b38f98eb4087b969b195ff349528b0917b62a8150dee4e8a99bf378a9ce7051",
-     "hash": "9a80ee3b64c9c4b1324441ab14fce484a6023d27385e13bd77cfae16f7463a7e"
+     "prev_hash": "62207bf2b5c706b044b1e1a546246424954a3421d1e6b42291cf4d19a131d9ed",
+     "hash": "fc048c969e481ca4cc00843db27856bf15d75b8ddd8150e1f840eff62c338e0d"
     },
     {
      "seq": 11,
-     "ts": "2026-11-05T06:51:35.713+00:00",
+     "ts": "2026-11-05T08:19:25.963+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "classify"
      },
-     "prev_hash": "9a80ee3b64c9c4b1324441ab14fce484a6023d27385e13bd77cfae16f7463a7e",
-     "hash": "dfd2f5b4aab30d40e04fd77613fd5772ec07d9afac8e830d258b0a531a22aa37"
+     "prev_hash": "fc048c969e481ca4cc00843db27856bf15d75b8ddd8150e1f840eff62c338e0d",
+     "hash": "6808af6f00b737b82f5ccac5f30b6eadb6f76154237db895bf0a15353dc2ca0d"
     },
     {
      "seq": 12,
-     "ts": "2026-11-05T06:51:35.766+00:00",
+     "ts": "2026-11-05T08:19:26.013+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -4919,12 +4919,12 @@
       "type": "bank_statement",
       "conf": 1.0
      },
-     "prev_hash": "dfd2f5b4aab30d40e04fd77613fd5772ec07d9afac8e830d258b0a531a22aa37",
-     "hash": "28ff252c9ddc511e720b21875eb7f5bf3d652c7b43d357b1fbc37079a9910deb"
+     "prev_hash": "6808af6f00b737b82f5ccac5f30b6eadb6f76154237db895bf0a15353dc2ca0d",
+     "hash": "8a593481938c20e0421d36877520c3a7639a63f870113230496888bed10fb963"
     },
     {
      "seq": 13,
-     "ts": "2026-11-05T06:51:35.796+00:00",
+     "ts": "2026-11-05T08:19:26.048+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -4932,12 +4932,12 @@
       "type": "payslip",
       "conf": 1.0
      },
-     "prev_hash": "28ff252c9ddc511e720b21875eb7f5bf3d652c7b43d357b1fbc37079a9910deb",
-     "hash": "71b8c451e8b635f1f92c4576f51787e373be99242f511188168d6616f3bc024e"
+     "prev_hash": "8a593481938c20e0421d36877520c3a7639a63f870113230496888bed10fb963",
+     "hash": "859694f2722e864cd3b10e3396a85a1a12171d1f42a8ef974625ef7bc3f0d141"
     },
     {
      "seq": 14,
-     "ts": "2026-11-05T06:51:35.816+00:00",
+     "ts": "2026-11-05T08:19:26.078+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -4945,12 +4945,12 @@
       "type": "loan_application",
       "conf": 1.0
      },
-     "prev_hash": "71b8c451e8b635f1f92c4576f51787e373be99242f511188168d6616f3bc024e",
-     "hash": "8d6ba128225b59c768a542bd8b8daa387b31ea6f16926060c9d5e30584c3e993"
+     "prev_hash": "859694f2722e864cd3b10e3396a85a1a12171d1f42a8ef974625ef7bc3f0d141",
+     "hash": "9ed2505854096af499b6a254fe3498522870d471cea3bbdc0cc13c0d86fabbb3"
     },
     {
      "seq": 15,
-     "ts": "2026-11-05T06:51:35.831+00:00",
+     "ts": "2026-11-05T08:19:26.082+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
@@ -4960,23 +4960,23 @@
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "8d6ba128225b59c768a542bd8b8daa387b31ea6f16926060c9d5e30584c3e993",
-     "hash": "00e48442cdc22416dcc53634b2f1d5f954ce956ff4e4abc56e97df4ba24eec2e"
+     "prev_hash": "9ed2505854096af499b6a254fe3498522870d471cea3bbdc0cc13c0d86fabbb3",
+     "hash": "347723dfb8d2cc632f145ea14db5eab12a69eab92992373f312cee5ec5c5566c"
     },
     {
      "seq": 16,
-     "ts": "2026-11-05T06:51:35.837+00:00",
+     "ts": "2026-11-05T08:19:26.096+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "extract"
      },
-     "prev_hash": "00e48442cdc22416dcc53634b2f1d5f954ce956ff4e4abc56e97df4ba24eec2e",
-     "hash": "cbe32a17991354dbcec91216bff61629dc12f7e720d5f529d29ffbe52bc4cc09"
+     "prev_hash": "347723dfb8d2cc632f145ea14db5eab12a69eab92992373f312cee5ec5c5566c",
+     "hash": "85b3d0762dabea469adf56070b854f457fa2a87f1f6c815ba1f6b9b779d8e834"
     },
     {
      "seq": 17,
-     "ts": "2026-11-05T06:51:35.879+00:00",
+     "ts": "2026-11-05T08:19:26.137+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -4985,12 +4985,12 @@
       "fields": 188,
       "empty": 36
      },
-     "prev_hash": "cbe32a17991354dbcec91216bff61629dc12f7e720d5f529d29ffbe52bc4cc09",
-     "hash": "f3282a8285dd8df6eb0e9f62078fc6a2778342120f3da7b55726612d230ea444"
+     "prev_hash": "85b3d0762dabea469adf56070b854f457fa2a87f1f6c815ba1f6b9b779d8e834",
+     "hash": "3b4e6aab02cce6b0e3a18614305f9720cc7a598dfa3405013e05026002f0d36f"
     },
     {
      "seq": 18,
-     "ts": "2026-11-05T06:51:35.910+00:00",
+     "ts": "2026-11-05T08:19:26.166+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -4999,12 +4999,12 @@
       "fields": 27,
       "empty": 2
      },
-     "prev_hash": "f3282a8285dd8df6eb0e9f62078fc6a2778342120f3da7b55726612d230ea444",
-     "hash": "0927f1660eac41fe69eef4ab8659c72d5b28cf499a9e800e7f617b558c532168"
+     "prev_hash": "3b4e6aab02cce6b0e3a18614305f9720cc7a598dfa3405013e05026002f0d36f",
+     "hash": "619c5813dccd5dd8104c4abd1f2e858862cf9a09c7ef4da7e89798d0c39a8726"
     },
     {
      "seq": 19,
-     "ts": "2026-11-05T06:51:35.938+00:00",
+     "ts": "2026-11-05T08:19:26.195+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -5013,12 +5013,12 @@
       "fields": 9,
       "empty": 0
      },
-     "prev_hash": "0927f1660eac41fe69eef4ab8659c72d5b28cf499a9e800e7f617b558c532168",
-     "hash": "fde772a27e075d6c5737c02584510e0644e374eeb40a677adc65bc5cb9f3bbab"
+     "prev_hash": "619c5813dccd5dd8104c4abd1f2e858862cf9a09c7ef4da7e89798d0c39a8726",
+     "hash": "6b31fd4c2605d9c4a0dc783219075408f724e16436eea093bda6ade41ad807db"
     },
     {
      "seq": 20,
-     "ts": "2026-11-05T06:51:35.941+00:00",
+     "ts": "2026-11-05T08:19:26.201+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
@@ -5028,23 +5028,23 @@
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "fde772a27e075d6c5737c02584510e0644e374eeb40a677adc65bc5cb9f3bbab",
-     "hash": "be38b9c8a981c90ebe3e89d9fc402eb2e16f252ee7fdc5d20e69d051fb6247df"
+     "prev_hash": "6b31fd4c2605d9c4a0dc783219075408f724e16436eea093bda6ade41ad807db",
+     "hash": "544b48999f88bca7bf31cf43acf9fcf35bc5381303567824283b3a22cb0230f9"
     },
     {
      "seq": 21,
-     "ts": "2026-11-05T06:51:35.955+00:00",
+     "ts": "2026-11-05T08:19:26.215+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "forensics"
      },
-     "prev_hash": "be38b9c8a981c90ebe3e89d9fc402eb2e16f252ee7fdc5d20e69d051fb6247df",
-     "hash": "ad9038bbaba8defef0ed0257580fce640301a7b4c7fba7f65c61a2f14659757f"
+     "prev_hash": "544b48999f88bca7bf31cf43acf9fcf35bc5381303567824283b3a22cb0230f9",
+     "hash": "f5f6bff44ecfcdf0b516b9383fff499f8e89d5ecf13f68f73c0529d5676e050a"
     },
     {
      "seq": 22,
-     "ts": "2026-11-05T06:51:35.976+00:00",
+     "ts": "2026-11-05T08:19:26.243+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5053,12 +5053,12 @@
       "fclass": "observation",
       "title": "Text changed in revision 2 (page 1)"
      },
-     "prev_hash": "ad9038bbaba8defef0ed0257580fce640301a7b4c7fba7f65c61a2f14659757f",
-     "hash": "cc9faea4d8487ceb66720fedd0245dc5ebd2607d0f175b4b21c736de39fc0c03"
+     "prev_hash": "f5f6bff44ecfcdf0b516b9383fff499f8e89d5ecf13f68f73c0529d5676e050a",
+     "hash": "af980510482224665ffe5b27ecb04dd38bf9e7e20094d4f7369bbf1e0dedec6e"
     },
     {
      "seq": 23,
-     "ts": "2026-11-05T06:51:35.990+00:00",
+     "ts": "2026-11-05T08:19:26.250+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5066,12 +5066,12 @@
       "detector": "revision_diff",
       "findings": 1
      },
-     "prev_hash": "cc9faea4d8487ceb66720fedd0245dc5ebd2607d0f175b4b21c736de39fc0c03",
-     "hash": "e826a1420b757e779d9d8bb96bc2f9c0f281149857976d57488004467a952598"
+     "prev_hash": "af980510482224665ffe5b27ecb04dd38bf9e7e20094d4f7369bbf1e0dedec6e",
+     "hash": "ac0097164bdb069e3457e307478aa9ffac9ec64be8adafcb9438a78c74152257"
     },
     {
      "seq": 24,
-     "ts": "2026-11-05T06:51:36.008+00:00",
+     "ts": "2026-11-05T08:19:26.271+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5079,12 +5079,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "e826a1420b757e779d9d8bb96bc2f9c0f281149857976d57488004467a952598",
-     "hash": "4a2afeff327d237346b1c7dc79497b9713c0cf3fe1e3e21dfb318ce73f9ef834"
+     "prev_hash": "ac0097164bdb069e3457e307478aa9ffac9ec64be8adafcb9438a78c74152257",
+     "hash": "106c377e225bfa92321a828bc942003e39d581a53c781fc16cd80630c881b1eb"
     },
     {
      "seq": 25,
-     "ts": "2026-11-05T06:51:36.025+00:00",
+     "ts": "2026-11-05T08:19:26.291+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5092,12 +5092,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "4a2afeff327d237346b1c7dc79497b9713c0cf3fe1e3e21dfb318ce73f9ef834",
-     "hash": "2dae7842ea8dea63a00ad66e9e84aa596a534ffd6e9ea0a98de84a4bb247cec5"
+     "prev_hash": "106c377e225bfa92321a828bc942003e39d581a53c781fc16cd80630c881b1eb",
+     "hash": "f423d4834a54f51bba3371e7e5e8e99712f40ab4513962a2d5226797f52461fe"
     },
     {
      "seq": 26,
-     "ts": "2026-11-05T06:51:36.031+00:00",
+     "ts": "2026-11-05T08:19:26.299+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5105,12 +5105,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "2dae7842ea8dea63a00ad66e9e84aa596a534ffd6e9ea0a98de84a4bb247cec5",
-     "hash": "63687c16463a472d552ce48580d4c9acc9241327a25e1cb257d06cf9b0e23b79"
+     "prev_hash": "f423d4834a54f51bba3371e7e5e8e99712f40ab4513962a2d5226797f52461fe",
+     "hash": "e27156415ee330ae0a1b8eeba682d25c759c451d97d05166d672ee6d2d0e10ef"
     },
     {
      "seq": 27,
-     "ts": "2026-11-05T06:51:36.045+00:00",
+     "ts": "2026-11-05T08:19:26.305+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5118,12 +5118,12 @@
       "detector": "revision_diff",
       "findings": 0
      },
-     "prev_hash": "63687c16463a472d552ce48580d4c9acc9241327a25e1cb257d06cf9b0e23b79",
-     "hash": "dcc694c73531b89883e02b998a9a3641223dc26f0a85c908d62b68718791f7b9"
+     "prev_hash": "e27156415ee330ae0a1b8eeba682d25c759c451d97d05166d672ee6d2d0e10ef",
+     "hash": "c249973037d9edae4a7be2ab2518f50a1eef89088997b59adf9fa7f068b0797a"
     },
     {
      "seq": 28,
-     "ts": "2026-11-05T06:51:36.052+00:00",
+     "ts": "2026-11-05T08:19:26.319+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5131,12 +5131,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "dcc694c73531b89883e02b998a9a3641223dc26f0a85c908d62b68718791f7b9",
-     "hash": "d781f95f774e37e0c45e51e467d9331004313b64227890f71e9a4f57cac72ffd"
+     "prev_hash": "c249973037d9edae4a7be2ab2518f50a1eef89088997b59adf9fa7f068b0797a",
+     "hash": "5ceb27c3102b832a7d86c745de41cd8166e10fdb6e647f2cc14c4178a24f3a0d"
     },
     {
      "seq": 29,
-     "ts": "2026-11-05T06:51:36.066+00:00",
+     "ts": "2026-11-05T08:19:26.327+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5144,12 +5144,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "d781f95f774e37e0c45e51e467d9331004313b64227890f71e9a4f57cac72ffd",
-     "hash": "90d39811fbf1f9e8ba7cd41059d61798409ed75a9f71c1cce35c9437a55796c9"
+     "prev_hash": "5ceb27c3102b832a7d86c745de41cd8166e10fdb6e647f2cc14c4178a24f3a0d",
+     "hash": "78a106e306a6186568b76f8916bbdc52acb0a35b3e92609be22a9ac746541d68"
     },
     {
      "seq": 30,
-     "ts": "2026-11-05T06:51:36.073+00:00",
+     "ts": "2026-11-05T08:19:26.339+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5157,12 +5157,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "90d39811fbf1f9e8ba7cd41059d61798409ed75a9f71c1cce35c9437a55796c9",
-     "hash": "a72a565440109921d37f3502d70c12a1ddec78cb39e7c8a83bfbb079d826997d"
+     "prev_hash": "78a106e306a6186568b76f8916bbdc52acb0a35b3e92609be22a9ac746541d68",
+     "hash": "a13103a845cf537c0969e120499e752ff9ce592e4fece88896e101c8dac83207"
     },
     {
      "seq": 31,
-     "ts": "2026-11-05T06:51:36.087+00:00",
+     "ts": "2026-11-05T08:19:26.348+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5170,12 +5170,12 @@
       "detector": "revision_diff",
       "findings": 0
      },
-     "prev_hash": "a72a565440109921d37f3502d70c12a1ddec78cb39e7c8a83bfbb079d826997d",
-     "hash": "03b629d33b53c07dbaee5895e747dfeaa722c78c6ed6f0b4337ae99e31354130"
+     "prev_hash": "a13103a845cf537c0969e120499e752ff9ce592e4fece88896e101c8dac83207",
+     "hash": "a37a6ebc076610166809185df6a2c329a7494628093a38621d53a86200fc8473"
     },
     {
      "seq": 32,
-     "ts": "2026-11-05T06:51:36.101+00:00",
+     "ts": "2026-11-05T08:19:26.362+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5183,12 +5183,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "03b629d33b53c07dbaee5895e747dfeaa722c78c6ed6f0b4337ae99e31354130",
-     "hash": "1d7203e92d26178b81ddbb83d8f8f54c24f67320c0bf9bb7a651d4056015f493"
+     "prev_hash": "a37a6ebc076610166809185df6a2c329a7494628093a38621d53a86200fc8473",
+     "hash": "712145fbcf2343ca6455e66dd2f81ff57cefb1a31b491d53ba648249a927cf68"
     },
     {
      "seq": 33,
-     "ts": "2026-11-05T06:51:36.108+00:00",
+     "ts": "2026-11-05T08:19:26.375+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5196,12 +5196,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "1d7203e92d26178b81ddbb83d8f8f54c24f67320c0bf9bb7a651d4056015f493",
-     "hash": "feb24c56756c627d99877267a7e48c4b5afc1a251d6ff0535eb1719c16065207"
+     "prev_hash": "712145fbcf2343ca6455e66dd2f81ff57cefb1a31b491d53ba648249a927cf68",
+     "hash": "c2ac3ef4f3ff8f50350143246ca6866e3f43133b0a1d6667a71e82afc1cb8964"
     },
     {
      "seq": 34,
-     "ts": "2026-11-05T06:51:36.122+00:00",
+     "ts": "2026-11-05T08:19:26.384+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5209,12 +5209,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "feb24c56756c627d99877267a7e48c4b5afc1a251d6ff0535eb1719c16065207",
-     "hash": "8b6b91bdc1daaabea04775188bf707874a5261c97a322f26cdc9842722e8e92c"
+     "prev_hash": "c2ac3ef4f3ff8f50350143246ca6866e3f43133b0a1d6667a71e82afc1cb8964",
+     "hash": "54b6f47e5c50492a7488493509b29e9845de81dd8ae20439150de3cdaf11d340"
     },
     {
      "seq": 35,
-     "ts": "2026-11-05T06:51:36.199+00:00",
+     "ts": "2026-11-05T08:19:26.479+00:00",
      "actor": "system",
      "event": "signature_compared",
      "data": {
@@ -5230,12 +5230,12 @@
       "limit": 9.4,
       "differs": false
      },
-     "prev_hash": "8b6b91bdc1daaabea04775188bf707874a5261c97a322f26cdc9842722e8e92c",
-     "hash": "3572a2b2b6a69f01d1635c840a90db3c482976ef03bfcf85219e61f17a1c5408"
+     "prev_hash": "54b6f47e5c50492a7488493509b29e9845de81dd8ae20439150de3cdaf11d340",
+     "hash": "8bed2814b45807ab6caddc2e45591cc73768c2a41fa6a073b463c1aee218a6fc"
     },
     {
      "seq": 36,
-     "ts": "2026-11-05T06:51:36.261+00:00",
+     "ts": "2026-11-05T08:19:26.541+00:00",
      "actor": "system",
      "event": "mark_compared",
      "data": {
@@ -5252,12 +5252,12 @@
       "limit": 10.5,
       "differs": false
      },
-     "prev_hash": "3572a2b2b6a69f01d1635c840a90db3c482976ef03bfcf85219e61f17a1c5408",
-     "hash": "3e2d86714e9c313332a3ee818ad38b311a6b91618fce767566f077473ae28f8c"
+     "prev_hash": "8bed2814b45807ab6caddc2e45591cc73768c2a41fa6a073b463c1aee218a6fc",
+     "hash": "4213b1d02d19825e6aadbc317e2ed8ad8ea9c1ad6bb28c1465ff8daa87465f85"
     },
     {
      "seq": 37,
-     "ts": "2026-11-05T06:51:36.344+00:00",
+     "ts": "2026-11-05T08:19:26.677+00:00",
      "actor": "system",
      "event": "mark_compared",
      "data": {
@@ -5274,50 +5274,50 @@
       "limit": 3.0,
       "differs": false
      },
-     "prev_hash": "3e2d86714e9c313332a3ee818ad38b311a6b91618fce767566f077473ae28f8c",
-     "hash": "84ff878ffe59488f754a641c8d68c533f44eec8b6c804610df123bdadfca5cb8"
+     "prev_hash": "4213b1d02d19825e6aadbc317e2ed8ad8ea9c1ad6bb28c1465ff8daa87465f85",
+     "hash": "5233f537766c8e26d5b89ed92eaeedb88d166b1a8052288617cddd9e1aabc4cf"
     },
     {
      "seq": 38,
-     "ts": "2026-11-05T06:51:36.351+00:00",
+     "ts": "2026-11-05T08:19:26.703+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "forensics",
       "ok": true,
-      "seconds": 0.375,
+      "seconds": 0.469,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "84ff878ffe59488f754a641c8d68c533f44eec8b6c804610df123bdadfca5cb8",
-     "hash": "0a64c065f84a05d56b6ce0d868da831059ee10c55c20ba03d904ac28d6ce1931"
+     "prev_hash": "5233f537766c8e26d5b89ed92eaeedb88d166b1a8052288617cddd9e1aabc4cf",
+     "hash": "37492ba951211a409e7f373398a0548a6b50eb1ee65249fce629ad39a6f3b946"
     },
     {
      "seq": 39,
-     "ts": "2026-11-05T06:51:36.367+00:00",
+     "ts": "2026-11-05T08:19:26.736+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "checks"
      },
-     "prev_hash": "0a64c065f84a05d56b6ce0d868da831059ee10c55c20ba03d904ac28d6ce1931",
-     "hash": "2513f77ac1c39a60c4268383da92b22ddcf052e5cb91efb1c5478850e3357720"
+     "prev_hash": "37492ba951211a409e7f373398a0548a6b50eb1ee65249fce629ad39a6f3b946",
+     "hash": "9f2ab2292b73786c122c3fcffff3f11a6da0b887050a70e6f3c02a1d36ea8a95"
     },
     {
      "seq": 40,
-     "ts": "2026-11-05T06:51:36.372+00:00",
+     "ts": "2026-11-05T08:19:26.772+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D1",
       "findings": 1
      },
-     "prev_hash": "2513f77ac1c39a60c4268383da92b22ddcf052e5cb91efb1c5478850e3357720",
-     "hash": "0a97f9977ceaf02f8c312cf6872f78a6455d03df427e748da1a8741707da55d3"
+     "prev_hash": "9f2ab2292b73786c122c3fcffff3f11a6da0b887050a70e6f3c02a1d36ea8a95",
+     "hash": "716d4ae1563926b3b0438831af6055c2615cb8e9ebe7df47a2928e7e7e2a4def"
     },
     {
      "seq": 41,
-     "ts": "2026-11-05T06:51:36.378+00:00",
+     "ts": "2026-11-05T08:19:26.806+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5326,85 +5326,85 @@
       "fclass": "inconsistency",
       "title": "The closing balance does not follow from the transactions"
      },
-     "prev_hash": "0a97f9977ceaf02f8c312cf6872f78a6455d03df427e748da1a8741707da55d3",
-     "hash": "40763611cc74f215f83d1b020d3bcea4e13426199f9ce7adca591d93ccdfca2c"
+     "prev_hash": "716d4ae1563926b3b0438831af6055c2615cb8e9ebe7df47a2928e7e7e2a4def",
+     "hash": "cdf19dc0bb2c483f97532f1cc155ab89b42083865087ab09f5b126f251a650f9"
     },
     {
      "seq": 42,
-     "ts": "2026-11-05T06:51:36.392+00:00",
+     "ts": "2026-11-05T08:19:26.841+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D2",
       "findings": 0
      },
-     "prev_hash": "40763611cc74f215f83d1b020d3bcea4e13426199f9ce7adca591d93ccdfca2c",
-     "hash": "68caf7b435aeadd14f0dd68a1416e1b6e07c9d9ce5869340bf377f44f3454dfd"
+     "prev_hash": "cdf19dc0bb2c483f97532f1cc155ab89b42083865087ab09f5b126f251a650f9",
+     "hash": "6a44bd5f6df7a4e388436258e8bc4c6dd30dba05be5a9497cc77035ef12b2326"
     },
     {
      "seq": 43,
-     "ts": "2026-11-05T06:51:36.402+00:00",
+     "ts": "2026-11-05T08:19:26.862+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D3",
       "findings": 0
      },
-     "prev_hash": "68caf7b435aeadd14f0dd68a1416e1b6e07c9d9ce5869340bf377f44f3454dfd",
-     "hash": "2b5774a48d42ac1a47a7dc93da45d6b083e5e77284bce67344db8748b248bd83"
+     "prev_hash": "6a44bd5f6df7a4e388436258e8bc4c6dd30dba05be5a9497cc77035ef12b2326",
+     "hash": "8c093732a9b91cb2834f06977dd81452249fc034021a5527ecb72ca320b3c125"
     },
     {
      "seq": 44,
-     "ts": "2026-11-05T06:51:36.413+00:00",
+     "ts": "2026-11-05T08:19:26.890+00:00",
      "actor": "system",
      "event": "cross_checked",
      "data": {
       "documents": 3,
       "findings": 0
      },
-     "prev_hash": "2b5774a48d42ac1a47a7dc93da45d6b083e5e77284bce67344db8748b248bd83",
-     "hash": "4e9ce6e2100f1429be0366a61a1242c838090b0015f331d473da5233b9dd4ba9"
+     "prev_hash": "8c093732a9b91cb2834f06977dd81452249fc034021a5527ecb72ca320b3c125",
+     "hash": "b4fe943c2c7a0803ee24a054c6a7679cdf187a07d13e4d4b5fb7af4ca39ac56a"
     },
     {
      "seq": 45,
-     "ts": "2026-11-05T06:51:36.420+00:00",
+     "ts": "2026-11-05T08:19:26.904+00:00",
      "actor": "system",
      "event": "context_checked",
      "data": {
       "findings": 0
      },
-     "prev_hash": "4e9ce6e2100f1429be0366a61a1242c838090b0015f331d473da5233b9dd4ba9",
-     "hash": "0e1de765374bcf53da83f0b870b0fbdf3aa130e12648c991cac0ecac1bc25e8d"
+     "prev_hash": "b4fe943c2c7a0803ee24a054c6a7679cdf187a07d13e4d4b5fb7af4ca39ac56a",
+     "hash": "dda52f6febf7634211c18dd24aa7a9698e7ec4681de59d53e7eddba9c3d17e92"
     },
     {
      "seq": 46,
-     "ts": "2026-11-05T06:51:36.432+00:00",
+     "ts": "2026-11-05T08:19:26.917+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "checks",
       "ok": true,
-      "seconds": 0.047,
+      "seconds": 0.156,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "0e1de765374bcf53da83f0b870b0fbdf3aa130e12648c991cac0ecac1bc25e8d",
-     "hash": "3c8ab7914fb3ef1da58b1db4b157d47830f591c07dc9371fa0e882eabbcda644"
+     "prev_hash": "dda52f6febf7634211c18dd24aa7a9698e7ec4681de59d53e7eddba9c3d17e92",
+     "hash": "f1f7075c3e69a11190dc5df0eca1b3fc7670e2775f5aa3cda6e25d3c3dbcf3ae"
     },
     {
      "seq": 47,
-     "ts": "2026-11-05T06:51:36.443+00:00",
+     "ts": "2026-11-05T08:19:26.933+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "link"
      },
-     "prev_hash": "3c8ab7914fb3ef1da58b1db4b157d47830f591c07dc9371fa0e882eabbcda644",
-     "hash": "0e78c02f63e40453ca445e5e61ff8e9f2255c287646b90801ae1bd7af0e445dd"
+     "prev_hash": "f1f7075c3e69a11190dc5df0eca1b3fc7670e2775f5aa3cda6e25d3c3dbcf3ae",
+     "hash": "15bd91b0c2152418d7ae190df14e214701b2b0e39fc6127cf3154299e0728e2a"
     },
     {
      "seq": 48,
-     "ts": "2026-11-05T06:51:36.448+00:00",
+     "ts": "2026-11-05T08:19:26.960+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5413,12 +5413,12 @@
       "fclass": "potential_manipulation",
       "title": "Closing balance on 01_statement.pdf: 2 findings from 2 kinds of check"
      },
-     "prev_hash": "0e78c02f63e40453ca445e5e61ff8e9f2255c287646b90801ae1bd7af0e445dd",
-     "hash": "07e9d626487a77c9068577a5a9d445e6313d664f9c7c13312f8d039e178cd204"
+     "prev_hash": "15bd91b0c2152418d7ae190df14e214701b2b0e39fc6127cf3154299e0728e2a",
+     "hash": "afe79789dbc7f7b18892a6b02d43262153c91bcd2d62fe37fd3302a3b566e5b3"
     },
     {
      "seq": 49,
-     "ts": "2026-11-05T06:51:36.455+00:00",
+     "ts": "2026-11-05T08:19:26.966+00:00",
      "actor": "system",
      "event": "findings_linked",
      "data": {
@@ -5426,114 +5426,114 @@
       "linked": 2,
       "clusters": 1
      },
-     "prev_hash": "07e9d626487a77c9068577a5a9d445e6313d664f9c7c13312f8d039e178cd204",
-     "hash": "ecda1b67dc52aff39b0c4334258bee197628c9f364f5a7f829e973d4663a94a3"
+     "prev_hash": "afe79789dbc7f7b18892a6b02d43262153c91bcd2d62fe37fd3302a3b566e5b3",
+     "hash": "2eb5412eb5814e988fa9735b4fbd2ba03685ca9a60393522545a374fd07ff1f6"
     },
     {
      "seq": 50,
-     "ts": "2026-11-05T06:51:36.469+00:00",
+     "ts": "2026-11-05T08:19:26.991+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "link",
       "ok": true,
-      "seconds": 0.015,
+      "seconds": 0.031,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "ecda1b67dc52aff39b0c4334258bee197628c9f364f5a7f829e973d4663a94a3",
-     "hash": "4eae89541ac0ebf60f6b104c3b0c064490b005d2eb1a0fcc9ad813871a4a1286"
+     "prev_hash": "2eb5412eb5814e988fa9735b4fbd2ba03685ca9a60393522545a374fd07ff1f6",
+     "hash": "23180ff6223745cfe383262ce7c0a2e9b3910c1a571a1c6cc2760cbf7ea065c6"
     },
     {
      "seq": 51,
-     "ts": "2026-11-05T06:51:36.485+00:00",
+     "ts": "2026-11-05T08:19:27.030+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "explain"
      },
-     "prev_hash": "4eae89541ac0ebf60f6b104c3b0c064490b005d2eb1a0fcc9ad813871a4a1286",
-     "hash": "fff203345ced8ba432b129d6c1e50b286e648f1079ffdb86c06ccb487a0c0f07"
+     "prev_hash": "23180ff6223745cfe383262ce7c0a2e9b3910c1a571a1c6cc2760cbf7ea065c6",
+     "hash": "7519c5d1a6d5770476c43985837e167c8eb5ed47f43bab947ca8eb67485ae18c"
     },
     {
      "seq": 52,
-     "ts": "2026-11-05T06:51:36.490+00:00",
+     "ts": "2026-11-05T08:19:27.058+00:00",
      "actor": "system",
      "event": "findings_explained",
      "data": {
       "findings": 3,
       "source": "template"
      },
-     "prev_hash": "fff203345ced8ba432b129d6c1e50b286e648f1079ffdb86c06ccb487a0c0f07",
-     "hash": "6b4075098e227184cbe0084f0ebb5ba747e0b470efc1c456096410b708786306"
+     "prev_hash": "7519c5d1a6d5770476c43985837e167c8eb5ed47f43bab947ca8eb67485ae18c",
+     "hash": "45fdc2c19ba734556f2c82e891a5758df35d8cc42b2300dd0dadadc870c893d8"
     },
     {
      "seq": 53,
-     "ts": "2026-11-05T06:51:36.504+00:00",
+     "ts": "2026-11-05T08:19:27.077+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "explain",
       "ok": true,
-      "seconds": 0.016,
+      "seconds": 0.031,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "6b4075098e227184cbe0084f0ebb5ba747e0b470efc1c456096410b708786306",
-     "hash": "ace7503451316fa12efb69bc750999d1f32ed98f6692201a6cc58f8f2c60fa84"
+     "prev_hash": "45fdc2c19ba734556f2c82e891a5758df35d8cc42b2300dd0dadadc870c893d8",
+     "hash": "197fc40073be3afe443d31e9d6233fe78585c7e06113ac44796ab9136c179a77"
     },
     {
      "seq": 54,
-     "ts": "2026-11-05T06:51:36.519+00:00",
+     "ts": "2026-11-05T08:19:27.090+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "crops"
      },
-     "prev_hash": "ace7503451316fa12efb69bc750999d1f32ed98f6692201a6cc58f8f2c60fa84",
-     "hash": "ea22fbf31637f8f270f4bd8200f1a8b4692faad873afa16ac5ff327406cdc35c"
+     "prev_hash": "197fc40073be3afe443d31e9d6233fe78585c7e06113ac44796ab9136c179a77",
+     "hash": "fa6a577cd7fd4d94e5a4f4553c326eece0cd5e9160432d06d0af1d1a48a9a083"
     },
     {
      "seq": 55,
-     "ts": "2026-11-05T06:51:36.562+00:00",
+     "ts": "2026-11-05T08:19:27.159+00:00",
      "actor": "system",
      "event": "crops_made",
      "data": {
       "crops": 5
      },
-     "prev_hash": "ea22fbf31637f8f270f4bd8200f1a8b4692faad873afa16ac5ff327406cdc35c",
-     "hash": "ace968483d0f0d9628544b259ba837a2283f8c7af48f3505b8bda24d2abf444f"
+     "prev_hash": "fa6a577cd7fd4d94e5a4f4553c326eece0cd5e9160432d06d0af1d1a48a9a083",
+     "hash": "84c267c003c98f342a71bc3ea904f70788be68d82762e4873c9905caab45fdae"
     },
     {
      "seq": 56,
-     "ts": "2026-11-05T06:51:36.568+00:00",
+     "ts": "2026-11-05T08:19:27.175+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "crops",
       "ok": true,
-      "seconds": 0.031,
+      "seconds": 0.063,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "ace968483d0f0d9628544b259ba837a2283f8c7af48f3505b8bda24d2abf444f",
-     "hash": "511e5a090e7fb200a148ef6c7ed144932f3ea6ceb771db7f5286da7b8ce6e2c7"
+     "prev_hash": "84c267c003c98f342a71bc3ea904f70788be68d82762e4873c9905caab45fdae",
+     "hash": "6d3ae5f118dab836edae118a2ce51592134f982554342e03ee2a62e8b09d2336"
     },
     {
      "seq": 57,
-     "ts": "2026-11-05T06:51:36.580+00:00",
+     "ts": "2026-11-05T08:19:27.187+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "dossier"
      },
-     "prev_hash": "511e5a090e7fb200a148ef6c7ed144932f3ea6ceb771db7f5286da7b8ce6e2c7",
-     "hash": "c11cd439adde5eac4099fca6bc4c2b076b8506ac228a719cb6e94c674b86c23c"
+     "prev_hash": "6d3ae5f118dab836edae118a2ce51592134f982554342e03ee2a62e8b09d2336",
+     "hash": "c5d44327c5807629bb6f84a997afc7b544db0445d64c67809272597557aefdfb"
     }
    ],
    "anchor": {
     "events": 57,
-    "head": "c11cd439adde5eac4099fca6bc4c2b076b8506ac228a719cb6e94c674b86c23c"
+    "head": "c5d44327c5807629bb6f84a997afc7b544db0445d64c67809272597557aefdfb"
    },
    "chain_ok": true,
    "problem": null
@@ -5566,9 +5566,11 @@
      "tests/test_read_pdf.py::test_word_boxes_match_render",
      "tests/test_ocr.py::test_ocr_reads_clean_render",
      "tests/test_ocr.py::test_scanned_pdf_pages_get_ocr_and_class",
-     "tests/test_quality.py::test_sharpness_falls_with_blur_and_classes_follow"
+     "tests/test_quality.py::test_sharpness_falls_with_blur_and_classes_follow",
+     "tests/test_sideways.py::test_a_pdf_page_stored_turned_is_read_as_poor_and_says_why",
+     "tests/test_sideways.py::test_a_scan_turned_a_quarter_is_read_as_poor_and_a_genuine_case_gives_no_conflict"
     ],
-    "note": "Every word has a box in page pixels. Scanned pages get a quality class from sharpness, not from the recogniser's score; numbers read from a degraded or poor page are flagged, not trusted. OCR output is a reading, not ground truth. Held-out (eval/test.md), on documents nobody changed: no amount, date or id was both wrong and trusted; 16 text values were."
+    "note": "Every word has a box in page pixels. Scanned pages get a quality class from sharpness, not from the recogniser's score; numbers read from a degraded or poor page are flagged, not trusted. OCR output is a reading, not ground truth. A page that stands on its side (a scan or a PDF page turned a quarter turn) is read as poor and the dossier says why; a page turned half a turn is not recognised (limitation 36). Held-out (eval/test.md), on documents nobody changed: no amount, date or id was both wrong and trusted; 16 text values were."
    },
    {
     "name": "Structured extraction: fields and tables, each with a confidence and a location",
@@ -5840,7 +5842,7 @@
     "The font check compares figures and dates that stand in a text run of their own with the others in their column (four or more) or on their line (three or more). A figure inside a longer run of text is not compared, and bold against regular of one family is not. A logo, stamp or signature placed as a picture on a text page is reported like any other picture.",
     "The metadata check reads what the file says about itself: producer and creator names, creation and modification dates. Anyone who can write the file can write them, and a file saved again for an ordinary reason shows a later modification date.",
     "The grain check compares each scanned word with the median of its page, on the paper inside the word's box and away from the ink, and leaves out paper brighter than 250 (the scanner cuts it at white). Scanners and JPEG saves change grain for ordinary reasons. On a mildly degraded scan a changed word can keep a grain close to the page's, because the second JPEG save puts back grain of about the same size, so the check finds a patch more easily on coarser scans. Pages of poor quality are not analysed and the dossier says so.",
-    "The placement check straightens a scanned page by the turn that makes its text rows sharpest, then compares each word's position with its row, and a figure's right edge and height with the page's other figures and its column. The height of a text word is not compared (its box depends on its letters and on the slant of its line). A difference counts when it is more than 6 px (position in the row) or 10 px (figure height, right edge): four times a spread that is never taken below 1.5, 2.5 and 2.5 px. Those floors come from the largest differences on 42 genuine simulated statements (3.3, 7.0 and 6.1 px on pages not degraded), and the largest right-edge difference rose from 5.6 to 6.1 px between the first six and the next eight, so a genuine statement can still give an observation, and a shift under the limits, or a row pasted from a scan turned the same way, is not seen. On a degraded page the floors are raised by half and figure columns are rarely found (one to five figures read), so the right-edge comparison is in practice not made there. A word on a line of fewer than four words (a label and its value in a header) has no row to be measured against, so a paste there is seen only when a grain, arithmetic or cross-document check disagrees. A creased or curled page moves words and can give an observation. A page of poor quality, one with fewer than 12 words or no row of four words, or one turned by more than 2.9 degrees is not compared and the dossier says so. The turn is looked for up to 10 degrees either way; a page turned further than that is not recognised as turned and may be compared as if it were turned less.",
+    "The placement check straightens a scanned page by the turn that makes its text rows sharpest, then compares each word's position with its row, and a figure's right edge and height with the page's other figures and its column. The height of a text word is not compared (its box depends on its letters and on the slant of its line). A difference counts when it is more than 6 px (position in the row) or 10 px (figure height, right edge): four times a spread that is never taken below 1.5, 2.5 and 2.5 px. Those floors come from the largest differences on 42 genuine simulated statements (3.3, 7.0 and 6.1 px on pages not degraded), and the largest right-edge difference rose from 5.6 to 6.1 px between the first six and the next eight, so a genuine statement can still give an observation, and a shift under the limits, or a row pasted from a scan turned the same way, is not seen. On a degraded page the floors are raised by half and figure columns are rarely found (one to five figures read), so the right-edge comparison is in practice not made there. A word on a line of fewer than four words (a label and its value in a header) has no row to be measured against, so a paste there is seen only when a grain, arithmetic or cross-document check disagrees. A creased or curled page moves words and can give an observation. A page of poor quality, one with fewer than 12 words or no row of four words, or one turned by more than 2.9 degrees is not compared and the dossier says so. The turn is looked for up to 10 degrees either way; a page turned further than that is not recognised as turned and may be compared as if it were turned less, except a page that stands on its side (limitation 36).",
     "A revision boundary is recognised from a startxref pointer followed by %%EOF. A file crafted to carry a convincing pointer inside a content stream can mislead it, which gives a false observation or a visible limitation, not a silent pass.",
     "A document the tool does not recognise as one of the three supported types is left out of the comparisons across documents, and the dossier says which comparisons were not made. Wording unlike the specs' can read as unrecognised.",
     "Names, addresses and employers are graded, not only passed or flagged: the same value apart from case, spacing and punctuation passes; the same words in another order, with other titles or with initials (names), the same comma-separated parts of an address in another order, or an employer with another legal form, are an observation 'written differently'; text at or above the similarity limit (0.85 for names, 0.8 for addresses and employers) that is still not identical is a 'Minor mismatch'; anything further apart is a 'Mismatch'. A name with a word left out (a middle name) is a Minor mismatch. The limits are starting values and were not tuned. In the held-out run 6 of the 7 planted changes of a name, address or employer were found; the miss is a major address change on a 120 dpi scan (eval/test.md).",
@@ -5862,7 +5864,8 @@
     "A scanned page is classed good, degraded or poor by its sharpness alone, with two limits set on the simulated scans of one generator. A page from another scanner or with other content can fall on the other side of a limit: a blurred page called good has its digits trusted, a sharp one called degraded has its conflicts shown as limitations to verify. Real scanners are not simulated.",
     "The OCR can misread a letter or a digit with no sign of doubt. The tool does not repair what it reads, and a value read from a page classed good carries the confidence of that class (up to 0.95), so a wrong one is not marked as doubtful. The evaluation counts these in its 'wrong, trusted' column: in the held-out run 16 text values (4 and 4 on layout A, mild and 150 dpi; 3 and 5 on layout B) and no amount, date or id.",
     "Extraction depends on the wordings of labels, column headings and captions that the spec of each document type lists. A wording that is not listed leaves its value missing, and whatever depends on that value is left unchecked; the tool says so as a limitation and does not guess. On the held-out layout B, about half of whose wordings the specs do not list, digital pages gave 91 % of amounts, 97 % of dates, 34 % of text values and no id, and the checks within a document could not be made in full on any of its 24 genuine statements and 24 genuine payslips (eval/test.md). A document that words its labels differently from the specs will meet the same limit, and a value under a label that is not listed cannot be compared with another document's.",
-    "The grain and placement checks found few changed scans. In the held-out split they found 3 of the 16 scans that were changed by pasting from another scan or by erasing and retyping (the placement check 1 of the 8 pasted scans, the grain check 2 of the 8 retyped ones), arithmetic and cross-document checks found 3 more, and 10 were not found at all; at 120 dpi 2 of 9 changes of any kind were found. A scan on which the tool raised nothing therefore says little about whether it was changed. These checks also gave the one flag on a genuine document, a 120 dpi scan (eval/test.md)."
+    "The grain and placement checks found few changed scans. In the held-out split they found 3 of the 16 scans that were changed by pasting from another scan or by erasing and retyping (the placement check 1 of the 8 pasted scans, the grain check 2 of the 8 retyped ones), arithmetic and cross-document checks found 3 more, and 10 were not found at all; at 120 dpi 2 of 9 changes of any kind were found. A scan on which the tool raised nothing therefore says little about whether it was changed. These checks also gave the one flag on a genuine document, a 120 dpi scan (eval/test.md).",
+    "The reader does not turn a page back upright. It recognises one case, a page that stands on its side (a scan turned a quarter turn, or a PDF page stored turned 90 or 270 degrees), because most of its words are taller than wide. Such a page is read as poor quality and the dossier says why. Its values carry low confidence, and the checks that compare them, the placement of its words and its marks are not run on it. The rule was added after cases with one such page gave false conflicts: the page's rows are the document's columns, so a value pairs with the wrong label. In 4 genuine development cases of three documents (2 scans, 2 PDFs), a statement turned a quarter gave a false address conflict with the other documents and a payslip turned a quarter gave false employer and payer conflicts, in every case; with the rule, the turned page gave no flag in any of them. A page that is upside down is not recognised (the tool has no test for it). It is read, few of its fields are found (8 to 38 of the 78 to 188 of a statement in those cases), and a check can give a false result: a statement scanned upside down gave a false placement observation in 1 of the 2 scans, and a statement stored as a PDF turned half a turn gave a false account-number conflict with the other documents in both PDFs. No page in the development or the held-out split is turned, so none of this is in the reported figures. A page should be turned upright before it is submitted."
    ],
    "assumptions": [
     "Dates are read day first (DD/MM/YYYY); a date that could be read another way is marked ambiguous and given a low confidence.",
@@ -5874,7 +5877,7 @@
   }
  },
  "integrity": {
-  "json_sha256": "a5d1edcfc2944d3052eed961dfbf23511e78d3351833c8a97e039d5dd1ddfd26",
+  "json_sha256": "48b2e18e92e1896164e6bd97be20229de8ac56b6ebf4c45a7a8df66274af2bd6",
   "method": "sha256 of this document without this block, as JSON with sorted keys, compact separators and ASCII escapes"
  }
 }

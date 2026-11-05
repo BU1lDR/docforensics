@@ -73,8 +73,8 @@ Four are the first case of their kind in the split, so their position picked the
 
 - Sections 3 to 5 hold the three findings and where each sits in the statement. Appendices B and C hold the capability matrix and the limitations, which say what the tool does not do.
 - Made by `python -m docforensics run sample_data/dev-0000`, without `--llm`. No language model was used, so the explanations are the tool's fixed texts (marked `template`), and section 6 says so.
-- The case is C-20261105-065135-500f, created at 06:51:35 UTC on 5 November 2026 (12:21 IST). Every time in the files is UTC.
-- Made with the tool as of commit eb4d6de.
+- The case is C-20261105-081924-a120, created at 08:19:24 UTC on 5 November 2026 (13:49 IST). Every time in the files is UTC.
+- Made with the tool as of commit 1eca670.
 - dev-0000 is a case of the development split, the one the thresholds were tuned on. The dossier shows what a dossier looks like and what the tool does on a case it was tuned on; it says nothing about other cases.
 - `stored_path` and `crop` in the JSON are paths inside the case folder that a run writes (`data/cases/<case id>/`). That folder is not kept here, and the HTML does not need it.
 - `python -m pytest tests/test_e2e_sample.py` checks that the files are unedited (the hash at the end of the page is the hash of the data in the JSON), that they are the dossier of dev-0000's documents, and that a new run of the case writes the same dossier apart from the case id, the times and the audit trail's hashes and timings. When a change to the tool changes what a dossier shows, that test fails until the dossier is made again: run the case as above, copy `dossier.html` and `dossier.json` from `data/cases/<case id>/` to these two names, and put the new case id, time and commit in this section.
