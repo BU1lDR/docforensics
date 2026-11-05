@@ -15,6 +15,7 @@ from docforensics.findings import add_findings
 from docforensics.ingest import create_case
 from docforensics.model import Evidence, Field, Finding, Reasoning, Relation
 from docforensics.pipeline import Ctx, run_case
+from docforensics.relations import build_relations
 from tests.helpers import d1_edited_statement, pdf_bytes, png_bytes
 
 SECTIONS = ["overview", "extracted_information", "contextual_analysis", "visual_forensic_findings",
@@ -142,6 +143,52 @@ def test_dossier_escapes_untrusted_text(tmp_path):
     assert XSS not in page and "<b>x</b>" not in page and 'onmouseover="alert' not in page
     assert html.escape(XSS) in page and html.escape("<b>x</b>.pdf") in page
     assert "<script" not in page.lower()
+
+
+def contextual(ctx) -> str:
+    """Section 3 of the page."""
+    page = ctx.cd.dossier_html.read_text(encoding="utf-8")
+    return re.search(r'<section id="contextual_analysis">(.*?)</section>', page, re.S).group(1)
+
+
+def test_the_dossier_lists_the_entities_the_documents_write_about(ran):
+    case, ctx = ran
+    rel = dossier_dict(case, ctx)["contextual_analysis"]["relationships"]
+    assert rel == build_relations(case, ctx.th) and rel["entities"]  # the statement's holder and account number
+    body = contextual(ctx)
+    assert "<h3>Entities across documents</h3>" in body
+    for e in rel["entities"]:
+        assert e["id"] in body and all(html.escape(m["value"]) in body for m in e["mentions"])
+
+
+def test_a_finding_is_linked_from_the_entity_it_touches(tmp_path):
+    case, ctx = fresh(tmp_path)
+    case.documents[0].fields.append(Field(id="D1-X1", doc="D1", name="holder", raw="Divya Menon", value="Divya Menon", kind="text", conf=0.9,
+                                          page=1, box=BOX, role="name"))
+    add_findings(case, ctx, [Finding(fclass="inconsistency", detector="cross_name", family="cross_document", title="Name differs",
+                                     evidence=[Evidence(doc="D1", page=1, box=BOX, field_id="D1-X1", value="Divya Menon")])])
+    build_dossier(case, ctx)
+    (e,) = json.loads(ctx.cd.dossier_json.read_bytes())["contextual_analysis"]["relationships"]["entities"]
+    assert (e["writings"], e["findings"]) == (["Divya Menon"], ["F-001"])
+    row = re.search(r"<tr><td>E1</td>.*?</tr>", contextual(ctx), re.S).group(0)
+    assert 'href="#F-001"' in row and "Divya Menon" in row and "page 1" in row
+
+
+def test_a_case_with_no_names_or_numbers_says_so(tmp_path):
+    case, ctx = fresh(tmp_path)
+    build_dossier(case, ctx)
+    assert json.loads(ctx.cd.dossier_json.read_bytes())["contextual_analysis"]["relationships"]["entities"] == []
+    assert re.search(r"<h3>Entities across documents</h3>(<p>[^<]*</p>)*<p class=\"none\">None\.</p>", contextual(ctx))
+
+
+def test_text_in_the_entity_table_is_escaped(tmp_path):
+    case, ctx = fresh(tmp_path)
+    case.documents[0].filename = "<b>x</b>.pdf"
+    case.documents[0].fields.append(Field(id="D1-X1", doc="D1", name=XSS, raw=XSS, value=XSS, kind="text", conf=0.9, page=1, box=BOX, role="name"))
+    build_dossier(case, ctx)
+    page, body = ctx.cd.dossier_html.read_text(encoding="utf-8"), contextual(ctx)
+    assert html.escape(XSS) in body and html.escape("<b>x</b>.pdf") in body
+    assert XSS not in page and "<b>x</b>" not in page and "<script" not in page.lower()
 
 
 def test_a_crop_that_cannot_be_embedded_is_said_so(tmp_path):

@@ -5,7 +5,7 @@ docforensics runs a case (the documents submitted together) through nine stages 
 ```mermaid
 flowchart TD
     cli["Command line<br/>run, trace, verify-audit, serve"]
-    desk["Review desk<br/>FastAPI, 127.0.0.1 only<br/>upload, page viewer, findings, reviewer actions"]
+    desk["Review desk<br/>FastAPI, 127.0.0.1 only<br/>upload, page viewer, findings, relationships, reviewer actions"]
     ingest["ingest<br/>type from the first bytes, size and page limits,<br/>stored read-only under the sha256 of the content"]
     cli --> ingest
     desk --> ingest
@@ -28,8 +28,12 @@ flowchart TD
     llm -.-> explain
     casefolder[("Case folder<br/>files, pages, crops, case.json")]
     audit[("audit trail<br/>hash-chained events")]
+    relations["relations (not a stage)<br/>names, addresses, employers, account numbers<br/>across documents, and the findings that touch them<br/>worked out on request, nothing stored"]
     pipeline --> casefolder
     pipeline -.-> audit
+    casefolder --> relations
+    relations --> desk
+    relations --> dossier
     desk -->|"reviewer actions"| casefolder
     desk -.->|"reviewer actions"| audit
     dossier --> report["Investigation dossier"]
@@ -52,6 +56,8 @@ flowchart TD
 
 A stage that raises an error, or does not finish in its time limit, is written to the audit trail and shown as a limitation. The run goes on with what it has. A step stuck in native code is abandoned, not killed.
 
+The entity relationship view ([relations.py](../src/docforensics/relations.py)) is not a stage. It is worked out from the case when the dossier is written and when the review desk's Relationships tab asks for it, it stores nothing, and it leaves the case as it was. It lists the names, addresses, employers and account numbers the documents write (two writings are one entity when the cross-document checks grade them as the same, or the same apart from form), the places where each is written, and the findings that cite one of those fields or lie over one of those places. The headline of a group of findings and limitations are left out. No model takes part.
+
 ## Findings
 
 - Every finding has a class: **observation** (something seen, which unaltered documents can show too), **inconsistency** (two things that should agree do not, by a stated measure and tolerance), **potential manipulation** (only the headline of a cluster: independent kinds of check point at one place, which is a priority for review and not a probability) or **processing limitation** (a step could not run in full, so what it would have shown is unknown).
@@ -60,7 +66,7 @@ A stage that raises an error, or does not finish in its time limit, is written t
 
 ## What is deterministic, and what is not
 
-Digits, arithmetic, dates, revision differences and shapes are measured by code, not by a model. The explanation of a finding is fixed wording from [explain/templates.py](../src/docforensics/explain/templates.py).
+Digits, arithmetic, dates, revision differences and shapes are measured by code, not by a model, and so is the sorting of writings into entities for the relationship view. The explanation of a finding is fixed wording from [explain/templates.py](../src/docforensics/explain/templates.py).
 
 The one place a model can take part is the explain stage, and only if one is given to the run (`--llm`). It does two things. It words the headline of a cluster ([explain/llm.py](../src/docforensics/explain/llm.py)), and it reads the case once and suggests relations between findings, a short summary and an order to read them in ([explain/reason.py](../src/docforensics/explain/reason.py)). It is given structured findings (ids, kinds of check, titles, the values the checks used), never page text, a finding's detail or a box. It adds, ranks and explains; it cannot change, confirm, remove or add a finding, and the order it returns always holds every finding once.
 

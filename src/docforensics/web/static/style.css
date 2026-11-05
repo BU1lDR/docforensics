@@ -113,6 +113,28 @@ img.crop { display: block; max-width: 100%; margin-top: .3rem; border: 1px solid
 code { font-family: ui-monospace, Consolas, monospace; font-size: .85em; overflow-wrap: anywhere; }
 details { margin: 0; }
 
+/* relationships tab: boxes joined by lines, drawn by app.js; the colours are the ones of the finding classes elsewhere on the page */
+.relmap { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--line); }
+.relmap .colhead { font-size: 12px; font-weight: 600; fill: var(--muted); }
+.relmap .edge { fill: none; stroke: #8c959f; stroke-width: 1; opacity: .6; vector-effect: non-scaling-stroke; pointer-events: none; }
+.relmap.picked .edge { opacity: .12; }
+.relmap.picked .edge.on { opacity: 1; stroke: var(--accent); stroke-width: 2.5; }
+.relmap .node { cursor: pointer; }
+.relmap .node rect { fill: #fff; stroke: var(--muted); stroke-width: 1.5; }
+.relmap .node .l1 { font-size: 12px; font-weight: 600; fill: var(--ink); pointer-events: none; }
+.relmap .node .l2 { font-size: 10.5px; fill: var(--muted); pointer-events: none; }
+.relmap .n-entity rect { stroke: var(--field); }
+.relmap .n-entity.touched rect { stroke-width: 3; }
+.relmap .n-finding.observation rect { stroke: var(--observation); }
+.relmap .n-finding.inconsistency rect { stroke: var(--inconsistency); }
+.relmap .n-finding.potential_manipulation rect { stroke: var(--potential_manipulation); stroke-dasharray: 8 4; }
+.relmap .n-finding.processing_limitation rect { stroke: var(--processing_limitation); stroke-dasharray: 2 3; }
+.relmap .node:hover rect { fill: var(--bg); }
+.relmap .node.near rect { fill: var(--warn-bg); }
+.relmap .node.sel rect { fill: #ddf4ff; stroke-width: 3; }
+.relmap.picked .node:not(.sel):not(.near) { opacity: .45; }
+#relpick { margin-top: .6rem; }
+
 #message { position: fixed; left: 1rem; bottom: .75rem; max-width: 60ch; margin: 0; padding: .4rem .7rem; background: #1f2328; color: #fff; border-radius: 6px; }
 #message:empty { display: none; }
 #message.bad { background: var(--inconsistency); color: #fff; }

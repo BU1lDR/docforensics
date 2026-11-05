@@ -16,6 +16,7 @@ from docforensics.config import Thresholds
 from docforensics.dossier import CLASS_LABEL, READING_LABEL, SOURCE_LABEL
 from docforensics.ingest import create_case
 from docforensics.model import Reasoning, Relation
+from docforensics.relations import build_relations
 from docforensics.store import CASE_ID_RE, CaseDir, load_case, save_case
 from docforensics.web import app as web
 from docforensics.web.app import HOST, STATIC, create_app
@@ -171,7 +172,7 @@ def test_index_has_all_tabs(case):
     client, _, _ = case
     r = client.get("/")
     assert r.status_code == 200 and r.headers["content-type"].startswith("text/html")
-    for tab in ("documents", "findings", "clusters", "audit", "capabilities", "dossier"):
+    for tab in ("documents", "findings", "clusters", "relationships", "audit", "capabilities", "dossier"):
         assert f'data-tab="{tab}"' in r.text and f'id="tab-{tab}"' in r.text, tab
     csp = r.headers["content-security-policy"]
     for directive in ("default-src 'none'", "script-src 'self'", "style-src 'self'", "img-src 'self' data:", "connect-src 'self'",
@@ -277,7 +278,7 @@ def test_case_is_withheld_while_processing(tmp_path, monkeypatch):
         assert s["intake"]["accepted"] == [{"id": "D1", "filename": "a.pdf", "size": len(pdf)}]  # what the page shows while it waits
         assert len(s["intake"]["rejected"]) == 1 and "notes.txt" in s["intake"]["rejected"][0]
         assert s["low_conf"] == Thresholds().low_conf
-        for url in ("/audit", "/dossier", "/dossier.json", "/pages/D1/1.png", "/crops/F-001-1.png"):
+        for url in ("/audit", "/relations", "/dossier", "/dossier.json", "/pages/D1/1.png", "/crops/F-001-1.png"):
             assert client.get(f"/api/cases/{cid}{url}").status_code == 409, url
         assert client.post(f"/api/cases/{cid}/findings/F-001/review", json={"note": "x"}).status_code == 409
     finally:
@@ -361,6 +362,14 @@ def test_a_model_reading_saved_with_the_case_reaches_the_page_and_the_dossier(ca
     shown = client.get(f"/api/cases/{cid}/dossier.json").json()["investigation_summary"]["ai_reading"]
     assert shown["status"] == "kept" and shown["summary"] == f"Read {a} first."
     assert READING_LABEL in client.get(f"/api/cases/{cid}/dossier").text
+
+
+def test_relations_are_worked_out_from_the_case_on_request(case):
+    client, cid, data = case
+    got = client.get(f"/api/cases/{cid}/relations")
+    assert got.status_code == 200 and got.headers["content-type"] == "application/json"
+    assert got.json() == build_relations(load_case(CaseDir.open(data, cid))) and got.json()["entities"]  # the statement's holder and account number
+    assert client.get(f"/api/cases/{ABSENT}/relations").status_code == 404
 
 
 def test_capabilities_are_served_from_the_one_matrix(case):

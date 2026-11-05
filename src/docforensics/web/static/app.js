@@ -36,7 +36,7 @@ const STAGES = [
   ["crops", "Cutting evidence crops"],
   ["dossier", "Building the dossier"],
 ];
-const TABS = ["documents", "findings", "clusters", "audit", "capabilities", "dossier"];
+const TABS = ["documents", "findings", "clusters", "relationships", "audit", "capabilities", "dossier"];
 const SVGNS = "http://www.w3.org/2000/svg";
 
 const state = {
@@ -52,6 +52,8 @@ const state = {
   timer: null,
   audit: null,
   caps: null,
+  rel: null,      // the relationship view of the open case, as the server worked it out
+  relSel: null,   // the box picked in it: a document, entity or finding id
 };
 
 const $ = (id) => document.getElementById(id);
@@ -129,7 +131,7 @@ async function api(url, opts) {
 
 async function openCase(id, finding) {
   clearTimeout(state.timer);
-  Object.assign(state, {id, info: null, doc: null, page: 1, finding: finding || null, mark: null, audit: null});
+  Object.assign(state, {id, info: null, doc: null, page: 1, finding: finding || null, mark: null, audit: null, rel: null, relSel: null});
   history.replaceState(null, "", finding ? `#${id}/${finding}` : `#${id}`);
   say("");
   render();
@@ -277,6 +279,10 @@ function showTab(name) {
   state.tab = name;
   for (const b of document.querySelectorAll("[data-tab]")) b.setAttribute("aria-selected", String(b.dataset.tab === name));
   for (const t of TABS) $(`tab-${t}`).hidden = t !== name;
+  if (name === "relationships") {
+    if (state.rel) renderRelations();
+    else loadRelations();
+  }
   if (name === "audit") {
     if (state.audit) renderAudit();
     else loadAudit();
@@ -735,6 +741,195 @@ function renderCaps() {
     h("ul", {}, c.limitations.map((t) => h("li", {}, t))),
     h("h3", {}, "Assumptions"),
     h("ul", {}, c.assumptions.map((t) => h("li", {}, t))));
+}
+
+// ---- relationships -----------------------------------------------------------------------------------------------
+
+/* Three columns of boxes: the documents, the entities (names, addresses, employers, account numbers) they write, and the findings
+   that touch an entity. A line joins a document to an entity it writes, and an entity to a finding that touches it. The server works
+   the view out (/relations); nothing here decides what counts as the same thing, or what a difference means. */
+const REL = {colw: 150, xs: [5, 230, 455], width: 610, top: 24, node: 40, pitch: 52};
+
+async function loadRelations() {
+  if (!data()) {
+    renderRelations();
+    return;
+  }
+  const id = state.id;
+  try {
+    const r = await api(`${cases()}/relations`);
+    if (state.id === id) {
+      state.rel = r;
+      renderRelations();
+    }
+  } catch (e) {
+    say(`The relationship view could not be loaded: ${e.message}`, true);
+  }
+}
+
+// Pick a box (or none), draw again, and give the focus back to a box, because drawing replaces them all.
+function relSelect(id, focus) {
+  state.relSel = id;
+  renderRelations();
+  const want = focus === undefined ? id : focus;
+  const n = [...$("relations").querySelectorAll("[data-node]")].find((x) => x.dataset.node === want);
+  if (n) n.focus();
+}
+
+function svgText(x, y, text, cls) {
+  const t = svgEl("text", {x, y, class: cls});
+  t.textContent = text;
+  return t;
+}
+
+function relNode(kind, item, at, lines, name, cls) {
+  const on = state.relSel === item.id;
+  const g = svgEl("g", {
+    class: `node n-${kind}${cls ? ` ${cls}` : ""}`,
+    "data-node": item.id,
+    tabindex: 0,
+    role: "button",
+    "aria-pressed": String(on),
+    "aria-label": name,
+  }, name);
+  g.append(
+    svgEl("rect", {x: at.x, y: at.y, width: REL.colw, height: REL.node, rx: 5}),
+    svgText(at.x + 8, at.y + 16, shorten(lines[0], 22), "l1"),
+    svgText(at.x + 8, at.y + 32, shorten(lines[1], 27), "l2"),
+  );
+  const toggle = () => relSelect(on ? null : item.id, item.id);
+  g.addEventListener("click", toggle);
+  g.addEventListener("keydown", (ev) => {
+    if (ev.key === "Enter" || ev.key === " ") {
+      ev.preventDefault();
+      toggle();
+    }
+  });
+  return g;
+}
+
+function relGraph(r) {
+  const sel = state.relSel;
+  const rows = Math.max(r.documents.length, r.entities.length, r.findings.length);
+  const high = rows * REL.pitch;
+  // each column is spread over the same height, so the lines between neighbouring columns stay shallow
+  const place = (items, c) => items.map((x, i) => [x.id, {x: REL.xs[c], y: REL.top + (i + 0.5) * (high / items.length) - REL.node / 2}]);
+  const pos = new Map([...place(r.documents, 0), ...place(r.entities, 1), ...place(r.findings, 2)]);
+  const edges = [
+    ...r.documents.flatMap((d) => d.entities.map((e) => [d.id, e])).filter(([a, b]) => pos.has(a) && pos.has(b)),
+    ...r.findings.flatMap((f) => f.entities.map((e) => [e, f.id])).filter(([a, b]) => pos.has(a) && pos.has(b)),
+  ];
+  const near = new Set(edges.flatMap(([a, b]) => (a === sel ? [b] : b === sel ? [a] : [])));
+  const svg = svgEl("svg", {
+    viewBox: `0 0 ${REL.width} ${REL.top + high}`,
+    class: `relmap${sel ? " picked" : ""}`,
+    role: "group",
+    "aria-label": "Relationship graph: documents, the entities they write, and the findings that touch an entity. Each box can be selected.",
+  });
+  ["Documents", "Entities", "Findings"].forEach((t, i) => svg.append(svgText(REL.xs[i], 14, t, "colhead")));
+  for (const [a, b] of edges) {
+    const p = pos.get(a);
+    const q = pos.get(b);
+    const x1 = p.x + REL.colw;
+    const y1 = p.y + REL.node / 2;
+    const x2 = q.x;
+    const y2 = q.y + REL.node / 2;
+    const mid = (x1 + x2) / 2;
+    svg.append(svgEl("path", {d: `M${x1} ${y1} C${mid} ${y1} ${mid} ${y2} ${x2} ${y2}`, class: `edge${a === sel || b === sel ? " on" : ""}`}));
+  }
+  const look = (id) => `${id === sel ? " sel" : ""}${near.has(id) ? " near" : ""}`;
+  for (const d of r.documents) {
+    const type = d.type === "unknown" ? "not recognised" : d.type;
+    svg.append(relNode("document", d, pos.get(d.id), [`${d.id} ${d.file}`, type], `Document ${d.id}, ${d.file}`, look(d.id).trim()));
+  }
+  for (const e of r.entities) {
+    const docs = new Set(e.mentions.map((m) => m.doc)).size;
+    const cls = `${e.findings.length ? "touched" : ""}${look(e.id)}`.trim();
+    svg.append(relNode("entity", e, pos.get(e.id), [`${e.id} ${e.label}`, `${e.role}, in ${docs} document${docs === 1 ? "" : "s"}`],
+      `Entity ${e.id}, ${e.role}, ${e.label}`, cls));
+  }
+  for (const f of r.findings) {
+    svg.append(relNode("finding", f, pos.get(f.id), [`${f.id} ${CLASS_LABEL[f.class]}`, f.title],
+      `Finding ${f.id}, ${CLASS_LABEL[f.class]}: ${f.title}`, `${f.class}${look(f.id)}`));
+  }
+  return h("div", {class: "scroll"}, svg);
+}
+
+// What the picked box connects to, in words: the same information as the lines, for a reader who cannot follow them.
+function relPicked(r) {
+  const id = state.relSel;
+  const e = r.entities.find((x) => x.id === id);
+  const d = r.documents.find((x) => x.id === id);
+  const f = r.findings.find((x) => x.id === id);
+  const entity = (eid) => {
+    const x = r.entities.find((y) => y.id === eid);
+    return h("button", {type: "button", class: "chip", click: () => relSelect(eid)}, `${eid}: ${x.role}, ${x.label}`);
+  };
+  const finding = (fid) => {
+    const x = findingsOf().find((y) => y.id === fid);
+    return x ? h("li", {}, findingButton(x)) : null;
+  };
+  if (e) {
+    return h("div", {},
+      h("h3", {}, `${e.id}: ${e.role}, ${e.label}`),
+      h("p", {class: "hint"}, e.writings.length > 1
+        ? `Written ${e.writings.length} ways: ${e.writings.join(" | ")}. The cross-document checks grade these as the same, or the same apart from form.`
+        : e.mentions.length > 1 ? "Written the same way in every place." : "Read in one place only."),
+      h("div", {class: "scroll"}, h("table", {},
+        h("thead", {}, h("tr", {}, ["File", "Page", "Field", "As written", "Confidence", ""].map((t) => h("th", {scope: "col"}, t)))),
+        h("tbody", {}, e.mentions.map((m) => {
+          const doc = docsOf().find((x) => x.id === m.doc);
+          return h("tr", {},
+            h("td", {}, m.file),
+            h("td", {}, String(m.page)),
+            h("td", {}, m.name),
+            h("td", {}, m.value),
+            h("td", {class: m.conf < lowConf() ? "low" : ""}, conf(m.conf)),
+            h("td", {}, doc ? h("button", {type: "button", click: () => mark(doc, m.page, m.box, `${m.name}: ${m.value}`)}, "Show on page") : null));
+        })))),
+      h("h4", {}, `Findings that touch it (${e.findings.length})`),
+      e.findings.length ? h("ul", {class: "plain"}, e.findings.map(finding)) : h("p", {class: "empty"}, "None."));
+  }
+  if (d) {
+    return h("div", {},
+      h("h3", {}, `${d.id}: ${d.file}`),
+      h("p", {}, `Type: ${d.type === "unknown" ? "not recognised" : d.type}.`),
+      h("h4", {}, `Entities it writes (${d.entities.length})`),
+      d.entities.length ? h("p", {}, d.entities.map(entity)) : h("p", {class: "empty"}, "None were read from this document."),
+      h("button", {type: "button", click: () => showDoc(d.id)}, "Show in the viewer"));
+  }
+  if (f) {
+    return h("div", {},
+      h("h3", {}, `${f.id}: ${f.title}`),
+      h("p", {}, h("span", {class: `tag ${f.class}`}, CLASS_LABEL[f.class]), h("span", {class: "tag"}, `detector ${f.detector}`)),
+      f.cluster ? h("p", {class: "hint"}, `Grouped under ${f.cluster}.`) : null,
+      h("h4", {}, `Entities it touches (${f.entities.length})`),
+      h("p", {}, f.entities.map(entity)),
+      h("button", {type: "button", click: () => selectFinding(f.id)}, "Open the finding"));
+  }
+  return h("p", {class: "empty"}, "Select a document, an entity or a finding to see what it connects to.");
+}
+
+function renderRelations() {
+  const box = $("relations");
+  box.replaceChildren();
+  const r = state.rel;
+  if (!r) {
+    const wait = data() ? "Loading the relationship view..." : state.info ? "The relationship view appears when the analysis finishes." : "No case open.";
+    box.append(h("p", {class: "empty"}, wait));
+    return;
+  }
+  box.append(h("p", {class: "hint"},
+    "Which names, addresses, employers and account numbers the documents write, and which findings touch them. Two writings are one entity when "
+    + "the cross-document checks grade them the same, or the same apart from form. A writing those checks grade as a mismatch is an entity of "
+    + "its own, and the finding that reports the mismatch touches both. This is a map of what was read, not a conclusion."));
+  if (!r.entities.length) {
+    box.append(h("p", {class: "empty"}, "No name, address, employer or account number was read from these documents, so there is nothing to relate."));
+    return;
+  }
+  box.append(relGraph(r));
+  if (!r.findings.length) box.append(h("p", {class: "hint"}, "No finding in this case touches one of these entities. Findings about amounts, dates or the files themselves are on the Findings tab."));
+  box.append(h("div", {id: "relpick"}, relPicked(r)));
 }
 
 // ---- start -------------------------------------------------------------------------------------------------------

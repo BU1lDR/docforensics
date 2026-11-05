@@ -233,7 +233,8 @@ def without_the_model(d: dict) -> dict:
     d["investigation_summary"].pop("ai_reading")
     d["investigation_summary"].pop("explanations")
     d["appendices"].pop("audit_trail")
-    for rows in (*d["contextual_analysis"].values(), d["visual_forensic_findings"]["observations"]):
+    ca = d["contextual_analysis"]  # the entity listing under "relationships" holds no wording of a model's and stays in the comparison
+    for rows in (ca["inconsistencies"], ca["potential_manipulation"], d["visual_forensic_findings"]["observations"]):
         for r in rows:
             r.pop("explanation")
             r.pop("explanation_source")

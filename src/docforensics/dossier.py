@@ -18,6 +18,7 @@ from .findings import quote
 from .ingest import sniff
 from .model import Case, Document, Evidence, Finding
 from .pipeline import Ctx
+from .relations import build_relations
 from .store import CaseDir
 
 MAX_CROP_BYTES = 2_000_000  # a crop is a padded piece of one page: a bigger file is not one of ours
@@ -130,7 +131,8 @@ def dossier_dict(case: Case, ctx: Ctx) -> dict:
                        "inconsistencies": len(of("inconsistency")), "potential_manipulation": len(of("potential_manipulation")),
                        "limitations": len(of("processing_limitation"))}},
         "extracted_information": {"documents": [_document(x) for x in case.documents]},
-        "contextual_analysis": {"inconsistencies": of("inconsistency"), "potential_manipulation": of("potential_manipulation")},
+        "contextual_analysis": {"inconsistencies": of("inconsistency"), "potential_manipulation": of("potential_manipulation"),
+                                "relationships": build_relations(case, ctx.th)},
         "visual_forensic_findings": {"observations": of("observation")},
         "evidence_and_traceability": {
             "documents": [{"id": x.id, "file": x.filename, "sha256": x.sha256, "stored_path": x.stored_path, "size": x.size}
@@ -254,6 +256,18 @@ def _extracted(d: dict) -> str:
     return "".join(out)
 
 
+def _entities(d: dict) -> str:
+    """Which names, addresses, employers and account numbers the documents write, and which findings touch each."""
+    rows = []
+    for e in d["contextual_analysis"]["relationships"]["entities"]:
+        where = Raw("<br>".join(f"{esc(m['file'])}, page {esc(m['page'])}, {esc(m['name'])}: {esc(m['value'])}" for m in e["mentions"]))
+        rows.append([e["id"], e["role"], where, Raw(", ".join(_link(f) for f in e["findings"])) if e["findings"] else "none"])
+    return ("<p>Entities are numbered in the order the documents mention them. Two writings share a row when the cross-document checks "
+            "grade them the same, or the same apart from form. A writing those checks grade as a mismatch has a row of its own, and the "
+            "finding that reports the mismatch is listed against both. It is a listing of what was read, not a conclusion.</p>"
+            + _table(["Entity", "Role", "Where it is written", "Findings that touch it"], rows))
+
+
 def _traceability(d: dict) -> str:
     t = d["evidence_and_traceability"]
     docs = _table(["Id", "File", "sha256", "Stored as", "Bytes"], [[x["id"], x["file"], x["sha256"], x["stored_path"], x["size"]] for x in t["documents"]])
@@ -338,7 +352,7 @@ def _page(d: dict, ctx: Ctx) -> str:
         ("contextual_analysis", "3. Contextual analysis",
          "<p>Where documents, or parts of one, disagree. A candidate for manipulation appears only where independent kinds of check "
          f"point at the same place.</p><h3>Potential manipulation</h3>{_cards(ca['potential_manipulation'], cd)}"
-         f"<h3>Inconsistencies</h3>{_cards(ca['inconsistencies'], cd)}"),
+         f"<h3>Inconsistencies</h3>{_cards(ca['inconsistencies'], cd)}<h3>Entities across documents</h3>{_entities(d)}"),
         ("visual_forensic_findings", "4. Visual forensic findings",
          "<p>Measured properties of the files and pages. An observation is not a problem: unaltered documents can show the same.</p>"
          + _cards(d["visual_forensic_findings"]["observations"], cd)),

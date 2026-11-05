@@ -22,6 +22,7 @@ from ..explain.llm import OllamaClient
 from ..ingest import create_case
 from ..model import Status
 from ..pipeline import Ctx, run_case
+from ..relations import build_relations
 from ..review import MAX_NOTE, apply_review
 from ..store import CaseDir, load_case
 
@@ -174,6 +175,13 @@ def create_app(data_root: Path | str, th: Thresholds | None = None, llm: OllamaC
     def audit(case_id: str):
         cd = settled(case_id)
         return audit_view(Ctx(cd, AuditLog(cd.audit_path), th))
+
+    @app.get("/api/cases/{case_id}/relations")
+    def relations(case_id: str):
+        cd = settled(case_id)
+        with edit_lock:
+            case = load_case(cd)
+        return build_relations(case, th)
 
     def dossier_download(case_id: str, kind: str) -> Response:
         """Built at the moment of the request, so it holds the reviewer's actions so far; each build is in the audit trail. The bytes are
