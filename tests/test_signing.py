@@ -229,7 +229,8 @@ def test_a_trail_whose_chain_does_not_verify_is_not_signed_and_the_refusal_is_re
     log.append("system", "step", {"i": 3})
     assert checkpoint(cd) is None and [json.loads(x) for x in lines(cd)] == [first]
     assert log.events()[-1].event == "checkpoint_failed" and "does not verify" in log.events()[-1].data["error"]
-    assert signing_view(cd)["uncovered"] == 2  # the event after the checkpoint, and the refusal
+    view = signing_view(cd)  # a trail whose own chain fails is not shown as signed at all
+    assert view["status"] == "broken" and view["problem"].startswith("CHAIN BROKEN")
 
 
 def test_a_trail_with_a_line_that_is_not_an_event_is_not_signed_and_does_not_raise(tmp_path):
@@ -406,13 +407,13 @@ def test_a_public_key_file_that_was_lost_is_written_again(tmp_path):
     assert public_pem(cd) == original
 
 
-def test_a_trail_with_a_line_that_is_not_an_event_is_reported_as_unreadable_and_not_as_cut_short(tmp_path):
+def test_a_trail_with_a_line_that_is_not_an_event_is_reported_as_a_broken_chain_and_not_as_cut_short(tmp_path):
     cd, _ = trail(tmp_path)
     started(cd)
     with cd.audit_path.open("a", encoding="utf-8", newline="\n") as f:
         f.write("not an event\n")
     view = signing_view(cd)
-    assert view["status"] == "broken" and view["problem"].startswith("UNREADABLE") and "audit trail" in view["problem"]
+    assert view["status"] == "broken" and view["problem"].startswith("CHAIN BROKEN")
 
 
 def test_a_checkpoint_file_that_cannot_be_opened_is_reported_and_does_not_raise(tmp_path):
@@ -430,3 +431,38 @@ def test_text_that_came_from_the_file_cannot_reach_a_terminal_as_an_escape_seque
     cd.checkpoints_path.write_text(signed_by(Ed25519PrivateKey.generate(), cd, count, head, case="\x1b[2Jother\x07"), encoding="utf-8")
     view = signing_view(cd)
     assert view["problem"].startswith("WRONG CASE") and "\x1b" not in view["problem"] and "\x07" not in view["problem"]
+
+
+# --- second review of the hardening (6 Nov): a view that said "signed" over a failing chain, a parser that recursed, a stale public key
+
+def test_a_trail_whose_own_chain_fails_is_not_shown_as_signed(tmp_path):
+    cd, log = trail(tmp_path)
+    started(cd)
+    ls = cd.audit_path.read_text(encoding="utf-8").split("\n")
+    ev = json.loads(ls[0])
+    ev["data"] = {"i": "changed"}  # the stored hash is left alone, so the chain fails at event 1
+    ls[0] = json.dumps(ev)
+    cd.audit_path.write_text("\n".join(ls), encoding="utf-8")
+    assert log.verify() == (False, 1)
+    view = signing_view(cd)
+    assert view["status"] == "broken" and "chain" in view["problem"].lower() and view["last"] is None
+
+
+def test_a_checkpoint_line_nested_deeper_than_the_parser_goes_is_reported_as_unreadable_and_does_not_raise(tmp_path):
+    cd, log = trail(tmp_path)
+    started(cd)
+    cd.checkpoints_path.write_text("[" * 100_000 + "\n", encoding="utf-8")
+    view = signing_view(cd)
+    assert view["status"] == "broken" and view["problem"].startswith("UNREADABLE")
+    assert checkpoint(cd) is None and checkpoint(cd, start=True) is None  # neither raises
+    assert log.events()[-1].event == "checkpoint_failed"
+
+
+def test_a_public_key_file_left_behind_by_an_earlier_key_is_replaced_by_the_half_of_the_key_in_use(tmp_path):
+    a, _ = trail(tmp_path)
+    first = started(a)
+    (tmp_path / "signing" / "private.pem").unlink()  # the private key is lost; a case without checkpoints gets a new one
+    b, _ = trail(tmp_path)
+    second = started(b)
+    assert second["key"] != first["key"]
+    assert public_key_bytes(public_pem(b)) == bytes.fromhex(second["key"])

@@ -325,7 +325,8 @@ def _signing_paragraph(s: dict) -> str:
             'that the events it covers were not changed or cut off after it was signed, as far as the key stayed private and the checkpoint is still in the file. '
             'It does not show who signed or when: the time is the clock of the machine that signed. The signatures are in checkpoints.jsonl in the case folder; '
             'verify-audit checks them, and its --pubkey option checks them against a key you know from elsewhere. The last checkpoints could be deleted '
-            'together with the events they cover; only a copy of the head, kept outside the case folder, would show that.</p>')
+            'together with the events they cover, and the events after the last checkpoint could be replaced and then signed by a later run; only a copy of the head, '
+            'kept outside the case folder, would show either.</p>')
 
 
 def _audit_section(d: dict) -> str:

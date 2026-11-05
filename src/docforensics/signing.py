@@ -14,7 +14,8 @@ What it does not show: who held the key, or when. The private key is made once p
 be copied without it, but it is a plain file with no password, and no outside clock stamps a checkpoint. Whoever can read that folder can
 sign a trail of their own, and a reader can tell only if they know the public key from somewhere else (`verify-audit --pubkey`). Nor are
 the checkpoints tied to each other or kept anywhere but the case folder: the last ones can be deleted together with the events they cover
-(a cut back to an earlier checkpoint), and a run on the cut trail then signs what is left. Only a copy of a checkpoint or of the head that
+(a cut back to an earlier checkpoint), and the events after the last checkpoint can be replaced before a run signs them. A run on the
+cut or replaced trail signs what is there. Only a copy of a checkpoint or of the head that
 verify-audit printed, kept outside the folder, shows that.
 """
 import hashlib
@@ -84,9 +85,9 @@ def _private_key(cd: CaseDir, chain_key: bytes | None) -> Ed25519PrivateKey:
                              "would sign over them")
         if chain_key is not None and _raw(key.public_key()) != chain_key:
             raise ValueError("the key of this data folder is not the one that signed the earlier checkpoints of this case")
-        public = folder / "public.pem"
-        if not public.exists():  # made with the key just now, or lost since
-            public.write_bytes(key.public_key().public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo))
+        public, pem = folder / "public.pem", key.public_key().public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo)
+        if not public.exists() or public.read_bytes() != pem:  # lost, or left behind by an earlier key: it is always the half of the key in use
+            public.write_bytes(pem)
         return key
 
 
@@ -152,7 +153,7 @@ def _checkpoints(cd: CaseDir) -> list[dict]:
             ok = (isinstance(cp, dict) and cp.get("v") == 1 and isinstance(cp["case"], str) and type(cp["events"]) is int and cp["events"] > 0
                   and isinstance(cp["head"], str) and isinstance(cp["ts"], str) and len(bytes.fromhex(cp["key"])) == 32
                   and len(bytes.fromhex(cp["sig"])) == 64)
-        except (ValueError, KeyError, TypeError):
+        except (ValueError, KeyError, TypeError, RecursionError):  # RecursionError: a line nested deeper than the parser goes
             ok = False
         if not ok:
             raise ValueError(f"UNREADABLE: line {n} of checkpoints.jsonl is not a checkpoint.")
@@ -204,6 +205,9 @@ def signing_view(cd: CaseDir, pinned: bytes | None = None) -> dict:
     public key the reader already knew, a case that is unsigned or signed by another key is broken."""
     view = {"status": "unsigned", "algorithm": ALGORITHM, "key_id": None, "checkpoints": 0, "last": None, "uncovered": 0, "problem": None}
     try:
+        ok, at = AuditLog(cd.audit_path).verify()
+        if not ok:  # checkpoints over a trail whose own chain fails are not shown as signed
+            raise ValueError(f"CHAIN BROKEN: the trail's own hash chain fails at event {at}, so its checkpoints are not shown as holding.")
         cps = _checkpoints(cd)
         problem = _problem(cd, cps, pinned)
     except ValueError as e:
