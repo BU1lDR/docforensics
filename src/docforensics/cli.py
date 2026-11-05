@@ -219,8 +219,9 @@ def _parser() -> argparse.ArgumentParser:
     serve.add_argument("--config", metavar="TOML", help="thresholds to use instead of the defaults")
     serve.set_defaults(fn=_serve)
     for s in (run, serve):
-        s.add_argument("--llm", action="store_true", help=f"also use the local language model {DEFAULT_MODEL} through Ollama (its output is "
-                       "labelled inference, and it cannot remove or confirm a finding)")
+        s.add_argument("--llm", action="store_true", help=f"also use the local language model {DEFAULT_MODEL} through Ollama: it words explanations, suggests how findings "
+                       "relate and reads facts on pages of a type the tool has no spec for (its output is labelled inference, and it "
+                       "cannot remove or confirm a finding)")
         s.add_argument("--llm-model", metavar="NAME", help="use this Ollama model instead of the default (implies --llm)")
     for s in (run, trace, verify, serve):
         s.add_argument("--data", default="data", metavar="DIR", help="where cases are kept (default: data)")

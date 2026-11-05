@@ -1,7 +1,9 @@
-"""The optional local language model (design 7.7). It words the explanation of a cluster headline (and reads a whole case, reason.py)
-and does nothing else: it is given structured findings (ids, kinds of check, titles, the values the checks used), never page text, a finding's detail or a box, and
-what it says is used only if the guard accepts it. It runs through Ollama on this computer: the client refuses any other host.
-Digits, arithmetic and revision diffs stay with the detectors."""
+"""The optional local language model (design 7.7). It words the explanation of a cluster headline, reads a whole case (reason.py), and on
+pages of a type the tool has no spec for names the facts the page states (understand/model_read.py), and does nothing else. The first
+two are given structured findings (ids, kinds of check, titles, the values the checks used), never page text, a finding's detail or a
+box, and what they say is used only if the guard accepts it. The third is given the page's text as numbered lines, never a box, and
+what it names is used only where code finds the words on the page. It runs through Ollama on this computer: the client refuses any
+other host. Digits, arithmetic and revision diffs stay with the detectors."""
 import hashlib
 import http.client
 import ipaddress
