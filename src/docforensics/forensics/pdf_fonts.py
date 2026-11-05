@@ -95,7 +95,7 @@ def font_outliers(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
                     detail=f'The value "{s["text"]}" on page {pg.n} is set in {s["font"]} at {s["size"]:g} pt in colour {s["colour"]}: '
                            + "; ".join(attrs[a] for a in _ATTR if a in attrs) + f". A size counts as different from {th.font_size_delta_pt:g} pt up; "
                            f"a group needs {_MIN_COLUMN} values in a column or {_MIN_LINE} on a line, and {_SHARE:.0%} of them must agree.",
-                    evidence=[_evidence(doc, pg, s["bbox"], "the value set in a different font, size or colour", s["text"])]))
+                    evidence=[_evidence(doc, pg, mu, s["bbox"], "the value set in a different font, size or colour", s["text"])]))
     if issues:
         out.append(limitation(DETECTOR, "Fonts of values only partly compared",
                               "Some pages were not fully compared for the font, size and colour of their values: " + "; ".join(issues[:10]) + ".",

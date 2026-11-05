@@ -50,8 +50,13 @@ def _colour(c) -> str:
     return "#%02x%02x%02x" % tuple(round(v * 255) for v in c) if c and len(c) == 3 else str(tuple(round(v, 2) for v in c or ()))
 
 
-def _evidence(doc: Document, pg: Page, box, note: str, value: str | None = None) -> Evidence:
-    return Evidence(doc=doc.id, page=pg.n, box=_px(box, pg.dpi / 72), note=note, value=None if value is None else quote(value))
+def _turned(mu: pymupdf.Page, box) -> pymupdf.Rect:
+    """A box on the page as it was drawn, as the reader and the viewer show the page: turned by its /Rotate."""
+    return pymupdf.Rect(box) * mu.rotation_matrix
+
+
+def _evidence(doc: Document, pg: Page, mu: pymupdf.Page, box, note: str, value: str | None = None) -> Evidence:
+    return Evidence(doc=doc.id, page=pg.n, box=_px(_turned(mu, box), pg.dpi / 72), note=note, value=None if value is None else quote(value))
 
 
 def _shapes(mu: pymupdf.Page) -> list[tuple[int, tuple, tuple]]:
@@ -70,9 +75,9 @@ def _covers(doc: Document, pg: Page, spans: list[dict], mu: pymupdf.Page) -> lis
         new = [s for s in spans if s["seqno"] > k and s["type"] in SHOWN and _text(s["chars"]).strip() and _share(s["bbox"], rect) >= _COVERED]
         was = quote(" ".join(t for t, _ in old))
         size = f"{rect[2] - rect[0]:.0f} x {rect[3] - rect[1]:.0f} pt, fill {_colour(fill)}"
-        ev = [_evidence(doc, pg, s["bbox"], "text drawn over the shape", _text(s["chars"]).strip()) for s in new[:LISTED]]
-        ev += [_evidence(doc, pg, box, "text drawn under the shape, still in the file", t) for t, box in old[:LISTED]]
-        ev.append(_evidence(doc, pg, rect, "the filled shape"))
+        ev = [_evidence(doc, pg, mu, s["bbox"], "text drawn over the shape", _text(s["chars"]).strip()) for s in new[:LISTED]]
+        ev += [_evidence(doc, pg, mu, box, "text drawn under the shape, still in the file", t) for t, box in old[:LISTED]]
+        ev.append(_evidence(doc, pg, mu, rect, "the filled shape"))
         rule = f"Text counts as covered when at least {_COVERED:.0%} of a character's box lies under a shape drawn after it."
         if new:
             now = quote(" ".join(_text(s["chars"]).strip() for s in new))
@@ -100,7 +105,7 @@ def _pictures(doc: Document, pg: Page, spans: list[dict], mu: pymupdf.Page, th: 
         old = _under(spans, k, tuple(rect))
         size = f"{rect[2] - rect[0]:.0f} x {rect[3] - rect[1]:.0f} pt, {share:.1%} of the page"
         rule = f"Pictures covering less than {th.image_max_page_fraction:.0%} of a text page are reported."
-        ev = [_evidence(doc, pg, rect, "the picture")] + [_evidence(doc, pg, box, "text drawn under the picture, still in the file", t) for t, box in old[:LISTED]]
+        ev = [_evidence(doc, pg, mu, rect, "the picture")] + [_evidence(doc, pg, mu, box, "text drawn under the picture, still in the file", t) for t, box in old[:LISTED]]
         if old:
             out.append(Finding(fclass="observation", detector=DETECTOR, family="visual", title=f"Picture placed over text (page {pg.n})",
                                detail=f'On page {pg.n} a picture ({size}) is drawn over the text "{quote(" ".join(t for t, _ in old))}", '
@@ -120,7 +125,7 @@ def _hidden(doc: Document, pg: Page, spans: list[dict], mu: pymupdf.Page, th: Th
         if s["type"] == 3:
             if not scan_layer:  # invisible text on a page that is one picture is the text layer of a scan
                 kinds["invisible"].append(s)
-        elif not mu.rect.intersects(pymupdf.Rect(s["bbox"])):
+        elif not mu.rect.intersects(_turned(mu, s["bbox"])):  # mu.rect is the page as shown, so the run is turned as well
             kinds["off the page"].append(s)
         elif s["type"] in SHOWN and s["size"] < th.tiny_text_pt:
             kinds["tiny"].append(s)
@@ -135,10 +140,11 @@ def _hidden(doc: Document, pg: Page, spans: list[dict], mu: pymupdf.Page, th: Th
                "off the page": f"placed outside the {mu.rect.width:.0f} x {mu.rect.height:.0f} pt page"}[kind]
         title = {"invisible": "Invisible text", "tiny": "Tiny text", "off the page": "Text placed off the page"}[kind]
         if kind == "off the page":
-            ev = [Evidence(doc=doc.id, page=0, box=(0.0, 0.0, 0.0, 0.0), note=f"page {pg.n}, outside the page, at x={s['bbox'][0]:.0f} pt, y={s['bbox'][1]:.0f} pt",
+            ev = [Evidence(doc=doc.id, page=0, box=(0.0, 0.0, 0.0, 0.0),
+                           note=f"page {pg.n}, outside the page, at x={_turned(mu, s['bbox']).x0:.0f} pt, y={_turned(mu, s['bbox']).y0:.0f} pt",
                            value=quote(_text(s["chars"]).strip())) for s in found[:LISTED]]
         else:
-            ev = [_evidence(doc, pg, s["bbox"], f"{kind} text", _text(s["chars"]).strip()) for s in found[:LISTED]]
+            ev = [_evidence(doc, pg, mu, s["bbox"], f"{kind} text", _text(s["chars"]).strip()) for s in found[:LISTED]]
         out.append(Finding(fclass="observation", detector=DETECTOR, family="visual", title=f"{title} (page {pg.n})",
                            detail=f'Page {pg.n} has {len(found)} text run(s) {how}: "{words}"{more}.', evidence=ev))
     return out

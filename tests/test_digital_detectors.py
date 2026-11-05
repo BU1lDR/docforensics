@@ -159,3 +159,38 @@ def test_observations_state_measurements_not_intent(tmp_path):
         text = f"{f.title} {f.detail}".lower()
         assert f.fclass == "observation" and not any(w in text for w in INTENT), text
         assert re.search(r"\d", f.detail), "a measurement is given"
+
+
+# --- a page with /Rotate: the detectors read the page as it was drawn, the reader and the viewer show it turned
+
+def rotated(pdf: bytes, degrees: int) -> bytes:
+    doc = pymupdf.open(stream=pdf, filetype="pdf")
+    doc[0].set_rotation(degrees)
+    return doc.tobytes()
+
+
+def word_box(case, text):
+    return next(w.box for w in case.documents[0].pages[0].words if w.text == text)
+
+
+@pytest.mark.parametrize("degrees", [90, 180, 270])
+def test_overlay_evidence_on_a_rotated_page_lands_on_the_text_the_reader_found(tmp_path, degrees):
+    edited, _ = d2_cover_retype(SALARY, "52,000.00", "82,000.00")
+    case = run(tmp_path, rotated(edited, degrees))
+    (f,) = case.findings
+    assert iou(f.evidence[0].box, word_box(case, "82,000.00")) >= 0.5
+
+
+@pytest.mark.parametrize("degrees", [90, 180, 270])
+def test_font_evidence_on_a_rotated_page_lands_on_the_text_the_reader_found(tmp_path, degrees):
+    column = [(400, 100 + 30 * i, "1,000.00", 10) for i in range(5)]
+    column[2] = (400, 160, "9,999.00", 14)  # one value of five is set larger than the rest of its column
+    case = run(tmp_path, rotated(lines_pdf(column), degrees))
+    (f,) = by(case, "pdf_fonts")
+    assert iou(f.evidence[0].box, word_box(case, "9,999.00")) >= 0.5
+
+
+@pytest.mark.parametrize("degrees", [90, 270])
+def test_text_low_on_a_rotated_page_is_not_reported_as_off_the_page(tmp_path, degrees):
+    pdf = lines_pdf([(72, 100, "Visible line of text", 11), (72, 800, "Page footer text", 11)])  # 800 pt down a 842 pt page
+    assert run(tmp_path, rotated(pdf, degrees)).findings == []
