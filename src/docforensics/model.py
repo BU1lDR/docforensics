@@ -52,6 +52,7 @@ class Field(_Base):
     row: int | None = None  # table cells
     role: str = ""  # "name" | "address" | "employer" | "account": set from the type spec
     note: str = ""
+    model_read: bool = False  # chosen and named by the local model on a page of a type without a spec: inference, not a rule's reading
 
 
 class Evidence(_Base):

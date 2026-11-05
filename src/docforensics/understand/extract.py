@@ -283,6 +283,11 @@ class _Extractor:
 
     # --- unknown types
 
+    @staticmethod
+    def guess(text: str) -> str:
+        """The kind a value reads as: a date, an amount with cents or a currency mark, else text."""
+        return "date" if parse_date(text)[0] is not None else "amount" if _amount_like(text) else "text"
+
     def generic(self) -> list[Field]:
         out = []
         for p in self.doc.pages:
@@ -291,7 +296,7 @@ class _Extractor:
                     continue
                 label, words = hit
                 text = text_of(words)
-                kind = "date" if parse_date(text)[0] is not None else "amount" if _amount_like(text) else "text"
+                kind = self.guess(text)
                 value, validator, note = self.read(kind, text)
                 out.append(self.make(re.sub(r"\W+", "_", label.casefold()).strip("_"), kind, words, p.n,
                                      union(w.box for w in words), value, validator, GENERIC_SCORE,
@@ -314,6 +319,8 @@ def _extract(doc: Document, spec: TypeSpec | None, ctx: Ctx) -> None:
 
 
 def extract_stage(case: Case, ctx: Ctx) -> None:
+    from .model_read import ModelReader  # it imports this module
+    reader = ModelReader(case, ctx) if ctx.llm is not None else None  # --llm: the model also reads what has no spec
     specs = load_specs()
     for doc in case.documents:
         if not doc.pages:  # never read: the read step has already reported it
@@ -325,3 +332,5 @@ def extract_stage(case: Case, ctx: Ctx) -> None:
                 "extract", UNSUPPORTED,
                 "This document matched no supported type. Only dates, amounts and 'label: value' pairs were read from it, "
                 "and no checks written for a specific type ran on it.", [doc_evidence(doc.id, "unsupported document type")])])
+            if reader is not None:
+                reader.read(doc)
