@@ -62,6 +62,25 @@ python -m docforensics verify-audit C-20261104-153000-ab12
 
 `trace` prints the document, the stored file and its sha256 (and whether the file still matches it), the page and the box in pixels and in PDF points, and the value read there.
 
+### Try it on the sample data
+
+[sample_data/](sample_data/) holds five small cases, each a bank statement, a payslip and a loan application: one genuine, three with a planted change that the tool finds and one with a planted change that it misses. Run the first:
+
+```
+python -m docforensics run sample_data/dev-0000
+```
+
+It prints three findings: a closing balance changed in a later saved revision of the PDF, seen two ways (the earlier revision still holds the old text, and the transactions do not give the new balance), and the group that holds both. `run` ends with the command that follows a finding to its file. Use the case id and a finding id it printed:
+
+```
+python -m docforensics trace C-20261105-103000-ab12 F-001
+python -m docforensics verify-audit C-20261105-103000-ab12
+```
+
+The date and time in a case id, in the audit trail and in the dossier are UTC. IST is UTC+05:30, so a run at 16:00 IST has 10:30 in its id. The dossier is `data/cases/<case id>/dossier.html`.
+
+These five cases are from the development split, the split on which the thresholds were tuned. They show the tool working from files to dossier; they are not evidence of how well it detects. The held-out figures are in [eval/test.md](eval/test.md). One of the five, dev-0043 (a slightly changed logo), is a miss. [sample_data/README.md](sample_data/README.md) says what the tool reports on each case, and `python -m pytest tests/test_e2e_sample.py` checks those statements against a real run.
+
 ### Tests
 
 ```
