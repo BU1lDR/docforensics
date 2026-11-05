@@ -1,0 +1,5880 @@
+{
+ "overview": {
+  "case": "C-20261105-065135-500f",
+  "created": "2026-11-05T06:51:35+00:00",
+  "generated": "2026-11-05T06:51:36+00:00",
+  "tool": {
+   "name": "docforensics",
+   "version": "0.1.0"
+  },
+  "notice": "Every item in this dossier is for a human reviewer to examine. Nothing in it is a conclusion about whether a document is genuine or about anyone's conduct. Values were read from the documents by software: OCR output is a reading, not ground truth, and each finding says how doubtful its weakest reading is. A status of 'confirmed by reviewer' appears only when a person set it.",
+  "thresholds": {
+   "low_conf": 0.6,
+   "amount_abs": 1.0,
+   "amount_rel": 0.005,
+   "name_sim": 0.85,
+   "label_sim": 0.86,
+   "income_rel": 0.05,
+   "emi_ratio_max": 0.5,
+   "max_doc_age_days": 90,
+   "text_sim": 0.8,
+   "same_tool_minutes": 10,
+   "font_size_delta_pt": 0.5,
+   "tiny_text_pt": 2.0,
+   "image_max_page_fraction": 0.5,
+   "mod_after_create_s": 60,
+   "max_page_objects": 5000,
+   "layout_k": 4.0,
+   "noise_ratio_lo": 0.5,
+   "noise_ratio_hi": 2.0,
+   "signature_dist": 9.4,
+   "logo_dist": 10.5,
+   "stamp_dist": 3.0,
+   "max_file_bytes": 10000000,
+   "max_pages": 20,
+   "max_docs": 10,
+   "stage_timeout_s": 120.0,
+   "max_revisions": 16,
+   "max_revision_runs": 12,
+   "max_diff_words": 5000,
+   "sharp_good": 0.24,
+   "sharp_poor": 0.18,
+   "rel_good": 0.95,
+   "rel_degraded": 0.5,
+   "rel_poor": 0.2,
+   "link_overlap": 0.5
+  },
+  "documents": [
+   {
+    "id": "D1",
+    "file": "01_statement.pdf",
+    "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+    "size": 38236,
+    "type": "bank_statement",
+    "pages": 2
+   },
+   {
+    "id": "D2",
+    "file": "02_payslip.pdf",
+    "sha256": "525287de57d48481e7f64bb02b469b05f0225585fd8c833d9687e6c07452d31e",
+    "size": 9719,
+    "type": "payslip",
+    "pages": 1
+   },
+   {
+    "id": "D3",
+    "file": "03_application.pdf",
+    "sha256": "06065dc879f750df49ac1ce5205e1aee46650f528cb5e3986c545fedd71cc3ba",
+    "size": 8471,
+    "type": "loan_application",
+    "pages": 1
+   }
+  ],
+  "counts": {
+   "documents": 3,
+   "findings": 3,
+   "observations": 1,
+   "inconsistencies": 1,
+   "potential_manipulation": 1,
+   "limitations": 0
+  }
+ },
+ "extracted_information": {
+  "documents": [
+   {
+    "id": "D1",
+    "file": "01_statement.pdf",
+    "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+    "size": 38236,
+    "kind": "pdf-digital",
+    "type": "bank_statement",
+    "type_confidence": 1.0,
+    "meta": {
+     "producer": "Orchard Test Bank Statement Service 4.2",
+     "creator": "Orchard Test Bank Statement Service 4.2",
+     "creationDate": "D:20260901103900+05'30'",
+     "modDate": "D:20260901103900+05'30'",
+     "format": "PDF 1.7",
+     "pages": "2"
+    },
+    "pages": [
+     {
+      "n": 1,
+      "width": 1653,
+      "height": 2339,
+      "dpi": 200,
+      "read_mode": "text-layer",
+      "quality": "text-layer",
+      "sharpness": null,
+      "words": 190
+     },
+     {
+      "n": 2,
+      "width": 1653,
+      "height": 2339,
+      "dpi": 200,
+      "read_mode": "text-layer",
+      "quality": "text-layer",
+      "sharpness": null,
+      "words": 33
+     }
+    ],
+    "fields": [
+     {
+      "id": "D1-f1",
+      "name": "bank",
+      "raw": "Orchard Test Bank",
+      "value": "Orchard Test Bank",
+      "kind": "text",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       124.7,
+       508.8,
+       185.9
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f2",
+      "name": "account_holder",
+      "raw": "Anil N. Nair",
+      "value": "Anil N. Nair",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       273.3,
+       551.4,
+       307.7
+      ],
+      "row": null,
+      "role": "name",
+      "note": ""
+     },
+     {
+      "id": "D1-f3",
+      "name": "address",
+      "raw": "Flat 2, Palm Court, Market Road, Kochi 682001",
+      "value": "Flat 2, Palm Court, Market Road, Kochi 682001",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       312.1,
+       966.8,
+       346.6
+      ],
+      "row": null,
+      "role": "address",
+      "note": ""
+     },
+     {
+      "id": "D1-f4",
+      "name": "account_no",
+      "raw": "TST-5674957725",
+      "value": "TST-5674957725",
+      "kind": "id",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       351.0,
+       611.2,
+       385.5
+      ],
+      "row": null,
+      "role": "account",
+      "note": ""
+     },
+     {
+      "id": "D1-f5",
+      "name": "period_start",
+      "raw": "01/08/2026",
+      "value": "2026-08-01",
+      "kind": "date",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       416.7,
+       389.9,
+       541.8,
+       424.3
+      ],
+      "row": null,
+      "role": "",
+      "note": "DD/MM, as the document's other dates show"
+     },
+     {
+      "id": "D1-f6",
+      "name": "period_end",
+      "raw": "31/08/2026",
+      "value": "2026-08-31",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       579.3,
+       389.9,
+       704.4,
+       424.3
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f7",
+      "name": "opening_balance",
+      "raw": "64,810.22",
+      "value": "64810.22",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       428.8,
+       527.9,
+       463.2
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f8",
+      "name": "closing_balance",
+      "raw": "2,10,102.52",
+      "value": "210102.52",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       467.7,
+       548.7,
+       502.1
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f9",
+      "name": "txn.date",
+      "raw": "02/08/2026",
+      "value": "2026-08-02",
+      "kind": "date",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       595.3,
+       236.2,
+       629.7
+      ],
+      "row": 1,
+      "role": "",
+      "note": "DD/MM, as the document's other dates show"
+     },
+     {
+      "id": "D1-f10",
+      "name": "txn.description",
+      "raw": "ECS/Electricity Board",
+      "value": "ECS/Electricity Board",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       595.3,
+       516.7,
+       629.7
+      ],
+      "row": 1,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f11",
+      "name": "txn.debit",
+      "raw": "1,121.06",
+      "value": "1121.06",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       595.3,
+       1055.6,
+       629.7
+      ],
+      "row": 1,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f12",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       595.3,
+       1277.8,
+       629.7
+      ],
+      "row": 1,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f13",
+      "name": "txn.balance",
+      "raw": "63,689.16",
+      "value": "63689.16",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1430.5,
+       595.3,
+       1541.7,
+       629.7
+      ],
+      "row": 1,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f14",
+      "name": "txn.date",
+      "raw": "04/08/2026",
+      "value": "2026-08-04",
+      "kind": "date",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       631.5,
+       236.2,
+       665.8
+      ],
+      "row": 2,
+      "role": "",
+      "note": "DD/MM, as the document's other dates show"
+     },
+     {
+      "id": "D1-f15",
+      "name": "txn.description",
+      "raw": "NEFT/Salary Brightfield",
+      "value": "NEFT/Salary Brightfield",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       631.5,
+       539.0,
+       665.8
+      ],
+      "row": 2,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f16",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       993.1,
+       631.5,
+       1055.6,
+       665.8
+      ],
+      "row": 2,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f17",
+      "name": "txn.credit",
+      "raw": "41,100.00",
+      "value": "41100.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1166.6,
+       631.5,
+       1277.8,
+       665.8
+      ],
+      "row": 2,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f18",
+      "name": "txn.balance",
+      "raw": "1,04,789.16",
+      "value": "104789.16",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       631.5,
+       1541.7,
+       665.8
+      ],
+      "row": 2,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f19",
+      "name": "txn.date",
+      "raw": "06/08/2026",
+      "value": "2026-08-06",
+      "kind": "date",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       667.6,
+       236.2,
+       701.9
+      ],
+      "row": 3,
+      "role": "",
+      "note": "DD/MM, as the document's other dates show"
+     },
+     {
+      "id": "D1-f20",
+      "name": "txn.description",
+      "raw": "UPI/Online Shopping",
+      "value": "UPI/Online Shopping",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       667.6,
+       511.2,
+       701.9
+      ],
+      "row": 3,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f21",
+      "name": "txn.debit",
+      "raw": "9,341.09",
+      "value": "9341.09",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       667.6,
+       1055.6,
+       701.9
+      ],
+      "row": 3,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f22",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       667.6,
+       1277.8,
+       701.9
+      ],
+      "row": 3,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f23",
+      "name": "txn.balance",
+      "raw": "95,448.07",
+      "value": "95448.07",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1430.5,
+       667.6,
+       1541.7,
+       701.9
+      ],
+      "row": 3,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f24",
+      "name": "txn.date",
+      "raw": "07/08/2026",
+      "value": "2026-08-07",
+      "kind": "date",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       703.7,
+       236.2,
+       738.0
+      ],
+      "row": 4,
+      "role": "",
+      "note": "DD/MM, as the document's other dates show"
+     },
+     {
+      "id": "D1-f25",
+      "name": "txn.description",
+      "raw": "IMPS/Transfer In",
+      "value": "IMPS/Transfer In",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       703.7,
+       466.7,
+       738.0
+      ],
+      "row": 4,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f26",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       993.1,
+       703.7,
+       1055.6,
+       738.0
+      ],
+      "row": 4,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f27",
+      "name": "txn.credit",
+      "raw": "10,098.53",
+      "value": "10098.53",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1166.6,
+       703.7,
+       1277.8,
+       738.0
+      ],
+      "row": 4,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f28",
+      "name": "txn.balance",
+      "raw": "1,05,546.60",
+      "value": "105546.60",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       703.7,
+       1541.7,
+       738.0
+      ],
+      "row": 4,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f29",
+      "name": "txn.date",
+      "raw": "08/08/2026",
+      "value": "2026-08-08",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       739.8,
+       236.2,
+       774.1
+      ],
+      "row": 5,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f30",
+      "name": "txn.description",
+      "raw": "ECS/Electricity Board",
+      "value": "ECS/Electricity Board",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       739.8,
+       516.7,
+       774.1
+      ],
+      "row": 5,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f31",
+      "name": "txn.debit",
+      "raw": "2,768.21",
+      "value": "2768.21",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       739.8,
+       1055.6,
+       774.1
+      ],
+      "row": 5,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f32",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       739.8,
+       1277.8,
+       774.1
+      ],
+      "row": 5,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f33",
+      "name": "txn.balance",
+      "raw": "1,02,778.39",
+      "value": "102778.39",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       739.8,
+       1541.7,
+       774.1
+      ],
+      "row": 5,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f34",
+      "name": "txn.date",
+      "raw": "10/08/2026",
+      "value": "2026-08-10",
+      "kind": "date",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       775.9,
+       236.2,
+       810.3
+      ],
+      "row": 6,
+      "role": "",
+      "note": "DD/MM, as the document's other dates show"
+     },
+     {
+      "id": "D1-f35",
+      "name": "txn.description",
+      "raw": "UPI/Rent Payment",
+      "value": "UPI/Rent Payment",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       775.9,
+       484.8,
+       810.3
+      ],
+      "row": 6,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f36",
+      "name": "txn.debit",
+      "raw": "4,047.70",
+      "value": "4047.70",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       775.9,
+       1055.6,
+       810.3
+      ],
+      "row": 6,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f37",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       775.9,
+       1277.8,
+       810.3
+      ],
+      "row": 6,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f38",
+      "name": "txn.balance",
+      "raw": "98,730.69",
+      "value": "98730.69",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1430.5,
+       775.9,
+       1541.7,
+       810.3
+      ],
+      "row": 6,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f39",
+      "name": "txn.date",
+      "raw": "10/08/2026",
+      "value": "2026-08-10",
+      "kind": "date",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       812.0,
+       236.2,
+       846.4
+      ],
+      "row": 7,
+      "role": "",
+      "note": "DD/MM, as the document's other dates show"
+     },
+     {
+      "id": "D1-f40",
+      "name": "txn.description",
+      "raw": "ATM/Cash Withdrawal",
+      "value": "ATM/Cash Withdrawal",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       812.0,
+       526.4,
+       846.4
+      ],
+      "row": 7,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f41",
+      "name": "txn.debit",
+      "raw": "6,045.95",
+      "value": "6045.95",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       812.0,
+       1055.6,
+       846.4
+      ],
+      "row": 7,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f42",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       812.0,
+       1277.8,
+       846.4
+      ],
+      "row": 7,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f43",
+      "name": "txn.balance",
+      "raw": "92,684.74",
+      "value": "92684.74",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1430.5,
+       812.0,
+       1541.7,
+       846.4
+      ],
+      "row": 7,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f44",
+      "name": "txn.date",
+      "raw": "11/08/2026",
+      "value": "2026-08-11",
+      "kind": "date",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       848.1,
+       236.2,
+       882.5
+      ],
+      "row": 8,
+      "role": "",
+      "note": "DD/MM, as the document's other dates show"
+     },
+     {
+      "id": "D1-f45",
+      "name": "txn.description",
+      "raw": "Cheque Deposit",
+      "value": "Cheque Deposit",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       848.1,
+       457.0,
+       882.5
+      ],
+      "row": 8,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f46",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       993.1,
+       848.1,
+       1055.6,
+       882.5
+      ],
+      "row": 8,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f47",
+      "name": "txn.credit",
+      "raw": "13,528.59",
+      "value": "13528.59",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1166.6,
+       848.1,
+       1277.8,
+       882.5
+      ],
+      "row": 8,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f48",
+      "name": "txn.balance",
+      "raw": "1,06,213.33",
+      "value": "106213.33",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       848.1,
+       1541.7,
+       882.5
+      ],
+      "row": 8,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f49",
+      "name": "txn.date",
+      "raw": "12/08/2026",
+      "value": "2026-08-12",
+      "kind": "date",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       884.2,
+       236.2,
+       918.6
+      ],
+      "row": 9,
+      "role": "",
+      "note": "DD/MM, as the document's other dates show"
+     },
+     {
+      "id": "D1-f50",
+      "name": "txn.description",
+      "raw": "UPI/Refund",
+      "value": "UPI/Refund",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       884.2,
+       407.0,
+       918.6
+      ],
+      "row": 9,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f51",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       993.1,
+       884.2,
+       1055.6,
+       918.6
+      ],
+      "row": 9,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f52",
+      "name": "txn.credit",
+      "raw": "36,792.94",
+      "value": "36792.94",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1166.6,
+       884.2,
+       1277.8,
+       918.6
+      ],
+      "row": 9,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f53",
+      "name": "txn.balance",
+      "raw": "1,43,006.27",
+      "value": "143006.27",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       884.2,
+       1541.7,
+       918.6
+      ],
+      "row": 9,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f54",
+      "name": "txn.date",
+      "raw": "14/08/2026",
+      "value": "2026-08-14",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       920.3,
+       236.2,
+       954.7
+      ],
+      "row": 10,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f55",
+      "name": "txn.description",
+      "raw": "ECS/Electricity Board",
+      "value": "ECS/Electricity Board",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       920.3,
+       516.7,
+       954.7
+      ],
+      "row": 10,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f56",
+      "name": "txn.debit",
+      "raw": "7,936.24",
+      "value": "7936.24",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       920.3,
+       1055.6,
+       954.7
+      ],
+      "row": 10,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f57",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       920.3,
+       1277.8,
+       954.7
+      ],
+      "row": 10,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f58",
+      "name": "txn.balance",
+      "raw": "1,35,070.03",
+      "value": "135070.03",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       920.3,
+       1541.7,
+       954.7
+      ],
+      "row": 10,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f59",
+      "name": "txn.date",
+      "raw": "15/08/2026",
+      "value": "2026-08-15",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       956.5,
+       236.2,
+       990.8
+      ],
+      "row": 11,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f60",
+      "name": "txn.description",
+      "raw": "ECS/Electricity Board",
+      "value": "ECS/Electricity Board",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       956.5,
+       516.7,
+       990.8
+      ],
+      "row": 11,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f61",
+      "name": "txn.debit",
+      "raw": "2,122.69",
+      "value": "2122.69",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       956.5,
+       1055.6,
+       990.8
+      ],
+      "row": 11,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f62",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       956.5,
+       1277.8,
+       990.8
+      ],
+      "row": 11,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f63",
+      "name": "txn.balance",
+      "raw": "1,32,947.34",
+      "value": "132947.34",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       956.5,
+       1541.7,
+       990.8
+      ],
+      "row": 11,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f64",
+      "name": "txn.date",
+      "raw": "16/08/2026",
+      "value": "2026-08-16",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       992.6,
+       236.2,
+       1026.9
+      ],
+      "row": 12,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f65",
+      "name": "txn.description",
+      "raw": "ATM/Cash Withdrawal",
+      "value": "ATM/Cash Withdrawal",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       992.6,
+       526.4,
+       1026.9
+      ],
+      "row": 12,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f66",
+      "name": "txn.debit",
+      "raw": "2,268.44",
+      "value": "2268.44",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       992.6,
+       1055.6,
+       1026.9
+      ],
+      "row": 12,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f67",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       992.6,
+       1277.8,
+       1026.9
+      ],
+      "row": 12,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f68",
+      "name": "txn.balance",
+      "raw": "1,30,678.90",
+      "value": "130678.90",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       992.6,
+       1541.7,
+       1026.9
+      ],
+      "row": 12,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f69",
+      "name": "txn.date",
+      "raw": "16/08/2026",
+      "value": "2026-08-16",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1028.7,
+       236.2,
+       1063.0
+      ],
+      "row": 13,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f70",
+      "name": "txn.description",
+      "raw": "IMPS/Transfer In",
+      "value": "IMPS/Transfer In",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1028.7,
+       466.7,
+       1063.0
+      ],
+      "row": 13,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f71",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       993.1,
+       1028.7,
+       1055.6,
+       1063.0
+      ],
+      "row": 13,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f72",
+      "name": "txn.credit",
+      "raw": "26,835.53",
+      "value": "26835.53",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1166.6,
+       1028.7,
+       1277.8,
+       1063.0
+      ],
+      "row": 13,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f73",
+      "name": "txn.balance",
+      "raw": "1,57,514.43",
+      "value": "157514.43",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1028.7,
+       1541.7,
+       1063.0
+      ],
+      "row": 13,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f74",
+      "name": "txn.date",
+      "raw": "18/08/2026",
+      "value": "2026-08-18",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1064.8,
+       236.2,
+       1099.1
+      ],
+      "row": 14,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f75",
+      "name": "txn.description",
+      "raw": "UPI/Refund",
+      "value": "UPI/Refund",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1064.8,
+       407.0,
+       1099.1
+      ],
+      "row": 14,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f76",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       993.1,
+       1064.8,
+       1055.6,
+       1099.1
+      ],
+      "row": 14,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f77",
+      "name": "txn.credit",
+      "raw": "1,108.30",
+      "value": "1108.30",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1180.5,
+       1064.8,
+       1277.8,
+       1099.1
+      ],
+      "row": 14,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f78",
+      "name": "txn.balance",
+      "raw": "1,58,622.73",
+      "value": "158622.73",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1064.8,
+       1541.7,
+       1099.1
+      ],
+      "row": 14,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f79",
+      "name": "txn.date",
+      "raw": "19/08/2026",
+      "value": "2026-08-19",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1100.9,
+       236.2,
+       1135.3
+      ],
+      "row": 15,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f80",
+      "name": "txn.description",
+      "raw": "UPI/Mobile Recharge",
+      "value": "UPI/Mobile Recharge",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1100.9,
+       515.4,
+       1135.3
+      ],
+      "row": 15,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f81",
+      "name": "txn.debit",
+      "raw": "9,242.15",
+      "value": "9242.15",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1100.9,
+       1055.6,
+       1135.3
+      ],
+      "row": 15,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f82",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1100.9,
+       1277.8,
+       1135.3
+      ],
+      "row": 15,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f83",
+      "name": "txn.balance",
+      "raw": "1,49,380.58",
+      "value": "149380.58",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1100.9,
+       1541.7,
+       1135.3
+      ],
+      "row": 15,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f84",
+      "name": "txn.date",
+      "raw": "20/08/2026",
+      "value": "2026-08-20",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1137.0,
+       236.2,
+       1171.4
+      ],
+      "row": 16,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f85",
+      "name": "txn.description",
+      "raw": "ATM/Cash Withdrawal",
+      "value": "ATM/Cash Withdrawal",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1137.0,
+       526.4,
+       1171.4
+      ],
+      "row": 16,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f86",
+      "name": "txn.debit",
+      "raw": "12,899.79",
+      "value": "12899.79",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       944.4,
+       1137.0,
+       1055.6,
+       1171.4
+      ],
+      "row": 16,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f87",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1137.0,
+       1277.8,
+       1171.4
+      ],
+      "row": 16,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f88",
+      "name": "txn.balance",
+      "raw": "1,36,480.79",
+      "value": "136480.79",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1137.0,
+       1541.7,
+       1171.4
+      ],
+      "row": 16,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f89",
+      "name": "txn.date",
+      "raw": "20/08/2026",
+      "value": "2026-08-20",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1173.1,
+       236.2,
+       1207.5
+      ],
+      "row": 17,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f90",
+      "name": "txn.description",
+      "raw": "ECS/Electricity Board",
+      "value": "ECS/Electricity Board",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1173.1,
+       516.7,
+       1207.5
+      ],
+      "row": 17,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f91",
+      "name": "txn.debit",
+      "raw": "5,308.40",
+      "value": "5308.40",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1173.1,
+       1055.6,
+       1207.5
+      ],
+      "row": 17,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f92",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1173.1,
+       1277.8,
+       1207.5
+      ],
+      "row": 17,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f93",
+      "name": "txn.balance",
+      "raw": "1,31,172.39",
+      "value": "131172.39",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1173.1,
+       1541.7,
+       1207.5
+      ],
+      "row": 17,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f94",
+      "name": "txn.date",
+      "raw": "21/08/2026",
+      "value": "2026-08-21",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1209.2,
+       236.2,
+       1243.6
+      ],
+      "row": 18,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f95",
+      "name": "txn.description",
+      "raw": "UPI/Mobile Recharge",
+      "value": "UPI/Mobile Recharge",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1209.2,
+       515.4,
+       1243.6
+      ],
+      "row": 18,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f96",
+      "name": "txn.debit",
+      "raw": "8,010.41",
+      "value": "8010.41",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1209.2,
+       1055.6,
+       1243.6
+      ],
+      "row": 18,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f97",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1209.2,
+       1277.8,
+       1243.6
+      ],
+      "row": 18,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f98",
+      "name": "txn.balance",
+      "raw": "1,23,161.98",
+      "value": "123161.98",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1209.2,
+       1541.7,
+       1243.6
+      ],
+      "row": 18,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f99",
+      "name": "txn.date",
+      "raw": "21/08/2026",
+      "value": "2026-08-21",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1245.3,
+       236.2,
+       1279.7
+      ],
+      "row": 19,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f100",
+      "name": "txn.description",
+      "raw": "IMPS/Transfer In",
+      "value": "IMPS/Transfer In",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1245.3,
+       466.7,
+       1279.7
+      ],
+      "row": 19,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f101",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       993.1,
+       1245.3,
+       1055.6,
+       1279.7
+      ],
+      "row": 19,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f102",
+      "name": "txn.credit",
+      "raw": "9,444.05",
+      "value": "9444.05",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1180.5,
+       1245.3,
+       1277.8,
+       1279.7
+      ],
+      "row": 19,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f103",
+      "name": "txn.balance",
+      "raw": "1,32,606.03",
+      "value": "132606.03",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1245.3,
+       1541.7,
+       1279.7
+      ],
+      "row": 19,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f104",
+      "name": "txn.date",
+      "raw": "22/08/2026",
+      "value": "2026-08-22",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1281.5,
+       236.2,
+       1315.8
+      ],
+      "row": 20,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f105",
+      "name": "txn.description",
+      "raw": "POS/Restaurant",
+      "value": "POS/Restaurant",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1281.5,
+       459.8,
+       1315.8
+      ],
+      "row": 20,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f106",
+      "name": "txn.debit",
+      "raw": "8,980.73",
+      "value": "8980.73",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1281.5,
+       1055.6,
+       1315.8
+      ],
+      "row": 20,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f107",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1281.5,
+       1277.8,
+       1315.8
+      ],
+      "row": 20,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f108",
+      "name": "txn.balance",
+      "raw": "1,23,625.30",
+      "value": "123625.30",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1281.5,
+       1541.7,
+       1315.8
+      ],
+      "row": 20,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f109",
+      "name": "txn.date",
+      "raw": "22/08/2026",
+      "value": "2026-08-22",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1317.6,
+       236.2,
+       1351.9
+      ],
+      "row": 21,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f110",
+      "name": "txn.description",
+      "raw": "UPI/Mobile Recharge",
+      "value": "UPI/Mobile Recharge",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1317.6,
+       515.4,
+       1351.9
+      ],
+      "row": 21,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f111",
+      "name": "txn.debit",
+      "raw": "2,169.44",
+      "value": "2169.44",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1317.6,
+       1055.6,
+       1351.9
+      ],
+      "row": 21,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f112",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1317.6,
+       1277.8,
+       1351.9
+      ],
+      "row": 21,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f113",
+      "name": "txn.balance",
+      "raw": "1,21,455.86",
+      "value": "121455.86",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1317.6,
+       1541.7,
+       1351.9
+      ],
+      "row": 21,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f114",
+      "name": "txn.date",
+      "raw": "22/08/2026",
+      "value": "2026-08-22",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1353.7,
+       236.2,
+       1388.0
+      ],
+      "row": 22,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f115",
+      "name": "txn.description",
+      "raw": "UPI/Rent Payment",
+      "value": "UPI/Rent Payment",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1353.7,
+       484.8,
+       1388.0
+      ],
+      "row": 22,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f116",
+      "name": "txn.debit",
+      "raw": "5,830.72",
+      "value": "5830.72",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1353.7,
+       1055.6,
+       1388.0
+      ],
+      "row": 22,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f117",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1353.7,
+       1277.8,
+       1388.0
+      ],
+      "row": 22,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f118",
+      "name": "txn.balance",
+      "raw": "1,15,625.14",
+      "value": "115625.14",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1353.7,
+       1541.7,
+       1388.0
+      ],
+      "row": 22,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f119",
+      "name": "txn.date",
+      "raw": "22/08/2026",
+      "value": "2026-08-22",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1389.8,
+       236.2,
+       1424.1
+      ],
+      "row": 23,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f120",
+      "name": "txn.description",
+      "raw": "UPI/Online Shopping",
+      "value": "UPI/Online Shopping",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1389.8,
+       511.2,
+       1424.1
+      ],
+      "row": 23,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f121",
+      "name": "txn.debit",
+      "raw": "8,316.28",
+      "value": "8316.28",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1389.8,
+       1055.6,
+       1424.1
+      ],
+      "row": 23,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f122",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1389.8,
+       1277.8,
+       1424.1
+      ],
+      "row": 23,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f123",
+      "name": "txn.balance",
+      "raw": "1,07,308.86",
+      "value": "107308.86",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1389.8,
+       1541.7,
+       1424.1
+      ],
+      "row": 23,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f124",
+      "name": "txn.date",
+      "raw": "22/08/2026",
+      "value": "2026-08-22",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1425.9,
+       236.2,
+       1460.3
+      ],
+      "row": 24,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f125",
+      "name": "txn.description",
+      "raw": "POS/Pharmacy",
+      "value": "POS/Pharmacy",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1425.9,
+       450.1,
+       1460.3
+      ],
+      "row": 24,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f126",
+      "name": "txn.debit",
+      "raw": "8,770.48",
+      "value": "8770.48",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1425.9,
+       1055.6,
+       1460.3
+      ],
+      "row": 24,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f127",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1425.9,
+       1277.8,
+       1460.3
+      ],
+      "row": 24,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f128",
+      "name": "txn.balance",
+      "raw": "98,538.38",
+      "value": "98538.38",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1430.5,
+       1425.9,
+       1541.7,
+       1460.3
+      ],
+      "row": 24,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f129",
+      "name": "txn.date",
+      "raw": "23/08/2026",
+      "value": "2026-08-23",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1462.0,
+       236.2,
+       1496.4
+      ],
+      "row": 25,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f130",
+      "name": "txn.description",
+      "raw": "UPI/Refund",
+      "value": "UPI/Refund",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1462.0,
+       407.0,
+       1496.4
+      ],
+      "row": 25,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f131",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       993.1,
+       1462.0,
+       1055.6,
+       1496.4
+      ],
+      "row": 25,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f132",
+      "name": "txn.credit",
+      "raw": "6,792.12",
+      "value": "6792.12",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1180.5,
+       1462.0,
+       1277.8,
+       1496.4
+      ],
+      "row": 25,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f133",
+      "name": "txn.balance",
+      "raw": "1,05,330.50",
+      "value": "105330.50",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1462.0,
+       1541.7,
+       1496.4
+      ],
+      "row": 25,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f134",
+      "name": "txn.date",
+      "raw": "23/08/2026",
+      "value": "2026-08-23",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1498.1,
+       236.2,
+       1532.5
+      ],
+      "row": 26,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f135",
+      "name": "txn.description",
+      "raw": "ECS/Electricity Board",
+      "value": "ECS/Electricity Board",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1498.1,
+       516.7,
+       1532.5
+      ],
+      "row": 26,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f136",
+      "name": "txn.debit",
+      "raw": "11,741.27",
+      "value": "11741.27",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       944.4,
+       1498.1,
+       1055.6,
+       1532.5
+      ],
+      "row": 26,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f137",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1498.1,
+       1277.8,
+       1532.5
+      ],
+      "row": 26,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f138",
+      "name": "txn.balance",
+      "raw": "93,589.23",
+      "value": "93589.23",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1430.5,
+       1498.1,
+       1541.7,
+       1532.5
+      ],
+      "row": 26,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f139",
+      "name": "txn.date",
+      "raw": "24/08/2026",
+      "value": "2026-08-24",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1534.2,
+       236.2,
+       1568.6
+      ],
+      "row": 27,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f140",
+      "name": "txn.description",
+      "raw": "ECS/Electricity Board",
+      "value": "ECS/Electricity Board",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1534.2,
+       516.7,
+       1568.6
+      ],
+      "row": 27,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f141",
+      "name": "txn.debit",
+      "raw": "1,140.72",
+      "value": "1140.72",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1534.2,
+       1055.6,
+       1568.6
+      ],
+      "row": 27,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f142",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1534.2,
+       1277.8,
+       1568.6
+      ],
+      "row": 27,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f143",
+      "name": "txn.balance",
+      "raw": "92,448.51",
+      "value": "92448.51",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1430.5,
+       1534.2,
+       1541.7,
+       1568.6
+      ],
+      "row": 27,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f144",
+      "name": "txn.date",
+      "raw": "24/08/2026",
+      "value": "2026-08-24",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1570.3,
+       236.2,
+       1604.7
+      ],
+      "row": 28,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f145",
+      "name": "txn.description",
+      "raw": "UPI/Mobile Recharge",
+      "value": "UPI/Mobile Recharge",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1570.3,
+       515.4,
+       1604.7
+      ],
+      "row": 28,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f146",
+      "name": "txn.debit",
+      "raw": "5,393.52",
+      "value": "5393.52",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1570.3,
+       1055.6,
+       1604.7
+      ],
+      "row": 28,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f147",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1570.3,
+       1277.8,
+       1604.7
+      ],
+      "row": 28,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f148",
+      "name": "txn.balance",
+      "raw": "87,054.99",
+      "value": "87054.99",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1430.5,
+       1570.3,
+       1541.7,
+       1604.7
+      ],
+      "row": 28,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f149",
+      "name": "txn.date",
+      "raw": "25/08/2026",
+      "value": "2026-08-25",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1606.5,
+       236.2,
+       1640.8
+      ],
+      "row": 29,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f150",
+      "name": "txn.description",
+      "raw": "ATM/Cash Withdrawal",
+      "value": "ATM/Cash Withdrawal",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1606.5,
+       526.4,
+       1640.8
+      ],
+      "row": 29,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f151",
+      "name": "txn.debit",
+      "raw": "6,590.06",
+      "value": "6590.06",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       958.3,
+       1606.5,
+       1055.6,
+       1640.8
+      ],
+      "row": 29,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f152",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1205.6,
+       1606.5,
+       1277.8,
+       1640.8
+      ],
+      "row": 29,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f153",
+      "name": "txn.balance",
+      "raw": "80,464.93",
+      "value": "80464.93",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1430.5,
+       1606.5,
+       1541.7,
+       1640.8
+      ],
+      "row": 29,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f154",
+      "name": "txn.date",
+      "raw": "25/08/2026",
+      "value": "2026-08-25",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       1642.6,
+       236.2,
+       1676.9
+      ],
+      "row": 30,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f155",
+      "name": "txn.description",
+      "raw": "Cheque Deposit",
+      "value": "Cheque Deposit",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       277.8,
+       1642.6,
+       457.0,
+       1676.9
+      ],
+      "row": 30,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f156",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       993.1,
+       1642.6,
+       1055.6,
+       1676.9
+      ],
+      "row": 30,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f157",
+      "name": "txn.credit",
+      "raw": "27,890.95",
+      "value": "27890.95",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1166.6,
+       1642.6,
+       1277.8,
+       1676.9
+      ],
+      "row": 30,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f158",
+      "name": "txn.balance",
+      "raw": "1,08,355.88",
+      "value": "108355.88",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1409.6,
+       1642.6,
+       1541.7,
+       1676.9
+      ],
+      "row": 30,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f159",
+      "name": "txn.date",
+      "raw": "26/08/2026",
+      "value": "2026-08-26",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       111.1,
+       139.8,
+       236.2,
+       174.1
+      ],
+      "row": 31,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f160",
+      "name": "txn.description",
+      "raw": "IMPS/Transfer In",
+      "value": "IMPS/Transfer In",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       277.8,
+       139.8,
+       466.7,
+       174.1
+      ],
+      "row": 31,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f161",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       993.1,
+       139.8,
+       1055.6,
+       174.1
+      ],
+      "row": 31,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f162",
+      "name": "txn.credit",
+      "raw": "35,941.29",
+      "value": "35941.29",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1166.6,
+       139.8,
+       1277.8,
+       174.1
+      ],
+      "row": 31,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f163",
+      "name": "txn.balance",
+      "raw": "1,44,297.17",
+      "value": "144297.17",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1409.6,
+       139.8,
+       1541.7,
+       174.1
+      ],
+      "row": 31,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f164",
+      "name": "txn.date",
+      "raw": "26/08/2026",
+      "value": "2026-08-26",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       111.1,
+       175.9,
+       236.2,
+       210.3
+      ],
+      "row": 32,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f165",
+      "name": "txn.description",
+      "raw": "POS/Fuel Station",
+      "value": "POS/Fuel Station",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       277.8,
+       175.9,
+       470.9,
+       210.3
+      ],
+      "row": 32,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f166",
+      "name": "txn.debit",
+      "raw": "12,818.19",
+      "value": "12818.19",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       944.4,
+       175.9,
+       1055.6,
+       210.3
+      ],
+      "row": 32,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f167",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1205.6,
+       175.9,
+       1277.8,
+       210.3
+      ],
+      "row": 32,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f168",
+      "name": "txn.balance",
+      "raw": "1,31,478.98",
+      "value": "131478.98",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1409.6,
+       175.9,
+       1541.7,
+       210.3
+      ],
+      "row": 32,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f169",
+      "name": "txn.date",
+      "raw": "28/08/2026",
+      "value": "2026-08-28",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       111.1,
+       212.0,
+       236.2,
+       246.4
+      ],
+      "row": 33,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f170",
+      "name": "txn.description",
+      "raw": "ATM/Cash Withdrawal",
+      "value": "ATM/Cash Withdrawal",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       277.8,
+       212.0,
+       526.4,
+       246.4
+      ],
+      "row": 33,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f171",
+      "name": "txn.debit",
+      "raw": "10,760.18",
+      "value": "10760.18",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       944.4,
+       212.0,
+       1055.6,
+       246.4
+      ],
+      "row": 33,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f172",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1205.6,
+       212.0,
+       1277.8,
+       246.4
+      ],
+      "row": 33,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f173",
+      "name": "txn.balance",
+      "raw": "1,20,718.80",
+      "value": "120718.80",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1409.6,
+       212.0,
+       1541.7,
+       246.4
+      ],
+      "row": 33,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f174",
+      "name": "txn.date",
+      "raw": "28/08/2026",
+      "value": "2026-08-28",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       111.1,
+       248.1,
+       236.2,
+       282.5
+      ],
+      "row": 34,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f175",
+      "name": "txn.description",
+      "raw": "Cheque Deposit",
+      "value": "Cheque Deposit",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       277.8,
+       248.1,
+       457.0,
+       282.5
+      ],
+      "row": 34,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f176",
+      "name": "txn.debit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       993.1,
+       248.1,
+       1055.6,
+       282.5
+      ],
+      "row": 34,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f177",
+      "name": "txn.credit",
+      "raw": "8,876.17",
+      "value": "8876.17",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1180.5,
+       248.1,
+       1277.8,
+       282.5
+      ],
+      "row": 34,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f178",
+      "name": "txn.balance",
+      "raw": "1,29,594.97",
+      "value": "129594.97",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1409.6,
+       248.1,
+       1541.7,
+       282.5
+      ],
+      "row": 34,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f179",
+      "name": "txn.date",
+      "raw": "30/08/2026",
+      "value": "2026-08-30",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       111.1,
+       284.2,
+       236.2,
+       318.6
+      ],
+      "row": 35,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f180",
+      "name": "txn.description",
+      "raw": "NEFT/Insurance Premium",
+      "value": "NEFT/Insurance Premium",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       277.8,
+       284.2,
+       566.7,
+       318.6
+      ],
+      "row": 35,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f181",
+      "name": "txn.debit",
+      "raw": "5,068.95",
+      "value": "5068.95",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       958.3,
+       284.2,
+       1055.6,
+       318.6
+      ],
+      "row": 35,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f182",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1205.6,
+       284.2,
+       1277.8,
+       318.6
+      ],
+      "row": 35,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f183",
+      "name": "txn.balance",
+      "raw": "1,24,526.02",
+      "value": "124526.02",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1409.6,
+       284.2,
+       1541.7,
+       318.6
+      ],
+      "row": 35,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f184",
+      "name": "txn.date",
+      "raw": "30/08/2026",
+      "value": "2026-08-30",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       111.1,
+       320.3,
+       236.2,
+       354.7
+      ],
+      "row": 36,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f185",
+      "name": "txn.description",
+      "raw": "POS/Pharmacy",
+      "value": "POS/Pharmacy",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       277.8,
+       320.3,
+       450.1,
+       354.7
+      ],
+      "row": 36,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f186",
+      "name": "txn.debit",
+      "raw": "14,423.50",
+      "value": "14423.50",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       944.4,
+       320.3,
+       1055.6,
+       354.7
+      ],
+      "row": 36,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f187",
+      "name": "txn.credit",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1205.6,
+       320.3,
+       1277.8,
+       354.7
+      ],
+      "row": 36,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D1-f188",
+      "name": "txn.balance",
+      "raw": "1,10,102.52",
+      "value": "110102.52",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 2,
+      "box": [
+       1409.6,
+       320.3,
+       1541.7,
+       354.7
+      ],
+      "row": 36,
+      "role": "",
+      "note": ""
+     }
+    ]
+   },
+   {
+    "id": "D2",
+    "file": "02_payslip.pdf",
+    "sha256": "525287de57d48481e7f64bb02b469b05f0225585fd8c833d9687e6c07452d31e",
+    "size": 9719,
+    "kind": "pdf-digital",
+    "type": "payslip",
+    "type_confidence": 1.0,
+    "meta": {
+     "producer": "Brightfield Payroll Suite 7.1",
+     "creator": "Brightfield Payroll Suite 7.1",
+     "creationDate": "D:20260801104200+05'30'",
+     "modDate": "D:20260801104200+05'30'",
+     "format": "PDF 1.7",
+     "pages": "1"
+    },
+    "pages": [
+     {
+      "n": 1,
+      "width": 1653,
+      "height": 2339,
+      "dpi": 200,
+      "read_mode": "text-layer",
+      "quality": "text-layer",
+      "sharpness": null,
+      "words": 85
+     }
+    ],
+    "fields": [
+     {
+      "id": "D2-f1",
+      "name": "employer",
+      "raw": "Brightfield Test Pvt Ltd",
+      "value": "Brightfield Test Pvt Ltd",
+      "kind": "text",
+      "confidence": 0.9,
+      "page": 1,
+      "box": [
+       111.1,
+       124.7,
+       600.0,
+       185.9
+      ],
+      "row": null,
+      "role": "employer",
+      "note": ""
+     },
+     {
+      "id": "D2-f2",
+      "name": "employee_name",
+      "raw": "Anil N. Nair",
+      "value": "Anil N. Nair",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       273.3,
+       551.4,
+       307.7
+      ],
+      "row": null,
+      "role": "name",
+      "note": ""
+     },
+     {
+      "id": "D2-f3",
+      "name": "employee_id",
+      "raw": "EMP-4381",
+      "value": "EMP-4381",
+      "kind": "id",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       312.1,
+       534.8,
+       346.6
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f4",
+      "name": "designation",
+      "raw": "Engineer",
+      "value": "Engineer",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       351.0,
+       523.6,
+       385.5
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f5",
+      "name": "bank_account",
+      "raw": "TST-5674957725",
+      "value": "TST-5674957725",
+      "kind": "id",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       389.9,
+       611.2,
+       424.3
+      ],
+      "row": null,
+      "role": "account",
+      "note": ""
+     },
+     {
+      "id": "D2-f6",
+      "name": "pay_month",
+      "raw": "July 2026",
+      "value": "July 2026",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       428.8,
+       529.2,
+       463.2
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f7",
+      "name": "pay_date",
+      "raw": "01 Aug 2026",
+      "value": "2026-08-01",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       467.7,
+       562.6,
+       502.1
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f8",
+      "name": "gross_earnings",
+      "raw": "46,000.00",
+      "value": "46000.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       528.8,
+       527.9,
+       563.2
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f9",
+      "name": "total_deductions",
+      "raw": "4,900.00",
+      "value": "4900.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       567.7,
+       514.0,
+       602.1
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f10",
+      "name": "net_pay",
+      "raw": "41,100.00",
+      "value": "41100.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       606.6,
+       527.9,
+       641.0
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f11",
+      "name": "net_pay_words",
+      "raw": "Rupees Forty One Thousand One Hundred Only",
+      "value": "Rupees Forty One Thousand One Hundred Only",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       416.7,
+       645.5,
+       986.2,
+       679.9
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f12",
+      "name": "line.earning_amount",
+      "raw": "23,000.00",
+      "value": "23000.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       597.1,
+       767.6,
+       708.3,
+       801.9
+      ],
+      "row": 1,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f13",
+      "name": "line.earning_name",
+      "raw": "Basic Salary",
+      "value": "Basic Salary",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       767.6,
+       250.0,
+       801.9
+      ],
+      "row": 1,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f14",
+      "name": "line.deduction_name",
+      "raw": "Provident Fund",
+      "value": "Provident Fund",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       861.1,
+       767.6,
+       1030.6,
+       801.9
+      ],
+      "row": 1,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f15",
+      "name": "line.deduction_amount",
+      "raw": "2,700.00",
+      "value": "2700.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1444.4,
+       767.6,
+       1541.7,
+       801.9
+      ],
+      "row": 1,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f16",
+      "name": "line.earning_amount",
+      "raw": "9,200.00",
+      "value": "9200.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       611.0,
+       803.7,
+       708.3,
+       838.0
+      ],
+      "row": 2,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f17",
+      "name": "line.earning_name",
+      "raw": "House Rent Allowance",
+      "value": "House Rent Allowance",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       803.7,
+       364.0,
+       838.0
+      ],
+      "row": 2,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f18",
+      "name": "line.deduction_name",
+      "raw": "Professional Tax",
+      "value": "Professional Tax",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       861.1,
+       803.7,
+       1047.3,
+       838.0
+      ],
+      "row": 2,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f19",
+      "name": "line.deduction_amount",
+      "raw": "200.00",
+      "value": "200.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1465.2,
+       803.7,
+       1541.7,
+       838.0
+      ],
+      "row": 2,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f20",
+      "name": "line.earning_amount",
+      "raw": "1,600.00",
+      "value": "1600.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       611.0,
+       839.8,
+       708.3,
+       874.1
+      ],
+      "row": 3,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f21",
+      "name": "line.earning_name",
+      "raw": "Conveyance Allowance",
+      "value": "Conveyance Allowance",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       839.8,
+       370.9,
+       874.1
+      ],
+      "row": 3,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f22",
+      "name": "line.deduction_name",
+      "raw": "Income Tax (TDS)",
+      "value": "Income Tax (TDS)",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       861.1,
+       839.8,
+       1065.3,
+       874.1
+      ],
+      "row": 3,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f23",
+      "name": "line.deduction_amount",
+      "raw": "2,000.00",
+      "value": "2000.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1444.4,
+       839.8,
+       1541.7,
+       874.1
+      ],
+      "row": 3,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f24",
+      "name": "line.earning_amount",
+      "raw": "12,200.00",
+      "value": "12200.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       597.1,
+       875.9,
+       708.3,
+       910.3
+      ],
+      "row": 4,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f25",
+      "name": "line.earning_name",
+      "raw": "Special Allowance",
+      "value": "Special Allowance",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       111.1,
+       875.9,
+       314.0,
+       910.3
+      ],
+      "row": 4,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f26",
+      "name": "line.deduction_name",
+      "raw": "",
+      "value": null,
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       861.1,
+       875.9,
+       997.2,
+       910.3
+      ],
+      "row": 4,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D2-f27",
+      "name": "line.deduction_amount",
+      "raw": "",
+      "value": null,
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       1326.4,
+       875.9,
+       1541.7,
+       910.3
+      ],
+      "row": 4,
+      "role": "",
+      "note": ""
+     }
+    ]
+   },
+   {
+    "id": "D3",
+    "file": "03_application.pdf",
+    "sha256": "06065dc879f750df49ac1ce5205e1aee46650f528cb5e3986c545fedd71cc3ba",
+    "size": 8471,
+    "kind": "pdf-digital",
+    "type": "loan_application",
+    "type_confidence": 1.0,
+    "meta": {
+     "producer": "Orchard LoanDesk Forms 3.0",
+     "creator": "Orchard LoanDesk Forms 3.0",
+     "creationDate": "D:20260920160700+05'30'",
+     "modDate": "D:20260920160700+05'30'",
+     "format": "PDF 1.7",
+     "pages": "1"
+    },
+    "pages": [
+     {
+      "n": 1,
+      "width": 1653,
+      "height": 2339,
+      "dpi": 200,
+      "read_mode": "text-layer",
+      "quality": "text-layer",
+      "sharpness": null,
+      "words": 72
+     }
+    ],
+    "fields": [
+     {
+      "id": "D3-f1",
+      "name": "application_date",
+      "raw": "Sun 20 Sep 2026",
+      "value": "2026-09-20",
+      "kind": "date",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       555.6,
+       273.3,
+       752.9,
+       307.7
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D3-f2",
+      "name": "applicant_name",
+      "raw": "Anil N. Nair",
+      "value": "Anil N. Nair",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       555.6,
+       312.1,
+       690.3,
+       346.6
+      ],
+      "row": null,
+      "role": "name",
+      "note": ""
+     },
+     {
+      "id": "D3-f3",
+      "name": "address",
+      "raw": "Flat 2, Palm Court, Market Road, Kochi 682001",
+      "value": "Flat 2, Palm Court, Market Road, Kochi 682001",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       555.6,
+       351.0,
+       1105.7,
+       385.5
+      ],
+      "row": null,
+      "role": "address",
+      "note": ""
+     },
+     {
+      "id": "D3-f4",
+      "name": "employer",
+      "raw": "Brightfield Test Pvt Ltd",
+      "value": "Brightfield Test Pvt Ltd",
+      "kind": "text",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       555.6,
+       389.9,
+       830.6,
+       424.3
+      ],
+      "row": null,
+      "role": "employer",
+      "note": ""
+     },
+     {
+      "id": "D3-f5",
+      "name": "account_no",
+      "raw": "TST-5674957725",
+      "value": "TST-5674957725",
+      "kind": "id",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       555.6,
+       428.8,
+       750.1,
+       463.2
+      ],
+      "row": null,
+      "role": "account",
+      "note": ""
+     },
+     {
+      "id": "D3-f6",
+      "name": "declared_monthly_income",
+      "raw": "46,000.00",
+      "value": "46000.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       555.6,
+       467.7,
+       666.8,
+       502.1
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D3-f7",
+      "name": "existing_emi",
+      "raw": "6,000.00",
+      "value": "6000.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       555.6,
+       506.6,
+       652.9,
+       541.0
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D3-f8",
+      "name": "loan_amount",
+      "raw": "4,50,000.00",
+      "value": "450000.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       555.6,
+       545.5,
+       687.6,
+       579.9
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     },
+     {
+      "id": "D3-f9",
+      "name": "tenure_months",
+      "raw": "48",
+      "value": "48.00",
+      "kind": "amount",
+      "confidence": 1.0,
+      "page": 1,
+      "box": [
+       555.6,
+       584.4,
+       583.4,
+       618.8
+      ],
+      "row": null,
+      "role": "",
+      "note": ""
+     }
+    ]
+   }
+  ]
+ },
+ "contextual_analysis": {
+  "inconsistencies": [
+   {
+    "id": "F-002",
+    "class": "inconsistency",
+    "detector": "statement_balance",
+    "family": "arithmetic",
+    "title": "The closing balance does not follow from the transactions",
+    "detail": "The closing balance is INR 210102.52, but the balance in row 36 is INR 110102.52 (difference INR 100000.00). Tolerance: INR 1.00. A transaction row that could not be read would break the chain here as well.",
+    "confidence": 1.0,
+    "review_priority": 2,
+    "status": "open",
+    "reviewer_note": "",
+    "explanation": "The running balance printed on the statement does not follow from the amounts printed on its rows, by more than the stated tolerance. An edited figure would cause this, and so would a misread digit, a row that was not read, or a layout these checks do not assume. It cites 2 places in D1 (pages 1, 2).",
+    "explanation_source": "template",
+    "next_steps": [
+     "Compare the marked cells with the page, digit by digit.",
+     "Work the balance out by hand from the last row before the break.",
+     "If the break holds, ask the bank for a statement issued directly."
+    ],
+    "related": [
+     "F-001"
+    ],
+    "cluster": "F-003",
+    "evidence": [
+     {
+      "n": 1,
+      "document": "D1",
+      "file": "01_statement.pdf",
+      "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+      "page": 1,
+      "box": [
+       416.7,
+       467.7,
+       548.7,
+       502.1
+      ],
+      "dpi": 200,
+      "box_pt": [
+       150.0,
+       168.4,
+       197.5,
+       180.8
+      ],
+      "note": "balance in question",
+      "field": "D1-f8",
+      "value": "210102.52",
+      "crop": "crops/F-002-1.png"
+     },
+     {
+      "n": 2,
+      "document": "D1",
+      "file": "01_statement.pdf",
+      "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+      "page": 2,
+      "box": [
+       1409.6,
+       320.3,
+       1541.7,
+       354.7
+      ],
+      "dpi": 200,
+      "box_pt": [
+       507.5,
+       115.3,
+       555.0,
+       127.7
+      ],
+      "note": "balance before",
+      "field": "D1-f188",
+      "value": "110102.52",
+      "crop": "crops/F-002-2.png"
+     }
+    ]
+   }
+  ],
+  "potential_manipulation": [
+   {
+    "id": "F-003",
+    "class": "potential_manipulation",
+    "detector": "link",
+    "family": "cluster",
+    "title": "Closing balance on 01_statement.pdf: 2 findings from 2 kinds of check",
+    "detail": "Closing balance on 01_statement.pdf: The closing balance does not follow from the transactions (arithmetic inconsistency); Text changed in revision 2 (page 1) (metadata observation).",
+    "confidence": 1.0,
+    "review_priority": 2,
+    "status": "open",
+    "reviewer_note": "",
+    "explanation": "Independent kinds of check point at the same place in the document. That makes the place worth a closer look. It is a priority for a reviewer, not a probability and not a conclusion about what happened. It cites 2 places in D1 (pages 1, 2).",
+    "explanation_source": "template",
+    "next_steps": [
+     "Go through the evidence one piece at a time.",
+     "Look for an ordinary explanation for each piece before drawing any conclusion, and verify with the issuer where a figure is in doubt."
+    ],
+    "related": [
+     "F-001",
+     "F-002"
+    ],
+    "cluster": null,
+    "evidence": [
+     {
+      "n": 1,
+      "document": "D1",
+      "file": "01_statement.pdf",
+      "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+      "page": 1,
+      "box": [
+       416.7,
+       467.7,
+       548.7,
+       502.1
+      ],
+      "dpi": 200,
+      "box_pt": [
+       150.0,
+       168.4,
+       197.5,
+       180.8
+      ],
+      "note": "balance in question",
+      "field": "D1-f8",
+      "value": "210102.52",
+      "crop": "crops/F-003-1.png"
+     },
+     {
+      "n": 2,
+      "document": "D1",
+      "file": "01_statement.pdf",
+      "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+      "page": 2,
+      "box": [
+       1409.6,
+       320.3,
+       1541.7,
+       354.7
+      ],
+      "dpi": 200,
+      "box_pt": [
+       507.5,
+       115.3,
+       555.0,
+       127.7
+      ],
+      "note": "balance before",
+      "field": "D1-f188",
+      "value": "110102.52",
+      "crop": "crops/F-003-2.png"
+     }
+    ]
+   }
+  ]
+ },
+ "visual_forensic_findings": {
+  "observations": [
+   {
+    "id": "F-001",
+    "class": "observation",
+    "detector": "pdf_revisions",
+    "family": "metadata",
+    "title": "Text changed in revision 2 (page 1)",
+    "detail": "In revision 1 the text read \"1,10,102.52\"; in revision 2 it reads \"2,10,102.52\".",
+    "confidence": 1.0,
+    "review_priority": 2,
+    "status": "open",
+    "reviewer_note": "",
+    "explanation": "The PDF file still holds an earlier saved version of itself, and the text differs between that version and a later one. Later saves have ordinary causes, such as a correction, a re-issue or a form being filled in, as well as improper ones. The file does not say which. It cites 1 place in D1 (page 1).",
+    "explanation_source": "template",
+    "next_steps": [
+     "Ask the issuer for a copy sent directly by them and compare it with this one.",
+     "Check whether the changed text is a figure, date or name that other findings depend on."
+    ],
+    "related": [
+     "F-002"
+    ],
+    "cluster": "F-003",
+    "evidence": [
+     {
+      "n": 1,
+      "document": "D1",
+      "file": "01_statement.pdf",
+      "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+      "page": 1,
+      "box": [
+       416.7,
+       467.7,
+       548.7,
+       502.1
+      ],
+      "dpi": 200,
+      "box_pt": [
+       150.0,
+       168.4,
+       197.5,
+       180.8
+      ],
+      "note": "the text as it stands in revision 2",
+      "field": null,
+      "value": "2,10,102.52",
+      "crop": "crops/F-001-1.png"
+     }
+    ]
+   }
+  ]
+ },
+ "evidence_and_traceability": {
+  "documents": [
+   {
+    "id": "D1",
+    "file": "01_statement.pdf",
+    "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+    "stored_path": "files/275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093.pdf",
+    "size": 38236
+   },
+   {
+    "id": "D2",
+    "file": "02_payslip.pdf",
+    "sha256": "525287de57d48481e7f64bb02b469b05f0225585fd8c833d9687e6c07452d31e",
+    "stored_path": "files/525287de57d48481e7f64bb02b469b05f0225585fd8c833d9687e6c07452d31e.pdf",
+    "size": 9719
+   },
+   {
+    "id": "D3",
+    "file": "03_application.pdf",
+    "sha256": "06065dc879f750df49ac1ce5205e1aee46650f528cb5e3986c545fedd71cc3ba",
+    "stored_path": "files/06065dc879f750df49ac1ce5205e1aee46650f528cb5e3986c545fedd71cc3ba.pdf",
+    "size": 8471
+   }
+  ],
+  "trace": [
+   {
+    "finding": "F-001",
+    "n": 1,
+    "document": "D1",
+    "file": "01_statement.pdf",
+    "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+    "page": 1,
+    "box": [
+     416.7,
+     467.7,
+     548.7,
+     502.1
+    ],
+    "dpi": 200,
+    "box_pt": [
+     150.0,
+     168.4,
+     197.5,
+     180.8
+    ],
+    "note": "the text as it stands in revision 2",
+    "field": null,
+    "value": "2,10,102.52",
+    "crop": "crops/F-001-1.png"
+   },
+   {
+    "finding": "F-002",
+    "n": 1,
+    "document": "D1",
+    "file": "01_statement.pdf",
+    "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+    "page": 1,
+    "box": [
+     416.7,
+     467.7,
+     548.7,
+     502.1
+    ],
+    "dpi": 200,
+    "box_pt": [
+     150.0,
+     168.4,
+     197.5,
+     180.8
+    ],
+    "note": "balance in question",
+    "field": "D1-f8",
+    "value": "210102.52",
+    "crop": "crops/F-002-1.png"
+   },
+   {
+    "finding": "F-002",
+    "n": 2,
+    "document": "D1",
+    "file": "01_statement.pdf",
+    "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+    "page": 2,
+    "box": [
+     1409.6,
+     320.3,
+     1541.7,
+     354.7
+    ],
+    "dpi": 200,
+    "box_pt": [
+     507.5,
+     115.3,
+     555.0,
+     127.7
+    ],
+    "note": "balance before",
+    "field": "D1-f188",
+    "value": "110102.52",
+    "crop": "crops/F-002-2.png"
+   },
+   {
+    "finding": "F-003",
+    "n": 1,
+    "document": "D1",
+    "file": "01_statement.pdf",
+    "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+    "page": 1,
+    "box": [
+     416.7,
+     467.7,
+     548.7,
+     502.1
+    ],
+    "dpi": 200,
+    "box_pt": [
+     150.0,
+     168.4,
+     197.5,
+     180.8
+    ],
+    "note": "balance in question",
+    "field": "D1-f8",
+    "value": "210102.52",
+    "crop": "crops/F-003-1.png"
+   },
+   {
+    "finding": "F-003",
+    "n": 2,
+    "document": "D1",
+    "file": "01_statement.pdf",
+    "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+    "page": 2,
+    "box": [
+     1409.6,
+     320.3,
+     1541.7,
+     354.7
+    ],
+    "dpi": 200,
+    "box_pt": [
+     507.5,
+     115.3,
+     555.0,
+     127.7
+    ],
+    "note": "balance before",
+    "field": "D1-f188",
+    "value": "110102.52",
+    "crop": "crops/F-003-2.png"
+   }
+  ]
+ },
+ "investigation_summary": {
+  "anomalies": [
+   {
+    "id": "F-003",
+    "class": "potential_manipulation",
+    "title": "Closing balance on 01_statement.pdf: 2 findings from 2 kinds of check",
+    "confidence": 1.0,
+    "status": "open"
+   },
+   {
+    "id": "F-002",
+    "class": "inconsistency",
+    "title": "The closing balance does not follow from the transactions",
+    "confidence": 1.0,
+    "status": "open"
+   }
+  ],
+  "evidence": [
+   {
+    "finding": "F-003",
+    "places": [
+     {
+      "n": 1,
+      "file": "01_statement.pdf",
+      "page": 1,
+      "box": [
+       416.7,
+       467.7,
+       548.7,
+       502.1
+      ],
+      "note": "balance in question"
+     },
+     {
+      "n": 2,
+      "file": "01_statement.pdf",
+      "page": 2,
+      "box": [
+       1409.6,
+       320.3,
+       1541.7,
+       354.7
+      ],
+      "note": "balance before"
+     }
+    ]
+   },
+   {
+    "finding": "F-002",
+    "places": [
+     {
+      "n": 1,
+      "file": "01_statement.pdf",
+      "page": 1,
+      "box": [
+       416.7,
+       467.7,
+       548.7,
+       502.1
+      ],
+      "note": "balance in question"
+     },
+     {
+      "n": 2,
+      "file": "01_statement.pdf",
+      "page": 2,
+      "box": [
+       1409.6,
+       320.3,
+       1541.7,
+       354.7
+      ],
+      "note": "balance before"
+     }
+    ]
+   }
+  ],
+  "explanations": [
+   {
+    "finding": "F-003",
+    "explanation": "Independent kinds of check point at the same place in the document. That makes the place worth a closer look. It is a priority for a reviewer, not a probability and not a conclusion about what happened. It cites 2 places in D1 (pages 1, 2).",
+    "source": "template"
+   },
+   {
+    "finding": "F-002",
+    "explanation": "The running balance printed on the statement does not follow from the amounts printed on its rows, by more than the stated tolerance. An edited figure would cause this, and so would a misread digit, a row that was not read, or a layout these checks do not assume. It cites 2 places in D1 (pages 1, 2).",
+    "source": "template"
+   }
+  ],
+  "further_verification": [
+   {
+    "step": "Ask the issuer for a copy sent directly by them and compare it with this one.",
+    "findings": [
+     "F-001"
+    ]
+   },
+   {
+    "step": "Check whether the changed text is a figure, date or name that other findings depend on.",
+    "findings": [
+     "F-001"
+    ]
+   },
+   {
+    "step": "Compare the marked cells with the page, digit by digit.",
+    "findings": [
+     "F-002"
+    ]
+   },
+   {
+    "step": "Work the balance out by hand from the last row before the break.",
+    "findings": [
+     "F-002"
+    ]
+   },
+   {
+    "step": "If the break holds, ask the bank for a statement issued directly.",
+    "findings": [
+     "F-002"
+    ]
+   },
+   {
+    "step": "Go through the evidence one piece at a time.",
+    "findings": [
+     "F-003"
+    ]
+   },
+   {
+    "step": "Look for an ordinary explanation for each piece before drawing any conclusion, and verify with the issuer where a figure is in doubt.",
+    "findings": [
+     "F-003"
+    ]
+   }
+  ],
+  "limitations": [],
+  "ai_reading": {
+   "status": "none",
+   "note": "No language model was used for this case."
+  }
+ },
+ "appendices": {
+  "audit_trail": {
+   "events": [
+    {
+     "seq": 1,
+     "ts": "2026-11-05T06:51:35.161+00:00",
+     "actor": "system",
+     "event": "case_created",
+     "data": {
+      "case": "C-20261105-065135-500f",
+      "thresholds": {
+       "low_conf": 0.6,
+       "amount_abs": 1.0,
+       "amount_rel": 0.005,
+       "name_sim": 0.85,
+       "label_sim": 0.86,
+       "income_rel": 0.05,
+       "emi_ratio_max": 0.5,
+       "max_doc_age_days": 90,
+       "text_sim": 0.8,
+       "same_tool_minutes": 10,
+       "font_size_delta_pt": 0.5,
+       "tiny_text_pt": 2.0,
+       "image_max_page_fraction": 0.5,
+       "mod_after_create_s": 60,
+       "max_page_objects": 5000,
+       "layout_k": 4.0,
+       "noise_ratio_lo": 0.5,
+       "noise_ratio_hi": 2.0,
+       "signature_dist": 9.4,
+       "logo_dist": 10.5,
+       "stamp_dist": 3.0,
+       "max_file_bytes": 10000000,
+       "max_pages": 20,
+       "max_docs": 10,
+       "stage_timeout_s": 120.0,
+       "max_revisions": 16,
+       "max_revision_runs": 12,
+       "max_diff_words": 5000,
+       "sharp_good": 0.24,
+       "sharp_poor": 0.18,
+       "rel_good": 0.95,
+       "rel_degraded": 0.5,
+       "rel_poor": 0.2,
+       "link_overlap": 0.5
+      }
+     },
+     "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+     "hash": "9600862820b0506489f886a2f49fe17f0291d74f5315d6af36327ae9015fbfc4"
+    },
+    {
+     "seq": 2,
+     "ts": "2026-11-05T06:51:35.171+00:00",
+     "actor": "system",
+     "event": "file_ingested",
+     "data": {
+      "doc": "D1",
+      "filename": "01_statement.pdf",
+      "sha256": "275c7d4d5403b9df93d84a951e2f4cf403037dd8eba827ac04d3a87d5309f093",
+      "size": 38236,
+      "type": "pdf"
+     },
+     "prev_hash": "9600862820b0506489f886a2f49fe17f0291d74f5315d6af36327ae9015fbfc4",
+     "hash": "d735bebfa9b71c31004a5e8751a5f3fc9db55af4b5b54b187d13341252e67166"
+    },
+    {
+     "seq": 3,
+     "ts": "2026-11-05T06:51:35.178+00:00",
+     "actor": "system",
+     "event": "file_ingested",
+     "data": {
+      "doc": "D2",
+      "filename": "02_payslip.pdf",
+      "sha256": "525287de57d48481e7f64bb02b469b05f0225585fd8c833d9687e6c07452d31e",
+      "size": 9719,
+      "type": "pdf"
+     },
+     "prev_hash": "d735bebfa9b71c31004a5e8751a5f3fc9db55af4b5b54b187d13341252e67166",
+     "hash": "147b15cec73c1a585e1270b87c3469dec3dec84d8688d860e2686845c200b17f"
+    },
+    {
+     "seq": 4,
+     "ts": "2026-11-05T06:51:35.185+00:00",
+     "actor": "system",
+     "event": "file_ingested",
+     "data": {
+      "doc": "D3",
+      "filename": "03_application.pdf",
+      "sha256": "06065dc879f750df49ac1ce5205e1aee46650f528cb5e3986c545fedd71cc3ba",
+      "size": 8471,
+      "type": "pdf"
+     },
+     "prev_hash": "147b15cec73c1a585e1270b87c3469dec3dec84d8688d860e2686845c200b17f",
+     "hash": "060152e6042d52f11c622aff134b1ed4f348fa0a2f068b49655d9dc5019fd4ca"
+    },
+    {
+     "seq": 5,
+     "ts": "2026-11-05T06:51:35.379+00:00",
+     "actor": "system",
+     "event": "run_started",
+     "data": {
+      "tool": "docforensics",
+      "version": "0.1.0",
+      "libs": {
+       "python": "3.11.9",
+       "pymupdf": "1.28.2",
+       "rapidocr": "3.10.0",
+       "onnxruntime": "1.31.1",
+       "numpy": "2.4.6",
+       "opencv-python-headless": "5.0.0.93",
+       "pillow": "13.0.0",
+       "pydantic": "2.14.2"
+      }
+     },
+     "prev_hash": "060152e6042d52f11c622aff134b1ed4f348fa0a2f068b49655d9dc5019fd4ca",
+     "hash": "4cc9683c5633106b8877e3fe14b7d1d5e570591510d171a80590b4327484879d"
+    },
+    {
+     "seq": 6,
+     "ts": "2026-11-05T06:51:35.387+00:00",
+     "actor": "system",
+     "event": "stage_start",
+     "data": {
+      "stage": "read"
+     },
+     "prev_hash": "4cc9683c5633106b8877e3fe14b7d1d5e570591510d171a80590b4327484879d",
+     "hash": "5bb02a196b027a3f7c89f01fffa62de5f92fb9f7685b09d7db610df89ff34468"
+    },
+    {
+     "seq": 7,
+     "ts": "2026-11-05T06:51:35.539+00:00",
+     "actor": "system",
+     "event": "doc_read",
+     "data": {
+      "doc": "D1",
+      "pages": 2,
+      "kind": "pdf-digital",
+      "words": 223
+     },
+     "prev_hash": "5bb02a196b027a3f7c89f01fffa62de5f92fb9f7685b09d7db610df89ff34468",
+     "hash": "0ad08020593578a5181d07dc7e867663e4da2f57121f2a5010e355ff2d6e8477"
+    },
+    {
+     "seq": 8,
+     "ts": "2026-11-05T06:51:35.608+00:00",
+     "actor": "system",
+     "event": "doc_read",
+     "data": {
+      "doc": "D2",
+      "pages": 1,
+      "kind": "pdf-digital",
+      "words": 85
+     },
+     "prev_hash": "0ad08020593578a5181d07dc7e867663e4da2f57121f2a5010e355ff2d6e8477",
+     "hash": "0bf97dec8fc32c6a3ebe30583f122c59e29142f9a331f7220bb0fdab7b576995"
+    },
+    {
+     "seq": 9,
+     "ts": "2026-11-05T06:51:35.700+00:00",
+     "actor": "system",
+     "event": "doc_read",
+     "data": {
+      "doc": "D3",
+      "pages": 1,
+      "kind": "pdf-digital",
+      "words": 72
+     },
+     "prev_hash": "0bf97dec8fc32c6a3ebe30583f122c59e29142f9a331f7220bb0fdab7b576995",
+     "hash": "8b38f98eb4087b969b195ff349528b0917b62a8150dee4e8a99bf378a9ce7051"
+    },
+    {
+     "seq": 10,
+     "ts": "2026-11-05T06:51:35.706+00:00",
+     "actor": "system",
+     "event": "stage_end",
+     "data": {
+      "stage": "read",
+      "ok": true,
+      "seconds": 0.313,
+      "tool": "docforensics",
+      "version": "0.1.0"
+     },
+     "prev_hash": "8b38f98eb4087b969b195ff349528b0917b62a8150dee4e8a99bf378a9ce7051",
+     "hash": "9a80ee3b64c9c4b1324441ab14fce484a6023d27385e13bd77cfae16f7463a7e"
+    },
+    {
+     "seq": 11,
+     "ts": "2026-11-05T06:51:35.713+00:00",
+     "actor": "system",
+     "event": "stage_start",
+     "data": {
+      "stage": "classify"
+     },
+     "prev_hash": "9a80ee3b64c9c4b1324441ab14fce484a6023d27385e13bd77cfae16f7463a7e",
+     "hash": "dfd2f5b4aab30d40e04fd77613fd5772ec07d9afac8e830d258b0a531a22aa37"
+    },
+    {
+     "seq": 12,
+     "ts": "2026-11-05T06:51:35.766+00:00",
+     "actor": "system",
+     "event": "doc_classified",
+     "data": {
+      "doc": "D1",
+      "type": "bank_statement",
+      "conf": 1.0
+     },
+     "prev_hash": "dfd2f5b4aab30d40e04fd77613fd5772ec07d9afac8e830d258b0a531a22aa37",
+     "hash": "28ff252c9ddc511e720b21875eb7f5bf3d652c7b43d357b1fbc37079a9910deb"
+    },
+    {
+     "seq": 13,
+     "ts": "2026-11-05T06:51:35.796+00:00",
+     "actor": "system",
+     "event": "doc_classified",
+     "data": {
+      "doc": "D2",
+      "type": "payslip",
+      "conf": 1.0
+     },
+     "prev_hash": "28ff252c9ddc511e720b21875eb7f5bf3d652c7b43d357b1fbc37079a9910deb",
+     "hash": "71b8c451e8b635f1f92c4576f51787e373be99242f511188168d6616f3bc024e"
+    },
+    {
+     "seq": 14,
+     "ts": "2026-11-05T06:51:35.816+00:00",
+     "actor": "system",
+     "event": "doc_classified",
+     "data": {
+      "doc": "D3",
+      "type": "loan_application",
+      "conf": 1.0
+     },
+     "prev_hash": "71b8c451e8b635f1f92c4576f51787e373be99242f511188168d6616f3bc024e",
+     "hash": "8d6ba128225b59c768a542bd8b8daa387b31ea6f16926060c9d5e30584c3e993"
+    },
+    {
+     "seq": 15,
+     "ts": "2026-11-05T06:51:35.831+00:00",
+     "actor": "system",
+     "event": "stage_end",
+     "data": {
+      "stage": "classify",
+      "ok": true,
+      "seconds": 0.11,
+      "tool": "docforensics",
+      "version": "0.1.0"
+     },
+     "prev_hash": "8d6ba128225b59c768a542bd8b8daa387b31ea6f16926060c9d5e30584c3e993",
+     "hash": "00e48442cdc22416dcc53634b2f1d5f954ce956ff4e4abc56e97df4ba24eec2e"
+    },
+    {
+     "seq": 16,
+     "ts": "2026-11-05T06:51:35.837+00:00",
+     "actor": "system",
+     "event": "stage_start",
+     "data": {
+      "stage": "extract"
+     },
+     "prev_hash": "00e48442cdc22416dcc53634b2f1d5f954ce956ff4e4abc56e97df4ba24eec2e",
+     "hash": "cbe32a17991354dbcec91216bff61629dc12f7e720d5f529d29ffbe52bc4cc09"
+    },
+    {
+     "seq": 17,
+     "ts": "2026-11-05T06:51:35.879+00:00",
+     "actor": "system",
+     "event": "doc_extracted",
+     "data": {
+      "doc": "D1",
+      "type": "bank_statement",
+      "fields": 188,
+      "empty": 36
+     },
+     "prev_hash": "cbe32a17991354dbcec91216bff61629dc12f7e720d5f529d29ffbe52bc4cc09",
+     "hash": "f3282a8285dd8df6eb0e9f62078fc6a2778342120f3da7b55726612d230ea444"
+    },
+    {
+     "seq": 18,
+     "ts": "2026-11-05T06:51:35.910+00:00",
+     "actor": "system",
+     "event": "doc_extracted",
+     "data": {
+      "doc": "D2",
+      "type": "payslip",
+      "fields": 27,
+      "empty": 2
+     },
+     "prev_hash": "f3282a8285dd8df6eb0e9f62078fc6a2778342120f3da7b55726612d230ea444",
+     "hash": "0927f1660eac41fe69eef4ab8659c72d5b28cf499a9e800e7f617b558c532168"
+    },
+    {
+     "seq": 19,
+     "ts": "2026-11-05T06:51:35.938+00:00",
+     "actor": "system",
+     "event": "doc_extracted",
+     "data": {
+      "doc": "D3",
+      "type": "loan_application",
+      "fields": 9,
+      "empty": 0
+     },
+     "prev_hash": "0927f1660eac41fe69eef4ab8659c72d5b28cf499a9e800e7f617b558c532168",
+     "hash": "fde772a27e075d6c5737c02584510e0644e374eeb40a677adc65bc5cb9f3bbab"
+    },
+    {
+     "seq": 20,
+     "ts": "2026-11-05T06:51:35.941+00:00",
+     "actor": "system",
+     "event": "stage_end",
+     "data": {
+      "stage": "extract",
+      "ok": true,
+      "seconds": 0.094,
+      "tool": "docforensics",
+      "version": "0.1.0"
+     },
+     "prev_hash": "fde772a27e075d6c5737c02584510e0644e374eeb40a677adc65bc5cb9f3bbab",
+     "hash": "be38b9c8a981c90ebe3e89d9fc402eb2e16f252ee7fdc5d20e69d051fb6247df"
+    },
+    {
+     "seq": 21,
+     "ts": "2026-11-05T06:51:35.955+00:00",
+     "actor": "system",
+     "event": "stage_start",
+     "data": {
+      "stage": "forensics"
+     },
+     "prev_hash": "be38b9c8a981c90ebe3e89d9fc402eb2e16f252ee7fdc5d20e69d051fb6247df",
+     "hash": "ad9038bbaba8defef0ed0257580fce640301a7b4c7fba7f65c61a2f14659757f"
+    },
+    {
+     "seq": 22,
+     "ts": "2026-11-05T06:51:35.976+00:00",
+     "actor": "system",
+     "event": "finding_created",
+     "data": {
+      "finding": "F-001",
+      "detector": "pdf_revisions",
+      "fclass": "observation",
+      "title": "Text changed in revision 2 (page 1)"
+     },
+     "prev_hash": "ad9038bbaba8defef0ed0257580fce640301a7b4c7fba7f65c61a2f14659757f",
+     "hash": "cc9faea4d8487ceb66720fedd0245dc5ebd2607d0f175b4b21c736de39fc0c03"
+    },
+    {
+     "seq": 23,
+     "ts": "2026-11-05T06:51:35.990+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D1",
+      "detector": "revision_diff",
+      "findings": 1
+     },
+     "prev_hash": "cc9faea4d8487ceb66720fedd0245dc5ebd2607d0f175b4b21c736de39fc0c03",
+     "hash": "e826a1420b757e779d9d8bb96bc2f9c0f281149857976d57488004467a952598"
+    },
+    {
+     "seq": 24,
+     "ts": "2026-11-05T06:51:36.008+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D1",
+      "detector": "covered_or_hidden_text",
+      "findings": 0
+     },
+     "prev_hash": "e826a1420b757e779d9d8bb96bc2f9c0f281149857976d57488004467a952598",
+     "hash": "4a2afeff327d237346b1c7dc79497b9713c0cf3fe1e3e21dfb318ce73f9ef834"
+    },
+    {
+     "seq": 25,
+     "ts": "2026-11-05T06:51:36.025+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D1",
+      "detector": "font_outliers",
+      "findings": 0
+     },
+     "prev_hash": "4a2afeff327d237346b1c7dc79497b9713c0cf3fe1e3e21dfb318ce73f9ef834",
+     "hash": "2dae7842ea8dea63a00ad66e9e84aa596a534ffd6e9ea0a98de84a4bb247cec5"
+    },
+    {
+     "seq": 26,
+     "ts": "2026-11-05T06:51:36.031+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D1",
+      "detector": "metadata_observations",
+      "findings": 0
+     },
+     "prev_hash": "2dae7842ea8dea63a00ad66e9e84aa596a534ffd6e9ea0a98de84a4bb247cec5",
+     "hash": "63687c16463a472d552ce48580d4c9acc9241327a25e1cb257d06cf9b0e23b79"
+    },
+    {
+     "seq": 27,
+     "ts": "2026-11-05T06:51:36.045+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D2",
+      "detector": "revision_diff",
+      "findings": 0
+     },
+     "prev_hash": "63687c16463a472d552ce48580d4c9acc9241327a25e1cb257d06cf9b0e23b79",
+     "hash": "dcc694c73531b89883e02b998a9a3641223dc26f0a85c908d62b68718791f7b9"
+    },
+    {
+     "seq": 28,
+     "ts": "2026-11-05T06:51:36.052+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D2",
+      "detector": "covered_or_hidden_text",
+      "findings": 0
+     },
+     "prev_hash": "dcc694c73531b89883e02b998a9a3641223dc26f0a85c908d62b68718791f7b9",
+     "hash": "d781f95f774e37e0c45e51e467d9331004313b64227890f71e9a4f57cac72ffd"
+    },
+    {
+     "seq": 29,
+     "ts": "2026-11-05T06:51:36.066+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D2",
+      "detector": "font_outliers",
+      "findings": 0
+     },
+     "prev_hash": "d781f95f774e37e0c45e51e467d9331004313b64227890f71e9a4f57cac72ffd",
+     "hash": "90d39811fbf1f9e8ba7cd41059d61798409ed75a9f71c1cce35c9437a55796c9"
+    },
+    {
+     "seq": 30,
+     "ts": "2026-11-05T06:51:36.073+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D2",
+      "detector": "metadata_observations",
+      "findings": 0
+     },
+     "prev_hash": "90d39811fbf1f9e8ba7cd41059d61798409ed75a9f71c1cce35c9437a55796c9",
+     "hash": "a72a565440109921d37f3502d70c12a1ddec78cb39e7c8a83bfbb079d826997d"
+    },
+    {
+     "seq": 31,
+     "ts": "2026-11-05T06:51:36.087+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D3",
+      "detector": "revision_diff",
+      "findings": 0
+     },
+     "prev_hash": "a72a565440109921d37f3502d70c12a1ddec78cb39e7c8a83bfbb079d826997d",
+     "hash": "03b629d33b53c07dbaee5895e747dfeaa722c78c6ed6f0b4337ae99e31354130"
+    },
+    {
+     "seq": 32,
+     "ts": "2026-11-05T06:51:36.101+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D3",
+      "detector": "covered_or_hidden_text",
+      "findings": 0
+     },
+     "prev_hash": "03b629d33b53c07dbaee5895e747dfeaa722c78c6ed6f0b4337ae99e31354130",
+     "hash": "1d7203e92d26178b81ddbb83d8f8f54c24f67320c0bf9bb7a651d4056015f493"
+    },
+    {
+     "seq": 33,
+     "ts": "2026-11-05T06:51:36.108+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D3",
+      "detector": "font_outliers",
+      "findings": 0
+     },
+     "prev_hash": "1d7203e92d26178b81ddbb83d8f8f54c24f67320c0bf9bb7a651d4056015f493",
+     "hash": "feb24c56756c627d99877267a7e48c4b5afc1a251d6ff0535eb1719c16065207"
+    },
+    {
+     "seq": 34,
+     "ts": "2026-11-05T06:51:36.122+00:00",
+     "actor": "system",
+     "event": "doc_forensics",
+     "data": {
+      "doc": "D3",
+      "detector": "metadata_observations",
+      "findings": 0
+     },
+     "prev_hash": "feb24c56756c627d99877267a7e48c4b5afc1a251d6ff0535eb1719c16065207",
+     "hash": "8b6b91bdc1daaabea04775188bf707874a5261c97a322f26cdc9842722e8e92c"
+    },
+    {
+     "seq": 35,
+     "ts": "2026-11-05T06:51:36.199+00:00",
+     "actor": "system",
+     "event": "signature_compared",
+     "data": {
+      "docs": [
+       "D2",
+       "D3"
+      ],
+      "pages": [
+       1,
+       1
+      ],
+      "distance": 0.32,
+      "limit": 9.4,
+      "differs": false
+     },
+     "prev_hash": "8b6b91bdc1daaabea04775188bf707874a5261c97a322f26cdc9842722e8e92c",
+     "hash": "3572a2b2b6a69f01d1635c840a90db3c482976ef03bfcf85219e61f17a1c5408"
+    },
+    {
+     "seq": 36,
+     "ts": "2026-11-05T06:51:36.261+00:00",
+     "actor": "system",
+     "event": "mark_compared",
+     "data": {
+      "kind": "logo",
+      "docs": [
+       "D1",
+       "D3"
+      ],
+      "pages": [
+       1,
+       1
+      ],
+      "distance": 0.0,
+      "limit": 10.5,
+      "differs": false
+     },
+     "prev_hash": "3572a2b2b6a69f01d1635c840a90db3c482976ef03bfcf85219e61f17a1c5408",
+     "hash": "3e2d86714e9c313332a3ee818ad38b311a6b91618fce767566f077473ae28f8c"
+    },
+    {
+     "seq": 37,
+     "ts": "2026-11-05T06:51:36.344+00:00",
+     "actor": "system",
+     "event": "mark_compared",
+     "data": {
+      "kind": "stamp",
+      "docs": [
+       "D1",
+       "D3"
+      ],
+      "pages": [
+       1,
+       1
+      ],
+      "distance": 0.0,
+      "limit": 3.0,
+      "differs": false
+     },
+     "prev_hash": "3e2d86714e9c313332a3ee818ad38b311a6b91618fce767566f077473ae28f8c",
+     "hash": "84ff878ffe59488f754a641c8d68c533f44eec8b6c804610df123bdadfca5cb8"
+    },
+    {
+     "seq": 38,
+     "ts": "2026-11-05T06:51:36.351+00:00",
+     "actor": "system",
+     "event": "stage_end",
+     "data": {
+      "stage": "forensics",
+      "ok": true,
+      "seconds": 0.375,
+      "tool": "docforensics",
+      "version": "0.1.0"
+     },
+     "prev_hash": "84ff878ffe59488f754a641c8d68c533f44eec8b6c804610df123bdadfca5cb8",
+     "hash": "0a64c065f84a05d56b6ce0d868da831059ee10c55c20ba03d904ac28d6ce1931"
+    },
+    {
+     "seq": 39,
+     "ts": "2026-11-05T06:51:36.367+00:00",
+     "actor": "system",
+     "event": "stage_start",
+     "data": {
+      "stage": "checks"
+     },
+     "prev_hash": "0a64c065f84a05d56b6ce0d868da831059ee10c55c20ba03d904ac28d6ce1931",
+     "hash": "2513f77ac1c39a60c4268383da92b22ddcf052e5cb91efb1c5478850e3357720"
+    },
+    {
+     "seq": 40,
+     "ts": "2026-11-05T06:51:36.372+00:00",
+     "actor": "system",
+     "event": "doc_checked",
+     "data": {
+      "doc": "D1",
+      "findings": 1
+     },
+     "prev_hash": "2513f77ac1c39a60c4268383da92b22ddcf052e5cb91efb1c5478850e3357720",
+     "hash": "0a97f9977ceaf02f8c312cf6872f78a6455d03df427e748da1a8741707da55d3"
+    },
+    {
+     "seq": 41,
+     "ts": "2026-11-05T06:51:36.378+00:00",
+     "actor": "system",
+     "event": "finding_created",
+     "data": {
+      "finding": "F-002",
+      "detector": "statement_balance",
+      "fclass": "inconsistency",
+      "title": "The closing balance does not follow from the transactions"
+     },
+     "prev_hash": "0a97f9977ceaf02f8c312cf6872f78a6455d03df427e748da1a8741707da55d3",
+     "hash": "40763611cc74f215f83d1b020d3bcea4e13426199f9ce7adca591d93ccdfca2c"
+    },
+    {
+     "seq": 42,
+     "ts": "2026-11-05T06:51:36.392+00:00",
+     "actor": "system",
+     "event": "doc_checked",
+     "data": {
+      "doc": "D2",
+      "findings": 0
+     },
+     "prev_hash": "40763611cc74f215f83d1b020d3bcea4e13426199f9ce7adca591d93ccdfca2c",
+     "hash": "68caf7b435aeadd14f0dd68a1416e1b6e07c9d9ce5869340bf377f44f3454dfd"
+    },
+    {
+     "seq": 43,
+     "ts": "2026-11-05T06:51:36.402+00:00",
+     "actor": "system",
+     "event": "doc_checked",
+     "data": {
+      "doc": "D3",
+      "findings": 0
+     },
+     "prev_hash": "68caf7b435aeadd14f0dd68a1416e1b6e07c9d9ce5869340bf377f44f3454dfd",
+     "hash": "2b5774a48d42ac1a47a7dc93da45d6b083e5e77284bce67344db8748b248bd83"
+    },
+    {
+     "seq": 44,
+     "ts": "2026-11-05T06:51:36.413+00:00",
+     "actor": "system",
+     "event": "cross_checked",
+     "data": {
+      "documents": 3,
+      "findings": 0
+     },
+     "prev_hash": "2b5774a48d42ac1a47a7dc93da45d6b083e5e77284bce67344db8748b248bd83",
+     "hash": "4e9ce6e2100f1429be0366a61a1242c838090b0015f331d473da5233b9dd4ba9"
+    },
+    {
+     "seq": 45,
+     "ts": "2026-11-05T06:51:36.420+00:00",
+     "actor": "system",
+     "event": "context_checked",
+     "data": {
+      "findings": 0
+     },
+     "prev_hash": "4e9ce6e2100f1429be0366a61a1242c838090b0015f331d473da5233b9dd4ba9",
+     "hash": "0e1de765374bcf53da83f0b870b0fbdf3aa130e12648c991cac0ecac1bc25e8d"
+    },
+    {
+     "seq": 46,
+     "ts": "2026-11-05T06:51:36.432+00:00",
+     "actor": "system",
+     "event": "stage_end",
+     "data": {
+      "stage": "checks",
+      "ok": true,
+      "seconds": 0.047,
+      "tool": "docforensics",
+      "version": "0.1.0"
+     },
+     "prev_hash": "0e1de765374bcf53da83f0b870b0fbdf3aa130e12648c991cac0ecac1bc25e8d",
+     "hash": "3c8ab7914fb3ef1da58b1db4b157d47830f591c07dc9371fa0e882eabbcda644"
+    },
+    {
+     "seq": 47,
+     "ts": "2026-11-05T06:51:36.443+00:00",
+     "actor": "system",
+     "event": "stage_start",
+     "data": {
+      "stage": "link"
+     },
+     "prev_hash": "3c8ab7914fb3ef1da58b1db4b157d47830f591c07dc9371fa0e882eabbcda644",
+     "hash": "0e78c02f63e40453ca445e5e61ff8e9f2255c287646b90801ae1bd7af0e445dd"
+    },
+    {
+     "seq": 48,
+     "ts": "2026-11-05T06:51:36.448+00:00",
+     "actor": "system",
+     "event": "finding_created",
+     "data": {
+      "finding": "F-003",
+      "detector": "link",
+      "fclass": "potential_manipulation",
+      "title": "Closing balance on 01_statement.pdf: 2 findings from 2 kinds of check"
+     },
+     "prev_hash": "0e78c02f63e40453ca445e5e61ff8e9f2255c287646b90801ae1bd7af0e445dd",
+     "hash": "07e9d626487a77c9068577a5a9d445e6313d664f9c7c13312f8d039e178cd204"
+    },
+    {
+     "seq": 49,
+     "ts": "2026-11-05T06:51:36.455+00:00",
+     "actor": "system",
+     "event": "findings_linked",
+     "data": {
+      "findings": 2,
+      "linked": 2,
+      "clusters": 1
+     },
+     "prev_hash": "07e9d626487a77c9068577a5a9d445e6313d664f9c7c13312f8d039e178cd204",
+     "hash": "ecda1b67dc52aff39b0c4334258bee197628c9f364f5a7f829e973d4663a94a3"
+    },
+    {
+     "seq": 50,
+     "ts": "2026-11-05T06:51:36.469+00:00",
+     "actor": "system",
+     "event": "stage_end",
+     "data": {
+      "stage": "link",
+      "ok": true,
+      "seconds": 0.015,
+      "tool": "docforensics",
+      "version": "0.1.0"
+     },
+     "prev_hash": "ecda1b67dc52aff39b0c4334258bee197628c9f364f5a7f829e973d4663a94a3",
+     "hash": "4eae89541ac0ebf60f6b104c3b0c064490b005d2eb1a0fcc9ad813871a4a1286"
+    },
+    {
+     "seq": 51,
+     "ts": "2026-11-05T06:51:36.485+00:00",
+     "actor": "system",
+     "event": "stage_start",
+     "data": {
+      "stage": "explain"
+     },
+     "prev_hash": "4eae89541ac0ebf60f6b104c3b0c064490b005d2eb1a0fcc9ad813871a4a1286",
+     "hash": "fff203345ced8ba432b129d6c1e50b286e648f1079ffdb86c06ccb487a0c0f07"
+    },
+    {
+     "seq": 52,
+     "ts": "2026-11-05T06:51:36.490+00:00",
+     "actor": "system",
+     "event": "findings_explained",
+     "data": {
+      "findings": 3,
+      "source": "template"
+     },
+     "prev_hash": "fff203345ced8ba432b129d6c1e50b286e648f1079ffdb86c06ccb487a0c0f07",
+     "hash": "6b4075098e227184cbe0084f0ebb5ba747e0b470efc1c456096410b708786306"
+    },
+    {
+     "seq": 53,
+     "ts": "2026-11-05T06:51:36.504+00:00",
+     "actor": "system",
+     "event": "stage_end",
+     "data": {
+      "stage": "explain",
+      "ok": true,
+      "seconds": 0.016,
+      "tool": "docforensics",
+      "version": "0.1.0"
+     },
+     "prev_hash": "6b4075098e227184cbe0084f0ebb5ba747e0b470efc1c456096410b708786306",
+     "hash": "ace7503451316fa12efb69bc750999d1f32ed98f6692201a6cc58f8f2c60fa84"
+    },
+    {
+     "seq": 54,
+     "ts": "2026-11-05T06:51:36.519+00:00",
+     "actor": "system",
+     "event": "stage_start",
+     "data": {
+      "stage": "crops"
+     },
+     "prev_hash": "ace7503451316fa12efb69bc750999d1f32ed98f6692201a6cc58f8f2c60fa84",
+     "hash": "ea22fbf31637f8f270f4bd8200f1a8b4692faad873afa16ac5ff327406cdc35c"
+    },
+    {
+     "seq": 55,
+     "ts": "2026-11-05T06:51:36.562+00:00",
+     "actor": "system",
+     "event": "crops_made",
+     "data": {
+      "crops": 5
+     },
+     "prev_hash": "ea22fbf31637f8f270f4bd8200f1a8b4692faad873afa16ac5ff327406cdc35c",
+     "hash": "ace968483d0f0d9628544b259ba837a2283f8c7af48f3505b8bda24d2abf444f"
+    },
+    {
+     "seq": 56,
+     "ts": "2026-11-05T06:51:36.568+00:00",
+     "actor": "system",
+     "event": "stage_end",
+     "data": {
+      "stage": "crops",
+      "ok": true,
+      "seconds": 0.031,
+      "tool": "docforensics",
+      "version": "0.1.0"
+     },
+     "prev_hash": "ace968483d0f0d9628544b259ba837a2283f8c7af48f3505b8bda24d2abf444f",
+     "hash": "511e5a090e7fb200a148ef6c7ed144932f3ea6ceb771db7f5286da7b8ce6e2c7"
+    },
+    {
+     "seq": 57,
+     "ts": "2026-11-05T06:51:36.580+00:00",
+     "actor": "system",
+     "event": "stage_start",
+     "data": {
+      "stage": "dossier"
+     },
+     "prev_hash": "511e5a090e7fb200a148ef6c7ed144932f3ea6ceb771db7f5286da7b8ce6e2c7",
+     "hash": "c11cd439adde5eac4099fca6bc4c2b076b8506ac228a719cb6e94c674b86c23c"
+    }
+   ],
+   "anchor": {
+    "events": 57,
+    "head": "c11cd439adde5eac4099fca6bc4c2b076b8506ac228a719cb6e94c674b86c23c"
+   },
+   "chain_ok": true,
+   "problem": null
+  },
+  "capabilities": [
+   {
+    "name": "Multi-document ingestion with file-type checks, limits and hashing",
+    "status": "Implemented",
+    "evidence": [
+     "tests/test_ingest.py::test_sniff_by_magic_not_extension",
+     "tests/test_ingest.py::test_rejections_have_reason_and_audit_event",
+     "tests/test_ingest.py::test_hostile_filename_stored_by_hash"
+    ],
+    "note": "PDF, PNG and JPEG by their first bytes. By default 10 MB, 20 pages and 10 documents per case. Files are stored under their sha256; a rejected file becomes a limitation with a reason."
+   },
+   {
+    "name": "Document classification",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_statement_extraction.py::test_classify_statement_payslip_unknown",
+     "tests/test_statement_extraction.py::test_tie_between_types_is_unknown",
+     "tests/test_payslip_application.py::test_three_types_are_told_apart"
+    ],
+    "note": "Rules over words and layout. Three types have a spec at this build (bank statement, payslip, loan application), written for one drawn layout each; anything else is 'unknown' and says so. Wording that differs from the specs' may also read as 'unknown'. Held-out (eval/test.md): the type was recognised for all 440 documents, on both drawn layouts, digital and scanned; all of them are of the three supported types, so a fourth kind of document is not tested. A local-model fallback is not built."
+   },
+   {
+    "name": "Text-layer reading and OCR (offline)",
+    "status": "Implemented",
+    "evidence": [
+     "tests/test_read_pdf.py::test_word_boxes_match_render",
+     "tests/test_ocr.py::test_ocr_reads_clean_render",
+     "tests/test_ocr.py::test_scanned_pdf_pages_get_ocr_and_class",
+     "tests/test_quality.py::test_sharpness_falls_with_blur_and_classes_follow"
+    ],
+    "note": "Every word has a box in page pixels. Scanned pages get a quality class from sharpness, not from the recogniser's score; numbers read from a degraded or poor page are flagged, not trusted. OCR output is a reading, not ground truth. Held-out (eval/test.md), on documents nobody changed: no amount, date or id was both wrong and trusted; 16 text values were."
+   },
+   {
+    "name": "Structured extraction: fields and tables, each with a confidence and a location",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_statement_extraction.py::test_header_fields_match_truth",
+     "tests/test_statement_extraction.py::test_table_cells_match_truth",
+     "tests/test_statement_extraction.py::test_every_field_has_existing_word_ids_and_box_on_page",
+     "tests/test_payslip_application.py::test_extraction_matches_truth"
+    ],
+    "note": "Bank statements, payslips and loan applications, digital and scanned (scans are simulated at three levels), on the drawn layouts the specs were written for. A column or label that is not found is reported as missing, never filled in, and nothing repairs a misread digit or separator. How many values come out right, wrong or missing, by kind of value and scan level, is measured by the evaluation, not by the tests (eval/test.md). Held-out, on documents nobody changed: layout A, which the specs were written for, is read right in every amount, date, id and text value on digital pages, and on mild scans in every amount, date and id and in 99.4 % of text values (4 of 625 wrong, and trusted); at 150 dpi 89.6 % of amounts are read and the rest are missing, and at 120 dpi 20.3 % are read (12 wrong, none trusted). Layout B was drawn after the specs were final, and about half of its labels, column headings and captions are wordings the specs do not list, so it is read much less: on digital pages 91 % of amounts, 97 % of dates and 34 % of text values, and no id. None of the values not read on those pages was wrong; each is reported missing. No amount, date or id was wrong and also trusted, in either layout; 16 text values were. A deduction beside an empty earnings cell is not read as a row. Other document types and layouts are not built."
+   },
+   {
+    "name": "Digital PDF forensics: comparison of saved revisions",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_pdf_revisions.py::test_d1_edit_found_with_old_and_new_text",
+     "tests/test_pdf_revisions.py::test_genuine_pdf_has_no_revision_findings",
+     "tests/test_pdf_revisions.py::test_linearized_pdf_is_not_compared"
+    ],
+    "note": "Text that differs between a PDF's earlier saved version and a later one is reported as an observation, with the old and the new text. Held-out: found and located in 8 of 8 incremental edits (D1), and raised on no genuine document. The other digital checks are in the next row."
+   },
+   {
+    "name": "Digital PDF forensics: covered and hidden text, pictures over text, fonts, file metadata",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_digital_detectors.py::test_d2_cover_and_retype_found",
+     "tests/test_digital_detectors.py::test_d3_near_font_found_by_font_name",
+     "tests/test_digital_detectors.py::test_d4_metadata_found",
+     "tests/test_digital_detectors.py::test_d5_pasted_image_found",
+     "tests/test_digital_detectors.py::test_hidden_text_is_reported_with_its_words",
+     "tests/test_digital_detectors.py::test_genuine_documents_trigger_no_digital_detector",
+     "tests/test_digital_detectors.py::test_more_objects_than_the_limit_is_a_limitation_not_a_pass"
+    ],
+    "note": "Reported as observations with the measured values: text still in the file but drawn under a filled rectangle or a picture that comes after it (the text written over a covering rectangle is cited too); a figure or date set in a different font, size or colour from the others in its column or on its line; text that is invisible, under 2 pt or off the page; a producer or creator that names PDF-editing software; a modification date later than the creation date. Held-out, 8 cases each, all found and (for D2, D3 and D5) located at the changed place: a cover with the text retyped in the same font (D2), the same in a near font (D3, a change the development set never showed), a metadata edit (D4) and a picture over text (D5); none of these checks raised a finding on a genuine document. Every case comes from one generator, and real editing software varies. Not built: text hidden by its colour, covers that are not rectangles, bold against regular."
+   },
+   {
+    "name": "Scan and image forensics",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_scan_detectors.py::test_flat_erased_patch_fires_noise_residual",
+     "tests/test_scan_detectors.py::test_strong_splice_fires_noise_or_layout",
+     "tests/test_scan_detectors.py::test_genuine_scans_fire_at_most_one_observation_each",
+     "tests/test_scan_detectors.py::test_poor_page_is_not_analysed_and_says_so",
+     "tests/test_scan_detectors.py::test_splice_from_a_scan_turned_otherwise_fires_layout",
+     "tests/test_scan_detectors.py::test_retyped_larger_figure_fires_layout",
+     "tests/test_scan_detectors.py::test_a_word_off_its_row_is_named",
+     "tests/test_scan_detectors.py::test_a_figure_off_its_column_is_named",
+     "tests/test_scan_detectors.py::test_a_taller_word_is_named"
+    ],
+    "note": "Two checks on scanned pages that are not of poor quality, both shown as observations: words whose image grain differs from the page median, and words set out of line after the page is straightened (a word against its row, a figure's right edge against its column, a figure's height against the page's other figures). Held-out (eval/test.md): of 16 scans changed by pasting from another scan (S1) or by erasing and retyping (S2), 6 were found and 10 missed. The placement check found 1 of the 8 pasted scans and the grain check 2 of the 8 retyped ones; the other finds came from arithmetic and cross-document checks. Counting every kind of change, 21 of 36 changes on scans were found (mild 13 of 18, 150 dpi 6 of 9, 120 dpi 2 of 9). One genuine 120 dpi scan was flagged by the placement check, the only flag on 144 genuine documents."
+   },
+   {
+    "name": "Edits inside one picture: error-level analysis, cloned regions, reused signatures and stamps",
+    "status": "Unsupported",
+    "evidence": [],
+    "note": "Not built, and not planned before submission: the dataset has no such change, so a detector for it could not be measured. A changed part of a scan is looked for only through the grain and placement checks above. A region copied inside one page is not looked for, and a signature, logo or stamp reused unchanged on two documents is not flagged (they are compared for difference, not for sameness). Photographs are out of scope."
+   },
+   {
+    "name": "Signature comparison across documents",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_signature.py::test_one_hand_on_two_documents_is_compared_and_passes_without_a_finding",
+     "tests/test_signature.py::test_another_hand_on_one_document_is_an_inconsistency_that_points_at_both_signatures",
+     "tests/test_signature.py::test_scans_are_straightened_and_compared_like_digital_pages",
+     "tests/test_signature.py::test_a_blank_signature_area_is_a_limitation_and_not_a_pass"
+    ],
+    "note": "The drawn signature on each document that has a signature caption in its spec (loan application, payslip) is cut out above that caption, straightened by the page's turn if it is a scan, and compared with the signature on every other such document by shape. A pair that differs by more than the stated limit is an inconsistency with both signatures marked; every pair compared is written to the audit trail. A signature that cannot be found or read (no ink, no caption, a poor page, printed matter in the area) is a limitation, never a pass. Shapes only: it does not say who signed. Held-out: a signature in another hand (C4) was found in 8 of 8 cases (4 digital and 4 scanned, one of them at 120 dpi), and the check raised no finding on a genuine document. The held-out signatures come from the same generator and the same invented names as the development ones, so other styles of signature are untested."
+   },
+   {
+    "name": "Checks within one document",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_statement_checks.py::test_genuine_statement_has_no_findings",
+     "tests/test_statement_checks.py::test_changed_balance_flagged_at_its_row",
+     "tests/test_statement_checks.py::test_dates_outside_period_and_out_of_order",
+     "tests/test_payslip_application.py::test_genuine_documents_have_no_findings",
+     "tests/test_payslip_application.py::test_changed_net_pay_is_flagged_by_the_sum_and_by_the_words",
+     "tests/test_payslip_application.py::test_the_pay_date_is_in_the_pay_month_or_the_month_after",
+     "tests/test_payslip_application.py::test_a_weekday_that_does_not_match_the_date_is_flagged"
+    ],
+    "note": "Bank statement balance chain and dates; payslip totals, net pay against its words, and pay date against pay month; the weekday printed on a loan application. Each states its tolerance. A conflict resting on a doubtful reading is shown as a possible extraction error. Held-out (eval/test.md): where a value these checks need is missing or unreadable they say so ('Cannot fully verify') and check no further. That happened for all 24 genuine statements and all 24 genuine payslips of layout B; for none of the 18 genuine cases of layout A that were digital or mild scans; and for the 6 genuine statements and 2 of the 6 genuine payslips of layout A scanned at 150 or 120 dpi."
+   },
+   {
+    "name": "Cross-document conflict checks",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_cross.py::test_c1_a_self_consistent_payslip_is_caught_only_against_the_other_documents",
+     "tests/test_cross.py::test_c2_a_changed_name_is_pinned_on_the_document_that_differs",
+     "tests/test_cross.py::test_c2_a_changed_employer_is_caught_by_the_name_and_by_the_salary_credit",
+     "tests/test_cross.py::test_c2_a_changed_address_is_caught_even_when_only_a_number_changes",
+     "tests/test_cross.py::test_c2_an_application_dated_before_its_supporting_documents_is_flagged",
+     "tests/test_cross.py::test_c3_the_same_file_submitted_twice_is_an_observation",
+     "tests/test_cross.py::test_an_unreadable_value_is_a_gap_and_not_a_pass_or_a_conflict",
+     "tests/test_cross.py::test_one_character_name_difference_is_flagged_minor",
+     "tests/test_cross.py::test_initials_only_difference_is_an_observation",
+     "tests/test_cross.py::test_addresses_are_graded",
+     "tests/test_cross.py::test_employers_are_graded_and_the_legal_form_is_only_a_form",
+     "tests/test_cross.py::test_c2_one_letter_dropped_from_a_name_is_a_minor_mismatch_pinned_on_the_slip"
+    ],
+    "note": "Name, address and employer across documents, graded as passing, written differently (observation), Minor mismatch or Mismatch; account number, which matches or is a Mismatch; net pay against the credits on a statement; declared income against gross earnings; the application date against the dates of the other documents; a file submitted twice; the same producing software on different kinds of document made minutes apart. A comparison that cannot be made is reported as a limitation, never as a pass. Built for three document types with one drawn layout each. Each finding prints its tolerance. Held-out (eval/test.md): a pay figure changed so that the payslip still adds up (C1) was found in 5 of 8 cases (0 of 3 where deductions were lowered), a name, address, employer or month changed in one document (C2) in 6 of 8, and a statement submitted twice (C3) in 8 of 8. The five misses left only limitations on the changed document: a comparison could not be made because a value was not read, or (a 120 dpi scan) a mismatch was shown as a possible extraction error to verify."
+   },
+   {
+    "name": "Context rules (income, obligations, date windows)",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_cross.py::test_context_rules_are_observations_and_say_their_reference_is_synthetic",
+     "tests/test_cross.py::test_c2_a_payslip_outside_every_statement_period_is_reported_as_unchecked_not_as_a_conflict"
+    ],
+    "note": "Two rules: monthly obligations (existing instalments plus the new loan over its tenure) as a share of declared income, and a document dated more than 90 days before the application. Both are observations for the reviewer, never conflicts. Their reference limits are synthetic values chosen for this prototype, not a lending standard, and the instalment sum ignores interest. Rules taken from a lender's own policy are not built. Not measured by the evaluation: the generator holds each applicant's obligations to 40 % of income, so the obligations rule has nothing to say about a genuine case (eval/test.md)."
+   },
+   {
+    "name": "Relationships between findings (clusters)",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_link.py::test_net_pay_cluster_is_potential_manipulation",
+     "tests/test_link.py::test_an_edited_net_pay_forms_one_cluster_in_a_real_run",
+     "tests/test_link.py::test_an_edited_credit_forms_one_cluster_through_the_cell_it_shares",
+     "tests/test_link.py::test_priority_counts_distinct_families_not_findings",
+     "tests/test_link.py::test_unrelated_findings_not_merged",
+     "tests/test_link.py::test_a_context_rule_is_linked_but_does_not_count_as_a_kind_of_check",
+     "tests/test_link.py::test_limitations_are_not_clustered",
+     "tests/test_dossier.py::test_a_finding_in_a_cluster_points_at_its_headline"
+    ],
+    "note": "Findings are grouped when they cite the same extracted field, lie on the same place of a page (half of the smaller box inside the other), or concern the same name, address, employer or account number in different documents. A group is ranked by how many independent kinds of check fired in it (visual, arithmetic, cross-document, metadata): a count, not a probability. A group with two or more kinds gets a headline finding, classed as potential manipulation, that lists its members and cites each of their places once. Context rules are linked but count as no kind, and limitations are never grouped. Findings that share none of these stay apart even where a person would relate them. The evaluation scores findings, not groups, so grouping has no measured accuracy of its own; the overlap limit is a starting value."
+   },
+   {
+    "name": "Plain-language explanations and next steps from fixed templates",
+    "status": "Implemented",
+    "evidence": [
+     "tests/test_templates.py::test_every_finding_is_explained_with_next_steps_and_no_verdict",
+     "tests/test_templates.py::test_explanation_never_repeats_text_taken_from_the_document"
+    ],
+    "note": "Fixed wording per detector and class. Without --llm nothing is written by a model; the next row covers the optional model."
+   },
+   {
+    "name": "Explanation wording from a local language model",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_llm_guard.py::test_guard_rejects_number_not_in_evidence",
+     "tests/test_llm_guard.py::test_guard_rejects_unknown_evidence_id",
+     "tests/test_llm_guard.py::test_client_refuses_non_loopback_host",
+     "tests/test_llm_guard.py::test_prompt_contains_no_page_text",
+     "tests/test_llm_guard.py::test_rejected_output_falls_back_to_template_and_audits",
+     "tests/test_llm_guard.py::test_the_model_cannot_change_a_class_remove_or_add_a_finding",
+     "tests/test_llm_guard.py::test_absent_llm_changes_nothing_else",
+     "tests/test_dossier.py::test_llm_wording_is_labelled_as_inference",
+     "tests/test_reason.py::test_a_faithful_reply_is_kept_whole_and_audited",
+     "tests/test_reason.py::test_each_part_that_fails_the_guard_is_dropped_alone_and_the_rest_stays",
+     "tests/test_reason.py::test_a_relation_is_kept_only_if_the_two_findings_share_what_its_kind_says",
+     "tests/test_reason.py::test_the_model_cannot_change_remove_or_add_a_finding",
+     "tests/test_reason.py::test_an_instruction_planted_in_a_value_cannot_turn_the_summary_into_a_verdict",
+     "tests/test_reason.py::test_a_call_that_could_outlast_the_stage_is_never_started_and_the_template_wording_stays",
+     "tests/test_llm_wiring.py::test_without_the_flag_there_is_no_client_and_no_reading",
+     "tests/test_dossier.py::test_the_models_reading_is_inference_and_changes_no_finding"
+    ],
+    "note": "Optional, and off unless a run is started with --llm. A small model (phi4-mini 3.8B, MIT) runs through Ollama on this computer, and the client refuses any other host. It words the headline of each group of findings and reads the case once for relations between findings, a short summary and a reading order. It sees structured findings (ids, kinds of check, titles, the values the checks used) and no page text, and it cannot add, change or remove a finding. Each part of what it writes is used only if the guard accepts it (ids, figures, dates, verdict words), and a relation only if its kind is true of what the two findings cite; the rest is dropped and logged. It is labelled as inference. Partial because it was measured only on development-set prompts, CPU only, one run each (the guard accepted 18 of 24 headline wordings), the guard does not check meaning, and nothing was run on a held-out set."
+   },
+   {
+    "name": "Evidence traceability: finding to file, sha256, page and box, with a marked crop",
+    "status": "Implemented",
+    "evidence": [
+     "tests/test_cli_slice.py::test_trace_prints_file_sha_page_box_value",
+     "tests/test_evidence.py::test_crop_is_padded_and_the_box_is_outlined",
+     "tests/test_dossier.py::test_every_finding_row_has_file_sha_page_box"
+    ],
+    "note": "Every piece of evidence names its document, page and box; the trace command prints them and checks the stored file's hash."
+   },
+   {
+    "name": "Investigation dossier: HTML (self-contained) and JSON, with its own hash",
+    "status": "Implemented",
+    "evidence": [
+     "tests/test_dossier.py::test_sections_follow_ps2_order",
+     "tests/test_dossier.py::test_html_is_self_contained",
+     "tests/test_dossier.py::test_json_hash_matches"
+    ],
+    "note": "Observations, inconsistencies, potential-manipulation candidates and limitations are kept in separate places."
+   },
+   {
+    "name": "Dossier export as PDF",
+    "status": "Planned",
+    "evidence": [],
+    "note": "Print the HTML dossier to PDF from a browser meanwhile."
+   },
+   {
+    "name": "Tamper-evident audit trail with a verify command",
+    "status": "Implemented",
+    "evidence": [
+     "tests/test_audit.py::test_chain_verifies",
+     "tests/test_audit.py::test_edit_in_the_middle_is_detected",
+     "tests/test_cli_slice.py::test_verify_audit_ok_then_tampered"
+    ],
+    "note": "Each event carries the hash of the one before it. The dossier records the trail's length and last hash."
+   },
+   {
+    "name": "Safe failure: rejected files, failed or stuck steps become visible limitations",
+    "status": "Implemented",
+    "evidence": [
+     "tests/test_pipeline.py::test_failing_stage_is_isolated",
+     "tests/test_pipeline.py::test_stage_timeout",
+     "tests/test_dossier.py::test_case_with_no_accepted_documents_still_has_dossier"
+    ],
+    "note": "A step that fails or times out is listed as a limitation and the case goes on. A step stuck in native code is abandoned, not killed."
+   },
+   {
+    "name": "Offline operation",
+    "status": "Implemented",
+    "evidence": [
+     "tests/test_offline_guard.py::test_public_address_connect_is_blocked"
+    ],
+    "note": "The OCR models ship inside the package. The test suite runs with connections to public addresses blocked."
+   },
+   {
+    "name": "Review interface in the browser",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_web.py::test_upload_two_files_completes",
+     "tests/test_web.py::test_page_png_served_and_unknown_case_404",
+     "tests/test_web.py::test_review_actions_are_audited",
+     "tests/test_web.py::test_dossier_download_is_built_fresh_and_audited",
+     "tests/test_web.py::test_index_has_all_tabs",
+     "tests/test_review.py::test_review_changes_status_and_audits",
+     "tests/test_review.py::test_dossier_shows_reviewer_status"
+    ],
+    "note": "Runs on this computer only. Upload, a background run with progress, page images with word, field and finding boxes, evidence crops, reviewer actions written to the audit trail, the audit trail, this list and the dossier download. The server side is tested; how the page behaves in a browser was checked by hand, not by an automated browser test. Findings that share evidence are grouped in the Clusters tab, each group under its headline."
+   },
+   {
+    "name": "Handwriting and multilingual OCR",
+    "status": "Planned",
+    "evidence": [],
+    "note": "Not built; text is read as printed English."
+   },
+   {
+    "name": "Real-world document layouts at scale",
+    "status": "Unsupported",
+    "evidence": [],
+    "note": "Only synthetic documents were used. Nothing is claimed about real ones. The held-out layout B, drawn after the specs were final, was read much worse than layout A (no id, and 34 % of the text values on digital pages)."
+   },
+   {
+    "name": "Logo and stamp comparison across documents of one issuer",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_marks.py::test_one_banks_marks_on_two_documents_are_compared_and_pass_without_a_finding",
+     "tests/test_marks.py::test_another_banks_mark_on_one_document_is_an_inconsistency_that_points_at_both_marks",
+     "tests/test_marks.py::test_a_stamp_with_one_ring_less_is_found",
+     "tests/test_marks.py::test_scans_are_straightened_and_compared_like_digital_pages",
+     "tests/test_marks.py::test_a_blank_logo_area_is_a_limitation_and_not_a_pass"
+    ],
+    "note": "The logo (right of the issuer's name) and the stamp (above its caption) on each document whose type spec lists them (bank statement, loan application) are cut out, straightened by the page's turn if it is a scan, and compared by shape with those on every other document whose issuer line reads alike; a stamp is compared at its best turn within 8 degrees. A pair that differs by more than the stated limit is an inconsistency with both marks marked; every pair compared is written to the audit trail. A mark that cannot be found or read (no ink, no caption, a poor page, printed matter in the window) is a limitation, never a pass. Built and measured on synthetic marks only: six invented designs, two of which (the same motif in a circle and in an octagon) are not told apart, and a small change to a logo is not found. Held-out (eval/test.md): another logo or stamp on one document (C5) was found in 6 of 8 cases (large logo 2 of 2, large stamp 2 of 2, small stamp 2 of 2, small logo 0 of 2), and the check raised no finding on a genuine document. The held-out documents use the same six designs as the development ones."
+   },
+   {
+    "name": "Verdicts on authenticity or intent; telling who signed; photographs and identity documents",
+    "status": "Unsupported",
+    "evidence": [],
+    "note": "Unsupported by design. The tool lists anomalies for a human reviewer and never concludes. Signatures, logos and stamps are compared by shape between documents, which does not say who signed or who issued them. Photographs and identity documents are not examined."
+   }
+  ],
+  "limitations": {
+   "limitations": [
+    "Every document used to build and test this tool is synthetic. Nothing was evaluated on real documents, real scanners or real layouts.",
+    "Findings are for a human reviewer. An ordinary cause (a re-issue, a rounding rule, a misread digit, an unusual layout) can produce any of them, and the tool cannot tell which.",
+    "OCR output is a reading, not ground truth. On scans a number from a degraded or poor page is not trusted, and a conflict that rests on one is shown as a possible extraction error.",
+    "The statement checks assume the oldest row comes first and that a balance follows each row. A statement listed newest first, or with signed amounts, is reported as a layout the checks do not assume and is not checked.",
+    "A totals row at the foot of a statement is not read, so it is not checked.",
+    "A transaction row that extraction misses (for example one with a garbled date on a scan) shows up as a balance break at the next row.",
+    "The saved-revision comparison reads incremental saves only. By default a linearized PDF is not compared, at most 16 revisions of a file are opened and a page of more than 5000 words is not compared; each of these is reported as a limitation.",
+    "A PDF that was saved more than once for an ordinary reason (a correction, a re-issue, a form being filled in) shows revision observations too.",
+    "The cover check looks at opaque rectangular fills, and at pictures smaller than half a page, drawn after the text they lie over. A cover of another form (a curve, a clipped path), text hidden by its colour, and the draw order of a picture on a file whose page content is unusual are not handled; a page that draws more than 5000 objects is not examined and the dossier says so. Invisible text on a page that is mostly one picture is taken as the text layer of a scan and is not reported.",
+    "The font check compares figures and dates that stand in a text run of their own with the others in their column (four or more) or on their line (three or more). A figure inside a longer run of text is not compared, and bold against regular of one family is not. A logo, stamp or signature placed as a picture on a text page is reported like any other picture.",
+    "The metadata check reads what the file says about itself: producer and creator names, creation and modification dates. Anyone who can write the file can write them, and a file saved again for an ordinary reason shows a later modification date.",
+    "The grain check compares each scanned word with the median of its page, on the paper inside the word's box and away from the ink, and leaves out paper brighter than 250 (the scanner cuts it at white). Scanners and JPEG saves change grain for ordinary reasons. On a mildly degraded scan a changed word can keep a grain close to the page's, because the second JPEG save puts back grain of about the same size, so the check finds a patch more easily on coarser scans. Pages of poor quality are not analysed and the dossier says so.",
+    "The placement check straightens a scanned page by the turn that makes its text rows sharpest, then compares each word's position with its row, and a figure's right edge and height with the page's other figures and its column. The height of a text word is not compared (its box depends on its letters and on the slant of its line). A difference counts when it is more than 6 px (position in the row) or 10 px (figure height, right edge): four times a spread that is never taken below 1.5, 2.5 and 2.5 px. Those floors come from the largest differences on 42 genuine simulated statements (3.3, 7.0 and 6.1 px on pages not degraded), and the largest right-edge difference rose from 5.6 to 6.1 px between the first six and the next eight, so a genuine statement can still give an observation, and a shift under the limits, or a row pasted from a scan turned the same way, is not seen. On a degraded page the floors are raised by half and figure columns are rarely found (one to five figures read), so the right-edge comparison is in practice not made there. A word on a line of fewer than four words (a label and its value in a header) has no row to be measured against, so a paste there is seen only when a grain, arithmetic or cross-document check disagrees. A creased or curled page moves words and can give an observation. A page of poor quality, one with fewer than 12 words or no row of four words, or one turned by more than 2.9 degrees is not compared and the dossier says so. The turn is looked for up to 10 degrees either way; a page turned further than that is not recognised as turned and may be compared as if it were turned less.",
+    "A revision boundary is recognised from a startxref pointer followed by %%EOF. A file crafted to carry a convincing pointer inside a content stream can mislead it, which gives a false observation or a visible limitation, not a silent pass.",
+    "A document the tool does not recognise as one of the three supported types is left out of the comparisons across documents, and the dossier says which comparisons were not made. Wording unlike the specs' can read as unrecognised.",
+    "Names, addresses and employers are graded, not only passed or flagged: the same value apart from case, spacing and punctuation passes; the same words in another order, with other titles or with initials (names), the same comma-separated parts of an address in another order, or an employer with another legal form, are an observation 'written differently'; text at or above the similarity limit (0.85 for names, 0.8 for addresses and employers) that is still not identical is a 'Minor mismatch'; anything further apart is a 'Mismatch'. A name with a word left out (a middle name) is a Minor mismatch. The limits are starting values and were not tuned. In the held-out run 6 of the 7 planted changes of a name, address or employer were found; the miss is a major address change on a 120 dpi scan (eval/test.md).",
+    "An initial stands for any name it starts, so 'M. Varghese' and 'Mohan Varghese' are reported only as written differently. An address with the same words in another order but without commas is a Minor mismatch or a Mismatch by how far apart the text is, never a difference in form; any change in the numbers of an address, or in their order, is a Mismatch. An employer with a word more or fewer apart from Pvt, Ltd and the like is a Minor mismatch at a text similarity of 0.8 or more and a Mismatch below it.",
+    "Amounts are not graded: a net pay that differs from the credit by no more than the larger of INR 1 and 0.5% of the larger amount, a declared income within 5% of the gross earnings, and a sum within a document that is off by INR 1 or less pass without a finding.",
+    "On a scan a Minor mismatch of a name or an address can be one letter misread by the OCR. On a page of good quality it is shown as a conflict with a note saying so; on a degraded or poor page it is shown as a possible extraction error to verify. Account numbers have no minor grade: they match, or they are a Mismatch.",
+    "That the employer pays the salary is judged by one word of the employer's name against the descriptions of salary credits on the statement. It is a heuristic and can be wrong in either direction.",
+    "An account number that is masked, or short, matches another by its visible end, which must be at least three characters.",
+    "A payslip dated outside every statement period submitted is reported as not compared, not as a conflict. A set of several months' statements looks the same.",
+    "The same software producing different kinds of document within ten minutes is noted, and it also happens for ordinary reasons (one office system issuing both).",
+    "The context rules use reference limits that are synthetic and illustrative (obligations up to half of declared income, documents up to 90 days old); they are not a lending standard, and the instalment sum ignores interest.",
+    "Thresholds were set and checked on a development set of synthetic documents (80 cases from one generator). The test split was run once, afterwards, on the frozen tree, and nothing was tuned to its results: 79 of 96 changes were found and 1 of 144 genuine documents was flagged (eval/test.md, which also names the one fix made after a first look at layout B). On other scanners, papers or layouts they may not hold; every finding prints the tolerance it used.",
+    "Untrusted files are opened in the same process as the tool. Size, page and time limits apply, but there is no sandbox.",
+    "Handwriting is not analysed, and text other than printed English is not read.",
+    "The signature comparison was fitted on synthetic signatures only, drawn by the generator for 14 invented people, and its limit was set from them. It looks in a fixed area above the caption printed under the signature, sized by the caption's text, so a layout that signs elsewhere is reported as not compared or compares the wrong marks; a stamp or a ruled line in that area counts as part of the signature unless it fills the area or reaches its edge, which is reported as not compared. A speck of ink under 12 px\u00b2 is dropped, and so is a small separate piece (under a tenth of the largest) that sticks out of the box of the larger pieces; a stray larger than that, or one inside the box of the signature, counts as part of it, and in a scan of 120 dpi the drop can take off the end of a thin real stroke. A scan turned by more than 2.9 degrees is not compared. It reads shape, not authorship: one person's signatures vary from signing to signing, a scan or another kind of pen changes the strokes, and a signature copied onto another document passes. A mismatch is a lead for a reviewer and nothing more.",
+    "Findings are linked only through a shared field, an overlapping place on a page, or the same name, address, employer or account value. Two unrelated findings that share a place are grouped, and a large shape drawn over several fields can join the findings on all of them, so a group can be wider than the story behind it. Findings that a person would relate by meaning but that share none of these are not linked. A group of two kinds of check can have an ordinary cause, and its review priority is a count of kinds of check, not a likelihood. The overlap limit (half of the smaller box) is a starting value that was not tuned, and the evaluation scores findings, not groups, so it has no measured accuracy.",
+    "A language model, if one is given, only words the headline of a group of findings and reads the case once for relations between findings, a short summary and a reading order; it does not detect, read the pages or change, add or remove a finding. The prompt carries finding titles and field values, which come from the documents, so a document can put its own text in front of the model; the guard, the fixed JSON shape and the label are what limit it. The guard checks ids, figures, dates and verdict words, not meaning, and a number written in words is not checked. Accepted wording was seen wrong: a headline that called the revision text-change finding F-001 'the debit amount of 723.26' (end-to-end run), an amount in words given as another figure, '$' written for rupees, a revision change called 'the transactions listed'. A relation's free-text reason can name the wrong document or field though its kind is checked. Measured on development-set prompts only, CPU only, one run each, a small sample: of 24 headline wordings the guard accepted 18 from phi4-mini and 13 from qwen3-4b-instruct; reading a case, 9 of 26 relations were kept from phi4-mini (5 readings) and 19 of 23 from qwen3 (10 readings). A call took 17 to 26 s on average for a headline and 40 to 48 s for a reading (the longest 112 s), and the model is loaded for every call, so a case with a model takes a minute or more, and free RAM fell to about 2 GiB. A reply is cut at 1024 tokens, and phi4-mini was seen to write on without end in 2 of 16 readings before the reply format bounded its lists. Not measured: GPU use, a vision-language model on page images, and any model on the held-out split.",
+    "The logo and stamp comparison was fitted on synthetic marks only: six invented designs of each, drawn by the generator, with both limits set from them. Two of the six logos, which share a motif and differ only in the outline, are not told apart at any limit; a small change to a logo (one point moved a tenth of its width) is not found; and the margin at the logo limit is narrow (the largest genuine pair is 6.5 against a limit of 10.5, the nearest pair of designs that can be told apart 13.8). It looks in a fixed window right of the line that names the issuer (the topmost line of page 1 that reads as a name among those within 15 % of the tallest) and above the caption printed under the stamp, sized by the text beside it, so a layout that puts a mark elsewhere is reported as not compared or compares the wrong ink; a window that is mostly ink or has ink at its edge is reported as not compared. The same two drops of ink apply as for signatures. Under a short issuer name the line beneath it runs on into the logo window: its words are erased from the window, and where that line stops inside the logo (or text is printed over the logo itself) the logo is reported as not compared, because the two documents would cut it differently. Documents count as one issuer when that line reads alike (80 % likeness), so a misread or changed name leaves a document ungrouped and unchecked, and a title more than 15 % taller than the issuer's name, printed alike on the documents of two issuers, takes the place of the name and groups them, so their different marks are reported as a difference. When two documents carry a mark but no two share an issuer line, that is one limitation; a single marked document says nothing. A scan turned by more than 2.9 degrees is not compared, and the round stamp of a payslip is not compared. It reads shape, not origin: a mark copied from another document passes.",
+    "A scanned page is classed good, degraded or poor by its sharpness alone, with two limits set on the simulated scans of one generator. A page from another scanner or with other content can fall on the other side of a limit: a blurred page called good has its digits trusted, a sharp one called degraded has its conflicts shown as limitations to verify. Real scanners are not simulated.",
+    "The OCR can misread a letter or a digit with no sign of doubt. The tool does not repair what it reads, and a value read from a page classed good carries the confidence of that class (up to 0.95), so a wrong one is not marked as doubtful. The evaluation counts these in its 'wrong, trusted' column: in the held-out run 16 text values (4 and 4 on layout A, mild and 150 dpi; 3 and 5 on layout B) and no amount, date or id.",
+    "Extraction depends on the wordings of labels, column headings and captions that the spec of each document type lists. A wording that is not listed leaves its value missing, and whatever depends on that value is left unchecked; the tool says so as a limitation and does not guess. On the held-out layout B, about half of whose wordings the specs do not list, digital pages gave 91 % of amounts, 97 % of dates, 34 % of text values and no id, and the checks within a document could not be made in full on any of its 24 genuine statements and 24 genuine payslips (eval/test.md). A document that words its labels differently from the specs will meet the same limit, and a value under a label that is not listed cannot be compared with another document's.",
+    "The grain and placement checks found few changed scans. In the held-out split they found 3 of the 16 scans that were changed by pasting from another scan or by erasing and retyping (the placement check 1 of the 8 pasted scans, the grain check 2 of the 8 retyped ones), arithmetic and cross-document checks found 3 more, and 10 were not found at all; at 120 dpi 2 of 9 changes of any kind were found. A scan on which the tool raised nothing therefore says little about whether it was changed. These checks also gave the one flag on a genuine document, a 120 dpi scan (eval/test.md)."
+   ],
+   "assumptions": [
+    "Dates are read day first (DD/MM/YYYY); a date that could be read another way is marked ambiguous and given a low confidence.",
+    "Amounts are in rupees, with lakh or western digit grouping.",
+    "A usable PDF text layer is taken as read; a page whose text layer is unusable is read by OCR instead.",
+    "Boxes are pixels of the page rendered at 200 dpi unless a page says otherwise; points are pixels x 72 / dpi.",
+    "Documents are synthetic or authorised for the purpose, and one case is analysed at a time on one machine."
+   ]
+  }
+ },
+ "integrity": {
+  "json_sha256": "a5d1edcfc2944d3052eed961dfbf23511e78d3351833c8a97e039d5dd1ddfd26",
+  "method": "sha256 of this document without this block, as JSON with sorted keys, compact separators and ASCII escapes"
+ }
+}

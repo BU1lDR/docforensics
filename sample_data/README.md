@@ -67,6 +67,18 @@ The logo on the statement is the bank's design with one point moved by a tenth (
 
 Four are the first case of their kind in the split, so their position picked them and not their result: the first case (a PDF edited in a later saved revision), the first genuine case, the first spliced scan and the first changed name. The fifth, dev-0043, was picked because the development report lists it as a miss. They are not the best cases of the split, and they are not its worst: the other three development misses are spliced scans (dev-0021, dev-0036, dev-0051) and are not here.
 
+## A sample dossier
+
+`dossier-dev-0000.html` and `dossier-dev-0000.json` are the dossier of dev-0000 as the tool wrote it, copied without editing. The HTML is one file with the images of the changed places inside it; open it in a browser after cloning (GitHub shows its source, not the page). The JSON holds the same data for programs.
+
+- Sections 3 to 5 hold the three findings and where each sits in the statement. Appendices B and C hold the capability matrix and the limitations, which say what the tool does not do.
+- Made by `python -m docforensics run sample_data/dev-0000`, without `--llm`. No language model was used, so the explanations are the tool's fixed texts (marked `template`), and section 6 says so.
+- The case is C-20261105-065135-500f, created at 06:51:35 UTC on 5 November 2026 (12:21 IST). Every time in the files is UTC.
+- Made with the tool as of commit eb4d6de.
+- dev-0000 is a case of the development split, the one the thresholds were tuned on. The dossier shows what a dossier looks like and what the tool does on a case it was tuned on; it says nothing about other cases.
+- `stored_path` and `crop` in the JSON are paths inside the case folder that a run writes (`data/cases/<case id>/`). That folder is not kept here, and the HTML does not need it.
+- `python -m pytest tests/test_e2e_sample.py` checks that the files are unedited (the hash at the end of the page is the hash of the data in the JSON), that they are the dossier of dev-0000's documents, and that a new run of the case writes the same dossier apart from the case id, the times and the audit trail's hashes and timings. When a change to the tool changes what a dossier shows, that test fails until the dossier is made again: run the case as above, copy `dossier.html` and `dossier.json` from `data/cases/<case id>/` to these two names, and put the new case id, time and commit in this section.
+
 ## The manifest
 
 `manifest.json` holds what is true of each case: the documents with their type, sha256, values and boxes, and each planted change with its method, place and note. The tool never reads it. The evaluation's scorer and the tests do, to say whether a case was found. Read it after a run if you want to try without the answer first.

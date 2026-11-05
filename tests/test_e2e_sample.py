@@ -3,7 +3,8 @@ start is true. Each case goes through the whole pipeline in a temporary folder a
 (evaluation/score.py), and what comes out is compared with what sample_data/README.md says of it.
 
 The cases are cases of the development split, on which the thresholds were tuned. Running them shows the tool working from files to
-dossier; it is not evidence of how well the tool detects. The held-out figures are in eval/test.md.
+dossier; it is not evidence of how well the tool detects. The held-out figures are in eval/test.md. The dossier of dev-0000 is kept in
+sample_data/ too, and one test checks that it is unedited and is what the tool writes for that case today.
 
 Every test that runs the pipeline is a function-scoped test, so the autouse guard in conftest.py that blocks public addresses is in
 force while the tool runs: the claim that a case needs no network is checked here, not assumed."""
@@ -155,6 +156,65 @@ def test_the_sample_can_be_built_again(tmp_path):
     assert (SPLIT, tuple(e["case"] for e in built["cases"])) == (manifest()["split"], BUILT) and list(BUILT) == list(EXPECT)
     for e in built["cases"]:  # what was written is what the manifest says was written
         assert {p.name: sha256(p.read_bytes()) for p in (tmp_path / e["case"]).iterdir()} == {d["file"]: d["sha256"] for d in e["docs"]}
+
+
+def stable(d: dict) -> dict:
+    """A dossier without what differs between two runs of one case: the case id and the times, the content hash that covers them, and the audit
+    trail's times, hashes and timings. Everything else follows from the files and the tool."""
+    d = json.loads(json.dumps(d))
+    d.pop("integrity")
+    for key in ("case", "created", "generated"):
+        d["overview"].pop(key)
+    trail = d["appendices"]["audit_trail"]
+    trail.pop("anchor")
+    for e in trail["events"]:
+        for key in ("ts", "hash", "prev_hash"):
+            e.pop(key)
+        for key in ("case", "seconds"):
+            e["data"].pop(key, None)
+    return d
+
+
+def test_the_sample_dossier_is_the_dossier_of_dev_0000(tmp_path):
+    page = (SAMPLE / "dossier-dev-0000.html").read_text(encoding="utf-8")
+    text = (SAMPLE / "dossier-dev-0000.json").read_text(encoding="utf-8")
+    kept = json.loads(text)
+    ov, trail = kept["overview"], kept["appendices"]["audit_trail"]
+
+    # whose dossier it is: the documents of dev-0000 by hash, and what the case raises
+    assert {x["file"]: x["sha256"] for x in kept["evidence_and_traceability"]["documents"]} == {d["file"]: d["sha256"] for d in entry_of("dev-0000")["docs"]}
+    raised = RAISES["dev-0000"]
+    assert ov["counts"] == {"documents": 3, "findings": sum(raised.values()), "observations": raised["pdf_revisions", "observation"],
+                            "inconsistencies": raised["statement_balance", "inconsistency"], "potential_manipulation": raised["link", "potential_manipulation"],
+                            "limitations": 0}
+
+    # not edited since it was written: the hash inside it is the hash of its data, the page shows the same hash, and the audit chain holds together
+    body = {k: v for k, v in kept.items() if k != "integrity"}
+    assert hashlib.sha256(json.dumps(body, sort_keys=True, separators=(",", ":")).encode("ascii")).hexdigest() == kept["integrity"]["json_sha256"]
+    assert kept["integrity"]["json_sha256"] in page and ov["case"] in page
+    assert trail["chain_ok"] and trail["anchor"] == {"events": len(trail["events"]), "head": trail["events"][-1]["hash"]}
+    assert all(b["prev_hash"] == a["hash"] for a, b in zip(trail["events"], trail["events"][1:]))
+
+    # it stands alone and says no language model was used; it carries no path of the machine it was made on and no verdict
+    assert kept["investigation_summary"]["ai_reading"] == {"status": "none", "note": "No language model was used for this case."}
+    assert page.count("<img") == page.count('src="data:image/png;base64,') == len([r for r in kept["evidence_and_traceability"]["trace"] if r["crop"]]) > 0
+    local = re.compile(r"(?<![A-Za-z])[A-Za-z]:[\\/]|[\\/]Users[\\/]|/home/|Aryan")
+    for shown in (re.sub(r"data:image/png;base64,[A-Za-z0-9+/=]+", "", page), text):
+        assert not local.search(shown) and not VERDICT.search(shown), (local.search(shown), VERDICT.search(shown))
+
+    # it is what the tool writes for this case today. A change to the tool that changes a dossier fails this until the dossier is made again
+    # (sample_data/README.md, "A sample dossier")
+    th = Thresholds()
+    _, cd, _ = create_case(tmp_path / "data", files_of("dev-0000"), th)
+    run_case(cd, th)
+    fresh = json.loads(cd.dossier_json.read_text(encoding="utf-8"))
+    a, b = stable(kept), stable(fresh)
+    assert list(a) == list(b) and [k for k in a if a[k] != b[k]] == [], "the kept dossier is out of date: make it again, as sample_data/README.md says"
+
+    # the README says which run it is
+    doc = (SAMPLE / "README.md").read_text(encoding="utf-8")
+    assert "dossier-dev-0000.html" in doc and "dossier-dev-0000.json" in doc and ov["case"] in doc and ov["created"][11:19] in doc
+    assert re.search(r"commit [0-9a-f]{7,40}\b", doc)
 
 
 def test_the_sample_readme_names_every_case_and_gives_no_verdict():

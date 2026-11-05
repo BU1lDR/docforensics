@@ -77,7 +77,7 @@ python -m docforensics trace C-20261105-103000-ab12 F-001
 python -m docforensics verify-audit C-20261105-103000-ab12
 ```
 
-The date and time in a case id, in the audit trail and in the dossier are UTC. IST is UTC+05:30, so a run at 16:00 IST has 10:30 in its id. The dossier is `data/cases/<case id>/dossier.html`.
+The date and time in a case id, in the audit trail and in the dossier are UTC. IST is UTC+05:30, so a run at 16:00 IST has 10:30 in its id. The dossier is `data/cases/<case id>/dossier.html`. One made from dev-0000 is kept as [sample_data/dossier-dev-0000.html](sample_data/dossier-dev-0000.html), with its data in [dossier-dev-0000.json](sample_data/dossier-dev-0000.json): open the HTML file in a browser after cloning, because GitHub shows only its source.
 
 These five cases are from the development split, the split on which the thresholds were tuned. They show the tool working from files to dossier; they are not evidence of how well it detects. The held-out figures are in [eval/test.md](eval/test.md). One of the five, dev-0043 (a slightly changed logo), is a miss. [sample_data/README.md](sample_data/README.md) says what the tool reports on each case, and `python -m pytest tests/test_e2e_sample.py` checks those statements against a real run.
 
