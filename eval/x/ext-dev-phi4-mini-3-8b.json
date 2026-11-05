@@ -1,0 +1,5615 @@
+{
+ "run": {
+  "model": "phi4-mini:3.8b",
+  "digest": "78fad5d182a7c33065e153a5f8ba210754207ba9d91973f57dffa7f487363753",
+  "timeout": 180.0,
+  "split": "ext-dev",
+  "start": 0,
+  "requested": 7,
+  "seeds": [
+   3000000,
+   3000006
+  ],
+  "replayed": true,
+  "errors": {},
+  "date": "2026-11-05 22:57 India Standard Time",
+  "commit": "74d2679",
+  "dirty": false,
+  "machine": "Windows 10, Python 3.11.9, CPU only"
+ },
+ "replies": {
+  "ff4f3628f337ec0230ebd9be2fcd1ee7cc0a257616ee7989ff23d34ce2d2e53b": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "company name",
+      "value": "Brightfield Test Traders Pvt Ltd",
+      "source_text": "1: Brightfield Test Traders Pvt Ltd"
+     },
+     {
+      "label": "document type",
+      "value": "Tax Invoice",
+      "source_text": "2: Tax Invoice"
+     },
+     {
+      "label": "invoice number",
+      "value": "INV-2026-7688",
+      "source_text": "3: Invoice No INV-2026-7688"
+     },
+     {
+      "label": "invoice date",
+      "value": "05/05/2026",
+      "source_text": "4: Invoice Date 05/05/2026"
+     },
+     {
+      "label": "due date",
+      "value": "04/06/2026",
+      "source_text": "5: Due Date 04/06/2026"
+     },
+     {
+      "label": "purchase order reference",
+      "value": "PO-61846",
+      "source_text": "6: PO Reference PO-61846"
+     },
+     {
+      "label": "bill to",
+      "value": "Vikram D. Joshi",
+      "source_text": "7: Bill To Vikram D. Joshi"
+     },
+     {
+      "label": "payment terms",
+      "value": "Net 30 days",
+      "source_text": "8: Payment Terms Net 30 days"
+     },
+     {
+      "label": "payment account",
+      "value": "TST-1698328893",
+      "source_text": "9: Pay to Account TST-1698328893"
+     },
+     {
+      "label": "item description",
+      "value": "Router replacement kit",
+      "source_text": "11: Description Qty Rate Amount"
+     },
+     {
+      "label": "quantity",
+      "value": "2",
+      "source_text": "11: Router replacement kit 2"
+     },
+     {
+      "label": "rate",
+      "value": "3,250.00",
+      "source_text": "11: Router replacement kit 2 3,250.00"
+     },
+     {
+      "label": "amount",
+      "value": "6,500.00",
+      "source_text": "11: Router replacement kit 2 3,250.00"
+     },
+     {
+      "label": "item description",
+      "value": "Support hours",
+      "source_text": "12: Support hours 6 850.00"
+     },
+     {
+      "label": "quantity",
+      "value": "6",
+      "source_text": "12: Support hours 6 850.00"
+     },
+     {
+      "label": "rate",
+      "value": "850.00",
+      "source_text": "12: Support hours 6 850.00"
+     },
+     {
+      "label": "amount",
+      "value": "5,100.00",
+      "source_text": "12: Support hours 6 850.00"
+     },
+     {
+      "label": "item description",
+      "value": "Cloud hosting, monthly",
+      "source_text": "13: Cloud hosting, monthly 1 4,800.00"
+     },
+     {
+      "label": "quantity",
+      "value": "1",
+      "source_text": "13: Cloud hosting, monthly 1"
+     },
+     {
+      "label": "rate",
+      "value": "4,800.00",
+      "source_text": "13: Cloud hosting, monthly 1 4,800.00"
+     },
+     {
+      "label": "amount",
+      "value": "4,800.00",
+      "source_text": "13: Cloud hosting, monthly 1 4,800.00"
+     },
+     {
+      "label": "subtotal",
+      "value": "16,400.00",
+      "source_text": "14: Subtotal 16,400.00"
+     },
+     {
+      "label": "GST rate",
+      "value": "18%",
+      "source_text": "15: GST @ 18%"
+     },
+     {
+      "label": "GST amount",
+      "value": "2,952.00",
+      "source_text": "15: GST @ 18% 2,952.00"
+     },
+     {
+      "label": "total amount",
+      "value": "19,352.00",
+      "source_text": "16: Total 19,352.00"
+     }
+    ]
+   },
+   "seconds": 116.8
+  },
+  "a6fa8335e56f0e8d928fa5020028418f2bd37e6aa85d9bc6635a54a54f43f12d": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "Consumer No",
+      "value": "3599687351",
+      "source_text": "Consumer No 3599687351"
+     },
+     {
+      "label": "Bill No",
+      "value": "EB-2026-258556",
+      "source_text": "Bill No EB-2026-258556"
+     },
+     {
+      "label": "Customer Name",
+      "value": "Vikram D. Joshi",
+      "source_text": "Customer Name Vikram D. Joshi"
+     },
+     {
+      "label": "Service Address",
+      "value": "Flat 36, Orchid Residency, Temple Street, Mysuru 570001",
+      "source_text": "Service Address Flat 36, Orchid Residency, Temple Street, Mysuru 570001"
+     },
+     {
+      "label": "Bill Date",
+      "value": "03/06/2026",
+      "source_text": "Bill Date 03/06/2026"
+     },
+     {
+      "label": "Due Date",
+      "value": "18/06/2026",
+      "source_text": "Due Date 18/06/2026"
+     },
+     {
+      "label": "Billing Period",
+      "value": "01/05/2026 to 31/05/2026",
+      "source_text": "Billing Period 01/05/2026 to 31/05/2026"
+     },
+     {
+      "label": "Previous Reading",
+      "value": "17775",
+      "source_text": "Previous Reading 17775"
+     },
+     {
+      "label": "Current Reading",
+      "value": "18165",
+      "source_text": "Current Reading 18165"
+     },
+     {
+      "label": "Units Consumed (kWh)",
+      "value": "390",
+      "source_text": "Units Consumed (kWh) 390"
+     },
+     {
+      "label": "Energy Charges",
+      "value": "2,437.50",
+      "source_text": "Energy Charges 2,437.50"
+     },
+     {
+      "label": "Fixed Charges",
+      "value": "120.00",
+      "source_text": "Fixed Charges 120.00"
+     },
+     {
+      "label": "Electricity Duty",
+      "value": "146.25",
+      "source_text": "Electricity Duty 146.25"
+     },
+     {
+      "label": "Net Amount Payable",
+      "value": "2,703.75",
+      "source_text": "Net Amount Payable 2,703.75"
+     },
+     {
+      "label": "Amount Payable After Due Date",
+      "value": "2,757.83",
+      "source_text": "Amount Payable After Due Date 2,757.83"
+     },
+     {
+      "label": "Pay at any authorised collection centre or online",
+      "value": "any authorised collection centre or online",
+      "source_text": "Pay at any authorised collection centre or online."
+     }
+    ]
+   },
+   "seconds": 75.3
+  },
+  "ecd79660da29046f4a9a3780913380eeeaaf91ed93915f5b74d97f176fa74c89": {
+   "system": "8d9125788062e8068fca89b9e006e0255a1a91311d45def76426391fdca99d66",
+   "reply": {
+    "summary": "The value 2,703.75 is set in a different font size on page 1 of document D2. This discrepancy in font size should be compared with the values beside it on the same page.",
+    "relations": [
+     {
+      "a": "F-003",
+      "b": "unknown",
+      "kind": "same_field",
+      "reason": "Both cite the same field on page 1 of document D2."
+     }
+    ],
+    "review_order": [
+     "F-003"
+    ]
+   },
+   "seconds": 21.1
+  },
+  "38a18fd9bdf58b0c3480c5c6cca41662216ec7aeee317b55f6248721ab387d48": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "Company Name",
+      "value": "Silverleaf Test Traders Pvt Ltd",
+      "source_text": "1: Silverleaf Test Traders Pvt Ltd"
+     },
+     {
+      "label": "Invoice Number",
+      "value": "INV-2026-7350",
+      "source_text": "4: INV-2026-7350"
+     },
+     {
+      "label": "Date of Issue",
+      "value": "24 Feb 2026",
+      "source_text": "4: INV-2026-7350 24 Feb 2026"
+     },
+     {
+      "label": "Order Number",
+      "value": "PO-29755",
+      "source_text": "6: PO-29755"
+     },
+     {
+      "label": "Payment Due By",
+      "value": "11 Mar 2026",
+      "source_text": "6: PO-29755 11 Mar 2026"
+     },
+     {
+      "label": "Terms",
+      "value": "Net 15 days",
+      "source_text": "8: Anil S. Reddy Net 15 days"
+     },
+     {
+      "label": "Invoice Number",
+      "value": "TST-1008088288",
+      "source_text": "10: TST-1008088288"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "6",
+      "source_text": "12: Support hours 6 850.00 5,100.00"
+     },
+     {
+      "label": "Unit Price",
+      "value": "850.00",
+      "source_text": "12: Support hours 6 850.00 5,100.00"
+     },
+     {
+      "label": "Line Total",
+      "value": "5,100.00",
+      "source_text": "12: Support hours 6 850.00 5,100.00"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "1",
+      "source_text": "13: Backup storage, 1 TB 2 5,400.00 10,800.00"
+     },
+     {
+      "label": "Unit Price",
+      "value": "5,400.00",
+      "source_text": "13: Backup storage, 1 TB 2 5,400.00 10,800.00"
+     },
+     {
+      "label": "Line Total",
+      "value": "10,800.00",
+      "source_text": "13: Backup storage, 1 TB 2 5,400.00 10,800.00"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "2",
+      "source_text": "14: Router replacement kit 2 3,250.00 6,500.00"
+     },
+     {
+      "label": "Unit Price",
+      "value": "3,250.00",
+      "source_text": "14: Router replacement kit 2 3,250.00 6,500.00"
+     },
+     {
+      "label": "Line Total",
+      "value": "6,500.00",
+      "source_text": "14: Router replacement kit 2 3,250.00 6,500.00"
+     },
+     {
+      "label": "Amount before tax",
+      "value": "22,400.00",
+      "source_text": "15: Amount before tax Rs. 22,400.00"
+     },
+     {
+      "label": "Tax rate",
+      "value": "18%",
+      "source_text": "16: Tax (18%) Rs. 4,032.00"
+     },
+     {
+      "label": "Tax amount",
+      "value": "4,032.00",
+      "source_text": "16: Tax (18%) Rs. 4,032.00"
+     },
+     {
+      "label": "Amount Payable",
+      "value": "26,432.00",
+      "source_text": "17: Amount Payable Rs. 26,432.00"
+     },
+     {
+      "label": "Signature",
+      "value": "Computer generated; no signature required",
+      "source_text": "18: Computer generated; no signature required."
+     }
+    ]
+   },
+   "seconds": 107.7
+  },
+  "ba0aacbdd831bd9fe21332378fe518a87a8bb47c0ae1db218b9cece141d67933": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "Company",
+      "value": "Ironwood Test Electricity Board",
+      "source_text": "1: Ironwood Test Electricity Board"
+     },
+     {
+      "label": "Bill Type",
+      "value": "Electricity Bill",
+      "source_text": "2: Electricity Bill"
+     },
+     {
+      "label": "Consumer ID",
+      "value": "4500893747",
+      "source_text": "3: Consumer No 4500893747"
+     },
+     {
+      "label": "Bill Number",
+      "value": "EB-2026-802751",
+      "source_text": "4: Bill No EB-2026-802751"
+     },
+     {
+      "label": "Customer Name",
+      "value": "Anil S. Reddy",
+      "source_text": "5: Customer Name Anil S. Reddy"
+     },
+     {
+      "label": "Service Address",
+      "value": "Flat 5, Cedar Villas, Station Road, Indore 452001",
+      "source_text": "6: Service Address Flat 5, Cedar Villas, Station Road, Indore 452001"
+     },
+     {
+      "label": "Bill Date",
+      "value": "04/03/2026",
+      "source_text": "7: Bill Date 04/03/2026"
+     },
+     {
+      "label": "Due Date",
+      "value": "19/03/2026",
+      "source_text": "8: Due Date 19/03/2026"
+     },
+     {
+      "label": "Billing Period",
+      "value": "01/02/2026 to 28/02/2026",
+      "source_text": "9: Billing Period 01/02/2026 to 28/02/2026"
+     },
+     {
+      "label": "Previous Reading",
+      "value": "52494",
+      "source_text": "10: Previous Reading 52494"
+     },
+     {
+      "label": "Current Reading",
+      "value": "52966",
+      "source_text": "11: Current Reading 52966"
+     },
+     {
+      "label": "Units Consumed",
+      "value": "472",
+      "source_text": "12: Units Consumed (kWh) 472"
+     },
+     {
+      "label": "Energy Charges",
+      "value": "2,950.00",
+      "source_text": "13: Energy Charges 2,950.00"
+     },
+     {
+      "label": "Fixed Charges",
+      "value": "210.00",
+      "source_text": "14: Fixed Charges 210.00"
+     },
+     {
+      "label": "Electricity Duty",
+      "value": "177.00",
+      "source_text": "15: Electricity Duty 177.00"
+     },
+     {
+      "label": "Net Amount Payable",
+      "value": "3,337.00",
+      "source_text": "16: Net Amount Payable 3,337.00"
+     },
+     {
+      "label": "Amount Payable After Due Date",
+      "value": "3,403.74",
+      "source_text": "17: Amount Payable After Due Date 3,403.74"
+     },
+     {
+      "label": "Payment Instructions",
+      "value": "Pay at any authorised collection centre or online.",
+      "source_text": "18: Pay at any authorised collection centre or online."
+     }
+    ]
+   },
+   "seconds": 78.2
+  },
+  "6d2b2d35747cb1a2b8e1a320984fe8ca87a7754d2d5985ab0f734ebe62f9a0c2": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "Company Name",
+      "value": "Northwind Test Traders Pvt Ltd",
+      "source_text": "1: Northwind Test Traders Pvt Ltd"
+     },
+     {
+      "label": "Invoice Type",
+      "value": "Tax Invoice",
+      "source_text": "2: Tax Invoice"
+     },
+     {
+      "label": "Invoice Number",
+      "value": "INV-2026-3190",
+      "source_text": "3: Invoice No INV-2026-3190"
+     },
+     {
+      "label": "Invoice Date",
+      "value": "23/01/2026",
+      "source_text": "4: Invoice Date 23/01/2026"
+     },
+     {
+      "label": "Due Date",
+      "value": "22/02/2026",
+      "source_text": "5: Due Date 22/02/2026"
+     },
+     {
+      "label": "PO Reference",
+      "value": "PO-85250",
+      "source_text": "6: PO Reference PO-85250"
+     },
+     {
+      "label": "Bill To",
+      "value": "Meera H. Menon",
+      "source_text": "7: Bill To Meera H. Menon"
+     },
+     {
+      "label": "Payment Terms",
+      "value": "Net 30 days",
+      "source_text": "8: Payment Terms Net 30 days"
+     },
+     {
+      "label": "Pay to Account",
+      "value": "TST-7939109314",
+      "source_text": "9: Pay to Account TST-7939109314"
+     },
+     {
+      "label": "Item Description",
+      "value": "Wireless access point 2",
+      "source_text": "11: Wireless access point 2"
+     },
+     {
+      "label": "Item Rate",
+      "value": "6,900.00",
+      "source_text": "11: 6,900.00"
+     },
+     {
+      "label": "Item Amount",
+      "value": "13,800.00",
+      "source_text": "11: 13,800.00"
+     },
+     {
+      "label": "Item Description",
+      "value": "Cloud hosting, monthly",
+      "source_text": "12: Cloud hosting, monthly"
+     },
+     {
+      "label": "Item Rate",
+      "value": "4,800.00",
+      "source_text": "12: Cloud hosting, monthly 1 4,800.00"
+     },
+     {
+      "label": "Item Amount",
+      "value": "4,800.00",
+      "source_text": "12: Cloud hosting, monthly 1 4,800.00"
+     },
+     {
+      "label": "Item Description",
+      "value": "Support hours 6",
+      "source_text": "13: Support hours 6"
+     },
+     {
+      "label": "Item Rate",
+      "value": "850.00",
+      "source_text": "13: Support hours 6 850.00"
+     },
+     {
+      "label": "Item Amount",
+      "value": "5,100.00",
+      "source_text": "13: Support hours 6 850.00"
+     },
+     {
+      "label": "Subtotal",
+      "value": "23,700.00",
+      "source_text": "14: Subtotal 23,700.00"
+     },
+     {
+      "label": "GST Rate",
+      "value": "18%",
+      "source_text": "15: GST @ 18%"
+     },
+     {
+      "label": "GST Amount",
+      "value": "4,266.00",
+      "source_text": "15: GST @ 18% 4,266.00"
+     },
+     {
+      "label": "Total Amount",
+      "value": "27,966.00",
+      "source_text": "16: Total 27,966.00"
+     }
+    ]
+   },
+   "seconds": 86.3
+  },
+  "2de6fbb772fe2e75c4a1565f0ae7d1e96327e7cb374f64d3ab0cbd67d5628e54": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "connection ID",
+      "value": "9854584182 EB-2026-883312",
+      "source_text": "Connection ID Invoice Ref 9854584182 EB-2026-883312"
+     },
+     {
+      "label": "name of consumer",
+      "value": "Meera H. Menon",
+      "source_text": "Name of Consumer Issued On Meera H. Menon 06 Feb 2026"
+     },
+     {
+      "label": "premises",
+      "value": "Flat 27, Orchid Residency, Station Road, Kochi 682001",
+      "source_text": "Premises Flat 27, Orchid Residency, Station Road, Kochi 682001"
+     },
+     {
+      "label": "cycle pay by",
+      "value": "01 Jan 2026 - 31 Jan 2026 21 Feb 2026",
+      "source_text": "Cycle Pay By 01 Jan 2026 - 31 Jan 2026 21 Feb 2026"
+     },
+     {
+      "label": "opening meter reading",
+      "value": "47157",
+      "source_text": "Opening Meter Reading 47157"
+     },
+     {
+      "label": "closing meter reading",
+      "value": "47432",
+      "source_text": "Closing Meter Reading 47432"
+     },
+     {
+      "label": "consumption",
+      "value": "275",
+      "source_text": "Consumption (units) 275"
+     },
+     {
+      "label": "cost of energy",
+      "value": "Rs. 1,718.75",
+      "source_text": "Cost of Energy Rs. 1,718.75"
+     },
+     {
+      "label": "demand charge",
+      "value": "Rs. 120.00",
+      "source_text": "Demand Charge Rs. 120.00"
+     },
+     {
+      "label": "duty and cess",
+      "value": "Rs. 103.12",
+      "source_text": "Duty and Cess Rs. 103.12"
+     },
+     {
+      "label": "total due",
+      "value": "Rs. 1,941.87",
+      "source_text": "Total Due Rs. 1,941.87"
+     },
+     {
+      "label": "late payment amount",
+      "value": "Rs. 1,980.71",
+      "source_text": "If Paid Late Rs. 1,980.71"
+     }
+    ]
+   },
+   "seconds": 58.8
+  },
+  "5e6bc8d030181cd3bc7f051734647023537ee8003d2bdf085858aeb26e3466bd": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "Company Name",
+      "value": "Harborview Test Traders Pvt Ltd",
+      "source_text": "1: Harborview Test Traders Pvt Ltd"
+     },
+     {
+      "label": "Invoice Number",
+      "value": "INV-2026-4559",
+      "source_text": "4: INV-2026-4559 25 Sep 2026"
+     },
+     {
+      "label": "Issue Date",
+      "value": "25 Sep 2026",
+      "source_text": "4: INV-2026-4559 25 Sep 2026"
+     },
+     {
+      "label": "Order Number",
+      "value": "PO-11792",
+      "source_text": "6: PO-11792 25 Oct 2026"
+     },
+     {
+      "label": "Payment Due Date",
+      "value": "25 Oct 2026",
+      "source_text": "6: PO-11792 25 Oct 2026"
+     },
+     {
+      "label": "Payment Terms",
+      "value": "Net 30 days",
+      "source_text": "8: Suresh T. Nair Net 30 days"
+     },
+     {
+      "label": "Account Number",
+      "value": "TST-7498588932",
+      "source_text": "10: Remit to A/c TST-7498588932"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "3",
+      "source_text": "12: Laptop stand 3 1.150.00 3.450.00"
+     },
+     {
+      "label": "Unit Price",
+      "value": "1.150.00",
+      "source_text": "12: Laptop stand 3 1.150.00 3.450.00"
+     },
+     {
+      "label": "Line Total",
+      "value": "3.450.00",
+      "source_text": "12: Laptop stand 3 1.150.00 3.450.00"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "2",
+      "source_text": "13: Wres sae ss sa eoint 2 6,900.00 13.800.00"
+     },
+     {
+      "label": "Unit Price",
+      "value": "6,900.00",
+      "source_text": "13: Wres sae ss sa eoint 2 6,900.00 13.800.00"
+     },
+     {
+      "label": "Line Total",
+      "value": "13.800.00",
+      "source_text": "13: Wres sae ss sa eoint 2 6,900.00 13.800.00"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "1",
+      "source_text": "14: Annual maintenance contract 1 12,000.00 12.000.00"
+     },
+     {
+      "label": "Unit Price",
+      "value": "12,000.00",
+      "source_text": "14: Annual maintenance contract 1 12,000.00 12.000.00"
+     },
+     {
+      "label": "Line Total",
+      "value": "12.000.00",
+      "source_text": "14: Annual maintenance contract 1 12,000.00 12.000.00"
+     },
+     {
+      "label": "Amount Before Tax",
+      "value": "29.250.00",
+      "source_text": "15: Amount before tax Rs. 29.250.00"
+     },
+     {
+      "label": "Tax Rate",
+      "value": "18%",
+      "source_text": "16: Tax (18%) Rs. 5.265.00"
+     },
+     {
+      "label": "Tax Amount",
+      "value": "5.265.00",
+      "source_text": "16: Tax (18%) Rs. 5.265.00"
+     },
+     {
+      "label": "Amount Payable",
+      "value": "34.515.00",
+      "source_text": "17: Amount Payable Rs. 34.515.00"
+     }
+    ]
+   },
+   "seconds": 110.6
+  },
+  "7e2964cd5784e2efb0689bce2e1afa5cff0bc2103d50594a88bfdd9a6f1d61ce": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "party",
+      "value": "Harborview Test Electricity Board",
+      "source_text": "Monthly Power Bill"
+     },
+     {
+      "label": "party",
+      "value": "Suresh T. Nair",
+      "source_text": "Name of Consumer Issued On"
+     },
+     {
+      "label": "date",
+      "value": "04 Oct 2026",
+      "source_text": "Name of Consumer Issued On"
+     },
+     {
+      "label": "address",
+      "value": "Flat 20, Jasmine Apartments, Station Road, Nagpur 440001",
+      "source_text": "Premises"
+     },
+     {
+      "label": "payment_period",
+      "value": "01p 6 - p 26",
+      "source_text": "Cycle Pay By"
+     },
+     {
+      "label": "opening_meter_reading",
+      "value": "35288",
+      "source_text": "Opening Meter Rleading Closing Meter Reading"
+     },
+     {
+      "label": "closing_meter_reading",
+      "value": "35712",
+      "source_text": "Opening Meter Rleading Closing Meter Reading"
+     },
+     {
+      "label": "consumption",
+      "value": "424",
+      "source_text": "Consumption (units)"
+     },
+     {
+      "label": "cost_of_energy",
+      "value": "Rs. 2,650.00",
+      "source_text": "Cost of Energy Rs. 2.650.00"
+     },
+     {
+      "label": "demand_charge",
+      "value": "Rs. 150.00",
+      "source_text": "Demand Charge Rs. 150.00"
+     },
+     {
+      "label": "duty_and_cess",
+      "value": "Rs. 159.00",
+      "source_text": "Duty and Cess Rs. 159.00"
+     },
+     {
+      "label": "total_due",
+      "value": "Rs. 2,959.00",
+      "source_text": "Total Due Rs. 2,959.00"
+     },
+     {
+      "label": "late_payment",
+      "value": "Rs. 3,018.18",
+      "source_text": "It Paid Late Rs. 3.018.18"
+     },
+     {
+      "label": "late_payment_surcharge",
+      "value": "Rs. 3,018.18",
+      "source_text": "It Paid Late Rs. 3.018.18"
+     }
+    ]
+   },
+   "seconds": 64.3
+  },
+  "6bfed4a31e79c93fda16107e057c96bc35385516aa66c9ee83c69319a8c09459": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "Company Name",
+      "value": "Harborview Test Traders Pvt Ltd",
+      "source_text": "1: Harborview Test Traders Pvt Ltd"
+     },
+     {
+      "label": "Invoice Type",
+      "value": "Tax Invoice",
+      "source_text": "2: Tax Invoice"
+     },
+     {
+      "label": "Invoice Number",
+      "value": "INV-2026-6670",
+      "source_text": "3: Invoice No INV-2026-6670"
+     },
+     {
+      "label": "Invoice Date",
+      "value": "24/04/2026",
+      "source_text": "4: Invoice Date 24/04/2026"
+     },
+     {
+      "label": "Due Date",
+      "value": "24/05/2026",
+      "source_text": "5: Due Date 24/05/2026"
+     },
+     {
+      "label": "PO Reference",
+      "value": "PO-32263",
+      "source_text": "6: PO Reference PO-32263"
+     },
+     {
+      "label": "Bill To",
+      "value": "Meera D. Joshi",
+      "source_text": "7: Bill To Meera D. Joshi"
+     },
+     {
+      "label": "Payment Terms",
+      "value": "Net 30 days",
+      "source_text": "8: Payment Terms Net 30 days"
+     },
+     {
+      "label": "Pay to Account",
+      "value": "TST-3482137197",
+      "source_text": "9: Pay to Account TST-3482137197"
+     },
+     {
+      "label": "Item Description",
+      "value": "Backup storage, 1 TB",
+      "source_text": "11: Description Qty Rate Amount"
+     },
+     {
+      "label": "Item Description",
+      "value": "Network cabling, 40 m",
+      "source_text": "12: Network cabling, 40 m"
+     },
+     {
+      "label": "Item Description",
+      "value": "Support hours",
+      "source_text": "13: Support hours 6"
+     },
+     {
+      "label": "Subtotal",
+      "value": "18,500.00",
+      "source_text": "14: Subtotal 18,500.00"
+     },
+     {
+      "label": "GST Rate",
+      "value": "18%",
+      "source_text": "15: GST @ 18% 3,330.00"
+     },
+     {
+      "label": "Total Amount",
+      "value": "21,830.00",
+      "source_text": "16: Total 21,830.00"
+     }
+    ]
+   },
+   "seconds": 59.7
+  },
+  "16e6f7db845ff458b13e0bfd780b9172fd03071d333f24f1d7682687bc985fb5": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "Company",
+      "value": "Kestrel Test Electricity Board",
+      "source_text": "1: Kestrel Test Electricity Board"
+     },
+     {
+      "label": "Bill Type",
+      "value": "Electricity Bill",
+      "source_text": "2: Electricity Bill"
+     },
+     {
+      "label": "Consumer ID",
+      "value": "6000163217",
+      "source_text": "3: Consumer No 6000163217"
+     },
+     {
+      "label": "Bill Number",
+      "value": "EB-2026-873610",
+      "source_text": "4: Bill No EB-2026-873610"
+     },
+     {
+      "label": "Customer Name",
+      "value": "Meera D. Joshi",
+      "source_text": "5: Customer Name Meera D. Joshi"
+     },
+     {
+      "label": "Service Address",
+      "value": "Flat 9, Palm Court, Station Road, Pune 411001",
+      "source_text": "6: Service Address Flat 9, Palm Court, Station Road, Pune 411001"
+     },
+     {
+      "label": "Bill Date",
+      "value": "07/05/2026",
+      "source_text": "7: Bill Date 07/05/2026"
+     },
+     {
+      "label": "Due Date",
+      "value": "22/05/2026",
+      "source_text": "8: Due Date 22/05/2026"
+     },
+     {
+      "label": "Billing Period",
+      "value": "01/04/2026 to 30/04/2026",
+      "source_text": "9: Billing Period 01/04/2026 to 30/04/2026"
+     },
+     {
+      "label": "Previous Reading",
+      "value": "76305",
+      "source_text": "10: Previous Reading 76305"
+     },
+     {
+      "label": "Current Reading",
+      "value": "76473",
+      "source_text": "11: Current Reading 76473"
+     },
+     {
+      "label": "Units Consumed",
+      "value": "168",
+      "source_text": "12: Units Consumed (kWh) 168"
+     },
+     {
+      "label": "Energy Charges",
+      "value": "1,192.80",
+      "source_text": "13: Energy Charges 1,192.80"
+     },
+     {
+      "label": "Fixed Charges",
+      "value": "210.00",
+      "source_text": "14: Fixed Charges 210.00"
+     },
+     {
+      "label": "Electricity Duty",
+      "value": "71.57",
+      "source_text": "15: Electricity Duty 71.57"
+     },
+     {
+      "label": "Net Amount Payable",
+      "value": "1,474.37",
+      "source_text": "16: Net Amount Payable 1,474.37"
+     },
+     {
+      "label": "Amount Payable After Due Date",
+      "value": "1,503.86",
+      "source_text": "17: Amount Payable After Due Date 1,503.86"
+     },
+     {
+      "label": "Payment Instructions",
+      "value": "Pay at any authorised collection centre or online.",
+      "source_text": "18: Pay at any authorised collection centre or online."
+     }
+    ]
+   },
+   "seconds": 83.4
+  },
+  "5f2b02759ba34f52a6fdb6b4555db04bc9b0b806d0c4e3c3585fb0a6d119a911": {
+   "system": "8d9125788062e8068fca89b9e006e0255a1a91311d45def76426391fdca99d66",
+   "reply": {
+    "summary": "The value 1,474.37 is set in a different font size compared to the values beside it on page 1 of document D2. This discrepancy in font size should be investigated further.",
+    "relations": [
+     {
+      "a": "F-003",
+      "b": "unknown",
+      "kind": "same_field",
+      "reason": "Both cite the same field id."
+     },
+     {
+      "a": "F-003",
+      "b": "unknown",
+      "kind": "same_document",
+      "reason": "Both cite the same document."
+     },
+     {
+      "a": "F-003",
+      "b": "unknown",
+      "kind": "same_value",
+      "reason": "Both cite the same figure."
+     },
+     {
+      "a": "F-003",
+      "b": "unknown",
+      "kind": "same_field",
+      "reason": "Both cite the same field id."
+     },
+     {
+      "a": "F-003",
+      "b": "unknown",
+      "kind": "same_document",
+      "reason": "Both cite the same document."
+     },
+     {
+      "a": "F-003",
+      "b": "unknown",
+      "kind": "same_value",
+      "reason": "Both cite the same figure."
+     },
+     {
+      "a": "F-003",
+      "b": "unknown",
+      "kind": "same_field",
+      "reason": "Both cite the same field id."
+     },
+     {
+      "a": "F-003",
+      "b": "unknown",
+      "kind": "same_document",
+      "reason": "Both cite the same document."
+     }
+    ],
+    "review_order": [
+     "F-003"
+    ]
+   },
+   "seconds": 54.2
+  },
+  "54ae92fbbc7c4be13aeec810852d498fe0c7c19dc86f7bb19a570fb98aa8a067": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "Company Name",
+      "value": "Ironwood Test Traders Pvt Ltd",
+      "source_text": "1: Ironwood Test Traders Pvt Ltd"
+     },
+     {
+      "label": "Invoice Number",
+      "value": "INV-2026-2263",
+      "source_text": "4: INV-2026-2263 18 Sep 2026"
+     },
+     {
+      "label": "Date of Issue",
+      "value": "18 Sep 2026",
+      "source_text": "4: INV-2026-2263 18 Sep 2026"
+     },
+     {
+      "label": "Order Number",
+      "value": "PO-19007",
+      "source_text": "6: PO-19007 03 Oct 2026"
+     },
+     {
+      "label": "Payment Due By",
+      "value": "03 Oct 2026",
+      "source_text": "6: PO-19007 03 Oct 2026"
+     },
+     {
+      "label": "Billed To",
+      "value": "Anil S. Reddy",
+      "source_text": "8: Anil S. Reddy Net 15 days"
+     },
+     {
+      "label": "Remit to Account",
+      "value": "TST-9598771862",
+      "source_text": "10: Remit to A/c TST-9598771862"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "2",
+      "source_text": "12: Router replacement kit 2 3,250.00 6,500.00"
+     },
+     {
+      "label": "Unit Price",
+      "value": "3,250.00",
+      "source_text": "12: Router replacement kit 2 3,250.00 6,500.00"
+     },
+     {
+      "label": "Line Total",
+      "value": "6,500.00",
+      "source_text": "12: Router replacement kit 2 3,250.00 6,500.00"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "3",
+      "source_text": "13: Laptop stand 3 1,150.00 3,450.00"
+     },
+     {
+      "label": "Unit Price",
+      "value": "1,150.00",
+      "source_text": "13: Laptop stand 3 1,150.00 3,450.00"
+     },
+     {
+      "label": "Line Total",
+      "value": "3,450.00",
+      "source_text": "13: Laptop stand 3 1,150.00 3,450.00"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "1",
+      "source_text": "14: Cloud hosting, monthly 1 4,800.00 4,800.00"
+     },
+     {
+      "label": "Unit Price",
+      "value": "4,800.00",
+      "source_text": "14: Cloud hosting, monthly 1 4,800.00 4,800.00"
+     },
+     {
+      "label": "Line Total",
+      "value": "4,800.00",
+      "source_text": "14: Cloud hosting, monthly 1 4,800.00 4,800.00"
+     },
+     {
+      "label": "Amount before Tax",
+      "value": "14,750.00",
+      "source_text": "15: Amount before tax Rs. 14,750.00"
+     },
+     {
+      "label": "Tax Percentage",
+      "value": "18%",
+      "source_text": "16: Tax (18%) Rs. 2,655.00"
+     },
+     {
+      "label": "Amount Payable",
+      "value": "17,405.00",
+      "source_text": "17: Amount Payable Rs. 17,405.00"
+     }
+    ]
+   },
+   "seconds": 107.1
+  },
+  "8670f10a4c0e032ed6495a048f47d5150f57d6acf5802764dfda5f2c83b304c7": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "party",
+      "value": "Northwind Test Electricity Board",
+      "source_text": "1: Northwind Test Electricity Board"
+     },
+     {
+      "label": "bill type",
+      "value": "Electricity Bill",
+      "source_text": "2: Electricity Bill"
+     },
+     {
+      "label": "consumer number",
+      "value": "1589648881",
+      "source_text": "3: Consumer No 1589648881"
+     },
+     {
+      "label": "bill number",
+      "value": "EB-2026-133555",
+      "source_text": "4: Bill No EB-2026-133555"
+     },
+     {
+      "label": "customer name",
+      "value": "Anil S. Reddy",
+      "source_text": "5: Customer Name Anil S. Reddy"
+     },
+     {
+      "label": "service address",
+      "value": "Flat 3, Jasmine Apartments, Temple Street, Kochi 682001",
+      "source_text": "6: Service Address Flat 3, Jasmine Apartments, Temple Street, Kochi 682001"
+     },
+     {
+      "label": "bill date",
+      "value": "07/10/2026",
+      "source_text": "7: Bill Date 07/10/2026"
+     },
+     {
+      "label": "due date",
+      "value": "22/10/2026",
+      "source_text": "8: Due Date 22/10/2026"
+     },
+     {
+      "label": "billing period",
+      "value": "01/09/2026 to 30/09/2026",
+      "source_text": "9: Billing Period 01/09/2026 to 30/09/2026"
+     },
+     {
+      "label": "previous reading",
+      "value": "80571",
+      "source_text": "10: Previous Reading 80571"
+     },
+     {
+      "label": "current reading",
+      "value": "80984",
+      "source_text": "11: Current Reading 80984"
+     },
+     {
+      "label": "units consumed",
+      "value": "413",
+      "source_text": "12: Units Consumed (kWh) 413"
+     },
+     {
+      "label": "energy charges",
+      "value": "2,271.50",
+      "source_text": "13: Energy Charges 2,271.50"
+     },
+     {
+      "label": "fixed charges",
+      "value": "120.00",
+      "source_text": "14: Fixed Charges 120.00"
+     },
+     {
+      "label": "electricity duty",
+      "value": "136.29",
+      "source_text": "15: Electricity Duty 136.29"
+     },
+     {
+      "label": "net amount payable",
+      "value": "2,527.79",
+      "source_text": "16: Net Amount Payable 2,527.79"
+     },
+     {
+      "label": "amount payable after due date",
+      "value": "2,578.35",
+      "source_text": "17: Amount Payable After Due Date 2,578.35"
+     },
+     {
+      "label": "payment instructions",
+      "value": "Pay at any authorised collection centre or online.",
+      "source_text": "18: Pay at any authorised collection centre or online."
+     }
+    ]
+   },
+   "seconds": 90.5
+  },
+  "b55149cbc4e604b25fa25cbc86bcfd03600dd9cb369fa702b1f23755097f113f": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "Company Name",
+      "value": "Northwind Test Traders Pvt Ltd",
+      "source_text": "1: Northwind Test Traders Pvt Ltd"
+     },
+     {
+      "label": "Invoice Type",
+      "value": "Tax Invoice",
+      "source_text": "2: Tax Invoice"
+     },
+     {
+      "label": "Invoice Number",
+      "value": "INV-2026-4144",
+      "source_text": "3: Invoice No INV-2026-4144"
+     },
+     {
+      "label": "Invoice Date",
+      "value": "22/07/2026",
+      "source_text": "4: Invoice Date 22/07/2026"
+     },
+     {
+      "label": "Due Date",
+      "value": "05/09/2026",
+      "source_text": "5: Due Date 05/09/2026"
+     },
+     {
+      "label": "PO Reference",
+      "value": "PO-36068",
+      "source_text": "6: PO Reference PO-36068"
+     },
+     {
+      "label": "Bill To",
+      "value": "Nikhil M. Pillai",
+      "source_text": "7: Bill To Nikhil M. Pillai"
+     },
+     {
+      "label": "Payment Terms",
+      "value": "Net 45 days",
+      "source_text": "8: Payment Terms Net 45 days"
+     },
+     {
+      "label": "Pay to Account",
+      "value": "TST-3201045588",
+      "source_text": "9: Pay to Account TST-3201045588"
+     },
+     {
+      "label": "Item Description",
+      "value": "Laptop stand",
+      "source_text": "11: Laptop stand 3 1,150.00 3,450.00"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "3",
+      "source_text": "11: Laptop stand 3 1,150.00 3,450.00"
+     },
+     {
+      "label": "Item Rate",
+      "value": "1,150.00",
+      "source_text": "11: Laptop stand 3 1,150.00 3,450.00"
+     },
+     {
+      "label": "Item Amount",
+      "value": "3,450.00",
+      "source_text": "11: Laptop stand 3 1,150.00 3,450.00"
+     },
+     {
+      "label": "Item Description",
+      "value": "Wireless access point",
+      "source_text": "12: Wireless access point 2 6,900.00 13,800.00"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "2",
+      "source_text": "12: Wireless access point 2 6,900.00 13,800.00"
+     },
+     {
+      "label": "Item Rate",
+      "value": "6,900.00",
+      "source_text": "12: Wireless access point 2 6,900.00 13,800.00"
+     },
+     {
+      "label": "Item Amount",
+      "value": "13,800.00",
+      "source_text": "12: Wireless access point 2 6,900.00 13,800.00"
+     },
+     {
+      "label": "Item Description",
+      "value": "Support hours",
+      "source_text": "13: Support hours 6 850.00 5,100.00"
+     },
+     {
+      "label": "Item Quantity",
+      "value": "6",
+      "source_text": "13: Support hours 6 850.00 5,100.00"
+     },
+     {
+      "label": "Item Rate",
+      "value": "850.00",
+      "source_text": "13: Support hours 6 850.00 5,100.00"
+     },
+     {
+      "label": "Item Amount",
+      "value": "5,100.00",
+      "source_text": "13: Support hours 6 850.00 5,100.00"
+     },
+     {
+      "label": "Subtotal",
+      "value": "22,350.00",
+      "source_text": "14: Subtotal 22,350.00"
+     },
+     {
+      "label": "GST Rate",
+      "value": "18%",
+      "source_text": "15: GST @ 18% 4,023.00"
+     },
+     {
+      "label": "GST Amount",
+      "value": "4,023.00",
+      "source_text": "15: GST @ 18% 4,023.00"
+     },
+     {
+      "label": "Total",
+      "value": "26,373.00",
+      "source_text": "16: Total 26,373.00"
+     }
+    ]
+   },
+   "seconds": 122.8
+  },
+  "bc1c364fc962805700f7d30ddb7226a47055122849fa5cdd0fd2d58fa4549eee": {
+   "system": "a70d1394e6f06c4302e2df99eceb8e643470bd9a506c2f60e4e2112ccb4f594e",
+   "reply": {
+    "items": [
+     {
+      "label": "connection ID",
+      "value": "5137235967 EB-2026-716930",
+      "source_text": "Connection ID Invoice Ref 5137235967 EB-2026-716930"
+     },
+     {
+      "label": "name of consumer",
+      "value": "Nikhil M. Pillai",
+      "source_text": "Name of Consumer Issued On Nikhil M. Pillai 07 Aug 2026"
+     },
+     {
+      "label": "premises",
+      "value": "Flat 25, Palm Court, Lakeview Road, Pune 411001",
+      "source_text": "Premises Flat 25, Palm Court, Lakeview Road, Pune 411001"
+     },
+     {
+      "label": "cycle pay by",
+      "value": "01 Jul 2026 - 31 Jul 2026 22 Aug 2026",
+      "source_text": "Cycle Pay By 01 Jul 2026 - 31 Jul 2026 22 Aug 2026"
+     },
+     {
+      "label": "opening meter reading",
+      "value": "43419",
+      "source_text": "Opening Meter Reading 43419"
+     },
+     {
+      "label": "closing meter reading",
+      "value": "43661",
+      "source_text": "Closing Meter Reading 43661"
+     },
+     {
+      "label": "consumption",
+      "value": "242",
+      "source_text": "Consumption (units) 242"
+     },
+     {
+      "label": "cost of energy",
+      "value": "Rs. 1,512.50",
+      "source_text": "Cost of Energy Rs. 1,512.50"
+     },
+     {
+      "label": "demand charge",
+      "value": "Rs. 120.00",
+      "source_text": "Demand Charge Rs. 120.00"
+     },
+     {
+      "label": "duty and cess",
+      "value": "Rs. 90.75",
+      "source_text": "Duty and Cess Rs. 90.75"
+     },
+     {
+      "label": "total due",
+      "value": "Rs. 1,723.25",
+      "source_text": "Total Due Rs. 1,723.25"
+     },
+     {
+      "label": "late payment amount",
+      "value": "Rs. 1,757.71",
+      "source_text": "If Paid Late Rs. 1,757.71"
+     },
+     {
+      "label": "late payment surcharge",
+      "value": "Yes",
+      "source_text": "Late payment attracts a surcharge."
+     }
+    ]
+   },
+   "seconds": 66.6
+  }
+ },
+ "results": [
+  {
+   "fields": [
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "seller",
+     "kind": "text",
+     "label": "",
+     "text": "Brightfield Test Traders Pvt Ltd",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "company_name",
+     "got_text": "Brightfield Test Traders Pvt Ltd",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "invoice_number",
+     "kind": "id",
+     "label": "Invoice No",
+     "text": "INV-2026-7688",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "invoice_number",
+     "got_text": "INV-2026-7688",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "invoice_date",
+     "kind": "date",
+     "label": "Invoice Date",
+     "text": "05/05/2026",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "invoice_date",
+     "got_text": "05/05/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Due Date",
+     "text": "04/06/2026",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "due_date",
+     "got_text": "04/06/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "po_number",
+     "kind": "id",
+     "label": "PO Reference",
+     "text": "PO-61846",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "purchase_order_reference",
+     "got_text": "PO-61846",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "buyer",
+     "kind": "text",
+     "label": "Bill To",
+     "text": "Vikram D. Joshi",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "bill_to",
+     "got_text": "Vikram D. Joshi",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "payment_terms",
+     "kind": "text",
+     "label": "Payment Terms",
+     "text": "Net 30 days",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "payment_terms",
+     "got_text": "Net 30 days",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "bank_account",
+     "kind": "id",
+     "label": "Pay to Account",
+     "text": "TST-1698328893",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "payment_account",
+     "got_text": "TST-1698328893",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "subtotal",
+     "kind": "amount",
+     "label": "Subtotal",
+     "text": "16,400.00",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "subtotal",
+     "got_text": "16,400.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "tax",
+     "kind": "amount",
+     "label": "GST @ 18%",
+     "text": "2,952.00",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "gst_amount",
+     "got_text": "2,952.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "total",
+     "kind": "amount",
+     "label": "Total",
+     "text": "19,352.00",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "total",
+     "got_text": "19,352.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "consumer_no",
+     "kind": "id",
+     "label": "Consumer No",
+     "text": "3599687351",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "consumer_no",
+     "got_text": "3599687351",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "bill_number",
+     "kind": "id",
+     "label": "Bill No",
+     "text": "EB-2026-258556",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "bill_no",
+     "got_text": "EB-2026-258556",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "customer",
+     "kind": "text",
+     "label": "Customer Name",
+     "text": "Vikram D. Joshi",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "customer_name",
+     "got_text": "Vikram D. Joshi",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "service_address",
+     "kind": "text",
+     "label": "Service Address",
+     "text": "Flat 36, Orchid Residency, Temple Street, Mysuru 570001",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "service_address",
+     "got_text": "Flat 36, Orchid Residency, Temple Street, Mysuru 570001",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "bill_date",
+     "kind": "date",
+     "label": "Bill Date",
+     "text": "03/06/2026",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "bill_date",
+     "got_text": "03/06/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Due Date",
+     "text": "18/06/2026",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "due_date",
+     "got_text": "18/06/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "billing_period",
+     "kind": "text",
+     "label": "Billing Period",
+     "text": "01/05/2026 to 31/05/2026",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "billing_period",
+     "got_text": "01/05/2026 to 31/05/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "previous_reading",
+     "kind": "text",
+     "label": "Previous Reading",
+     "text": "17775",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "previous_reading",
+     "got_text": "17775",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "current_reading",
+     "kind": "text",
+     "label": "Current Reading",
+     "text": "18165",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "current_reading",
+     "got_text": "18165",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "units_consumed",
+     "kind": "text",
+     "label": "Units Consumed (kWh)",
+     "text": "390",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "units_consumed_kwh",
+     "got_text": "390",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "energy_charges",
+     "kind": "amount",
+     "label": "Energy Charges",
+     "text": "2,437.50",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "energy_charges",
+     "got_text": "2,437.50",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "fixed_charges",
+     "kind": "amount",
+     "label": "Fixed Charges",
+     "text": "120.00",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "fixed_charges",
+     "got_text": "120.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "electricity_duty",
+     "kind": "amount",
+     "label": "Electricity Duty",
+     "text": "146.25",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "electricity_duty",
+     "got_text": "146.25",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "total_due",
+     "kind": "amount",
+     "label": "Net Amount Payable",
+     "text": "2,703.75",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "net_amount_payable",
+     "got_text": "2,703.75",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "amount_after_due",
+     "kind": "amount",
+     "label": "Amount Payable After Due Date",
+     "text": "2,757.83",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "amount_payable_after_due_date",
+     "got_text": "2,757.83",
+     "exact": true
+    }
+   ],
+   "extras": [
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "document_type",
+     "text": "Tax Invoice",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "quantity",
+     "text": "2",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "rate",
+     "text": "3,250.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Support hours",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "quantity",
+     "text": "6",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "rate",
+     "text": "850.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Cloud hosting, monthly",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "quantity",
+     "text": "1",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "rate",
+     "text": "4,800.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "gst_rate",
+     "text": "18%",
+     "where": "unlisted"
+    }
+   ],
+   "dropped": [
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D1",
+     "label": "invoice date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D1",
+     "label": "due date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D1",
+     "label": "item description",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D1",
+     "label": "amount",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D1",
+     "label": "amount",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D1",
+     "label": "amount",
+     "reason": "same words as an earlier item"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D1",
+     "label": "subtotal",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D1",
+     "label": "total amount",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D2",
+     "label": "Bill Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D2",
+     "label": "Due Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D2",
+     "label": "Energy Charges",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D2",
+     "label": "Fixed Charges",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D2",
+     "label": "Electricity Duty",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D2",
+     "label": "Net Amount Payable",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D2",
+     "label": "Amount Payable After Due Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0000",
+     "doc": "D2",
+     "label": "Pay at any authorised collection cent...",
+     "reason": "label too long"
+    }
+   ],
+   "calls": {
+    "pages": 2,
+    "accepted": 2,
+    "items": 41,
+    "kept": 25,
+    "unused": 0
+   },
+   "seconds": [
+    116.8,
+    75.3
+   ]
+  },
+  {
+   "fields": [
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "seller",
+     "kind": "text",
+     "label": "",
+     "text": "Silverleaf Test Traders Pvt Ltd",
+     "outcome": "right",
+     "iou": 0.81,
+     "got": "company_name",
+     "got_text": "Silverleaf Test Traders Pvt Ltd",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "invoice_number",
+     "kind": "id",
+     "label": "Invoice #",
+     "text": "INV-2026-7350",
+     "outcome": "right",
+     "iou": 0.88,
+     "got": "invoice_number",
+     "got_text": "INV-2026-7350",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "invoice_date",
+     "kind": "date",
+     "label": "Date of Issue",
+     "text": "24 Feb 2026",
+     "outcome": "right",
+     "iou": 0.88,
+     "got": "date_of_issue",
+     "got_text": "24 Feb 2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Payment Due By",
+     "text": "11 Mar 2026",
+     "outcome": "right",
+     "iou": 0.84,
+     "got": "payment_due_by",
+     "got_text": "11 Mar 2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "po_number",
+     "kind": "id",
+     "label": "Your Order No.",
+     "text": "PO-29755",
+     "outcome": "right",
+     "iou": 0.86,
+     "got": "order_number",
+     "got_text": "PO-29755",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "buyer",
+     "kind": "text",
+     "label": "Billed To",
+     "text": "Anil S. Reddy",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "payment_terms",
+     "kind": "text",
+     "label": "Terms",
+     "text": "Net 15 days",
+     "outcome": "right",
+     "iou": 0.91,
+     "got": "terms",
+     "got_text": "Net 15 days",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "bank_account",
+     "kind": "id",
+     "label": "Remit to A/c",
+     "text": "TST-1008088288",
+     "outcome": "misnamed",
+     "iou": 0.86,
+     "got": "invoice_number",
+     "got_text": "TST-1008088288",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "subtotal",
+     "kind": "amount",
+     "label": "Amount before tax",
+     "text": "Rs. 22,400.00",
+     "outcome": "right",
+     "iou": 0.65,
+     "got": "amount_before_tax",
+     "got_text": "22,400.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "tax",
+     "kind": "amount",
+     "label": "Tax (18%)",
+     "text": "Rs. 4,032.00",
+     "outcome": "right",
+     "iou": 0.57,
+     "got": "tax_amount",
+     "got_text": "4,032.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "total",
+     "kind": "amount",
+     "label": "Amount Payable",
+     "text": "Rs. 26,432.00",
+     "outcome": "right",
+     "iou": 0.63,
+     "got": "amount_payable",
+     "got_text": "26,432.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "consumer_no",
+     "kind": "id",
+     "label": "Consumer No",
+     "text": "4500893747",
+     "outcome": "right",
+     "iou": 0.94,
+     "got": "consumer_id",
+     "got_text": "4500893747",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "bill_number",
+     "kind": "id",
+     "label": "Bill No",
+     "text": "EB-2026-802751",
+     "outcome": "right",
+     "iou": 0.89,
+     "got": "bill_number",
+     "got_text": "EB-2026-802751",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "customer",
+     "kind": "text",
+     "label": "Customer Name",
+     "text": "Anil S. Reddy",
+     "outcome": "right",
+     "iou": 0.83,
+     "got": "customer_name",
+     "got_text": "Anil S. Reddy",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "service_address",
+     "kind": "text",
+     "label": "Service Address",
+     "text": "Flat 5, Cedar Villas, Station Road, Indore 452001",
+     "outcome": "right",
+     "iou": 0.9,
+     "got": "service_address",
+     "got_text": "Flat 5, Cedar Villas, Station Road, Indore 452001",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "bill_date",
+     "kind": "date",
+     "label": "Bill Date",
+     "text": "04/03/2026",
+     "outcome": "rules",
+     "iou": 0.93,
+     "got": "bill_date",
+     "got_text": "04/03/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Due Date",
+     "text": "19/03/2026",
+     "outcome": "rules",
+     "iou": 0.87,
+     "got": "due_date",
+     "got_text": "19/03/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "billing_period",
+     "kind": "text",
+     "label": "Billing Period",
+     "text": "01/02/2026 to 28/02/2026",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "billing_period",
+     "got_text": "01/02/2026 to 28/02/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "previous_reading",
+     "kind": "text",
+     "label": "Previous Reading",
+     "text": "52494",
+     "outcome": "right",
+     "iou": 0.89,
+     "got": "previous_reading",
+     "got_text": "52494",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "current_reading",
+     "kind": "text",
+     "label": "Current Reading",
+     "text": "52966",
+     "outcome": "right",
+     "iou": 0.91,
+     "got": "current_reading",
+     "got_text": "52966",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "units_consumed",
+     "kind": "text",
+     "label": "Units Consumed (kWh)",
+     "text": "472",
+     "outcome": "right",
+     "iou": 0.88,
+     "got": "units_consumed",
+     "got_text": "472",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "energy_charges",
+     "kind": "amount",
+     "label": "Energy Charges",
+     "text": "2,950.00",
+     "outcome": "rules",
+     "iou": 0.85,
+     "got": "energy_charges",
+     "got_text": "2,950.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "fixed_charges",
+     "kind": "amount",
+     "label": "Fixed Charges",
+     "text": "210.00",
+     "outcome": "rules",
+     "iou": 0.89,
+     "got": "fixed_charges",
+     "got_text": "210.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "electricity_duty",
+     "kind": "amount",
+     "label": "Electricity Duty",
+     "text": "177.00",
+     "outcome": "rules",
+     "iou": 0.93,
+     "got": "electricity_duty",
+     "got_text": "177.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "total_due",
+     "kind": "amount",
+     "label": "Net Amount Payable",
+     "text": "3,337.00",
+     "outcome": "rules",
+     "iou": 0.88,
+     "got": "net_amount_payable",
+     "got_text": "3,337.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "amount_after_due",
+     "kind": "amount",
+     "label": "Amount Payable After Due Date",
+     "text": "3,403.74",
+     "outcome": "rules",
+     "iou": 0.83,
+     "got": "amount_payable_after_due_date",
+     "got_text": "3,403.74",
+     "exact": true
+    }
+   ],
+   "extras": [
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "6",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "unit_price",
+     "text": "850.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "line_total",
+     "text": "5,100.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "1",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "unit_price",
+     "text": "5,400.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "line_total",
+     "text": "10,800.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "2",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "unit_price",
+     "text": "3,250.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "line_total",
+     "text": "6,500.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "tax_rate",
+     "text": "(18%)",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "signature",
+     "text": "Computer generated; no signature required.",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "name": "company",
+     "text": "Ironwood Test Electricity Board",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "name": "bill_type",
+     "text": "Electricity Bill",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "name": "payment_instructions",
+     "text": "Pay at any authorised collection centre or online.",
+     "where": "unlisted"
+    }
+   ],
+   "dropped": [
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "D2",
+     "label": "Bill Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "D2",
+     "label": "Due Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "D2",
+     "label": "Energy Charges",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "D2",
+     "label": "Fixed Charges",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "D2",
+     "label": "Electricity Duty",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "D2",
+     "label": "Net Amount Payable",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0001",
+     "doc": "D2",
+     "label": "Amount Payable After Due Date",
+     "reason": "already read by the rules"
+    }
+   ],
+   "calls": {
+    "pages": 2,
+    "accepted": 2,
+    "items": 39,
+    "kept": 32,
+    "unused": 0
+   },
+   "seconds": [
+    107.7,
+    78.2
+   ]
+  },
+  {
+   "fields": [
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "seller",
+     "kind": "text",
+     "label": "",
+     "text": "Northwind Test Traders Pvt Ltd",
+     "outcome": "right",
+     "iou": 0.87,
+     "got": "company_name",
+     "got_text": "Northwind Test Traders Pvt Ltd",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "invoice_number",
+     "kind": "id",
+     "label": "Invoice No",
+     "text": "INV-2026-3190",
+     "outcome": "right",
+     "iou": 0.94,
+     "got": "invoice_number",
+     "got_text": "INV-2026-3190",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "invoice_date",
+     "kind": "date",
+     "label": "Invoice Date",
+     "text": "23/01/2026",
+     "outcome": "rules",
+     "iou": 0.96,
+     "got": "invoice_date",
+     "got_text": "23/01/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Due Date",
+     "text": "22/02/2026",
+     "outcome": "rules",
+     "iou": 0.96,
+     "got": "due_date",
+     "got_text": "22/02/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "po_number",
+     "kind": "id",
+     "label": "PO Reference",
+     "text": "PO-85250",
+     "outcome": "right",
+     "iou": 0.96,
+     "got": "po_reference",
+     "got_text": "PO-85250",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "buyer",
+     "kind": "text",
+     "label": "Bill To",
+     "text": "Meera H. Menon",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "bill_to",
+     "got_text": "Meera H. Menon",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "payment_terms",
+     "kind": "text",
+     "label": "Payment Terms",
+     "text": "Net 30 days",
+     "outcome": "right",
+     "iou": 0.91,
+     "got": "payment_terms",
+     "got_text": "Net 30 days",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "bank_account",
+     "kind": "id",
+     "label": "Pay to Account",
+     "text": "TST-7939109314",
+     "outcome": "right",
+     "iou": 0.95,
+     "got": "pay_to_account",
+     "got_text": "TST-7939109314",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "subtotal",
+     "kind": "amount",
+     "label": "Subtotal",
+     "text": "23,700.00",
+     "outcome": "rules",
+     "iou": 0.89,
+     "got": "subtotal",
+     "got_text": "23,700.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "tax",
+     "kind": "amount",
+     "label": "GST @ 18%",
+     "text": "4,266.00",
+     "outcome": "right",
+     "iou": 0.93,
+     "got": "gst_amount",
+     "got_text": "4,266.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "total",
+     "kind": "amount",
+     "label": "Total",
+     "text": "27,966.00",
+     "outcome": "rules",
+     "iou": 0.94,
+     "got": "total",
+     "got_text": "27,966.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "consumer_no",
+     "kind": "id",
+     "label": "Connection ID",
+     "text": "9854584182",
+     "outcome": "partial",
+     "iou": 0.1,
+     "got": "connection_id",
+     "got_text": "9854584182 EB-2026-883312",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "bill_number",
+     "kind": "id",
+     "label": "Invoice Ref",
+     "text": "EB-2026-883312",
+     "outcome": "partial",
+     "iou": 0.15,
+     "got": "connection_id",
+     "got_text": "9854584182 EB-2026-883312",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "customer",
+     "kind": "text",
+     "label": "Name of Consumer",
+     "text": "Meera H. Menon",
+     "outcome": "right",
+     "iou": 0.87,
+     "got": "name_of_consumer",
+     "got_text": "Meera H. Menon",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "service_address",
+     "kind": "text",
+     "label": "Premises",
+     "text": "Flat 27, Orchid Residency, Station Road, Kochi 682001",
+     "outcome": "right",
+     "iou": 0.97,
+     "got": "premises",
+     "got_text": "Flat 27, Orchid Residency, Station Road, Kochi 682001",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "bill_date",
+     "kind": "date",
+     "label": "Issued On",
+     "text": "06 Feb 2026",
+     "outcome": "rules",
+     "iou": 0.9,
+     "got": "meera_h_menon",
+     "got_text": "06 Feb 2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Pay By",
+     "text": "21 Feb 2026",
+     "outcome": "partial",
+     "iou": 0.11,
+     "got": "cycle_pay_by",
+     "got_text": "01 Jan 2026 - 31 Jan 2026 21 Feb 2026",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "billing_period",
+     "kind": "text",
+     "label": "Cycle",
+     "text": "01 Jan 2026 - 31 Jan 2026",
+     "outcome": "partial",
+     "iou": 0.28,
+     "got": "cycle_pay_by",
+     "got_text": "01 Jan 2026 - 31 Jan 2026 21 Feb 2026",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "previous_reading",
+     "kind": "text",
+     "label": "Opening Meter Reading",
+     "text": "47157",
+     "outcome": "right",
+     "iou": 0.85,
+     "got": "opening_meter_reading",
+     "got_text": "47157",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "current_reading",
+     "kind": "text",
+     "label": "Closing Meter Reading",
+     "text": "47432",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "units_consumed",
+     "kind": "text",
+     "label": "Consumption (units)",
+     "text": "275",
+     "outcome": "right",
+     "iou": 0.86,
+     "got": "consumption",
+     "got_text": "275",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "energy_charges",
+     "kind": "amount",
+     "label": "Cost of Energy",
+     "text": "Rs. 1,718.75",
+     "outcome": "rules",
+     "iou": 0.91,
+     "got": "cost_of_energy",
+     "got_text": "Rs. 1,718.75",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "fixed_charges",
+     "kind": "amount",
+     "label": "Demand Charge",
+     "text": "Rs. 120.00",
+     "outcome": "rules",
+     "iou": 0.86,
+     "got": "demand_charge",
+     "got_text": "Rs. 120.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "electricity_duty",
+     "kind": "amount",
+     "label": "Duty and Cess",
+     "text": "Rs. 103.12",
+     "outcome": "rules",
+     "iou": 0.86,
+     "got": "duty_and_cess",
+     "got_text": "Rs. 103.12",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "total_due",
+     "kind": "amount",
+     "label": "Total Due",
+     "text": "Rs. 1,941.87",
+     "outcome": "rules",
+     "iou": 0.93,
+     "got": "total_due",
+     "got_text": "Rs. 1,941.87",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "amount_after_due",
+     "kind": "amount",
+     "label": "If Paid Late",
+     "text": "Rs. 1,980.71",
+     "outcome": "rules",
+     "iou": 0.95,
+     "got": "if_paid_late",
+     "got_text": "Rs. 1,980.71",
+     "exact": true
+    }
+   ],
+   "extras": [
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "invoice_type",
+     "text": "Tax Invoice",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Wireless access point 2",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_rate",
+     "text": "6,900.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_amount",
+     "text": "13,800.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Cloud hosting, monthly",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_rate",
+     "text": "4,800.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Support hours 6",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_rate",
+     "text": "850.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "gst_rate",
+     "text": "18%",
+     "where": "unlisted"
+    }
+   ],
+   "dropped": [
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D1",
+     "label": "Invoice Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D1",
+     "label": "Due Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D1",
+     "label": "Item Amount",
+     "reason": "same words as an earlier item"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D1",
+     "label": "Item Amount",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D1",
+     "label": "Subtotal",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D1",
+     "label": "Total Amount",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D2",
+     "label": "closing meter reading",
+     "reason": "source text not found on the page"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D2",
+     "label": "cost of energy",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D2",
+     "label": "demand charge",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D2",
+     "label": "duty and cess",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D2",
+     "label": "total due",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0002",
+     "doc": "D2",
+     "label": "late payment amount",
+     "reason": "already read by the rules"
+    }
+   ],
+   "calls": {
+    "pages": 2,
+    "accepted": 2,
+    "items": 34,
+    "kept": 22,
+    "unused": 0
+   },
+   "seconds": [
+    86.3,
+    58.8
+   ]
+  },
+  {
+   "fields": [
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "seller",
+     "kind": "text",
+     "label": "",
+     "text": "Harborview Test Traders Pvt Ltd",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "company_name",
+     "got_text": "Harborview Test Traders Pvt Ltd",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "invoice_number",
+     "kind": "id",
+     "label": "Invoice #",
+     "text": "INV-2026-4559",
+     "outcome": "right",
+     "iou": 0.85,
+     "got": "invoice_number",
+     "got_text": "INV-2026-4559",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "invoice_date",
+     "kind": "date",
+     "label": "Date of Issue",
+     "text": "25 Sep 2026",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "issue_date",
+     "got_text": "25 Sep 2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Payment Due By",
+     "text": "25 Oct 2026",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "payment_due_date",
+     "got_text": "25 Oct 2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "po_number",
+     "kind": "id",
+     "label": "Your Order No.",
+     "text": "PO-11792",
+     "outcome": "right",
+     "iou": 0.9,
+     "got": "order_number",
+     "got_text": "PO-11792",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "buyer",
+     "kind": "text",
+     "label": "Billed To",
+     "text": "Suresh T. Nair",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "payment_terms",
+     "kind": "text",
+     "label": "Terms",
+     "text": "Net 30 days",
+     "outcome": "right",
+     "iou": 0.85,
+     "got": "payment_terms",
+     "got_text": "Net 30 days",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "bank_account",
+     "kind": "id",
+     "label": "Remit to A/c",
+     "text": "TST-7498588932",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "account_number",
+     "got_text": "TST-7498588932",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "subtotal",
+     "kind": "amount",
+     "label": "Amount before tax",
+     "text": "Rs. 29,250.00",
+     "outcome": "right",
+     "iou": 0.67,
+     "got": "amount_before_tax",
+     "got_text": "29.250.00",
+     "exact": false
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "tax",
+     "kind": "amount",
+     "label": "Tax (18%)",
+     "text": "Rs. 5,265.00",
+     "outcome": "right",
+     "iou": 0.6,
+     "got": "tax_amount",
+     "got_text": "5.265.00",
+     "exact": false
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "total",
+     "kind": "amount",
+     "label": "Amount Payable",
+     "text": "Rs. 34,515.00",
+     "outcome": "right",
+     "iou": 0.65,
+     "got": "amount_payable",
+     "got_text": "34.515.00",
+     "exact": false
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "consumer_no",
+     "kind": "id",
+     "label": "Connection ID",
+     "text": "7865163317",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "bill_number",
+     "kind": "id",
+     "label": "Invoice Ref",
+     "text": "EB-2026-902781",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "customer",
+     "kind": "text",
+     "label": "Name of Consumer",
+     "text": "Suresh T. Nair",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "service_address",
+     "kind": "text",
+     "label": "Premises",
+     "text": "Flat 20, Jasmine Apartments, Station Road, Nagpur 440001",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "bill_date",
+     "kind": "date",
+     "label": "Issued On",
+     "text": "04 Oct 2026",
+     "outcome": "rules",
+     "iou": 0.92,
+     "got": "suresh_t_nair",
+     "got_text": "04 Oct 2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Pay By",
+     "text": "19 Oct 2026",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "billing_period",
+     "kind": "text",
+     "label": "Cycle",
+     "text": "01 Sep 2026 - 30 Sep 2026",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "previous_reading",
+     "kind": "text",
+     "label": "Opening Meter Reading",
+     "text": "35288",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "current_reading",
+     "kind": "text",
+     "label": "Closing Meter Reading",
+     "text": "35712",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "units_consumed",
+     "kind": "text",
+     "label": "Consumption (units)",
+     "text": "424",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "energy_charges",
+     "kind": "amount",
+     "label": "Cost of Energy",
+     "text": "Rs. 2,650.00",
+     "outcome": "right",
+     "iou": 0.91,
+     "got": "cost_of_energy",
+     "got_text": "Rs. 2.650.00",
+     "exact": false
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "fixed_charges",
+     "kind": "amount",
+     "label": "Demand Charge",
+     "text": "Rs. 150.00",
+     "outcome": "rules",
+     "iou": 0.88,
+     "got": "demand_charge",
+     "got_text": "Rs. 150.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "electricity_duty",
+     "kind": "amount",
+     "label": "Duty and Cess",
+     "text": "Rs. 159.00",
+     "outcome": "rules",
+     "iou": 0.93,
+     "got": "duty_and_cess",
+     "got_text": "Rs. 159.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "total_due",
+     "kind": "amount",
+     "label": "Total Due",
+     "text": "Rs. 2,959.00",
+     "outcome": "rules",
+     "iou": 0.91,
+     "got": "total_due",
+     "got_text": "Rs. 2,959.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "120dpi",
+     "field": "amount_after_due",
+     "kind": "amount",
+     "label": "If Paid Late",
+     "text": "Rs. 3,018.18",
+     "outcome": "right",
+     "iou": 0.89,
+     "got": "late_payment",
+     "got_text": "Rs. 3.018.18",
+     "exact": false
+    }
+   ],
+   "extras": [
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "3",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "unit_price",
+     "text": "1.150.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "line_total",
+     "text": "3.450.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "2",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "unit_price",
+     "text": "6,900.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "line_total",
+     "text": "13.800.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "1",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "unit_price",
+     "text": "12,000.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "line_total",
+     "text": "12.000.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "tax_rate",
+     "text": "(18%)",
+     "where": "unlisted"
+    }
+   ],
+   "dropped": [
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "party",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "party",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "date",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "address",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "payment_period",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "opening_meter_reading",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "closing_meter_reading",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "consumption",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "demand_charge",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "duty_and_cess",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "total_due",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0003",
+     "doc": "D2",
+     "label": "late_payment_surcharge",
+     "reason": "same words as an earlier item"
+    }
+   ],
+   "calls": {
+    "pages": 2,
+    "accepted": 2,
+    "items": 34,
+    "kept": 22,
+    "unused": 0
+   },
+   "seconds": [
+    110.6,
+    64.3
+   ]
+  },
+  {
+   "fields": [
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "seller",
+     "kind": "text",
+     "label": "",
+     "text": "Harborview Test Traders Pvt Ltd",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "company_name",
+     "got_text": "Harborview Test Traders Pvt Ltd",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "invoice_number",
+     "kind": "id",
+     "label": "Invoice No",
+     "text": "INV-2026-6670",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "invoice_number",
+     "got_text": "INV-2026-6670",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "invoice_date",
+     "kind": "date",
+     "label": "Invoice Date",
+     "text": "24/04/2026",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "invoice_date",
+     "got_text": "24/04/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Due Date",
+     "text": "24/05/2026",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "due_date",
+     "got_text": "24/05/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "po_number",
+     "kind": "id",
+     "label": "PO Reference",
+     "text": "PO-32263",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "po_reference",
+     "got_text": "PO-32263",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "buyer",
+     "kind": "text",
+     "label": "Bill To",
+     "text": "Meera D. Joshi",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "bill_to",
+     "got_text": "Meera D. Joshi",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "payment_terms",
+     "kind": "text",
+     "label": "Payment Terms",
+     "text": "Net 30 days",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "payment_terms",
+     "got_text": "Net 30 days",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "bank_account",
+     "kind": "id",
+     "label": "Pay to Account",
+     "text": "TST-3482137197",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "pay_to_account",
+     "got_text": "TST-3482137197",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "subtotal",
+     "kind": "amount",
+     "label": "Subtotal",
+     "text": "18,500.00",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "subtotal",
+     "got_text": "18,500.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "tax",
+     "kind": "amount",
+     "label": "GST @ 18%",
+     "text": "3,330.00",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "digital",
+     "field": "total",
+     "kind": "amount",
+     "label": "Total",
+     "text": "21,830.00",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "total",
+     "got_text": "21,830.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "consumer_no",
+     "kind": "id",
+     "label": "Consumer No",
+     "text": "6000163217",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "consumer_id",
+     "got_text": "6000163217",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "bill_number",
+     "kind": "id",
+     "label": "Bill No",
+     "text": "EB-2026-873610",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "bill_number",
+     "got_text": "EB-2026-873610",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "customer",
+     "kind": "text",
+     "label": "Customer Name",
+     "text": "Meera D. Joshi",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "customer_name",
+     "got_text": "Meera D. Joshi",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "service_address",
+     "kind": "text",
+     "label": "Service Address",
+     "text": "Flat 9, Palm Court, Station Road, Pune 411001",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "service_address",
+     "got_text": "Flat 9, Palm Court, Station Road, Pune 411001",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "bill_date",
+     "kind": "date",
+     "label": "Bill Date",
+     "text": "07/05/2026",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "bill_date",
+     "got_text": "07/05/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Due Date",
+     "text": "22/05/2026",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "due_date",
+     "got_text": "22/05/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "billing_period",
+     "kind": "text",
+     "label": "Billing Period",
+     "text": "01/04/2026 to 30/04/2026",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "billing_period",
+     "got_text": "01/04/2026 to 30/04/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "previous_reading",
+     "kind": "text",
+     "label": "Previous Reading",
+     "text": "76305",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "previous_reading",
+     "got_text": "76305",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "current_reading",
+     "kind": "text",
+     "label": "Current Reading",
+     "text": "76473",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "current_reading",
+     "got_text": "76473",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "units_consumed",
+     "kind": "text",
+     "label": "Units Consumed (kWh)",
+     "text": "168",
+     "outcome": "right",
+     "iou": 1.0,
+     "got": "units_consumed",
+     "got_text": "168",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "energy_charges",
+     "kind": "amount",
+     "label": "Energy Charges",
+     "text": "1,192.80",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "energy_charges",
+     "got_text": "1,192.80",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "fixed_charges",
+     "kind": "amount",
+     "label": "Fixed Charges",
+     "text": "210.00",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "fixed_charges",
+     "got_text": "210.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "electricity_duty",
+     "kind": "amount",
+     "label": "Electricity Duty",
+     "text": "71.57",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "electricity_duty",
+     "got_text": "71.57",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "total_due",
+     "kind": "amount",
+     "label": "Net Amount Payable",
+     "text": "1,474.37",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "net_amount_payable",
+     "got_text": "1,474.37",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "layout": "A",
+     "medium": "digital",
+     "field": "amount_after_due",
+     "kind": "amount",
+     "label": "Amount Payable After Due Date",
+     "text": "1,503.86",
+     "outcome": "rules",
+     "iou": 1.0,
+     "got": "amount_payable_after_due_date",
+     "got_text": "1,503.86",
+     "exact": true
+    }
+   ],
+   "extras": [
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "invoice_type",
+     "text": "Tax Invoice",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Network cabling, 40 m",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Support hours",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "01_invoice.pdf",
+     "type": "invoice",
+     "name": "gst_rate",
+     "text": "18%",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "name": "company",
+     "text": "Kestrel Test Electricity Board",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "name": "bill_type",
+     "text": "Electricity Bill",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "02_bill.pdf",
+     "type": "bill",
+     "name": "payment_instructions",
+     "text": "Pay at any authorised collection centre or online.",
+     "where": "unlisted"
+    }
+   ],
+   "dropped": [
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D1",
+     "label": "Invoice Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D1",
+     "label": "Due Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D1",
+     "label": "Item Description",
+     "reason": "value not inside its source text"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D1",
+     "label": "Subtotal",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D1",
+     "label": "Total Amount",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D2",
+     "label": "Bill Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D2",
+     "label": "Due Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D2",
+     "label": "Energy Charges",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D2",
+     "label": "Fixed Charges",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D2",
+     "label": "Electricity Duty",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D2",
+     "label": "Net Amount Payable",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0004",
+     "doc": "D2",
+     "label": "Amount Payable After Due Date",
+     "reason": "already read by the rules"
+    }
+   ],
+   "calls": {
+    "pages": 2,
+    "accepted": 2,
+    "items": 33,
+    "kept": 21,
+    "unused": 0
+   },
+   "seconds": [
+    59.7,
+    83.4
+   ]
+  },
+  {
+   "fields": [
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "seller",
+     "kind": "text",
+     "label": "",
+     "text": "Ironwood Test Traders Pvt Ltd",
+     "outcome": "right",
+     "iou": 0.8,
+     "got": "company_name",
+     "got_text": "Ironwood Test Traders Pvt Ltd",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "invoice_number",
+     "kind": "id",
+     "label": "Invoice #",
+     "text": "INV-2026-2263",
+     "outcome": "right",
+     "iou": 0.9,
+     "got": "invoice_number",
+     "got_text": "INV-2026-2263",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "invoice_date",
+     "kind": "date",
+     "label": "Date of Issue",
+     "text": "18 Sep 2026",
+     "outcome": "right",
+     "iou": 0.87,
+     "got": "date_of_issue",
+     "got_text": "18 Sep 2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Payment Due By",
+     "text": "03 Oct 2026",
+     "outcome": "right",
+     "iou": 0.89,
+     "got": "payment_due_by",
+     "got_text": "03 Oct 2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "po_number",
+     "kind": "id",
+     "label": "Your Order No.",
+     "text": "PO-19007",
+     "outcome": "right",
+     "iou": 0.82,
+     "got": "order_number",
+     "got_text": "PO-19007",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "buyer",
+     "kind": "text",
+     "label": "Billed To",
+     "text": "Anil S. Reddy",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "billed_to",
+     "got_text": "Anil S. Reddy",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "payment_terms",
+     "kind": "text",
+     "label": "Terms",
+     "text": "Net 15 days",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "bank_account",
+     "kind": "id",
+     "label": "Remit to A/c",
+     "text": "TST-9598771862",
+     "outcome": "right",
+     "iou": 0.88,
+     "got": "remit_to_account",
+     "got_text": "TST-9598771862",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "subtotal",
+     "kind": "amount",
+     "label": "Amount before tax",
+     "text": "Rs. 14,750.00",
+     "outcome": "right",
+     "iou": 0.61,
+     "got": "amount_before_tax",
+     "got_text": "14,750.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "tax",
+     "kind": "amount",
+     "label": "Tax (18%)",
+     "text": "Rs. 2,655.00",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "B",
+     "medium": "mild",
+     "field": "total",
+     "kind": "amount",
+     "label": "Amount Payable",
+     "text": "Rs. 17,405.00",
+     "outcome": "right",
+     "iou": 0.65,
+     "got": "amount_payable",
+     "got_text": "17,405.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "consumer_no",
+     "kind": "id",
+     "label": "Consumer No",
+     "text": "1589648881",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "consumer_number",
+     "got_text": "1589648881",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "bill_number",
+     "kind": "id",
+     "label": "Bill No",
+     "text": "EB-2026-133555",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "bill_number",
+     "got_text": "EB-2026-133555",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "customer",
+     "kind": "text",
+     "label": "Customer Name",
+     "text": "Anil S. Reddy",
+     "outcome": "right",
+     "iou": 0.9,
+     "got": "customer_name",
+     "got_text": "Anil S. Reddy",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "service_address",
+     "kind": "text",
+     "label": "Service Address",
+     "text": "Flat 3, Jasmine Apartments, Temple Street, Kochi 682001",
+     "outcome": "right",
+     "iou": 0.95,
+     "got": "service_address",
+     "got_text": "Flat 3, Jasmine Apartments, Temple Street, Kochi 682001",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "bill_date",
+     "kind": "date",
+     "label": "Bill Date",
+     "text": "07/10/2026",
+     "outcome": "rules",
+     "iou": 0.95,
+     "got": "bill_date",
+     "got_text": "07/10/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Due Date",
+     "text": "22/10/2026",
+     "outcome": "rules",
+     "iou": 0.89,
+     "got": "due_date",
+     "got_text": "22/10/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "billing_period",
+     "kind": "text",
+     "label": "Billing Period",
+     "text": "01/09/2026 to 30/09/2026",
+     "outcome": "right",
+     "iou": 0.9,
+     "got": "billing_period",
+     "got_text": "01/09/2026 to 30/09/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "previous_reading",
+     "kind": "text",
+     "label": "Previous Reading",
+     "text": "80571",
+     "outcome": "right",
+     "iou": 0.92,
+     "got": "previous_reading",
+     "got_text": "80571",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "current_reading",
+     "kind": "text",
+     "label": "Current Reading",
+     "text": "80984",
+     "outcome": "right",
+     "iou": 0.91,
+     "got": "current_reading",
+     "got_text": "80984",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "units_consumed",
+     "kind": "text",
+     "label": "Units Consumed (kWh)",
+     "text": "413",
+     "outcome": "right",
+     "iou": 0.83,
+     "got": "units_consumed",
+     "got_text": "413",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "energy_charges",
+     "kind": "amount",
+     "label": "Energy Charges",
+     "text": "2,271.50",
+     "outcome": "rules",
+     "iou": 0.85,
+     "got": "energy_charges",
+     "got_text": "2,271.50",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "fixed_charges",
+     "kind": "amount",
+     "label": "Fixed Charges",
+     "text": "120.00",
+     "outcome": "rules",
+     "iou": 0.89,
+     "got": "fixed_charges",
+     "got_text": "120.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "electricity_duty",
+     "kind": "amount",
+     "label": "Electricity Duty",
+     "text": "136.29",
+     "outcome": "rules",
+     "iou": 0.89,
+     "got": "electricity_duty",
+     "got_text": "136.29",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "total_due",
+     "kind": "amount",
+     "label": "Net Amount Payable",
+     "text": "2,527.79",
+     "outcome": "rules",
+     "iou": 0.89,
+     "got": "net_amount_payable",
+     "got_text": "2,527.79",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "A",
+     "medium": "mild",
+     "field": "amount_after_due",
+     "kind": "amount",
+     "label": "Amount Payable After Due Date",
+     "text": "2,578.35",
+     "outcome": "rules",
+     "iou": 0.91,
+     "got": "amount_payable_after_due_date",
+     "got_text": "2,578.35",
+     "exact": true
+    }
+   ],
+   "extras": [
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "2",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "unit_price",
+     "text": "3,250.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "line_total",
+     "text": "6,500.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "3",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "unit_price",
+     "text": "1,150.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "line_total",
+     "text": "3,450.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "1",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "unit_price",
+     "text": "4,800.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "tax_percentage",
+     "text": "(18%)",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "name": "party",
+     "text": "Northwind Test Electricity Board",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "name": "bill_type",
+     "text": "Electricity Bill",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "name": "payment_instructions",
+     "text": "Pay at any authorised collection centre or online.",
+     "where": "unlisted"
+    }
+   ],
+   "dropped": [
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "D1",
+     "label": "Line Total",
+     "reason": "same words as an earlier item"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "D2",
+     "label": "bill date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "D2",
+     "label": "due date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "D2",
+     "label": "energy charges",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "D2",
+     "label": "fixed charges",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "D2",
+     "label": "electricity duty",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "D2",
+     "label": "net amount payable",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0005",
+     "doc": "D2",
+     "label": "amount payable after due date",
+     "reason": "already read by the rules"
+    }
+   ],
+   "calls": {
+    "pages": 2,
+    "accepted": 2,
+    "items": 37,
+    "kept": 29,
+    "unused": 0
+   },
+   "seconds": [
+    107.1,
+    90.5
+   ]
+  },
+  {
+   "fields": [
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "seller",
+     "kind": "text",
+     "label": "",
+     "text": "Northwind Test Traders Pvt Ltd",
+     "outcome": "right",
+     "iou": 0.74,
+     "got": "company_name",
+     "got_text": "Northwind Test Traders Pvt Ltd",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "invoice_number",
+     "kind": "id",
+     "label": "Invoice No",
+     "text": "INV-2026-4144",
+     "outcome": "right",
+     "iou": 0.89,
+     "got": "invoice_number",
+     "got_text": "INV-2026-4144",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "invoice_date",
+     "kind": "date",
+     "label": "Invoice Date",
+     "text": "22/07/2026",
+     "outcome": "rules",
+     "iou": 0.89,
+     "got": "invoice_date",
+     "got_text": "22/07/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Due Date",
+     "text": "05/09/2026",
+     "outcome": "rules",
+     "iou": 0.89,
+     "got": "due_date",
+     "got_text": "05/09/2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "po_number",
+     "kind": "id",
+     "label": "PO Reference",
+     "text": "PO-36068",
+     "outcome": "right",
+     "iou": 0.9,
+     "got": "po_reference",
+     "got_text": "PO-36068",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "buyer",
+     "kind": "text",
+     "label": "Bill To",
+     "text": "Nikhil M. Pillai",
+     "outcome": "right",
+     "iou": 0.86,
+     "got": "bill_to",
+     "got_text": "Nikhil M. Pillai",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "payment_terms",
+     "kind": "text",
+     "label": "Payment Terms",
+     "text": "Net 45 days",
+     "outcome": "right",
+     "iou": 0.95,
+     "got": "payment_terms",
+     "got_text": "Net 45 days",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "bank_account",
+     "kind": "id",
+     "label": "Pay to Account",
+     "text": "TST-3201045588",
+     "outcome": "right",
+     "iou": 0.9,
+     "got": "pay_to_account",
+     "got_text": "TST-3201045588",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "subtotal",
+     "kind": "amount",
+     "label": "Subtotal",
+     "text": "22,350.00",
+     "outcome": "rules",
+     "iou": 0.87,
+     "got": "subtotal",
+     "got_text": "22,350.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "tax",
+     "kind": "amount",
+     "label": "GST @ 18%",
+     "text": "4,023.00",
+     "outcome": "right",
+     "iou": 0.89,
+     "got": "gst_amount",
+     "got_text": "4,023.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "layout": "A",
+     "medium": "150dpi",
+     "field": "total",
+     "kind": "amount",
+     "label": "Total",
+     "text": "26,373.00",
+     "outcome": "rules",
+     "iou": 0.89,
+     "got": "total",
+     "got_text": "26,373.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "consumer_no",
+     "kind": "id",
+     "label": "Connection ID",
+     "text": "5137235967",
+     "outcome": "partial",
+     "iou": 0.14,
+     "got": "connection_id",
+     "got_text": "5137235967 EB-2026-716930",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "bill_number",
+     "kind": "id",
+     "label": "Invoice Ref",
+     "text": "EB-2026-716930",
+     "outcome": "partial",
+     "iou": 0.18,
+     "got": "connection_id",
+     "got_text": "5137235967 EB-2026-716930",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "customer",
+     "kind": "text",
+     "label": "Name of Consumer",
+     "text": "Nikhil M. Pillai",
+     "outcome": "right",
+     "iou": 0.84,
+     "got": "name_of_consumer",
+     "got_text": "Nikhil M. Pillai",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "service_address",
+     "kind": "text",
+     "label": "Premises",
+     "text": "Flat 25, Palm Court, Lakeview Road, Pune 411001",
+     "outcome": "right",
+     "iou": 0.93,
+     "got": "premises",
+     "got_text": "Flat 25, Palm Court, Lakeview Road, Pune 411001",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "bill_date",
+     "kind": "date",
+     "label": "Issued On",
+     "text": "07 Aug 2026",
+     "outcome": "rules",
+     "iou": 0.8,
+     "got": "nikhil_m_pillai",
+     "got_text": "07 Aug 2026",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "due_date",
+     "kind": "date",
+     "label": "Pay By",
+     "text": "22 Aug 2026",
+     "outcome": "partial",
+     "iou": 0.14,
+     "got": "cycle_pay_by",
+     "got_text": "01 Jul 2026 - 31 Jul 2026 22 Aug 2026",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "billing_period",
+     "kind": "text",
+     "label": "Cycle",
+     "text": "01 Jul 2026 - 31 Jul 2026",
+     "outcome": "partial",
+     "iou": 0.3,
+     "got": "cycle_pay_by",
+     "got_text": "01 Jul 2026 - 31 Jul 2026 22 Aug 2026",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "previous_reading",
+     "kind": "text",
+     "label": "Opening Meter Reading",
+     "text": "43419",
+     "outcome": "right",
+     "iou": 0.82,
+     "got": "opening_meter_reading",
+     "got_text": "43419",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "current_reading",
+     "kind": "text",
+     "label": "Closing Meter Reading",
+     "text": "43661",
+     "outcome": "missing",
+     "iou": 0.0,
+     "got": "",
+     "got_text": "",
+     "exact": null
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "units_consumed",
+     "kind": "text",
+     "label": "Consumption (units)",
+     "text": "242",
+     "outcome": "right",
+     "iou": 0.83,
+     "got": "consumption",
+     "got_text": "242",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "energy_charges",
+     "kind": "amount",
+     "label": "Cost of Energy",
+     "text": "Rs. 1,512.50",
+     "outcome": "rules",
+     "iou": 0.94,
+     "got": "cost_of_energy",
+     "got_text": "Rs. 1,512.50",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "fixed_charges",
+     "kind": "amount",
+     "label": "Demand Charge",
+     "text": "Rs. 120.00",
+     "outcome": "rules",
+     "iou": 0.91,
+     "got": "demand_charge",
+     "got_text": "Rs. 120.00",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "electricity_duty",
+     "kind": "amount",
+     "label": "Duty and Cess",
+     "text": "Rs. 90.75",
+     "outcome": "rules",
+     "iou": 0.87,
+     "got": "duty_and_cess",
+     "got_text": "Rs. 90.75",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "total_due",
+     "kind": "amount",
+     "label": "Total Due",
+     "text": "Rs. 1,723.25",
+     "outcome": "rules",
+     "iou": 0.82,
+     "got": "total_due",
+     "got_text": "Rs. 1,723.25",
+     "exact": true
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "02_bill.jpg",
+     "type": "bill",
+     "layout": "B",
+     "medium": "150dpi",
+     "field": "amount_after_due",
+     "kind": "amount",
+     "label": "If Paid Late",
+     "text": "Rs. 1,757.71",
+     "outcome": "rules",
+     "iou": 0.88,
+     "got": "if_paid_late",
+     "got_text": "Rs. 1,757.71",
+     "exact": true
+    }
+   ],
+   "extras": [
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "invoice_type",
+     "text": "Tax Invoice",
+     "where": "unlisted"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Laptop stand",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "3",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_rate",
+     "text": "1,150.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_amount",
+     "text": "3,450.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Wireless access point",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "2",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_rate",
+     "text": "6,900.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_amount",
+     "text": "13,800.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_description",
+     "text": "Support hours",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_quantity",
+     "text": "6",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_rate",
+     "text": "850.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "item_amount",
+     "text": "5,100.00",
+     "where": "table cell"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "01_invoice.jpg",
+     "type": "invoice",
+     "name": "gst_rate",
+     "text": "18%",
+     "where": "unlisted"
+    }
+   ],
+   "dropped": [
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D1",
+     "label": "Invoice Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D1",
+     "label": "Due Date",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D1",
+     "label": "Subtotal",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D1",
+     "label": "Total",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D2",
+     "label": "closing meter reading",
+     "reason": "source text not found on the page"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D2",
+     "label": "cost of energy",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D2",
+     "label": "demand charge",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D2",
+     "label": "duty and cess",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D2",
+     "label": "total due",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D2",
+     "label": "late payment amount",
+     "reason": "already read by the rules"
+    },
+    {
+     "case": "ext-dev-x-0006",
+     "doc": "D2",
+     "label": "late payment surcharge",
+     "reason": "value not inside its source text"
+    }
+   ],
+   "calls": {
+    "pages": 2,
+    "accepted": 2,
+    "items": 38,
+    "kept": 27,
+    "unused": 0
+   },
+   "seconds": [
+    122.8,
+    66.6
+   ]
+  }
+ ]
+}
