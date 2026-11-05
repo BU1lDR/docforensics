@@ -11,6 +11,7 @@ const CLASS_LABEL = {
 };
 const SOURCE_LABEL = {template: "Template wording", llm: "AI-generated wording (inference)"};
 const READING_LABEL = "AI reading of the case (inference)";
+const MODEL_READ_LABEL = "model-read (inference)";
 const STATUS_LABEL = {
   open: "Open",
   needs_verification: "Needs verification",
@@ -360,7 +361,7 @@ function renderPage() {
     for (const f of d.fields) {
       if (f.page !== p.n) continue;
       const shown = f.value != null ? f.value : f.raw;
-      g.append(rect(f.box, f.conf < lowConf() ? "fld low" : "fld", `${f.name}: ${shown} (confidence ${conf(f.conf)})`));
+      g.append(rect(f.box, f.conf < lowConf() ? "fld low" : "fld", `${f.name}: ${shown} (confidence ${conf(f.conf)})${f.model_read ? `; ${MODEL_READ_LABEL}` : ""}`));
     }
     svg.append(g);
   }
@@ -494,7 +495,8 @@ function renderFields() {
     box.append(h("div", {class: "scroll"}, h("table", {},
       h("thead", {}, h("tr", {}, ["Field", "Value", "As read", "Confidence", "Page"].map((t) => h("th", {scope: "col"}, t)))),
       h("tbody", {}, head.map((f) => h("tr", {},
-        h("td", {}, h("button", {type: "button", class: "link", click: () => mark(d, f.page, f.box, f.name)}, f.name)),
+        h("td", {}, h("button", {type: "button", class: "link", click: () => mark(d, f.page, f.box, f.name)}, f.name),
+          f.model_read ? h("span", {class: "chip warn"}, MODEL_READ_LABEL) : null),
         h("td", {}, f.value != null ? f.value : "(not parsed)"),
         h("td", {}, f.raw),
         h("td", {class: f.conf < lowConf() ? "low" : ""}, conf(f.conf), " ", low(f)),

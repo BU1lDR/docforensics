@@ -235,3 +235,21 @@ def test_lines_beyond_the_cap_are_not_shown_and_said_so(tmp_path):
     shown = fake.calls[0][1].splitlines()[1:]
     assert len(shown) == 60 and shown[-1] == "60: Row 60"
     assert [f.title for f in case.findings if "not shown to the model" in f.title] == ["D1 page 1: 10 lines were not shown to the model"]
+
+
+# --- how the dossier and the page show it
+
+def test_the_dossier_marks_the_fields_the_model_read_and_only_those(tmp_path):
+    from docforensics.dossier import build_dossier, dossier_dict
+    from docforensics.model import MODEL_READ_LABEL
+    from docforensics.pipeline import Ctx
+    cd, audit = case_of(tmp_path, lines_pdf(SHEET))
+    case = run_case(cd, TH, llm=Fake(REPLY))
+    ctx = Ctx(cd, audit, TH, llm=None)
+    fields = dossier_dict(case, ctx)["extracted_information"]["documents"][0]["fields"]
+    marked = {f["name"] for f in fields if f.get("model_read")}
+    assert marked == {f.name for f in case.documents[0].fields if f.model_read} and marked
+    assert all("model_read" not in f for f in fields if f["name"] not in marked)  # a field the rules read looks as it always did
+    build_dossier(case, ctx)
+    page = cd.dossier_html.read_text(encoding="utf-8")
+    assert MODEL_READ_LABEL in page

@@ -69,7 +69,8 @@ def _document(d: Document) -> dict:
             "pages": [{"n": p.n, "width": p.width, "height": p.height, "dpi": p.dpi, "read_mode": p.read_mode,
                        "quality": p.quality_class, "sharpness": p.sharpness, "words": len(p.words)} for p in d.pages],
             "fields": [{"id": f.id, "name": f.name, "raw": f.raw, "value": f.value, "kind": f.kind, "confidence": f.conf,
-                        "page": f.page, "box": _round(f.box), "row": f.row, "role": f.role, "note": f.note} for f in d.fields]}
+                        "page": f.page, "box": _round(f.box), "row": f.row, "role": f.role, "note": f.note,
+                        **({"model_read": True} if f.model_read else {})} for f in d.fields]}
 
 
 def audit_view(ctx: Ctx) -> dict:

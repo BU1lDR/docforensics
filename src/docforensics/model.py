@@ -38,6 +38,9 @@ class Page(_Base):
     blobs: list[Box] = []  # non-text ink: stamp and signature candidates
 
 
+MODEL_READ_LABEL = "model-read (inference)"  # how a field the local model chose is marked in the note, the dossier and the page
+
+
 class Field(_Base):
     id: str
     doc: str

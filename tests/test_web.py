@@ -15,7 +15,7 @@ from docforensics.capabilities import load_capabilities
 from docforensics.config import Thresholds
 from docforensics.dossier import CLASS_LABEL, READING_LABEL, SOURCE_LABEL
 from docforensics.ingest import create_case
-from docforensics.model import Reasoning, Relation
+from docforensics.model import MODEL_READ_LABEL, Reasoning, Relation
 from docforensics.relations import build_relations
 from docforensics.store import CASE_ID_RE, CaseDir, load_case, save_case
 from docforensics.web import app as web
@@ -162,7 +162,7 @@ def test_ui_loads_nothing_from_outside_and_has_no_inline_code():
 
 def test_ui_labels_match_the_dossier_and_say_no_verdict():
     js = (STATIC / "app.js").read_text(encoding="utf-8")
-    for label in [*CLASS_LABEL.values(), *SOURCE_LABEL.values(), READING_LABEL]:
+    for label in [*CLASS_LABEL.values(), *SOURCE_LABEL.values(), READING_LABEL, MODEL_READ_LABEL]:
         assert label in js, label
     for p in STATIC.iterdir():
         assert not VERDICT.search(p.read_text(encoding="utf-8")), p.name

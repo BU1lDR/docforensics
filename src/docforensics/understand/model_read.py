@@ -11,7 +11,7 @@ from itertools import count
 
 from ..explain.llm import LLMError, _sha
 from ..findings import add_findings, doc_evidence, limitation, quote
-from ..model import Case, Document, Field, Page, Word
+from ..model import MODEL_READ_LABEL, Case, Document, Field, Page, Word
 from ..pipeline import Ctx, guarded
 from .extract import _Extractor
 from .layout import find_phrase, text_of, union
@@ -196,7 +196,7 @@ class ModelReader:
         value, validator, note = ex.read(kind, raw)
         how = max(src.how, val.how, key=HOW.index)
         f = ex.make(name, kind, val.words, page.n, union(w.box for w in val.words), value, validator, min(src.score, val.score),
-                    note="; ".join(filter(None, [f"model-read (inference): the model chose the words and named them, the value is the page's ({how} match)", note])))
+                    note="; ".join(filter(None, [f"{MODEL_READ_LABEL}: the model chose the words and named them, the value is the page's ({how} match)", note])))
         f.model_read = True
         f.conf = min(f.conf, CAP * ex.th.low_conf)
         return ex.restore([f])[0]
