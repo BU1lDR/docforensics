@@ -87,3 +87,7 @@ There is no database. [audit.py](../src/docforensics/audit.py) hashes each event
 - Uploaded files are typed by their first bytes, limited in size, pages and number, and stored by hash, so a user-supplied file name never becomes a path.
 - Text taken from a document reaches the dossier HTML only after control and bidirectional characters are stripped and it is escaped, reaches the review desk page as text and never as markup, and reaches the terminal through one-line quoting.
 - Files are opened by PDF and image parsers in the same process as the tool. There are limits on size, pages and time, and there is no sandbox. That is a stated limitation, see [limitations](limitations.md).
+
+## Comments in the code
+
+A comment such as "design 7.4" points to the author's design notes, which are not published. This page, the README and [limitations](limitations.md) describe the same design.

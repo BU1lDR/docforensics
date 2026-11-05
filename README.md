@@ -2,7 +2,7 @@
 
 Offline document forensics for a human investigator. A case of scanned and digital documents goes in. An investigation dossier comes out, and every finding in it is traced to a box on a page of a stored source file.
 
-It is a solo entry to the DataOps Innovation Hackathon 2026 (Hack The Core), for the problem statement on AI-powered document forensics and contextual intelligence.
+It is a solo entry by Aryan to the DataOps Innovation Hackathon 2026 (Hack The Core), for the problem statement on AI-powered document forensics and contextual intelligence.
 
 The tool lists anomalies for a reviewer. It does not decide whether a document is authentic and it does not name intent. Observations, inconsistencies, candidates for closer review and limits of the analysis are kept apart, and what a finding means is the reviewer's decision. **Every document used to build and test it is synthetic:** read [docs/limitations.md](docs/limitations.md) before reading anything into a result.
 
@@ -240,7 +240,7 @@ Everything used here is synthetic: fictional people and institutions, no real cu
 
 This project was built with an AI assistant, and most of the code, the tests and the documents in it, this README included, are its output. The assistant is Claude, from Anthropic, used through Claude Code. It drafted the design and the task plan, wrote the source, the tests, the document generator and the documentation, and ran the test suite and the measurements the repository quotes. For part of the build two Claude Code sessions worked side by side, each on its own tasks and branches.
 
-The author chose the problem statement, set the requirements and constraints (offline, synthetic data only, findings for a reviewer and no verdicts) and is responsible for what is submitted.
+Aryan, the author, chose the problem statement, set the requirements and constraints (offline, synthetic data only, findings for a reviewer and no verdicts) and is responsible for what is submitted.
 
 At run time the tool calls no hosted AI service. The only model that can take part is the optional local one above.
 
