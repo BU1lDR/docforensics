@@ -1,8 +1,8 @@
 {
  "overview": {
-  "case": "C-20261105-081924-a120",
-  "created": "2026-11-05T08:19:24+00:00",
-  "generated": "2026-11-05T08:19:27+00:00",
+  "case": "C-20261105-173941-b3d4",
+  "created": "2026-11-05T17:39:41+00:00",
+  "generated": "2026-11-05T17:39:43+00:00",
   "tool": {
    "name": "docforensics",
    "version": "0.1.0"
@@ -4368,7 +4368,239 @@
      }
     ]
    }
-  ]
+  ],
+  "relationships": {
+   "entities": [
+    {
+     "id": "E1",
+     "role": "name",
+     "label": "Anil N. Nair",
+     "writings": [
+      "Anil N. Nair"
+     ],
+     "mentions": [
+      {
+       "doc": "D1",
+       "file": "01_statement.pdf",
+       "field": "D1-f2",
+       "name": "account_holder",
+       "page": 1,
+       "box": [
+        416.66666666666663,
+        273.25000762939453,
+        551.4166514078776,
+        307.6750013563368
+       ],
+       "conf": 1.0,
+       "value": "Anil N. Nair"
+      },
+      {
+       "doc": "D2",
+       "file": "02_payslip.pdf",
+       "field": "D2-f2",
+       "name": "employee_name",
+       "page": 1,
+       "box": [
+        416.66666666666663,
+        273.25000762939453,
+        551.4166514078776,
+        307.6750013563368
+       ],
+       "conf": 1.0,
+       "value": "Anil N. Nair"
+      },
+      {
+       "doc": "D3",
+       "file": "03_application.pdf",
+       "field": "D3-f2",
+       "name": "applicant_name",
+       "page": 1,
+       "box": [
+        555.5555555555555,
+        312.1388965182834,
+        690.3055402967665,
+        346.5638902452257
+       ],
+       "conf": 1.0,
+       "value": "Anil N. Nair"
+      }
+     ],
+     "findings": []
+    },
+    {
+     "id": "E2",
+     "role": "address",
+     "label": "Flat 2, Palm Court, Market Road, Kochi 682001",
+     "writings": [
+      "Flat 2, Palm Court, Market Road, Kochi 682001"
+     ],
+     "mentions": [
+      {
+       "doc": "D1",
+       "file": "01_statement.pdf",
+       "field": "D1-f3",
+       "name": "address",
+       "page": 1,
+       "box": [
+        416.66666666666663,
+        312.1388965182834,
+        966.8416341145833,
+        346.5638902452257
+       ],
+       "conf": 1.0,
+       "value": "Flat 2, Palm Court, Market Road, Kochi 682001"
+      },
+      {
+       "doc": "D3",
+       "file": "03_application.pdf",
+       "field": "D3-f3",
+       "name": "address",
+       "page": 1,
+       "box": [
+        555.5555555555555,
+        351.0277854071723,
+        1105.7306077745225,
+        385.45277913411456
+       ],
+       "conf": 1.0,
+       "value": "Flat 2, Palm Court, Market Road, Kochi 682001"
+      }
+     ],
+     "findings": []
+    },
+    {
+     "id": "E3",
+     "role": "account",
+     "label": "TST-5674957725",
+     "writings": [
+      "TST-5674957725"
+     ],
+     "mentions": [
+      {
+       "doc": "D1",
+       "file": "01_statement.pdf",
+       "field": "D1-f4",
+       "name": "account_no",
+       "page": 1,
+       "box": [
+        416.66666666666663,
+        351.0277854071723,
+        611.216566297743,
+        385.45277913411456
+       ],
+       "conf": 1.0,
+       "value": "TST-5674957725"
+      },
+      {
+       "doc": "D2",
+       "file": "02_payslip.pdf",
+       "field": "D2-f5",
+       "name": "bank_account",
+       "page": 1,
+       "box": [
+        416.66666666666663,
+        389.9166531032986,
+        611.216566297743,
+        424.3416680230035
+       ],
+       "conf": 1.0,
+       "value": "TST-5674957725"
+      },
+      {
+       "doc": "D3",
+       "file": "03_application.pdf",
+       "field": "D3-f5",
+       "name": "account_no",
+       "page": 1,
+       "box": [
+        555.5555555555555,
+        428.8055419921875,
+        750.105455186632,
+        463.23055691189234
+       ],
+       "conf": 1.0,
+       "value": "TST-5674957725"
+      }
+     ],
+     "findings": []
+    },
+    {
+     "id": "E4",
+     "role": "employer",
+     "label": "Brightfield Test Pvt Ltd",
+     "writings": [
+      "Brightfield Test Pvt Ltd"
+     ],
+     "mentions": [
+      {
+       "doc": "D2",
+       "file": "02_payslip.pdf",
+       "field": "D2-f1",
+       "name": "employer",
+       "page": 1,
+       "box": [
+        111.11111111111111,
+        124.66665903727213,
+        600.044420030382,
+        185.86667378743488
+       ],
+       "conf": 0.9,
+       "value": "Brightfield Test Pvt Ltd"
+      },
+      {
+       "doc": "D3",
+       "file": "03_application.pdf",
+       "field": "D3-f4",
+       "name": "employer",
+       "page": 1,
+       "box": [
+        555.5555555555555,
+        389.9166531032986,
+        830.580563015408,
+        424.3416680230035
+       ],
+       "conf": 1.0,
+       "value": "Brightfield Test Pvt Ltd"
+      }
+     ],
+     "findings": []
+    }
+   ],
+   "findings": [],
+   "documents": [
+    {
+     "id": "D1",
+     "file": "01_statement.pdf",
+     "type": "bank_statement",
+     "entities": [
+      "E1",
+      "E2",
+      "E3"
+     ]
+    },
+    {
+     "id": "D2",
+     "file": "02_payslip.pdf",
+     "type": "payslip",
+     "entities": [
+      "E4",
+      "E1",
+      "E3"
+     ]
+    },
+    {
+     "id": "D3",
+     "file": "03_application.pdf",
+     "type": "loan_application",
+     "entities": [
+      "E1",
+      "E2",
+      "E4",
+      "E3"
+     ]
+    }
+   ]
+  }
  },
  "visual_forensic_findings": {
   "observations": [
@@ -4718,11 +4950,11 @@
    "events": [
     {
      "seq": 1,
-     "ts": "2026-11-05T08:19:24.870+00:00",
+     "ts": "2026-11-05T17:39:41.703+00:00",
      "actor": "system",
      "event": "case_created",
      "data": {
-      "case": "C-20261105-081924-a120",
+      "case": "C-20261105-173941-b3d4",
       "thresholds": {
        "low_conf": 0.6,
        "amount_abs": 1.0,
@@ -4761,11 +4993,11 @@
       }
      },
      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-     "hash": "c6e820be3cd36c760c66f51493f02c651e4454911c14b8ab1b6e7b1fc96bef64"
+     "hash": "787f82ee97d42ae75581ca4502ec6b9d9d28cdc2753641a5086972fc54cfd8fc"
     },
     {
      "seq": 2,
-     "ts": "2026-11-05T08:19:24.892+00:00",
+     "ts": "2026-11-05T17:39:41.713+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -4775,12 +5007,12 @@
       "size": 38236,
       "type": "pdf"
      },
-     "prev_hash": "c6e820be3cd36c760c66f51493f02c651e4454911c14b8ab1b6e7b1fc96bef64",
-     "hash": "e99a7e0cde39821a98ffc4241c84caa3f0b440e5a485e5a23a768570bf8d1ba5"
+     "prev_hash": "787f82ee97d42ae75581ca4502ec6b9d9d28cdc2753641a5086972fc54cfd8fc",
+     "hash": "6b3f1c09d5633ed77528822d32628af794bbe0f568ecb90c1addd29f0d900194"
     },
     {
      "seq": 3,
-     "ts": "2026-11-05T08:19:24.917+00:00",
+     "ts": "2026-11-05T17:39:41.721+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -4790,12 +5022,12 @@
       "size": 9719,
       "type": "pdf"
      },
-     "prev_hash": "e99a7e0cde39821a98ffc4241c84caa3f0b440e5a485e5a23a768570bf8d1ba5",
-     "hash": "82b7764a4562e241d24c18dd0defe61b210a9933b0818bc42b91f4a8511e4695"
+     "prev_hash": "6b3f1c09d5633ed77528822d32628af794bbe0f568ecb90c1addd29f0d900194",
+     "hash": "6d47fa8d3ded79dc81ffba73783b1bf87240e30f68c31824711effff83d6a4ab"
     },
     {
      "seq": 4,
-     "ts": "2026-11-05T08:19:24.931+00:00",
+     "ts": "2026-11-05T17:39:41.730+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -4805,12 +5037,12 @@
       "size": 8471,
       "type": "pdf"
      },
-     "prev_hash": "82b7764a4562e241d24c18dd0defe61b210a9933b0818bc42b91f4a8511e4695",
-     "hash": "5553314addfd25763ea3b3dc76a7f53743ce9185a51320a271da022d0ab4764d"
+     "prev_hash": "6d47fa8d3ded79dc81ffba73783b1bf87240e30f68c31824711effff83d6a4ab",
+     "hash": "e721d9025487dc515b228017968cb9c51bd63c60cc7ca0056c539e51711f3862"
     },
     {
      "seq": 5,
-     "ts": "2026-11-05T08:19:25.438+00:00",
+     "ts": "2026-11-05T17:39:41.950+00:00",
      "actor": "system",
      "event": "run_started",
      "data": {
@@ -4827,23 +5059,23 @@
        "pydantic": "2.14.2"
       }
      },
-     "prev_hash": "5553314addfd25763ea3b3dc76a7f53743ce9185a51320a271da022d0ab4764d",
-     "hash": "d5c9964e3da18d9d646fe4ecd2f79610556bb053019111b6c12c05c6d94ac2bf"
+     "prev_hash": "e721d9025487dc515b228017968cb9c51bd63c60cc7ca0056c539e51711f3862",
+     "hash": "a8472d1b3eb54ac5ee281d740b34b9b2ff3fd368b3455fe7ce97a48a5b328619"
     },
     {
      "seq": 6,
-     "ts": "2026-11-05T08:19:25.454+00:00",
+     "ts": "2026-11-05T17:39:41.960+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "read"
      },
-     "prev_hash": "d5c9964e3da18d9d646fe4ecd2f79610556bb053019111b6c12c05c6d94ac2bf",
-     "hash": "080b18e62add40aa2b13d657d4493e19342dca4400bbab7d8ae1330ad1f6481e"
+     "prev_hash": "a8472d1b3eb54ac5ee281d740b34b9b2ff3fd368b3455fe7ce97a48a5b328619",
+     "hash": "45cc4dee0526d645b1203997ecb1cb22bcc4335f82bb5f44824fdaeb4f511bb2"
     },
     {
      "seq": 7,
-     "ts": "2026-11-05T08:19:25.707+00:00",
+     "ts": "2026-11-05T17:39:42.156+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -4852,12 +5084,12 @@
       "kind": "pdf-digital",
       "words": 223
      },
-     "prev_hash": "080b18e62add40aa2b13d657d4493e19342dca4400bbab7d8ae1330ad1f6481e",
-     "hash": "6a4ef1775410038ec44e6720fe23d16fd241bda31de80c720a3f7d536de76ad2"
+     "prev_hash": "45cc4dee0526d645b1203997ecb1cb22bcc4335f82bb5f44824fdaeb4f511bb2",
+     "hash": "e4c73e165ee3ba5b68bc2ddeaa1f5aa42697e24f06ffa84bfd11de2c7b6f9bb7"
     },
     {
      "seq": 8,
-     "ts": "2026-11-05T08:19:25.828+00:00",
+     "ts": "2026-11-05T17:39:42.243+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -4866,12 +5098,12 @@
       "kind": "pdf-digital",
       "words": 85
      },
-     "prev_hash": "6a4ef1775410038ec44e6720fe23d16fd241bda31de80c720a3f7d536de76ad2",
-     "hash": "fcb055dc5f57d56350b002aa83281a1a4492a3ab09573bacdd14848945003dc8"
+     "prev_hash": "e4c73e165ee3ba5b68bc2ddeaa1f5aa42697e24f06ffa84bfd11de2c7b6f9bb7",
+     "hash": "fe77241adb8b4e0f0c86e74173cc8335098f55d62d5011ddd94d1716993679f0"
     },
     {
      "seq": 9,
-     "ts": "2026-11-05T08:19:25.943+00:00",
+     "ts": "2026-11-05T17:39:42.321+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -4880,38 +5112,38 @@
       "kind": "pdf-digital",
       "words": 72
      },
-     "prev_hash": "fcb055dc5f57d56350b002aa83281a1a4492a3ab09573bacdd14848945003dc8",
-     "hash": "62207bf2b5c706b044b1e1a546246424954a3421d1e6b42291cf4d19a131d9ed"
+     "prev_hash": "fe77241adb8b4e0f0c86e74173cc8335098f55d62d5011ddd94d1716993679f0",
+     "hash": "00730797924c971a769e20ab107bcff4ccca8b50b091566d2e675a7422c904b6"
     },
     {
      "seq": 10,
-     "ts": "2026-11-05T08:19:25.952+00:00",
+     "ts": "2026-11-05T17:39:42.328+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "read",
       "ok": true,
-      "seconds": 0.5,
+      "seconds": 0.359,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "62207bf2b5c706b044b1e1a546246424954a3421d1e6b42291cf4d19a131d9ed",
-     "hash": "fc048c969e481ca4cc00843db27856bf15d75b8ddd8150e1f840eff62c338e0d"
+     "prev_hash": "00730797924c971a769e20ab107bcff4ccca8b50b091566d2e675a7422c904b6",
+     "hash": "d7eb658ee82ca3150022096eaf935d81ae17b02569cd6de4d6ebcfeb435b2a31"
     },
     {
      "seq": 11,
-     "ts": "2026-11-05T08:19:25.963+00:00",
+     "ts": "2026-11-05T17:39:42.341+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "classify"
      },
-     "prev_hash": "fc048c969e481ca4cc00843db27856bf15d75b8ddd8150e1f840eff62c338e0d",
-     "hash": "6808af6f00b737b82f5ccac5f30b6eadb6f76154237db895bf0a15353dc2ca0d"
+     "prev_hash": "d7eb658ee82ca3150022096eaf935d81ae17b02569cd6de4d6ebcfeb435b2a31",
+     "hash": "e7879f3be163e3cfbe32b10e51e300d0cde3b031581f56e0303c13ca5d1e9374"
     },
     {
      "seq": 12,
-     "ts": "2026-11-05T08:19:26.013+00:00",
+     "ts": "2026-11-05T17:39:42.391+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -4919,12 +5151,12 @@
       "type": "bank_statement",
       "conf": 1.0
      },
-     "prev_hash": "6808af6f00b737b82f5ccac5f30b6eadb6f76154237db895bf0a15353dc2ca0d",
-     "hash": "8a593481938c20e0421d36877520c3a7639a63f870113230496888bed10fb963"
+     "prev_hash": "e7879f3be163e3cfbe32b10e51e300d0cde3b031581f56e0303c13ca5d1e9374",
+     "hash": "d0fc0044e8f24e4cee55865f6bb107cbbbe26c96baad1f5c1b359e89ddad77dd"
     },
     {
      "seq": 13,
-     "ts": "2026-11-05T08:19:26.048+00:00",
+     "ts": "2026-11-05T17:39:42.432+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -4932,12 +5164,12 @@
       "type": "payslip",
       "conf": 1.0
      },
-     "prev_hash": "8a593481938c20e0421d36877520c3a7639a63f870113230496888bed10fb963",
-     "hash": "859694f2722e864cd3b10e3396a85a1a12171d1f42a8ef974625ef7bc3f0d141"
+     "prev_hash": "d0fc0044e8f24e4cee55865f6bb107cbbbe26c96baad1f5c1b359e89ddad77dd",
+     "hash": "8968d063e756a201b24e5bdee583b1c60be5d1bb323eb206c0aada6d0e84a25e"
     },
     {
      "seq": 14,
-     "ts": "2026-11-05T08:19:26.078+00:00",
+     "ts": "2026-11-05T17:39:42.472+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -4945,38 +5177,38 @@
       "type": "loan_application",
       "conf": 1.0
      },
-     "prev_hash": "859694f2722e864cd3b10e3396a85a1a12171d1f42a8ef974625ef7bc3f0d141",
-     "hash": "9ed2505854096af499b6a254fe3498522870d471cea3bbdc0cc13c0d86fabbb3"
+     "prev_hash": "8968d063e756a201b24e5bdee583b1c60be5d1bb323eb206c0aada6d0e84a25e",
+     "hash": "781ff65635cc1128eccccc09c65205888177ea0ca3ba6599dc1cdfa52e519f53"
     },
     {
      "seq": 15,
-     "ts": "2026-11-05T08:19:26.082+00:00",
+     "ts": "2026-11-05T17:39:42.482+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "classify",
       "ok": true,
-      "seconds": 0.11,
+      "seconds": 0.14,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "9ed2505854096af499b6a254fe3498522870d471cea3bbdc0cc13c0d86fabbb3",
-     "hash": "347723dfb8d2cc632f145ea14db5eab12a69eab92992373f312cee5ec5c5566c"
+     "prev_hash": "781ff65635cc1128eccccc09c65205888177ea0ca3ba6599dc1cdfa52e519f53",
+     "hash": "8d1152a99330c42e71da5179aba8f0853b75e687c10702ede7c307dbd9b3c733"
     },
     {
      "seq": 16,
-     "ts": "2026-11-05T08:19:26.096+00:00",
+     "ts": "2026-11-05T17:39:42.495+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "extract"
      },
-     "prev_hash": "347723dfb8d2cc632f145ea14db5eab12a69eab92992373f312cee5ec5c5566c",
-     "hash": "85b3d0762dabea469adf56070b854f457fa2a87f1f6c815ba1f6b9b779d8e834"
+     "prev_hash": "8d1152a99330c42e71da5179aba8f0853b75e687c10702ede7c307dbd9b3c733",
+     "hash": "be66214f045820ce48516402eea16f48c3f8a46a3723aee4323fb0c64a850fc2"
     },
     {
      "seq": 17,
-     "ts": "2026-11-05T08:19:26.137+00:00",
+     "ts": "2026-11-05T17:39:42.542+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -4985,12 +5217,12 @@
       "fields": 188,
       "empty": 36
      },
-     "prev_hash": "85b3d0762dabea469adf56070b854f457fa2a87f1f6c815ba1f6b9b779d8e834",
-     "hash": "3b4e6aab02cce6b0e3a18614305f9720cc7a598dfa3405013e05026002f0d36f"
+     "prev_hash": "be66214f045820ce48516402eea16f48c3f8a46a3723aee4323fb0c64a850fc2",
+     "hash": "64eb45a5af341e1bf9409857f29b735c24f1c5223c0013a0b4f2ca41766385a0"
     },
     {
      "seq": 18,
-     "ts": "2026-11-05T08:19:26.166+00:00",
+     "ts": "2026-11-05T17:39:42.584+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -4999,12 +5231,12 @@
       "fields": 27,
       "empty": 2
      },
-     "prev_hash": "3b4e6aab02cce6b0e3a18614305f9720cc7a598dfa3405013e05026002f0d36f",
-     "hash": "619c5813dccd5dd8104c4abd1f2e858862cf9a09c7ef4da7e89798d0c39a8726"
+     "prev_hash": "64eb45a5af341e1bf9409857f29b735c24f1c5223c0013a0b4f2ca41766385a0",
+     "hash": "478285ca1ade32636f7b74032adf9744c318e25f61e34eba8423aba432aab10f"
     },
     {
      "seq": 19,
-     "ts": "2026-11-05T08:19:26.195+00:00",
+     "ts": "2026-11-05T17:39:42.618+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -5013,38 +5245,38 @@
       "fields": 9,
       "empty": 0
      },
-     "prev_hash": "619c5813dccd5dd8104c4abd1f2e858862cf9a09c7ef4da7e89798d0c39a8726",
-     "hash": "6b31fd4c2605d9c4a0dc783219075408f724e16436eea093bda6ade41ad807db"
+     "prev_hash": "478285ca1ade32636f7b74032adf9744c318e25f61e34eba8423aba432aab10f",
+     "hash": "e41e300ce17d735dc65b33932af5ce12d711ece882481679be210d52db9018f2"
     },
     {
      "seq": 20,
-     "ts": "2026-11-05T08:19:26.201+00:00",
+     "ts": "2026-11-05T17:39:42.625+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "extract",
       "ok": true,
-      "seconds": 0.094,
+      "seconds": 0.125,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "6b31fd4c2605d9c4a0dc783219075408f724e16436eea093bda6ade41ad807db",
-     "hash": "544b48999f88bca7bf31cf43acf9fcf35bc5381303567824283b3a22cb0230f9"
+     "prev_hash": "e41e300ce17d735dc65b33932af5ce12d711ece882481679be210d52db9018f2",
+     "hash": "8f88645ea1893e3b043e4abbf8d8092d66abd935f6057d6c7a9278e21d030ff4"
     },
     {
      "seq": 21,
-     "ts": "2026-11-05T08:19:26.215+00:00",
+     "ts": "2026-11-05T17:39:42.632+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "forensics"
      },
-     "prev_hash": "544b48999f88bca7bf31cf43acf9fcf35bc5381303567824283b3a22cb0230f9",
-     "hash": "f5f6bff44ecfcdf0b516b9383fff499f8e89d5ecf13f68f73c0529d5676e050a"
+     "prev_hash": "8f88645ea1893e3b043e4abbf8d8092d66abd935f6057d6c7a9278e21d030ff4",
+     "hash": "80fb380d6a9ce9f3aa753fbf5d1b77db499881c2b91c3a4c69ec13fd0d1aa2c2"
     },
     {
      "seq": 22,
-     "ts": "2026-11-05T08:19:26.243+00:00",
+     "ts": "2026-11-05T17:39:42.660+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5053,12 +5285,12 @@
       "fclass": "observation",
       "title": "Text changed in revision 2 (page 1)"
      },
-     "prev_hash": "f5f6bff44ecfcdf0b516b9383fff499f8e89d5ecf13f68f73c0529d5676e050a",
-     "hash": "af980510482224665ffe5b27ecb04dd38bf9e7e20094d4f7369bbf1e0dedec6e"
+     "prev_hash": "80fb380d6a9ce9f3aa753fbf5d1b77db499881c2b91c3a4c69ec13fd0d1aa2c2",
+     "hash": "3e8b8b7aa383de61508d1c0f9030de0b0a163fa5a4e130adda3b3305f9f4a851"
     },
     {
      "seq": 23,
-     "ts": "2026-11-05T08:19:26.250+00:00",
+     "ts": "2026-11-05T17:39:42.674+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5066,12 +5298,12 @@
       "detector": "revision_diff",
       "findings": 1
      },
-     "prev_hash": "af980510482224665ffe5b27ecb04dd38bf9e7e20094d4f7369bbf1e0dedec6e",
-     "hash": "ac0097164bdb069e3457e307478aa9ffac9ec64be8adafcb9438a78c74152257"
+     "prev_hash": "3e8b8b7aa383de61508d1c0f9030de0b0a163fa5a4e130adda3b3305f9f4a851",
+     "hash": "5e0fceb3bcb23b24fcd3c1786b2f15b86780d7f0f8b7234a094de5aeeb82060b"
     },
     {
      "seq": 24,
-     "ts": "2026-11-05T08:19:26.271+00:00",
+     "ts": "2026-11-05T17:39:42.695+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5079,12 +5311,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "ac0097164bdb069e3457e307478aa9ffac9ec64be8adafcb9438a78c74152257",
-     "hash": "106c377e225bfa92321a828bc942003e39d581a53c781fc16cd80630c881b1eb"
+     "prev_hash": "5e0fceb3bcb23b24fcd3c1786b2f15b86780d7f0f8b7234a094de5aeeb82060b",
+     "hash": "05287b6e0c8f6522c5c70f7aa4cab566ac8a0fa20dcaec3927a61cea4e3c718b"
     },
     {
      "seq": 25,
-     "ts": "2026-11-05T08:19:26.291+00:00",
+     "ts": "2026-11-05T17:39:42.709+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5092,12 +5324,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "106c377e225bfa92321a828bc942003e39d581a53c781fc16cd80630c881b1eb",
-     "hash": "f423d4834a54f51bba3371e7e5e8e99712f40ab4513962a2d5226797f52461fe"
+     "prev_hash": "05287b6e0c8f6522c5c70f7aa4cab566ac8a0fa20dcaec3927a61cea4e3c718b",
+     "hash": "35757a5120a5918d94f429890960d44ce9905f43dfa4b294e444bde54e17ed49"
     },
     {
      "seq": 26,
-     "ts": "2026-11-05T08:19:26.299+00:00",
+     "ts": "2026-11-05T17:39:42.715+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5105,12 +5337,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "f423d4834a54f51bba3371e7e5e8e99712f40ab4513962a2d5226797f52461fe",
-     "hash": "e27156415ee330ae0a1b8eeba682d25c759c451d97d05166d672ee6d2d0e10ef"
+     "prev_hash": "35757a5120a5918d94f429890960d44ce9905f43dfa4b294e444bde54e17ed49",
+     "hash": "03654841f25cfbb268f51126fc27258f7226805c080780f092cfba44c5f6aff2"
     },
     {
      "seq": 27,
-     "ts": "2026-11-05T08:19:26.305+00:00",
+     "ts": "2026-11-05T17:39:42.729+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5118,12 +5350,12 @@
       "detector": "revision_diff",
       "findings": 0
      },
-     "prev_hash": "e27156415ee330ae0a1b8eeba682d25c759c451d97d05166d672ee6d2d0e10ef",
-     "hash": "c249973037d9edae4a7be2ab2518f50a1eef89088997b59adf9fa7f068b0797a"
+     "prev_hash": "03654841f25cfbb268f51126fc27258f7226805c080780f092cfba44c5f6aff2",
+     "hash": "99eef9d8575d418f152cd55100d3203f9df43de6952b20fd198ac3bf76515732"
     },
     {
      "seq": 28,
-     "ts": "2026-11-05T08:19:26.319+00:00",
+     "ts": "2026-11-05T17:39:42.740+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5131,12 +5363,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "c249973037d9edae4a7be2ab2518f50a1eef89088997b59adf9fa7f068b0797a",
-     "hash": "5ceb27c3102b832a7d86c745de41cd8166e10fdb6e647f2cc14c4178a24f3a0d"
+     "prev_hash": "99eef9d8575d418f152cd55100d3203f9df43de6952b20fd198ac3bf76515732",
+     "hash": "b7d2720b71521c0bc64c6d5cfc2134cf1697cbe6c1d961404a380a77713bcf8a"
     },
     {
      "seq": 29,
-     "ts": "2026-11-05T08:19:26.327+00:00",
+     "ts": "2026-11-05T17:39:42.750+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5144,12 +5376,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "5ceb27c3102b832a7d86c745de41cd8166e10fdb6e647f2cc14c4178a24f3a0d",
-     "hash": "78a106e306a6186568b76f8916bbdc52acb0a35b3e92609be22a9ac746541d68"
+     "prev_hash": "b7d2720b71521c0bc64c6d5cfc2134cf1697cbe6c1d961404a380a77713bcf8a",
+     "hash": "af2f232f9559ab4600af1a39daaa60f7c26c2d4fe2e6e120df6bdb105021bb2b"
     },
     {
      "seq": 30,
-     "ts": "2026-11-05T08:19:26.339+00:00",
+     "ts": "2026-11-05T17:39:42.764+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5157,12 +5389,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "78a106e306a6186568b76f8916bbdc52acb0a35b3e92609be22a9ac746541d68",
-     "hash": "a13103a845cf537c0969e120499e752ff9ce592e4fece88896e101c8dac83207"
+     "prev_hash": "af2f232f9559ab4600af1a39daaa60f7c26c2d4fe2e6e120df6bdb105021bb2b",
+     "hash": "a0c195cfe5210aa3acf5f9704d792c5735a64d45348f94f8bdc878e9f6193cd6"
     },
     {
      "seq": 31,
-     "ts": "2026-11-05T08:19:26.348+00:00",
+     "ts": "2026-11-05T17:39:42.771+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5170,12 +5402,12 @@
       "detector": "revision_diff",
       "findings": 0
      },
-     "prev_hash": "a13103a845cf537c0969e120499e752ff9ce592e4fece88896e101c8dac83207",
-     "hash": "a37a6ebc076610166809185df6a2c329a7494628093a38621d53a86200fc8473"
+     "prev_hash": "a0c195cfe5210aa3acf5f9704d792c5735a64d45348f94f8bdc878e9f6193cd6",
+     "hash": "5a0ac2f38ebfe453964e8771e2f9f53a3c1cf761f3ed3ea21b6c621252bad24b"
     },
     {
      "seq": 32,
-     "ts": "2026-11-05T08:19:26.362+00:00",
+     "ts": "2026-11-05T17:39:42.781+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5183,12 +5415,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "a37a6ebc076610166809185df6a2c329a7494628093a38621d53a86200fc8473",
-     "hash": "712145fbcf2343ca6455e66dd2f81ff57cefb1a31b491d53ba648249a927cf68"
+     "prev_hash": "5a0ac2f38ebfe453964e8771e2f9f53a3c1cf761f3ed3ea21b6c621252bad24b",
+     "hash": "5d361f359a8353c2023155ae5f25d186b979e155a6b8113d4f0082abaf8c3b13"
     },
     {
      "seq": 33,
-     "ts": "2026-11-05T08:19:26.375+00:00",
+     "ts": "2026-11-05T17:39:42.792+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5196,12 +5428,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "712145fbcf2343ca6455e66dd2f81ff57cefb1a31b491d53ba648249a927cf68",
-     "hash": "c2ac3ef4f3ff8f50350143246ca6866e3f43133b0a1d6667a71e82afc1cb8964"
+     "prev_hash": "5d361f359a8353c2023155ae5f25d186b979e155a6b8113d4f0082abaf8c3b13",
+     "hash": "d6e3997784e74566a81a2acc1814acc7b1218fba62c76c81c3763a530c191326"
     },
     {
      "seq": 34,
-     "ts": "2026-11-05T08:19:26.384+00:00",
+     "ts": "2026-11-05T17:39:42.799+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5209,12 +5441,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "c2ac3ef4f3ff8f50350143246ca6866e3f43133b0a1d6667a71e82afc1cb8964",
-     "hash": "54b6f47e5c50492a7488493509b29e9845de81dd8ae20439150de3cdaf11d340"
+     "prev_hash": "d6e3997784e74566a81a2acc1814acc7b1218fba62c76c81c3763a530c191326",
+     "hash": "a0119296e7d6e5b595dff3afe6afb9fce140b894343c9718dc1b3b3e8e287f5d"
     },
     {
      "seq": 35,
-     "ts": "2026-11-05T08:19:26.479+00:00",
+     "ts": "2026-11-05T17:39:42.889+00:00",
      "actor": "system",
      "event": "signature_compared",
      "data": {
@@ -5230,12 +5462,12 @@
       "limit": 9.4,
       "differs": false
      },
-     "prev_hash": "54b6f47e5c50492a7488493509b29e9845de81dd8ae20439150de3cdaf11d340",
-     "hash": "8bed2814b45807ab6caddc2e45591cc73768c2a41fa6a073b463c1aee218a6fc"
+     "prev_hash": "a0119296e7d6e5b595dff3afe6afb9fce140b894343c9718dc1b3b3e8e287f5d",
+     "hash": "7d08ebb014b88552c6675ccde193b84598cdbbc6513e3e910a3d4fa37d9332f5"
     },
     {
      "seq": 36,
-     "ts": "2026-11-05T08:19:26.541+00:00",
+     "ts": "2026-11-05T17:39:42.946+00:00",
      "actor": "system",
      "event": "mark_compared",
      "data": {
@@ -5252,12 +5484,12 @@
       "limit": 10.5,
       "differs": false
      },
-     "prev_hash": "8bed2814b45807ab6caddc2e45591cc73768c2a41fa6a073b463c1aee218a6fc",
-     "hash": "4213b1d02d19825e6aadbc317e2ed8ad8ea9c1ad6bb28c1465ff8daa87465f85"
+     "prev_hash": "7d08ebb014b88552c6675ccde193b84598cdbbc6513e3e910a3d4fa37d9332f5",
+     "hash": "aae5ac772145febe8345c2205b5e54831fd2d33128e46cabb967802906ef41f1"
     },
     {
      "seq": 37,
-     "ts": "2026-11-05T08:19:26.677+00:00",
+     "ts": "2026-11-05T17:39:43.029+00:00",
      "actor": "system",
      "event": "mark_compared",
      "data": {
@@ -5274,50 +5506,50 @@
       "limit": 3.0,
       "differs": false
      },
-     "prev_hash": "4213b1d02d19825e6aadbc317e2ed8ad8ea9c1ad6bb28c1465ff8daa87465f85",
-     "hash": "5233f537766c8e26d5b89ed92eaeedb88d166b1a8052288617cddd9e1aabc4cf"
+     "prev_hash": "aae5ac772145febe8345c2205b5e54831fd2d33128e46cabb967802906ef41f1",
+     "hash": "10242ee09261e0144e3f43a22c43e88f2c5c910cfdc85d49edb2584885606035"
     },
     {
      "seq": 38,
-     "ts": "2026-11-05T08:19:26.703+00:00",
+     "ts": "2026-11-05T17:39:43.036+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "forensics",
       "ok": true,
-      "seconds": 0.469,
+      "seconds": 0.391,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "5233f537766c8e26d5b89ed92eaeedb88d166b1a8052288617cddd9e1aabc4cf",
-     "hash": "37492ba951211a409e7f373398a0548a6b50eb1ee65249fce629ad39a6f3b946"
+     "prev_hash": "10242ee09261e0144e3f43a22c43e88f2c5c910cfdc85d49edb2584885606035",
+     "hash": "b37c8e1c5ad35f6b566b18e7046c42681ca2c744cddf02e67f4c65eb078490f9"
     },
     {
      "seq": 39,
-     "ts": "2026-11-05T08:19:26.736+00:00",
+     "ts": "2026-11-05T17:39:43.050+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "checks"
      },
-     "prev_hash": "37492ba951211a409e7f373398a0548a6b50eb1ee65249fce629ad39a6f3b946",
-     "hash": "9f2ab2292b73786c122c3fcffff3f11a6da0b887050a70e6f3c02a1d36ea8a95"
+     "prev_hash": "b37c8e1c5ad35f6b566b18e7046c42681ca2c744cddf02e67f4c65eb078490f9",
+     "hash": "c055db21c46a2e16095f8b166c60d21f9b1ef22e8edec2b793b34cb6c9f11d5b"
     },
     {
      "seq": 40,
-     "ts": "2026-11-05T08:19:26.772+00:00",
+     "ts": "2026-11-05T17:39:43.056+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D1",
       "findings": 1
      },
-     "prev_hash": "9f2ab2292b73786c122c3fcffff3f11a6da0b887050a70e6f3c02a1d36ea8a95",
-     "hash": "716d4ae1563926b3b0438831af6055c2615cb8e9ebe7df47a2928e7e7e2a4def"
+     "prev_hash": "c055db21c46a2e16095f8b166c60d21f9b1ef22e8edec2b793b34cb6c9f11d5b",
+     "hash": "bd130cfd06490eb330c7eb600be52efd54415a3d95cff4ef7d945c3279f23ce5"
     },
     {
      "seq": 41,
-     "ts": "2026-11-05T08:19:26.806+00:00",
+     "ts": "2026-11-05T17:39:43.069+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5326,85 +5558,85 @@
       "fclass": "inconsistency",
       "title": "The closing balance does not follow from the transactions"
      },
-     "prev_hash": "716d4ae1563926b3b0438831af6055c2615cb8e9ebe7df47a2928e7e7e2a4def",
-     "hash": "cdf19dc0bb2c483f97532f1cc155ab89b42083865087ab09f5b126f251a650f9"
+     "prev_hash": "bd130cfd06490eb330c7eb600be52efd54415a3d95cff4ef7d945c3279f23ce5",
+     "hash": "67a7b22c02231f969ebfb6a447faea9c86eeb9aa78b97165b7767b2e9e5a589f"
     },
     {
      "seq": 42,
-     "ts": "2026-11-05T08:19:26.841+00:00",
+     "ts": "2026-11-05T17:39:43.077+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D2",
       "findings": 0
      },
-     "prev_hash": "cdf19dc0bb2c483f97532f1cc155ab89b42083865087ab09f5b126f251a650f9",
-     "hash": "6a44bd5f6df7a4e388436258e8bc4c6dd30dba05be5a9497cc77035ef12b2326"
+     "prev_hash": "67a7b22c02231f969ebfb6a447faea9c86eeb9aa78b97165b7767b2e9e5a589f",
+     "hash": "7fa4335f2e5871993b23f2d4604da9cdcc7532fb3fe7b355e5bfb07af5bdc56d"
     },
     {
      "seq": 43,
-     "ts": "2026-11-05T08:19:26.862+00:00",
+     "ts": "2026-11-05T17:39:43.084+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D3",
       "findings": 0
      },
-     "prev_hash": "6a44bd5f6df7a4e388436258e8bc4c6dd30dba05be5a9497cc77035ef12b2326",
-     "hash": "8c093732a9b91cb2834f06977dd81452249fc034021a5527ecb72ca320b3c125"
+     "prev_hash": "7fa4335f2e5871993b23f2d4604da9cdcc7532fb3fe7b355e5bfb07af5bdc56d",
+     "hash": "1bed6c608cebab036d7dad830c190c404e67f36d711a0c14a336f8313f8aa2b8"
     },
     {
      "seq": 44,
-     "ts": "2026-11-05T08:19:26.890+00:00",
+     "ts": "2026-11-05T17:39:43.098+00:00",
      "actor": "system",
      "event": "cross_checked",
      "data": {
       "documents": 3,
       "findings": 0
      },
-     "prev_hash": "8c093732a9b91cb2834f06977dd81452249fc034021a5527ecb72ca320b3c125",
-     "hash": "b4fe943c2c7a0803ee24a054c6a7679cdf187a07d13e4d4b5fb7af4ca39ac56a"
+     "prev_hash": "1bed6c608cebab036d7dad830c190c404e67f36d711a0c14a336f8313f8aa2b8",
+     "hash": "1bd7f7d96c2a2f618a0e370ecef45902c1d4d52a3c288e4d7138ebb76ce0ec17"
     },
     {
      "seq": 45,
-     "ts": "2026-11-05T08:19:26.904+00:00",
+     "ts": "2026-11-05T17:39:43.107+00:00",
      "actor": "system",
      "event": "context_checked",
      "data": {
       "findings": 0
      },
-     "prev_hash": "b4fe943c2c7a0803ee24a054c6a7679cdf187a07d13e4d4b5fb7af4ca39ac56a",
-     "hash": "dda52f6febf7634211c18dd24aa7a9698e7ec4681de59d53e7eddba9c3d17e92"
+     "prev_hash": "1bd7f7d96c2a2f618a0e370ecef45902c1d4d52a3c288e4d7138ebb76ce0ec17",
+     "hash": "b2488707fae73ef2eed14016baf216b696bd4848d7518331497548850331b065"
     },
     {
      "seq": 46,
-     "ts": "2026-11-05T08:19:26.917+00:00",
+     "ts": "2026-11-05T17:39:43.112+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "checks",
       "ok": true,
-      "seconds": 0.156,
+      "seconds": 0.047,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "dda52f6febf7634211c18dd24aa7a9698e7ec4681de59d53e7eddba9c3d17e92",
-     "hash": "f1f7075c3e69a11190dc5df0eca1b3fc7670e2775f5aa3cda6e25d3c3dbcf3ae"
+     "prev_hash": "b2488707fae73ef2eed14016baf216b696bd4848d7518331497548850331b065",
+     "hash": "60d58c6e671cdea676d009682c78abb5a75304b4e5787ada2b22345bcc98b9ad"
     },
     {
      "seq": 47,
-     "ts": "2026-11-05T08:19:26.933+00:00",
+     "ts": "2026-11-05T17:39:43.126+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "link"
      },
-     "prev_hash": "f1f7075c3e69a11190dc5df0eca1b3fc7670e2775f5aa3cda6e25d3c3dbcf3ae",
-     "hash": "15bd91b0c2152418d7ae190df14e214701b2b0e39fc6127cf3154299e0728e2a"
+     "prev_hash": "60d58c6e671cdea676d009682c78abb5a75304b4e5787ada2b22345bcc98b9ad",
+     "hash": "87b204721eafea9177de8cef2b4d3c110e466f9ec7e9a03d2c3855a9a9fd15f6"
     },
     {
      "seq": 48,
-     "ts": "2026-11-05T08:19:26.960+00:00",
+     "ts": "2026-11-05T17:39:43.133+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5413,12 +5645,12 @@
       "fclass": "potential_manipulation",
       "title": "Closing balance on 01_statement.pdf: 2 findings from 2 kinds of check"
      },
-     "prev_hash": "15bd91b0c2152418d7ae190df14e214701b2b0e39fc6127cf3154299e0728e2a",
-     "hash": "afe79789dbc7f7b18892a6b02d43262153c91bcd2d62fe37fd3302a3b566e5b3"
+     "prev_hash": "87b204721eafea9177de8cef2b4d3c110e466f9ec7e9a03d2c3855a9a9fd15f6",
+     "hash": "3614de2e57b508b3241417c7310d3f83746ee9ebb4e7a85bec11912af94c8279"
     },
     {
      "seq": 49,
-     "ts": "2026-11-05T08:19:26.966+00:00",
+     "ts": "2026-11-05T17:39:43.140+00:00",
      "actor": "system",
      "event": "findings_linked",
      "data": {
@@ -5426,117 +5658,134 @@
       "linked": 2,
       "clusters": 1
      },
-     "prev_hash": "afe79789dbc7f7b18892a6b02d43262153c91bcd2d62fe37fd3302a3b566e5b3",
-     "hash": "2eb5412eb5814e988fa9735b4fbd2ba03685ca9a60393522545a374fd07ff1f6"
+     "prev_hash": "3614de2e57b508b3241417c7310d3f83746ee9ebb4e7a85bec11912af94c8279",
+     "hash": "8bbe3d1fe4257071dabf95a499432682d2b6492066dbaf9bca1fcd42afbc735d"
     },
     {
      "seq": 50,
-     "ts": "2026-11-05T08:19:26.991+00:00",
+     "ts": "2026-11-05T17:39:43.154+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "link",
       "ok": true,
-      "seconds": 0.031,
+      "seconds": 0.0,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "2eb5412eb5814e988fa9735b4fbd2ba03685ca9a60393522545a374fd07ff1f6",
-     "hash": "23180ff6223745cfe383262ce7c0a2e9b3910c1a571a1c6cc2760cbf7ea065c6"
+     "prev_hash": "8bbe3d1fe4257071dabf95a499432682d2b6492066dbaf9bca1fcd42afbc735d",
+     "hash": "d6d3ebd17ffeecfd901822bbf9059cc9afbd446facad677681d734e7daabccf5"
     },
     {
      "seq": 51,
-     "ts": "2026-11-05T08:19:27.030+00:00",
+     "ts": "2026-11-05T17:39:43.160+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "explain"
      },
-     "prev_hash": "23180ff6223745cfe383262ce7c0a2e9b3910c1a571a1c6cc2760cbf7ea065c6",
-     "hash": "7519c5d1a6d5770476c43985837e167c8eb5ed47f43bab947ca8eb67485ae18c"
+     "prev_hash": "d6d3ebd17ffeecfd901822bbf9059cc9afbd446facad677681d734e7daabccf5",
+     "hash": "ac45b69e5285b38b6dcf977fe214dab903e0d4921ea5f7982b664f6672f9b8fe"
     },
     {
      "seq": 52,
-     "ts": "2026-11-05T08:19:27.058+00:00",
+     "ts": "2026-11-05T17:39:43.175+00:00",
      "actor": "system",
      "event": "findings_explained",
      "data": {
       "findings": 3,
       "source": "template"
      },
-     "prev_hash": "7519c5d1a6d5770476c43985837e167c8eb5ed47f43bab947ca8eb67485ae18c",
-     "hash": "45fdc2c19ba734556f2c82e891a5758df35d8cc42b2300dd0dadadc870c893d8"
+     "prev_hash": "ac45b69e5285b38b6dcf977fe214dab903e0d4921ea5f7982b664f6672f9b8fe",
+     "hash": "e712616bf613358cdd78ccd6cf2d4d31ccd6df40b178dab5b99795e618fb5eaa"
     },
     {
      "seq": 53,
-     "ts": "2026-11-05T08:19:27.077+00:00",
+     "ts": "2026-11-05T17:39:43.181+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "explain",
       "ok": true,
-      "seconds": 0.031,
+      "seconds": 0.015,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "45fdc2c19ba734556f2c82e891a5758df35d8cc42b2300dd0dadadc870c893d8",
-     "hash": "197fc40073be3afe443d31e9d6233fe78585c7e06113ac44796ab9136c179a77"
+     "prev_hash": "e712616bf613358cdd78ccd6cf2d4d31ccd6df40b178dab5b99795e618fb5eaa",
+     "hash": "0d9ed2905668a30343eeb8d4b51d6038295f1c015764eae2e6519f55bd9ebfa6"
     },
     {
      "seq": 54,
-     "ts": "2026-11-05T08:19:27.090+00:00",
+     "ts": "2026-11-05T17:39:43.195+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "crops"
      },
-     "prev_hash": "197fc40073be3afe443d31e9d6233fe78585c7e06113ac44796ab9136c179a77",
-     "hash": "fa6a577cd7fd4d94e5a4f4553c326eece0cd5e9160432d06d0af1d1a48a9a083"
+     "prev_hash": "0d9ed2905668a30343eeb8d4b51d6038295f1c015764eae2e6519f55bd9ebfa6",
+     "hash": "00d9c586e89fcbb34b4cf7c33f04f55b50b5010d7e3d3c366fdc8ffb665c3f1f"
     },
     {
      "seq": 55,
-     "ts": "2026-11-05T08:19:27.159+00:00",
+     "ts": "2026-11-05T17:39:43.241+00:00",
      "actor": "system",
      "event": "crops_made",
      "data": {
       "crops": 5
      },
-     "prev_hash": "fa6a577cd7fd4d94e5a4f4553c326eece0cd5e9160432d06d0af1d1a48a9a083",
-     "hash": "84c267c003c98f342a71bc3ea904f70788be68d82762e4873c9905caab45fdae"
+     "prev_hash": "00d9c586e89fcbb34b4cf7c33f04f55b50b5010d7e3d3c366fdc8ffb665c3f1f",
+     "hash": "d6d7f701888dd1d013dd367fa8441d1abdf2ad0f9751d00e47dee74a34ef3194"
     },
     {
      "seq": 56,
-     "ts": "2026-11-05T08:19:27.175+00:00",
+     "ts": "2026-11-05T17:39:43.251+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "crops",
       "ok": true,
-      "seconds": 0.063,
+      "seconds": 0.047,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "84c267c003c98f342a71bc3ea904f70788be68d82762e4873c9905caab45fdae",
-     "hash": "6d3ae5f118dab836edae118a2ce51592134f982554342e03ee2a62e8b09d2336"
+     "prev_hash": "d6d7f701888dd1d013dd367fa8441d1abdf2ad0f9751d00e47dee74a34ef3194",
+     "hash": "2370ef80e8c66f0254cecf0ecc0c17d721f6bfc9804f1e1cca72c77219e11362"
     },
     {
      "seq": 57,
-     "ts": "2026-11-05T08:19:27.187+00:00",
+     "ts": "2026-11-05T17:39:43.261+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "dossier"
      },
-     "prev_hash": "6d3ae5f118dab836edae118a2ce51592134f982554342e03ee2a62e8b09d2336",
-     "hash": "c5d44327c5807629bb6f84a997afc7b544db0445d64c67809272597557aefdfb"
+     "prev_hash": "2370ef80e8c66f0254cecf0ecc0c17d721f6bfc9804f1e1cca72c77219e11362",
+     "hash": "be2327cd1e86ad146388a1ce368511a98451df293cf5ffbf72d8c33fe77019e9"
     }
    ],
    "anchor": {
     "events": 57,
-    "head": "c5d44327c5807629bb6f84a997afc7b544db0445d64c67809272597557aefdfb"
+    "head": "be2327cd1e86ad146388a1ce368511a98451df293cf5ffbf72d8c33fe77019e9"
    },
    "chain_ok": true,
-   "problem": null
+   "problem": null,
+   "signing": {
+    "status": "signed",
+    "algorithm": "Ed25519",
+    "key_id": "9abba1a772ba66c5aa872e626d86357a75362c4df5e1fb00d9c2f97a46118dbf",
+    "checkpoints": 1,
+    "last": {
+     "case": "C-20261105-173941-b3d4",
+     "events": 57,
+     "head": "be2327cd1e86ad146388a1ce368511a98451df293cf5ffbf72d8c33fe77019e9",
+     "key": "3e51efda82253a515ed0477e4ff0e7a41643548d3dc887bb5a2f1203460d99ae",
+     "sig": "bca5cc1aedb5baa5ade0a4e0a3ee7a09ac6724d1cee4b5000084b076491608804de156806a2bf19555fbabbb537340afc7ad8459cfa8b0b81e41b5682088140f",
+     "ts": "2026-11-05T17:39:43.279+00:00",
+     "v": 1
+    },
+    "uncovered": 0,
+    "problem": null
+   }
   },
   "capabilities": [
    {
@@ -5698,6 +5947,22 @@
     "note": "Findings are grouped when they cite the same extracted field, lie on the same place of a page (half of the smaller box inside the other), or concern the same name, address, employer or account number in different documents. A group is ranked by how many independent kinds of check fired in it (visual, arithmetic, cross-document, metadata): a count, not a probability. A group with two or more kinds gets a headline finding, classed as potential manipulation, that lists its members and cites each of their places once. Context rules are linked but count as no kind, and limitations are never grouped. Findings that share none of these stay apart even where a person would relate them. The evaluation scores findings, not groups, so grouping has no measured accuracy of its own; the overlap limit is a starting value."
    },
    {
+    "name": "Entity relationship view: names, addresses, employers and account numbers across documents, and the findings that touch them",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_relations.py::test_a_value_written_alike_in_two_documents_is_one_entity",
+     "tests/test_relations.py::test_a_value_that_differs_is_another_entity_and_the_numbering_follows_the_documents",
+     "tests/test_relations.py::test_a_writing_that_differs_only_in_form_touches_one_entity",
+     "tests/test_relations.py::test_a_finding_that_cites_fields_touches_every_entity_they_hold",
+     "tests/test_relations.py::test_a_finding_that_lies_over_a_field_touches_its_entity_and_one_far_away_touches_none",
+     "tests/test_relations.py::test_headlines_and_limitations_are_not_findings_of_the_view",
+     "tests/test_relations.py::test_building_the_view_changes_nothing_and_gives_the_same_answer_twice",
+     "tests/test_dossier.py::test_the_dossier_lists_the_entities_the_documents_write_about",
+     "tests/test_web.py::test_relations_are_worked_out_from_the_case_on_request"
+    ],
+    "note": "Every name, address, employer and account number the extraction read goes into one list of entities, numbered in the order the documents mention them. Two writings are one entity when the cross-document checks grade them as the same or as the same apart from form (case, spacing, punctuation, the order of the words of a name, titles, initials, an employer's legal form, the visible end of a masked account number); a writing those checks grade as a Minor mismatch or a Mismatch is an entity of its own, so a changed name appears as two entities and the finding that reports it touches both. An entity lists each place it is written (document, page, box, the confidence of the reading). A finding touches an entity when it cites a field that holds it or lies over its box; the headline of a group of findings and limitations are left out. The Relationships tab draws documents, entities and findings as boxes joined by lines, and the dossier lists the entities under contextual analysis. Partial: the rules are fixed and sit on the grading of the cross-document checks, with the limits stated there; this is not a trained graph model, it finds no aliases, nicknames or links by meaning, it covers these four kinds of value only, and its accuracy was not measured because the evaluation scores findings, not entities (limitation 37). Nothing in it says what a difference means."
+   },
+   {
     "name": "Plain-language explanations and next steps from fixed templates",
     "status": "Implemented",
     "evidence": [
@@ -5745,9 +6010,10 @@
     "evidence": [
      "tests/test_dossier.py::test_sections_follow_ps2_order",
      "tests/test_dossier.py::test_html_is_self_contained",
-     "tests/test_dossier.py::test_json_hash_matches"
+     "tests/test_dossier.py::test_json_hash_matches",
+     "tests/test_dossier.py::test_the_dossier_lists_the_entities_the_documents_write_about"
     ],
-    "note": "Observations, inconsistencies, potential-manipulation candidates and limitations are kept in separate places."
+    "note": "Observations, inconsistencies, potential-manipulation candidates and limitations are kept in separate places. The entities the documents write about (names, addresses, employers, account numbers), each with the places it is written and the findings that touch it, are listed under contextual analysis."
    },
    {
     "name": "Dossier export as PDF",
@@ -5763,7 +6029,22 @@
      "tests/test_audit.py::test_edit_in_the_middle_is_detected",
      "tests/test_cli_slice.py::test_verify_audit_ok_then_tampered"
     ],
-    "note": "Each event carries the hash of the one before it. The dossier records the trail's length and last hash."
+    "note": "Each event carries the hash of the one before it, so an event edited or removed in the middle is found. The dossier records the trail's length and last hash. The chain alone does not see an event changed together with every hash after it, or a trail cut at the end: the signed checkpoints row covers that."
+   },
+   {
+    "name": "Signed checkpoints of the audit trail",
+    "status": "Partial",
+    "evidence": [
+     "tests/test_signing.py::test_a_checkpoint_names_the_case_the_count_and_the_last_hash_and_verifies",
+     "tests/test_signing.py::test_an_event_changed_and_the_chain_worked_out_again_is_seen_by_the_signature",
+     "tests/test_signing.py::test_a_trail_cut_short_is_seen_by_the_signature",
+     "tests/test_signing.py::test_a_trail_changed_and_signed_again_with_another_key_passes_unless_the_key_is_pinned",
+     "tests/test_signing.py::test_a_run_ends_with_a_checkpoint_over_the_whole_trail",
+     "tests/test_signing.py::test_a_data_folder_that_cannot_hold_a_key_does_not_stop_the_work_and_the_trail_says_so",
+     "tests/test_cli_slice.py::test_verify_audit_sees_a_trail_that_was_changed_and_chained_again",
+     "tests/test_cli_slice.py::test_verify_audit_with_the_public_key_given"
+    ],
+    "note": "At the end of a run, after a reviewer action and around the building of the dossier, the trail's length and last hash are signed with an Ed25519 key and added as one line to checkpoints.jsonl in the case folder (the trail itself gets no new event). The key is made once per data folder, in its signing folder, outside the case folders. verify-audit checks every checkpoint against the trail: an event changed together with a new chain, or a trail cut at the end, no longer matches a checkpoint signed before it, and events after the last checkpoint are counted as not covered. A trail whose chain already fails is not signed, and a signing that fails does not stop the run: it is written to the trail as an event, without a file path. What a checkpoint does not show is who held the key or when: the private key is a plain file without a password, no outside party stamps the time, and whoever can read the data folder can change the trail and sign it again with a key of their own, which only a public key the reader knows from elsewhere (verify-audit --pubkey) tells apart. It is a check of integrity that a reader can repeat, not a certification."
    },
    {
     "name": "Safe failure: rejected files, failed or stuck steps become visible limitations",
@@ -5792,10 +6073,12 @@
      "tests/test_web.py::test_review_actions_are_audited",
      "tests/test_web.py::test_dossier_download_is_built_fresh_and_audited",
      "tests/test_web.py::test_index_has_all_tabs",
+     "tests/test_web.py::test_relations_are_worked_out_from_the_case_on_request",
+     "tests/test_web.py::test_a_finished_run_is_signed_and_the_audit_endpoint_says_so",
      "tests/test_review.py::test_review_changes_status_and_audits",
      "tests/test_review.py::test_dossier_shows_reviewer_status"
     ],
-    "note": "Runs on this computer only. Upload, a background run with progress, page images with word, field and finding boxes, evidence crops, reviewer actions written to the audit trail, the audit trail, this list and the dossier download. The server side is tested; how the page behaves in a browser was checked by hand, not by an automated browser test. Findings that share evidence are grouped in the Clusters tab, each group under its headline."
+    "note": "Runs on this computer only. Upload, a background run with progress, page images with word, field and finding boxes, evidence crops, reviewer actions written to the audit trail, the audit trail, this list and the dossier download. The server side is tested; how the page behaves in a browser was checked by hand, not by an automated browser test. Findings that share evidence are grouped in the Clusters tab, each group under its headline. The Relationships tab shows the entities the documents write about and the findings that touch them (see the entity relationship row); its page script was checked by hand in a browser, with keyboard use, and not by an automated browser test. The Audit trail tab also says whether the trail is signed (see the signed checkpoints row); that line was checked by hand in a browser too, for a signed, an unsigned and a case whose checkpoint does not match, and not by an automated browser test."
    },
    {
     "name": "Handwriting and multilingual OCR",
@@ -5865,7 +6148,11 @@
     "The OCR can misread a letter or a digit with no sign of doubt. The tool does not repair what it reads, and a value read from a page classed good carries the confidence of that class (up to 0.95), so a wrong one is not marked as doubtful. The evaluation counts these in its 'wrong, trusted' column: in the held-out run 16 text values (4 and 4 on layout A, mild and 150 dpi; 3 and 5 on layout B) and no amount, date or id.",
     "Extraction depends on the wordings of labels, column headings and captions that the spec of each document type lists. A wording that is not listed leaves its value missing, and whatever depends on that value is left unchecked; the tool says so as a limitation and does not guess. On the held-out layout B, about half of whose wordings the specs do not list, digital pages gave 91 % of amounts, 97 % of dates, 34 % of text values and no id, and the checks within a document could not be made in full on any of its 24 genuine statements and 24 genuine payslips (eval/test.md). A document that words its labels differently from the specs will meet the same limit, and a value under a label that is not listed cannot be compared with another document's.",
     "The grain and placement checks found few changed scans. In the held-out split they found 3 of the 16 scans that were changed by pasting from another scan or by erasing and retyping (the placement check 1 of the 8 pasted scans, the grain check 2 of the 8 retyped ones), arithmetic and cross-document checks found 3 more, and 10 were not found at all; at 120 dpi 2 of 9 changes of any kind were found. A scan on which the tool raised nothing therefore says little about whether it was changed. These checks also gave the one flag on a genuine document, a 120 dpi scan (eval/test.md).",
-    "The reader does not turn a page back upright. It recognises one case, a page that stands on its side (a scan turned a quarter turn, or a PDF page stored turned 90 or 270 degrees), because most of its words are taller than wide. Such a page is read as poor quality and the dossier says why. Its values carry low confidence, and the checks that compare them, the placement of its words and its marks are not run on it. The rule was added after cases with one such page gave false conflicts: the page's rows are the document's columns, so a value pairs with the wrong label. In 4 genuine development cases of three documents (2 scans, 2 PDFs), a statement turned a quarter gave a false address conflict with the other documents and a payslip turned a quarter gave false employer and payer conflicts, in every case; with the rule, the turned page gave no flag in any of them. A page that is upside down is not recognised (the tool has no test for it). It is read, few of its fields are found (8 to 38 of the 78 to 188 of a statement in those cases), and a check can give a false result: a statement scanned upside down gave a false placement observation in 1 of the 2 scans, and a statement stored as a PDF turned half a turn gave a false account-number conflict with the other documents in both PDFs. No page in the development or the held-out split is turned, so none of this is in the reported figures. A page should be turned upright before it is submitted."
+    "The reader does not turn a page back upright. It recognises one case, a page that stands on its side (a scan turned a quarter turn, or a PDF page stored turned 90 or 270 degrees), because most of its words are taller than wide. Such a page is read as poor quality and the dossier says why. Its values carry low confidence, and the checks that compare them, the placement of its words and its marks are not run on it. The rule was added after cases with one such page gave false conflicts: the page's rows are the document's columns, so a value pairs with the wrong label. In 4 genuine development cases of three documents (2 scans, 2 PDFs), a statement turned a quarter gave a false address conflict with the other documents and a payslip turned a quarter gave false employer and payer conflicts, in every case; with the rule, the turned page gave no flag in any of them. A page that is upside down is not recognised (the tool has no test for it). It is read, few of its fields are found (8 to 38 of the 78 to 188 of a statement in those cases), and a check can give a false result: a statement scanned upside down gave a false placement observation in 1 of the 2 scans, and a statement stored as a PDF turned half a turn gave a false account-number conflict with the other documents in both PDFs. No page in the development or the held-out split is turned, so none of this is in the reported figures. A page should be turned upright before it is submitted.",
+    "The entity view puts two writings together by the pairwise grading of the cross-document checks, which is not transitive: a writing joins the first entity, in the order the documents mention them, that holds a writing graded as the same or as the same apart from form, so three writings of which the first matches the second and the second the third, but the first does not match the third, can end up in one entity or in two depending on the order they are read in. An initial stands for any name it starts, so 'M. Varghese' joins the entity of 'Mohan Varghese' (and of any other name it could stand for), and a masked account number joins the entity of any number that ends the same way. Only names, addresses, employers and account numbers are entities. Dates, amounts and ids are not, and neither are aliases, nicknames, a person named by role ('the borrower') or a name inside running text. A value the extraction missed is absent from the view, and one it misread is an entity of its own, so a letter misread in a name appears as two names. A finding touches an entity only through a field it cites or a box it lies over, so one that concerns an entity in some other way is not drawn on it, and every finding that does touch one is drawn whatever its review status. The view has no accuracy measured, because the evaluation scores findings and not entities, and it does not say that two entities are, or are not, one person or one thing.",
+    "The signed checkpoints show that the audit trail still reads as it did when a checkpoint was signed. They do not show who held the key or when: the private key is a plain file without a password in the signing folder of the data folder, the time in a checkpoint is the clock of the machine that signed it, and no outside party stamps it. Whoever can read that folder can change the trail, work the hashes out again and sign it with a key of their own; a reader tells that apart only by knowing the public key from somewhere else (verify-audit --pubkey).",
+    "A case folder whose checkpoints.jsonl was removed reads as unsigned, which verify-audit reports and passes unless a public key is given. A checkpoint carries the public key that signed it, so without a key known beforehand it shows only that one key signed this trail. Events after the last checkpoint are counted as not covered, not as changed.",
+    "The tool makes no claim of compliance with SOC 2, ISO/IEC 27001, ISO/IEC 27037 or any other standard. The audit trail and its signed checkpoints are checks of integrity that a reader can repeat; a standard also asks about people, procedure and the custody of the original files, which software cannot supply."
    ],
    "assumptions": [
     "Dates are read day first (DD/MM/YYYY); a date that could be read another way is marked ambiguous and given a low confidence.",
@@ -5877,7 +6164,7 @@
   }
  },
  "integrity": {
-  "json_sha256": "48b2e18e92e1896164e6bd97be20229de8ac56b6ebf4c45a7a8df66274af2bd6",
+  "json_sha256": "101287c23392b3848e9e320d3e255b13651dd1bdb1550f8006d1ce9713b0cb06",
   "method": "sha256 of this document without this block, as JSON with sorted keys, compact separators and ASCII escapes"
  }
 }
