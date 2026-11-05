@@ -27,6 +27,8 @@ How the pieces fit is in [docs/architecture.md](docs/architecture.md).
 Python 3.11 or newer. It was developed and tested on Windows 11 with Python 3.11.9; no other system has been tried.
 
 ```
+git clone https://github.com/BU1lDR/docforensics.git
+cd docforensics
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
