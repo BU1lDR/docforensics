@@ -4,7 +4,8 @@ start is true. Each case goes through the whole pipeline in a temporary folder a
 
 The cases are cases of the development split, on which the thresholds were tuned. Running them shows the tool working from files to
 dossier; it is not evidence of how well the tool detects. The held-out figures are in eval/test.md. The dossier of dev-0000 is kept in
-sample_data/ too, and one test checks that it is unedited and is what the tool writes for that case today.
+sample_data/ too, made without a language model and made with one. One test checks that the first is unedited and is what the tool writes
+for that case today; another checks that the second is unedited and holds the same findings.
 
 Every test that runs the pipeline is a function-scoped test, so the autouse guard in conftest.py that blocks public addresses is in
 force while the tool runs: the claim that a case needs no network is checked here, not assumed."""
@@ -21,6 +22,7 @@ from datagen.sample import CASES as BUILT, SPLIT, build_sample
 from docforensics.audit import AuditLog
 from docforensics.cli import main
 from docforensics.config import Thresholds
+from docforensics.dossier import READING_LABEL, SOURCE_LABEL
 from docforensics.ingest import create_case
 from docforensics.pipeline import STAGE_ORDER, run_case
 from evaluation.score import score
@@ -28,6 +30,7 @@ from evaluation.score import score
 SAMPLE = Path(__file__).resolve().parents[1] / "sample_data"
 VERDICT = re.compile(r"fraud|forg|fake|counterfeit", re.I)  # as in test_readme: the documents give no verdict either
 UTC = timedelta(0)
+MODEL = "phi4-mini:3.8b"  # the model of the dossier made with --llm: the default one when it was made
 
 # case: (change planted, found, located). The values are what the pipeline returns on these files, as sample_data/README.md says; a change in
 # the pipeline that moves one of them makes this fail until the README is brought in line.
@@ -175,32 +178,38 @@ def stable(d: dict) -> dict:
     return d
 
 
-def test_the_sample_dossier_is_the_dossier_of_dev_0000(tmp_path):
-    page = (SAMPLE / "dossier-dev-0000.html").read_text(encoding="utf-8")
-    text = (SAMPLE / "dossier-dev-0000.json").read_text(encoding="utf-8")
+def kept_dossier(stem: str) -> tuple[dict, str]:
+    """A dossier kept in sample_data/ (its data and its page), after the checks that hold for each of them. It is the dossier of dev-0000's
+    documents, by hash. It is not edited since it was written: the hash inside it is the hash of its data, the page shows the same hash, and
+    the audit chain holds together. It stands alone, with every image inside the page, and carries no path of the machine it was made on and
+    no verdict."""
+    page = (SAMPLE / f"{stem}.html").read_text(encoding="utf-8")
+    text = (SAMPLE / f"{stem}.json").read_text(encoding="utf-8")
     kept = json.loads(text)
     ov, trail = kept["overview"], kept["appendices"]["audit_trail"]
-
-    # whose dossier it is: the documents of dev-0000 by hash, and what the case raises
     assert {x["file"]: x["sha256"] for x in kept["evidence_and_traceability"]["documents"]} == {d["file"]: d["sha256"] for d in entry_of("dev-0000")["docs"]}
-    raised = RAISES["dev-0000"]
-    assert ov["counts"] == {"documents": 3, "findings": sum(raised.values()), "observations": raised["pdf_revisions", "observation"],
-                            "inconsistencies": raised["statement_balance", "inconsistency"], "potential_manipulation": raised["link", "potential_manipulation"],
-                            "limitations": 0}
-
-    # not edited since it was written: the hash inside it is the hash of its data, the page shows the same hash, and the audit chain holds together
     body = {k: v for k, v in kept.items() if k != "integrity"}
     assert hashlib.sha256(json.dumps(body, sort_keys=True, separators=(",", ":")).encode("ascii")).hexdigest() == kept["integrity"]["json_sha256"]
     assert kept["integrity"]["json_sha256"] in page and ov["case"] in page
     assert trail["chain_ok"] and trail["anchor"] == {"events": len(trail["events"]), "head": trail["events"][-1]["hash"]}
     assert all(b["prev_hash"] == a["hash"] for a, b in zip(trail["events"], trail["events"][1:]))
-
-    # it stands alone and says no language model was used; it carries no path of the machine it was made on and no verdict
-    assert kept["investigation_summary"]["ai_reading"] == {"status": "none", "note": "No language model was used for this case."}
     assert page.count("<img") == page.count('src="data:image/png;base64,') == len([r for r in kept["evidence_and_traceability"]["trace"] if r["crop"]]) > 0
     local = re.compile(r"(?<![A-Za-z])[A-Za-z]:[\\/]|[\\/]Users[\\/]|/home/|Aryan")
     for shown in (re.sub(r"data:image/png;base64,[A-Za-z0-9+/=]+", "", page), text):
         assert not local.search(shown) and not VERDICT.search(shown), (local.search(shown), VERDICT.search(shown))
+    return kept, page
+
+
+def test_the_sample_dossier_is_the_dossier_of_dev_0000(tmp_path):
+    kept, _ = kept_dossier("dossier-dev-0000")
+    ov = kept["overview"]
+
+    # what the case raises, and that no language model was used
+    raised = RAISES["dev-0000"]
+    assert ov["counts"] == {"documents": 3, "findings": sum(raised.values()), "observations": raised["pdf_revisions", "observation"],
+                            "inconsistencies": raised["statement_balance", "inconsistency"], "potential_manipulation": raised["link", "potential_manipulation"],
+                            "limitations": 0}
+    assert kept["investigation_summary"]["ai_reading"] == {"status": "none", "note": "No language model was used for this case."}
 
     # it is what the tool writes for this case today. A change to the tool that changes a dossier fails this until the dossier is made again
     # (sample_data/README.md, "A sample dossier")
@@ -215,6 +224,47 @@ def test_the_sample_dossier_is_the_dossier_of_dev_0000(tmp_path):
     doc = (SAMPLE / "README.md").read_text(encoding="utf-8")
     assert "dossier-dev-0000.html" in doc and "dossier-dev-0000.json" in doc and ov["case"] in doc and ov["created"][11:19] in doc
     assert re.search(r"commit [0-9a-f]{7,40}\b", doc)
+
+
+def without_the_model(d: dict) -> dict:
+    """stable() without what a language model can add or reword: its reading, the explanations (the wording of a group headline may be the
+    model's) and the audit trail, which holds its calls. What is left is what the detectors and the checks made."""
+    d = stable(d)
+    d["investigation_summary"].pop("ai_reading")
+    d["investigation_summary"].pop("explanations")
+    d["appendices"].pop("audit_trail")
+    for rows in (*d["contextual_analysis"].values(), d["visual_forensic_findings"]["observations"]):
+        for r in rows:
+            r.pop("explanation")
+            r.pop("explanation_source")
+    return d
+
+
+def test_the_sample_dossier_made_with_the_language_model_holds_the_same_findings():
+    """The dossier made with --llm cannot be compared with a new run, because that needs the model and its words may differ. What can be
+    checked is that it is unedited, that it records the model's calls, that the model's words are labelled, and that apart from them it is
+    the dossier made without the model: the model adds a reading and may reword a headline, and changes no finding."""
+    kept, page = kept_dossier("dossier-dev-0000-llm")
+    plain = json.loads((SAMPLE / "dossier-dev-0000.json").read_text(encoding="utf-8"))
+    ov, trail = kept["overview"], kept["appendices"]["audit_trail"]
+    a, b = without_the_model(plain), without_the_model(kept)
+    assert list(a) == list(b) and [k for k in a if a[k] != b[k]] == [], "the dossier made with the model differs from the one made without it in more than the model's words"
+
+    # it is a run of its own, and its audit trail names the model and the digest of the weights for every call
+    assert ov["case"] != plain["overview"]["case"]
+    calls = [e["data"] for e in trail["events"] if e["event"] in ("llm_wording", "llm_reasoning")]
+    assert {e["event"] for e in trail["events"]} >= {"llm_wording", "llm_reasoning"} and {c["model"] for c in calls} == {MODEL} and all(c["model_digest"] for c in calls)
+
+    # the model's reading was kept, and its words are labelled as inference in the data and on the page
+    ai = kept["investigation_summary"]["ai_reading"]
+    assert ai["status"] == "kept" and ai["source"] == "llm" and ai["model"] == MODEL and READING_LABEL in page
+    assert [e["finding"] for e in kept["investigation_summary"]["explanations"] if e["source"] == "llm"] == ["F-003"] and SOURCE_LABEL["llm"] in page
+
+    # the README says which dossier is which, in one line
+    doc = (SAMPLE / "README.md").read_text(encoding="utf-8")
+    line = next(x for x in doc.splitlines() if "dossier-dev-0000-llm.html" in x)
+    assert "dossier-dev-0000-llm.json" in line and MODEL in line and ov["case"] in line and ov["created"][11:19] in line
+    assert re.search(r"commit [0-9a-f]{7,40}\b", line)
 
 
 def test_the_sample_readme_names_every_case_and_gives_no_verdict():
