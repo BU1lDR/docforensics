@@ -1,8 +1,10 @@
 """Read stage: render every page and locate its words, one document at a time."""
 from collections.abc import Callable
 
-from ..model import Case, Document
+from ..findings import add_findings, limitation
+from ..model import Case, Document, Evidence
 from ..pipeline import Ctx, guarded
+from ..understand.layout import sideways
 from .ocr import Ocr, load_image_page, ocr_page
 from .pdf import pdf_meta, read_pdf_page
 
@@ -50,3 +52,13 @@ def read_stage(case: Case, ctx: Ctx) -> None:
     for doc in case.documents:
         read = _read_image_doc if doc.kind == "image" else _read_pdf_doc
         guarded(ctx, case, "read", lambda doc=doc, read=read: read(doc, ctx, before_ocr), doc_id=doc.id)
+        for pg in doc.pages:
+            if seen := sideways(pg.words):  # a quarter turn is not undone: the page is unreliable, whatever its sharpness
+                pg.quality_class = "poor"
+                add_findings(case, ctx, [limitation(
+                    "read", f"Page {pg.n} stands on its side",
+                    f"{seen[0]} of the {seen[1]} words of three characters or more on this page are taller than wide, so it was scanned "
+                    "or stored a quarter turn. The reader does not turn pages back: its rows are the document's columns and a value "
+                    "would pair with the wrong label. The page is read as poor, so its values carry low confidence and the checks that "
+                    "compare them, the placement of its words and its marks were not run on it. A copy that stands upright would allow them.",
+                    [Evidence(doc=doc.id, page=pg.n, box=(0.0, 0.0, float(pg.width), float(pg.height)), note="page stands on its side")])])

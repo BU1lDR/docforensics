@@ -104,6 +104,16 @@ def lines_of(page: Page) -> list[Line]:
     return out
 
 
+def sideways(words: list[Word]) -> tuple[int, int] | None:
+    """(words taller than wide, words counted) if the page stands on its side, else None: it was scanned or stored a quarter turn.
+    Only words of three characters or more count, and there must be MIN_WORDS of them. The turn is not undone (the engine's word
+    order is by position, so 90 and 270 degrees cannot be told apart): the page's rows are the document's columns, so a value
+    would pair with the wrong label."""
+    long = [w for w in words if len(w.text) >= 3]
+    tall = sum(w.box[3] - w.box[1] > w.box[2] - w.box[0] for w in long)
+    return (tall, len(long)) if len(long) >= MIN_WORDS and 2 * tall > len(long) else None
+
+
 def _sharp(v: np.ndarray) -> float:
     """How sharply the values pile up: the sum of the squared counts of 3 px bins, over three offsets of the bins."""
     return sum(float((np.bincount(((v - v.min() + o) // 3).astype(int)) ** 2).sum()) for o in (0, 1, 2))

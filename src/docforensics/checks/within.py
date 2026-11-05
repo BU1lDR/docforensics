@@ -368,7 +368,7 @@ def run_within_checks(case: Case, ctx: Ctx) -> None:
             add_findings(case, ctx, [limitation(
                 "checks", f"Unreliable reading: page {p.n}",
                 "This page was read at a quality too low to trust its amounts and dates, so the checks that compare values "
-                "inside this document were not run on it. A sharper or higher-resolution copy would allow them.",
+                "inside this document were not run on it. A sharper, higher-resolution or upright copy would allow them.",
                 [Evidence(doc=doc.id, page=p.n, box=(0.0, 0.0, float(p.width), float(p.height)), note="page read at poor quality")])
                 for p in poor])
             continue

@@ -177,7 +177,7 @@ def word_box(case, text):
 def test_overlay_evidence_on_a_rotated_page_lands_on_the_text_the_reader_found(tmp_path, degrees):
     edited, _ = d2_cover_retype(SALARY, "52,000.00", "82,000.00")
     case = run(tmp_path, rotated(edited, degrees))
-    (f,) = case.findings
+    (f,) = by(case, "pdf_overlay")  # a page on its side also carries a limitation from the reader (tests/test_sideways.py)
     assert iou(f.evidence[0].box, word_box(case, "82,000.00")) >= 0.5
 
 
