@@ -283,6 +283,16 @@ TEMPLATES.update(_across(
     "the issuer or the caption of a stamp was not found, no ink lay where the mark should be, or the area held printed matter. "
     "Whether the marks agree is unknown."))
 TEMPLATES.update({
+    ("reuse", "observation"): (
+        "A signature or a stamp on one document is the same image as the one on another document, by the measures the finding states. "
+        "A hand signs afresh each time and a stamp is pressed afresh each time, so two separate ones come out close but not the same. "
+        "There are ordinary causes all the same: software that places one stored image of a signature or a stamp on every document it "
+        "makes, one page submitted in two forms, or one scan used for two documents. The comparison reads shapes only: it does not say "
+        "who signed or stamped, or how the image came to be on both documents.",
+        ["Open the two marks and compare them at full size.",
+         "Ask the signatory or the issuer how the mark is put on a document: by hand, or by software from a stored image."]),
+})
+TEMPLATES.update({
     ("cross_duplicate", "observation"): (
         "The same file was submitted more than once, with identical content. It may be an accidental second upload, or one document "
         "offered in two roles. The tool does not say which.",

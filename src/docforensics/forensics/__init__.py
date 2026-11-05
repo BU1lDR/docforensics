@@ -12,6 +12,7 @@ from .pdf_fonts import font_outliers
 from .pdf_meta import metadata_observations
 from .pdf_overlay import covered_or_hidden_text
 from .pdf_revisions import revision_diff
+from .reuse import compare_reuse
 from .scan_layout import layout_consistency
 from .scan_noise import noise_residual
 from .signature import compare_signatures
@@ -31,7 +32,7 @@ def run_forensics(case: Case, ctx: Ctx) -> None:
                        doc_id=doc.id):
                 add_findings(case, ctx, drafts)
                 ctx.audit.append("system", "doc_forensics", {"doc": doc.id, "detector": det.__name__, "findings": len(drafts)})
-    for compare in (compare_signatures, compare_marks):  # signatures and marks are compared across the documents, so once for the case
+    for compare in (compare_signatures, compare_marks, compare_reuse):  # signatures and marks are compared across the documents, so once for the case
         drafts = []
         if guarded(ctx, case, f"forensics.{compare.__name__}", lambda compare=compare, drafts=drafts: drafts.extend(compare(case, ctx))):
             add_findings(case, ctx, drafts)
