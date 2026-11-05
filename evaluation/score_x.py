@@ -69,7 +69,7 @@ def score_case(entry: dict, case: Case | None, events: list[dict], seconds: list
                 extras.append({"case": entry["case"], "doc": td["file"], "type": td["type"], "name": f.name, "text": f.raw,
                                "where": "table cell" if any(iou(f.box, c) >= NEAR for c in cells) else "unlisted"})
     calls = {"pages": len(events), "accepted": sum(1 for e in events if e["accepted"]), "items": sum(e.get("items", 0) for e in events),
-             "kept": sum(e.get("kept", 0) for e in events)}  # a page that was skipped has neither
+             "kept": sum(e.get("kept", 0) for e in events), "unused": sum(e.get("unused", 0) for e in events)}  # a page that was skipped has none
     dropped = [{"case": entry["case"], "doc": e["doc"], **d} for e in events for d in e.get("dropped", [])]
     return {"fields": rows, "extras": extras, "dropped": dropped, "calls": calls, "seconds": list(seconds)}
 
@@ -126,7 +126,8 @@ def format_report(s: dict) -> str:
         lines += _table(title, s[key]) + [""]
     c = s["calls"]
     lines += [f"Calls: {c.get('pages', 0)} pages considered, {c.get('accepted', 0)} replies accepted, {c.get('items', 0)} items given, "
-              f"{c.get('kept', 0)} kept. Dropped: " + (", ".join(f"{v} {k}" for k, v in s["dropped"].most_common()) or "none") + ".",
+              f"{c.get('kept', 0)} kept. Dropped: " + (", ".join(f"{v} {k}" for k, v in s["dropped"].most_common()) or "none")
+              + f"; {c.get('unused', 0)} beyond the limit.",
               f"Seconds per page: mean {s['seconds']['mean']}, median {s['seconds']['median']}, longest {s['seconds']['max']} "
               f"({s['seconds']['calls']} calls).", "",
               "Extras (model-read fields at no listed fact): " + (", ".join(f"{v} {k}" for k, v in s["extras"].items()) or "none") + ".", ""]

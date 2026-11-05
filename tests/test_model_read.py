@@ -192,6 +192,31 @@ def test_the_cap_on_confidence_is_below_the_doubt_limit_whatever_it_is_set_to(tm
     assert all(f.conf < 0.3 for f in case.documents[0].fields if f.model_read)
 
 
+def test_a_model_that_lists_more_than_it_was_asked_is_still_read_up_to_the_limit(tmp_path):
+    """phi4-mini gave 21 to 25 items on 4 of 14 pages it was asked 'up to 20' for (measured, ext-dev), and the totals come last on a page."""
+    sheet = [(40, 20 + 10 * i, f"Note {i} reads alpha{i}", 8) for i in range(1, 31)]
+    reply = {"items": [{"label": f"Note {i}", "value": f"alpha{i}", "source_text": f"Note {i} reads alpha{i}"} for i in range(1, 31)]}
+    case, audit = run(tmp_path, lines_pdf(sheet), llm=Fake(reply))
+    assert len(by_name(case.documents[0])) == 30
+    (ev,) = [e for e in audit.events() if e.event == "llm_extraction"]
+    assert (ev.data["items"], ev.data["kept"], ev.data["unused"]) == (30, 30, 0)
+
+
+def test_items_beyond_the_limit_are_counted_and_said_and_not_lost_silently(tmp_path, monkeypatch):
+    from docforensics.understand import model_read
+    monkeypatch.setattr(model_read, "MAX_USED", 4)
+    reply = {"items": [{"label": f"Fact {i}", "value": v, "source_text": s} for i, (v, s) in enumerate(
+        [("30 days", "Valid for 30 days"), ("12/05/2026", "Delivery on or before 12/05/2026 at site"), ("Rs. 5,000.00", "Advance of Rs. 5,000.00 payable"),
+         ("Rohan Iyer", "Prepared by Rohan Iyer"), ("Q-17", "Reference Q-17"), ("31/03/2026", "Quote Date: 31/03/2026")], 1)]}
+    case, audit = run(tmp_path, lines_pdf(SHEET), llm=Fake(reply))
+    assert set(by_name(case.documents[0])) == {"fact_1", "fact_2", "fact_3", "fact_4"}  # the first four; the rest are not looked at
+    (ev,) = [e for e in audit.events() if e.event == "llm_extraction"]
+    assert (ev.data["items"], ev.data["kept"], ev.data["unused"]) == (6, 4, 2)
+    assert ev.data["items"] == ev.data["kept"] + len(ev.data["dropped"]) + ev.data["unused"]
+    (lim,) = [f for f in case.findings if f.fclass == "processing_limitation" and "not used" in f.title]
+    assert lim.title == "D1 page 1: 2 items the model listed were not used" and [e.doc for e in lim.evidence] == ["D1"]
+
+
 # --- when the model fails
 
 def test_a_failed_call_is_a_limitation_and_the_rest_of_the_case_goes_on(tmp_path):

@@ -58,7 +58,9 @@ def test_the_summary_counts_by_outcome_kind_and_medium_and_the_report_states_the
     reply = {"invoice": {"items": [item("Invoice number", inv["invoice_number"]["text"])]}, "bill": {"items": []}}
     _, cd, audit = create_case(tmp_path / "data", [(n, d) for n, d in files.items()], TH)
     case = run_case(cd, TH, llm=Router(reply))
-    res = score_case(entry, case, [e.data for e in audit.events() if e.event == "llm_extraction"], [30.0, 20.0])
+    events = [e.data for e in audit.events() if e.event == "llm_extraction"]
+    events[0] = {**events[0], "unused": 3}  # a reply with 3 items beyond the limit
+    res = score_case(entry, case, events, [30.0, 20.0])
     s = summarise([res])
     total = sum(s["outcomes"].values())
     assert total == len(res["fields"]) and s["outcomes"]["right"] == 1
@@ -66,6 +68,7 @@ def test_the_summary_counts_by_outcome_kind_and_medium_and_the_report_states_the
     assert set(s["by_medium"]) == {"digital"} and s["seconds"] == {"calls": 2, "mean": 25.0, "median": 25.0, "max": 30.0}
     text = format_report({**s, "run": {"model": "fake-model:1b", "split": "ext-dev", "cases": 1}})
     assert "IoU" in text and "right" in text and "fake-model:1b" in text and "inference" in text
+    assert s["calls"]["unused"] == 3 and "3 beyond the limit" in text
 
 
 def test_a_failed_call_is_counted_as_a_page_not_read(tmp_path):

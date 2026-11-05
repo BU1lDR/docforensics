@@ -17,9 +17,11 @@ from .extract import _Extractor
 from .layout import find_phrase, text_of, union
 from .normalise import plain
 
-MAX_PAGES = 2   # pages of one document the model reads: a call takes 40 to 100 s on this laptop
+MAX_PAGES = 2   # pages of one document the model reads: a call takes 1 to 2.5 minutes on this laptop (measured, ext-dev)
 MAX_LINES = 60  # lines of a page it is shown
-MAX_ITEMS = 20  # items of a reply that are looked at
+MAX_ITEMS = 20  # facts the prompt asks for
+MAX_USED = 60   # items of a reply that are looked at: models list more than they are asked for (21 to 25 on 4 of 14 pages, ext-dev), and the
+                # totals of an invoice come last. As many as the lines shown; the rest are counted and said, never dropped without a word
 CAP = 0.9       # of the doubt limit: the most confidence a field the model read can have
 GUARD = 1.1     # a call that has not ended after this multiple of the client's own timeout is abandoned
 HOW = ("exact", "normalised", "fuzzy")
@@ -131,7 +133,7 @@ class ModelReader:
         shown = lines[:MAX_LINES]
         user = "Page text, one numbered line per line:\n" + "\n".join(f"{i}: {quote(text_of(ln.words), 300)}" for i, ln in enumerate(shown, 1))
         event = {"model_digest": self.llm.digest(), "prompt_sha256": _sha(user), "output_sha256": "", "lines": len(shown),
-                 "lines_total": len(lines), "items": 0, "kept": 0, "dropped": []}
+                 "lines_total": len(lines), "items": 0, "kept": 0, "unused": 0, "dropped": []}
         got: dict = {}
 
         def call() -> None:  # only this runs in the thread that may be abandoned; everything it found is used here, after it
@@ -151,7 +153,11 @@ class ModelReader:
             return self._fail(doc, page, event, "the reply is not a list of items", stop=False)
         fields, dropped = self._fields(doc, ex, page, [w for ln in shown for w in ln.words], items)
         doc.fields += fields
-        self._audit(doc, page, **{**event, "items": len(items), "kept": len(fields), "dropped": dropped}, accepted=True, reason="")
+        unused = max(len(items) - MAX_USED, 0)
+        self._audit(doc, page, **{**event, "items": len(items), "kept": len(fields), "unused": unused, "dropped": dropped}, accepted=True, reason="")
+        if unused:
+            self._say(doc, page, f"{doc.id} page {page.n}: {unused} items the model listed were not used",
+                      f"Only the first {MAX_USED} of its {len(items)} items were looked at.")
         if len(lines) > len(shown):
             self._say(doc, page, f"{doc.id} page {page.n}: {len(lines) - len(shown)} lines were not shown to the model",
                       f"Only the first {MAX_LINES} of {len(lines)} lines were given to the model.")
@@ -160,7 +166,7 @@ class ModelReader:
         rules = {frozenset(f.word_ids) for f in doc.fields if f.word_ids}
         seen: set[frozenset[str]] = set()
         kept, dropped = [], []
-        for it in items[:MAX_ITEMS]:
+        for it in items[:MAX_USED]:
             made = self._item(ex, page, words, it, rules, seen)
             if isinstance(made, Field):
                 kept.append(made)
