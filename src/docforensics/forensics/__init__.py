@@ -6,6 +6,7 @@ from collections.abc import Callable
 from ..findings import add_findings
 from ..model import Case, Document, Finding
 from ..pipeline import Ctx, guarded
+from .ela import jpeg_history
 from .marks import compare_marks
 from .pdf_fonts import font_outliers
 from .pdf_meta import metadata_observations
@@ -17,7 +18,7 @@ from .signature import compare_signatures
 
 Detector = Callable[[Case, Document, Ctx], list[Finding]]
 DIGITAL_DETECTORS: list[Detector] = [revision_diff, covered_or_hidden_text, font_outliers, metadata_observations]
-SCAN_DETECTORS: list[Detector] = [noise_residual, layout_consistency]
+SCAN_DETECTORS: list[Detector] = [noise_residual, layout_consistency, jpeg_history]
 
 
 def run_forensics(case: Case, ctx: Ctx) -> None:

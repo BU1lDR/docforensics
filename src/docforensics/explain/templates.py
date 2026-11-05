@@ -86,6 +86,19 @@ TEMPLATES: dict[tuple[str, str], tuple[str, list[str]]] = {
         f"{_LIMIT} The placement of some scanned words could not be compared, so a word set out of line may exist among them and "
         "would not have been shown.",
         _UNCHECKED),
+    ("ela", "observation"): (
+        "The picture of this scanned page was saved as a JPEG more than once. Most of its ink still carries a mark of the earlier "
+        "save, and the highlighted places do not: they behave as if they had been added after it. A piece pasted in from another "
+        "picture, or text typed into the scan, would look like this. So would a page put together from more than one scan, or a "
+        "stamp, a date, a page number or a sticker that the scanner or a program added later. "
+        "This has ordinary causes and does not show what was done.",
+        ["Look at the marked places in the original picture, at full size, beside their neighbours.",
+         "Ask how the page was scanned and saved, and ask the issuer for the original document or another scan of the same page."]),
+    ("ela", "processing_limitation"): (
+        f"{_LIMIT} The history of JPEG saves of some scanned pages was not examined, because the page is not a JPEG picture, was "
+        "scaled or turned when it was read, or could not be read. A piece added after an earlier save may exist there and would not "
+        "have been shown.",
+        _UNCHECKED),
     ("statement_balance", "inconsistency"): (
         "The running balance printed on the statement does not follow from the amounts printed on its rows, by more than the "
         "stated tolerance. An edited figure would cause this, and so would a misread digit, a row that was not read, or a layout "
