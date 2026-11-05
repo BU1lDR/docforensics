@@ -37,7 +37,13 @@ from .score import iou
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCATED = 0.3  # IoU of a region with the edited box at which the edit counts as found at its place
-OFF_GRID = {"mild": 82, "150dpi": 47, "120dpi": 33}  # host qualities 2 to 3 away from the steps of 5 the check tries (85, 50, 35 in the pack)
+# Robustness variants of the pack's hosts (the quality of the first save of each level; the pack has 85, 50, 35). They are reports, not tuning sets.
+HOSTS = {"off-grid": {"mild": 82, "150dpi": 47, "120dpi": 33},        # libjpeg's tables at qualities between the steps of 5 the check tries
+         "other-tables": {"mild": 71, "150dpi": 59, "120dpi": 59}}   # Photoshop-family tables (Pillow's presets); the numbers are the nearest libjpeg qualities
+NOTES = {"off-grid": "The hosts were saved at qualities 82, 47 and 33 (the pack's 85, 50 and 35), between the steps of 5 the check tries.",
+         "other-tables": "The hosts were written with Photoshop-family quantisation tables (Pillow's presets web_medium and web_low); the nearest libjpeg "
+                         "qualities, 71 and 59, stand in for the host quality in the pack's `expect` rule. The last saves are libjpeg's."}
+PRESET = {71: "web_medium", 59: "web_low"}
 KNOBS = ("QUALITIES", "GAP", "MIN_DIP", "INK", "BLOCK", "MIN_INK", "Z", "MAX_DIP", "MIN_CELLS", "MIN_RATIO", "LISTED")
 
 
@@ -85,12 +91,12 @@ def format_report(split: str, mode: str, rows: list[dict], run: dict) -> str:
     blind = [r for r in rows if r["expect"] == "blind"]
     c, s, b = tally(controls), tally(seen), tally(blind)
     names = lambda sel: ", ".join(r["case"] for r in sel) or "none"  # noqa: E731
-    out = [f"# Compression-history check on the {split} pack ({mode})" + (" with hosts saved between the steps" if run.get("off_grid") else ""), "",
+    out = [f"# Compression-history check on the {split} pack ({mode})" + (f" with hosts of the variant {run['hosts']}" if run.get("hosts") else ""), "",
            f"Run: {run['date']}, commit {run['commit']}{', working tree not clean' if run['dirty'] else ''}, {run['machine']}.",
            f"{len(rows)} cases (seeds {run['seeds'][0]} to {run['seeds'][1]}), {sum(r['seconds'] for r in rows):.0f} s in all, "
            f"{sum(r['seconds'] for r in rows) / max(len(rows), 1):.1f} s a case.",
            f"Constants of forensics/ela.py: {', '.join(f'{k}={v}' for k, v in run['knobs'].items())}.",
-           *(["The hosts were saved at qualities 82, 47 and 33 (the pack's 85, 50 and 35), between the steps of 5 the check tries. A robustness report: nothing was tuned on it."] if run.get("off_grid") else []), "",
+           *([NOTES[run["hosts"]] + " A robustness report: nothing was tuned on it."] if run.get("hosts") else []), "",
            "A case is `none` when the scan has no edit (saved once, or saved again unchanged), `seen` when its edit was made after an earlier "
            "save at least 10 quality points below the last, so that the earlier save left a mark the edited place does not share, and `blind` "
            "when the check cannot see it by construction (an edit with the page's own grid and quality, or a last save too close to the "
@@ -123,7 +129,7 @@ def format_report(split: str, mode: str, rows: list[dict], run: dict) -> str:
     return "\n".join(out) + "\n"
 
 
-def run_pack(split: str, n: int, start: int, pipeline: bool, out_dir: Path, off_grid: bool = False) -> list[dict]:
+def run_pack(split: str, n: int, start: int, pipeline: bool, out_dir: Path, hosts: str = "") -> list[dict]:
     th, work = Thresholds(), Path(tempfile.mkdtemp(prefix="docforensics-ela-"))
     try:
         manifest = json.loads(ela_pack.build_split(split, work / "pack", n, start).read_text(encoding="utf-8"))
@@ -136,11 +142,11 @@ def run_pack(split: str, n: int, start: int, pipeline: bool, out_dir: Path, off_
         seeds = [e["seed"] for e in manifest["cases"]]
         mode = "whole tool" if pipeline else "pixels"
         run = {"date": datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z"), "commit": _git("rev-parse", "--short", "HEAD") or "unknown",
-               "dirty": bool(_git("status", "--porcelain")), "off_grid": off_grid, "seeds": (min(seeds, default=0), max(seeds, default=0)),
+               "dirty": bool(_git("status", "--porcelain")), "hosts": hosts, "seeds": (min(seeds, default=0), max(seeds, default=0)),
                "knobs": {k: getattr(ela_module, k) if k != "QUALITIES" else f"{ela_module.QUALITIES[0]}..{ela_module.QUALITIES[-1]} step 5" for k in KNOBS},
                "machine": f"{platform.system()} {platform.release()}, Python {platform.python_version()}, {psutil.cpu_count(logical=False)} cores, CPU only"}
         out_dir.mkdir(parents=True, exist_ok=True)
-        stem = f"{split}{'-offgrid' if off_grid else ''}-{'tool' if pipeline else 'pixels'}"
+        stem = f"{split}{'-' + hosts if hosts else ''}-{'tool' if pipeline else 'pixels'}"
         (out_dir / f"{stem}.md").write_text(format_report(split, mode, rows, run), encoding="utf-8", newline="\n")
         (out_dir / f"{stem}.json").write_text(json.dumps({"run": run, "rows": rows}, indent=1), encoding="utf-8", newline="\n")
         return rows
@@ -205,6 +211,28 @@ def format_dev(rows: list[dict], n: int, run: dict) -> str:
     return "\n".join(out) + "\n"
 
 
+def use_hosts(variant: str) -> None:
+    """Make the pack write its hosts the way `variant` says (see HOSTS)."""
+    for level, quality in HOSTS[variant].items():
+        scan_module.LEVELS[level] = (*scan_module.LEVELS[level][:4], quality)  # the pack reads its hosts' qualities from here
+    if variant == "other-tables":
+        save, simulate, host = Image.Image.save, ela_pack.simulate_scan, []
+
+        def patched_save(self, fp, format=None, **params):
+            if host and format == "JPEG" and params.get("quality") in PRESET:  # only the host's own save, not the pack's later ones
+                params["quality"] = PRESET[params["quality"]]
+            return save(self, fp, format, **params)
+
+        def patched_simulate(*args, **kw):
+            host.append(1)
+            try:
+                return simulate(*args, **kw)
+            finally:
+                host.pop()
+
+        Image.Image.save, ela_pack.simulate_scan = patched_save, patched_simulate
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="python -m evaluation.run_e", description="Score the compression-history check on its pack.")
     p.add_argument("split", choices=["ext-dev", "ext-test", "dev"])
@@ -212,18 +240,17 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--start", type=int, default=0)
     p.add_argument("--pipeline", action="store_true", help="run the whole tool on each picture instead of the check on its pixels")
     p.add_argument("--out", default="eval/e", help="where the report goes (default: eval/e)")
-    p.add_argument("--off-grid", action="store_true", help="hosts saved at qualities between the steps the check tries (82, 47, 33): a robustness report, not a tuning set")
+    p.add_argument("--hosts", choices=sorted(HOSTS), default="", help="write the pack's hosts another way (a robustness report, not a tuning set)")
     p.add_argument("--once-at-freeze", action="store_true", help="allow ext-test, which is read once, at the freeze")
     a = p.parse_args(argv)
     if a.split == "ext-test" and not a.once_at_freeze:
         sys.exit("ext-test is read once, at the freeze (--once-at-freeze)")
-    if a.off_grid:
-        for level, quality in OFF_GRID.items():
-            scan_module.LEVELS[level] = (*scan_module.LEVELS[level][:4], quality)  # the pack reads its hosts' qualities from here
+    if a.hosts:
+        use_hosts(a.hosts)
     if a.split == "dev":
         run_dev(a.cases or 80, ROOT / a.out)
     else:
-        run_pack(a.split, a.cases or 36, a.start, a.pipeline, ROOT / a.out, a.off_grid)
+        run_pack(a.split, a.cases or 36, a.start, a.pipeline, ROOT / a.out, a.hosts)
     return 0
 
 
