@@ -12,6 +12,7 @@ from .audit import AuditLog
 from .config import Thresholds
 from .findings import add_findings, doc_evidence, limitation
 from .model import Case
+from .signing import checkpoint
 from .store import CaseDir, load_case, save_case
 
 if TYPE_CHECKING:  # the explain package imports this module; the type is only needed for annotations
@@ -119,4 +120,5 @@ def run_case(cd: CaseDir, th: Thresholds | None = None, stages: dict[str, Callab
         ctx.audit.append("system", "stage_end", {"stage": name, "ok": ok, "seconds": round(time.monotonic() - t0, 3),
                                                  "tool": "docforensics", "version": __version__})
         save_case(case, cd)
+    checkpoint(cd)  # the whole trail of the run, signed
     return case

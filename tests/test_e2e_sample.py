@@ -170,6 +170,7 @@ def stable(d: dict) -> dict:
         d["overview"].pop(key)
     trail = d["appendices"]["audit_trail"]
     trail.pop("anchor")
+    trail.pop("signing", None)  # the key is made per data folder and every checkpoint carries a time and a signature; the dossiers kept here predate them
     for e in trail["events"]:
         for key in ("ts", "hash", "prev_hash"):
             e.pop(key)

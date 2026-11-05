@@ -13,6 +13,7 @@ from .findings import quote
 from .ingest import create_case
 from .model import Case, Document, Evidence
 from .pipeline import run_case
+from .signing import public_key_bytes, signing_view
 from .store import CaseDir, load_case
 
 
@@ -155,6 +156,12 @@ def _trace(args: argparse.Namespace) -> int:
 
 def _verify(args: argparse.Namespace) -> int:
     cd = _case_dir(args)
+    pinned = None
+    if args.pubkey:
+        try:
+            pinned = public_key_bytes(Path(args.pubkey).read_bytes())
+        except (OSError, ValueError) as e:
+            raise UsageError(f"cannot read a public key from {args.pubkey}: {e}")
     audit = AuditLog(cd.audit_path)
     ok, bad = audit.verify()
     if not ok:
@@ -164,7 +171,20 @@ def _verify(args: argparse.Namespace) -> int:
     if count == 0:  # an empty trail verifies, but every case starts with an event: a missing or emptied file is not a clean one
         print(f"No audit trail: audit.jsonl of {cd.id} is missing or empty")
         return 1
+    sig = signing_view(cd, pinned)
+    if sig["problem"]:  # the chain holds, but a signature says it is not the trail that was signed
+        print(sig["problem"])
+        return 1
     print(f"OK: {count} events, head {head}")
+    if sig["status"] == "unsigned":
+        print("Unsigned: this case has no signed checkpoint. The hash chain shows that the events agree with each other; it does not show "
+              "that the end was not cut off, or that the whole trail was not written again.")
+        return 0
+    late = sig["uncovered"]
+    print(f"Signed: {sig['checkpoints']} checkpoint{'s' * (sig['checkpoints'] != 1)} by key {sig['key_id'][:16]}"
+          f"{' (the key you gave)' if pinned else ''}, the last covers events 1-{sig['last']['events']}."
+          + (f" {late} later event{' is' if late == 1 else 's are'} not covered." if late else "")
+          + ("" if pinned else " Compare the key with one you know from elsewhere, or give it with --pubkey."))
     return 0
 
 
@@ -191,6 +211,8 @@ def _parser() -> argparse.ArgumentParser:
     trace.set_defaults(fn=_trace)
     verify = sub.add_parser("verify-audit", help="check that a case's audit trail has not been changed")
     verify.add_argument("case")
+    verify.add_argument("--pubkey", metavar="PEM", help="the public key (a PEM file) that must have signed the case; a case that is unsigned, "
+                        "or signed by another key, then fails")
     verify.set_defaults(fn=_verify)
     serve = sub.add_parser("serve", help="open the review desk in a browser (127.0.0.1 only)")
     serve.add_argument("--port", type=int, default=8000)

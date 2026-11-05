@@ -4,10 +4,13 @@ import os
 import stat
 
 import pytest
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 
+from docforensics.audit import AuditLog
 from docforensics.cli import main
 from docforensics.store import CaseDir, load_case
-from tests.helpers import d1_edited_statement, pdf_bytes
+from tests.helpers import d1_edited_statement, pdf_bytes, rechain
 
 NEW = "9,99,999.00"
 
@@ -139,3 +142,61 @@ def test_verify_audit_does_not_call_a_missing_trail_ok(tmp_path, capsys, edited)
     cd.audit_path.unlink()
     code, cap = cli(tmp_path, capsys, "verify-audit", case.id)
     assert code == 1 and "OK" not in cap.out and "no audit trail" in cap.out.lower()
+
+
+def public_pem(tmp_path):
+    return tmp_path / "data" / "signing" / "public.pem"
+
+
+def test_verify_audit_says_who_signed_and_how_far_the_signature_reaches(tmp_path, capsys, edited):
+    cd, case, _ = edited_case(tmp_path, capsys, edited)
+    count = len(cd.audit_path.read_text(encoding="utf-8").splitlines())
+    code, cap = cli(tmp_path, capsys, "verify-audit", case.id)
+    first, signed = cap.out.splitlines()
+    assert code == 0 and first.startswith("OK: ") and signed.startswith("Signed: ") and f"events 1-{count}" in signed and "key " in signed
+
+
+def test_verify_audit_sees_a_trail_that_was_changed_and_chained_again(tmp_path, capsys, edited):
+    cd, case, _ = edited_case(tmp_path, capsys, edited)
+    rechain(cd, 3)
+    assert AuditLog(cd.audit_path).verify() == (True, None)  # the chain alone is satisfied
+    code, cap = cli(tmp_path, capsys, "verify-audit", case.id)
+    assert code == 1 and cap.out.startswith("REWRITTEN") and "OK" not in cap.out
+
+
+def test_verify_audit_counts_the_events_no_signature_covers(tmp_path, capsys, edited):
+    cd, case, _ = edited_case(tmp_path, capsys, edited)
+    AuditLog(cd.audit_path).append("system", "later", {})
+    code, cap = cli(tmp_path, capsys, "verify-audit", case.id)
+    assert code == 0 and "1 later event is not covered" in cap.out
+
+
+def test_verify_audit_of_a_case_without_checkpoints_says_unsigned_and_still_passes(tmp_path, capsys, edited):
+    cd, case, _ = edited_case(tmp_path, capsys, edited)
+    cd.checkpoints_path.unlink()
+    code, cap = cli(tmp_path, capsys, "verify-audit", case.id)
+    assert code == 0 and cap.out.startswith("OK: ") and "Unsigned: " in cap.out and "Signed: " not in cap.out
+
+
+def test_verify_audit_with_the_public_key_given(tmp_path, capsys, edited):
+    cd, case, _ = edited_case(tmp_path, capsys, edited)
+    pem = str(public_pem(tmp_path))
+    code, cap = cli(tmp_path, capsys, "verify-audit", case.id, "--pubkey", pem)
+    assert code == 0 and "Signed: " in cap.out and "the key you gave" in cap.out
+    other = Ed25519PrivateKey.generate().public_key().public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo)
+    (tmp_path / "other.pem").write_bytes(other)
+    code, cap = cli(tmp_path, capsys, "verify-audit", case.id, "--pubkey", str(tmp_path / "other.pem"))
+    assert code == 1 and cap.out.startswith("WRONG KEY")
+    cd.checkpoints_path.unlink()  # a key was asked for, and nothing is signed
+    code, cap = cli(tmp_path, capsys, "verify-audit", case.id, "--pubkey", pem)
+    assert code == 1 and cap.out.startswith("NOT SIGNED")
+
+
+@pytest.mark.parametrize("content", [None, b"not a key"])
+def test_verify_audit_with_a_public_key_file_that_is_not_one_is_a_usage_error(tmp_path, capsys, edited, content):
+    _, case, _ = edited_case(tmp_path, capsys, edited)
+    path = tmp_path / "k.pem"
+    if content is not None:
+        path.write_bytes(content)
+    code, cap = cli(tmp_path, capsys, "verify-audit", case.id, "--pubkey", str(path))
+    assert code == 2 and cap.err.strip() and cap.out == ""

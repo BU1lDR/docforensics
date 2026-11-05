@@ -24,6 +24,7 @@ class CaseDir:
     crops = property(lambda self: self.root / "crops")
     case_json = property(lambda self: self.root / "case.json")
     audit_path = property(lambda self: self.root / "audit.jsonl")
+    checkpoints_path = property(lambda self: self.root / "checkpoints.jsonl")
     dossier_html = property(lambda self: self.root / "dossier.html")
     dossier_json = property(lambda self: self.root / "dossier.json")
 

@@ -690,6 +690,15 @@ async function loadAudit() {
   }
 }
 
+function signingLine(s) {
+  if (s.status === "broken") return h("p", {class: "bad"}, s.problem);
+  if (s.status === "unsigned") return h("p", {class: "hint"}, "No signed checkpoint: a cut at the end of the trail, or a rewrite with a new chain, would not be seen.");
+  const late = s.uncovered ? ` ${s.uncovered} later event(s) are not covered.` : "";
+  return h("div", {},
+    h("p", {class: "ok"}, `Signed: ${s.checkpoints} checkpoint(s) by key ${s.key_id.slice(0, 16)}..., the last covers events 1-${s.last.events}.${late}`),
+    h("p", {class: "hint"}, "The key is a file on this computer. A signature shows the trail unchanged since it was signed, as far as the key stayed private; it does not show who signed or when."));
+}
+
 function renderAudit() {
   const box = $("audit");
   box.replaceChildren();
@@ -701,6 +710,7 @@ function renderAudit() {
   box.append(
     h("p", {class: a.chain_ok ? "ok" : "bad"},
       a.chain_ok ? `Hash chain intact: ${a.anchor.events} events, last hash ${a.anchor.head.slice(0, 16)}...` : a.problem),
+    signingLine(a.signing),
     h("div", {class: "scroll"}, h("table", {},
       h("thead", {}, h("tr", {}, ["#", "Time (UTC)", "Actor", "Event", "Data"].map((t) => h("th", {scope: "col"}, t)))),
       h("tbody", {}, a.events.map((e) => h("tr", {},

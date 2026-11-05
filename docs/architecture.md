@@ -28,9 +28,12 @@ flowchart TD
     llm -.-> explain
     casefolder[("Case folder<br/>files, pages, crops, case.json")]
     audit[("audit trail<br/>hash-chained events")]
+    sig["signing (not a stage)<br/>checkpoints.jsonl: Ed25519 signature over the trail's<br/>length and last hash; key in data/signing/"]
     relations["relations (not a stage)<br/>names, addresses, employers, account numbers<br/>across documents, and the findings that touch them<br/>worked out on request, nothing stored"]
     pipeline --> casefolder
     pipeline -.-> audit
+    audit -.->|"signed"| sig
+    sig -.-> dossier
     casefolder --> relations
     relations --> desk
     relations --> dossier
@@ -81,11 +84,18 @@ data/cases/C-<date>-<time>-<4 hex>/
     crops/         F-001-1.png, ... (finding, evidence)
     case.json      documents, pages, words, fields, findings, reviewer actions
     audit.jsonl    one JSON event per line, each carrying the hash of the one before
+    checkpoints.jsonl  signed checkpoints of that trail, one JSON line each
     dossier.html
     dossier.json
+data/signing/
+    private.pem, public.pem   the Ed25519 key of this data folder, outside the case folders
 ```
 
 There is no database. [audit.py](../src/docforensics/audit.py) hashes each event together with the previous hash, so editing or removing a line breaks the chain from that point on; `verify-audit` checks it. Truncating the end of the file cannot be seen from the file alone, which is why the dossier records the trail's length and last hash as an outside anchor.
+
+[signing.py](../src/docforensics/signing.py) goes further, as far as a key can. At the end of a run, after a reviewer action and twice around the building of a dossier it signs the case id, the number of events, the last hash and the time with an Ed25519 key, and adds the result as one line to `checkpoints.jsonl`. The trail gets no new event for it, so the events of a run are the same with or without signing. `verify-audit` checks each checkpoint against the trail: the signature, the case, that the trail is at least as long as the checkpoint says, and that the event at the signed position still has the signed hash. An event changed with every later hash worked out again fails the last check, and a trail cut at the end fails the length check. Events after the last checkpoint are counted as not covered. A trail whose own chain fails is not signed, and a signing that fails (no folder to write the key in, a damaged key file) never stops the run: it becomes a `checkpoint_failed` event that gives the reason and no file path.
+
+The key is made the first time it is needed, one per data folder, as `data/signing/private.pem` (PKCS#8, no password; the file is set to owner-only where the system honours that) with `public.pem` beside it. It is kept outside the case folders so that a case can be shared without it. A checkpoint names its own public key, and whoever can read the data folder can change a trail, chain it again and sign it with a key of their own, so "some key signed this" is all a checkpoint shows by itself. A reader who needs more takes the public key from somewhere else and gives it to `verify-audit --pubkey`. The time in a checkpoint is the clock of the signing machine, with no timestamp authority. It is a check of integrity, not a certification; no SOC 2 or ISO/IEC 27001 claim is made.
 
 ## Trust boundaries
 

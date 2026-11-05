@@ -24,6 +24,7 @@ from ..model import Status
 from ..pipeline import Ctx, run_case
 from ..relations import build_relations
 from ..review import MAX_NOTE, apply_review
+from ..signing import checkpoint
 from ..store import CaseDir, load_case
 
 HOST = "127.0.0.1"
@@ -101,6 +102,7 @@ def create_app(data_root: Path | str, th: Thresholds | None = None, llm: OllamaC
                 error = f"{type(e).__name__}: {e}"[:300]
                 try:
                     AuditLog(cd.audit_path).append("system", "run_failed", {"error": error})
+                    checkpoint(cd)
                 except Exception:
                     pass  # the failure is reported to the browser either way
                 jobs[cd.id] = {"status": "failed", "stage": "", "error": error}

@@ -407,3 +407,37 @@ def test_text_in_the_models_reading_is_escaped(tmp_path):
     build_dossier(case, ctx)
     page = ctx.cd.dossier_html.read_text(encoding="utf-8")
     assert XSS not in page and "<script" not in page.lower() and html.escape(XSS) in page
+
+
+def audit_part(page: str) -> str:
+    """The page's Appendix A, the audit trail."""
+    return page.split('<section id="appendix_audit_trail">')[1].split("</section>")[0]
+
+
+def test_the_audit_appendix_says_the_trail_is_signed_and_what_a_signature_does_not_show(ran):
+    _, ctx = ran
+    sig = json.loads(ctx.cd.dossier_json.read_bytes())["appendices"]["audit_trail"]["signing"]
+    part = audit_part(ctx.cd.dossier_html.read_text(encoding="utf-8"))
+    assert sig["status"] == "signed" and sig["last"]["events"] > 1
+    assert "Ed25519" in part and sig["key_id"][:16] in part and sig["last"]["head"][:16] in part and sig["last"]["sig"][:16] in part
+    assert "checkpoints.jsonl" in part and "does not show who signed" in part
+
+
+def test_a_dossier_whose_trail_could_not_be_signed_says_so(tmp_path):
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "signing").write_text("a file where the key folder should be", encoding="utf-8")
+    case, ctx = fresh(tmp_path)
+    build_dossier(case, ctx)
+    part = audit_part(ctx.cd.dossier_html.read_text(encoding="utf-8"))
+    assert "No signed checkpoint" in part and "Signed:" not in part
+    assert json.loads(ctx.cd.dossier_json.read_bytes())["appendices"]["audit_trail"]["signing"]["status"] == "unsigned"
+
+
+def test_a_checkpoint_that_does_not_hold_is_a_warning_in_the_dossier(tmp_path):
+    case, ctx = fresh(tmp_path)
+    build_dossier(case, ctx)
+    first = json.loads(ctx.cd.checkpoints_path.read_text(encoding="utf-8").splitlines()[0])
+    ctx.cd.checkpoints_path.write_text(json.dumps({**first, "head": "0" * 64}) + "\n", encoding="utf-8")
+    build_dossier(case, ctx)  # a trail that does not check out is reported in the dossier, not a reason to refuse to make one
+    part = audit_part(ctx.cd.dossier_html.read_text(encoding="utf-8"))
+    assert '<p class="warn">BAD SIGNATURE' in part and "Signed:" not in part

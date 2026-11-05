@@ -4,6 +4,7 @@ from typing import get_args
 
 from .model import Case, Finding, Status
 from .pipeline import Ctx
+from .signing import checkpoint
 from .store import save_case
 
 STATUSES = get_args(Status)
@@ -29,4 +30,5 @@ def apply_review(case: Case, ctx: Ctx, finding_id: str, status: str | None = Non
         f.note = note
     save_case(case, ctx.cd)
     ctx.audit.append("reviewer", "reviewer_action", {"finding": f.id, "from": before, "to": f.status, "note": note})
+    checkpoint(ctx.cd)
     return f

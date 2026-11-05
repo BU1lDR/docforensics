@@ -19,6 +19,7 @@ from .ingest import sniff
 from .model import Case, Document, Evidence, Finding
 from .pipeline import Ctx
 from .relations import build_relations
+from .signing import checkpoint, signing_view
 from .store import CaseDir
 
 MAX_CROP_BYTES = 2_000_000  # a crop is a padded piece of one page: a bigger file is not one of ours
@@ -82,7 +83,7 @@ def audit_view(ctx: Ctx) -> dict:
     problem = (None if events else "No audit trail: audit.jsonl is missing or empty.") if ok else \
         f"The hash chain breaks at event {bad}: the audit trail was changed after it was written."
     return {"events": [e.model_dump() for e in events], "anchor": {"events": len(events), "head": events[-1].hash if events else GENESIS},
-            "chain_ok": problem is None, "problem": problem}
+            "chain_ok": problem is None, "problem": problem, "signing": signing_view(ctx.cd)}
 
 
 def _tool_order(case: Case) -> list[str]:
@@ -309,9 +310,26 @@ def _summary(d: dict, cd: CaseDir) -> str:
             f'<h3>Further verification</h3>{verify}<h3>Limitations of this analysis</h3>{_cards(s["limitations"], cd)}{_reading(d)}')
 
 
+def _signing_paragraph(s: dict) -> str:
+    """What the signed checkpoints say about the trail, and what they cannot say (signing.py)."""
+    if s["status"] == "broken":
+        return f'<p class="warn">{esc(s["problem"])}</p>'
+    if s["status"] == "unsigned":
+        return ("<p>No signed checkpoint covers this trail, so a change made together with a new hash chain, or a cut at the end of the trail, "
+                "would not show.</p>")
+    last = s["last"]
+    later = f' {esc(s["uncovered"])} later event(s) are not covered.' if s["uncovered"] else ""
+    return (f'<p>Signed: {esc(s["checkpoints"])} checkpoint(s) by the {esc(s["algorithm"])} key {esc(s["key_id"][:16])}. The last, made {esc(last["ts"])}, '
+            f'covers events 1 to {esc(last["events"])}, ending in hash {esc(last["head"][:16])}, signature {esc(last["sig"][:16])}.{later} A checkpoint shows '
+            'that the events it covers were not changed or cut off after it was signed, as far as the key stayed private. It does not show who signed '
+            'or when: the time is the clock of the machine that signed. The signatures are in checkpoints.jsonl in the case folder; verify-audit checks them, and '
+            'its --pubkey option checks them against a key you know from elsewhere.</p>')
+
+
 def _audit_section(d: dict) -> str:
     a = d["appendices"]["audit_trail"]
     warn = f'<p class="warn">{esc(a["problem"])}</p>' if a["problem"] else "<p>The hash chain verifies.</p>"
+    warn += _signing_paragraph(a["signing"])
     events = _table(["#", "Time (UTC)", "Actor", "Event", "Data", "Hash"],
                     [[e["seq"], e["ts"], e["actor"], e["event"], json.dumps(e["data"]), e["hash"][:16]] for e in a["events"]])
     return (f'{warn}<p>The trail below ends at event {esc(a["anchor"]["events"])}, hash {esc(a["anchor"]["head"])}. Events written after '
@@ -376,13 +394,16 @@ def _write(path: Path, data: bytes) -> None:
 
 
 def build_dossier(case: Case, ctx: Ctx) -> tuple[Path, Path]:
-    """Write dossier.html and dossier.json into the case folder and audit both files' hashes. Returns (html path, json path)."""
+    """Write dossier.html and dossier.json into the case folder and audit both files' hashes. Returns (html path, json path). The trail is
+    signed first, so the dossier carries a signed anchor, and again after `dossier_generated`, so that event is covered too."""
+    checkpoint(ctx.cd)
     d = dossier_dict(case, ctx)
     js, page = json.dumps(d, indent=1).encode("ascii"), _page(d, ctx).encode("utf-8")
     _write(ctx.cd.dossier_json, js)
     _write(ctx.cd.dossier_html, page)
     ctx.audit.append("system", "dossier_generated", {"html_sha256": _sha(page), "json_sha256": _sha(js), "content_sha256": d["integrity"]["json_sha256"],
                                                      "documents": len(case.documents), "findings": len(case.findings)})
+    checkpoint(ctx.cd)
     return ctx.cd.dossier_html, ctx.cd.dossier_json
 
 

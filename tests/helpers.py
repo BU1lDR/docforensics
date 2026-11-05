@@ -4,6 +4,9 @@ import io
 import pymupdf
 from PIL import Image
 
+from docforensics.audit import GENESIS, AuditLog, _digest
+from docforensics.model import AuditEvent
+
 
 def pdf_bytes(pages: int = 1, text: str = "TST-0001", **save) -> bytes:
     doc = pymupdf.open()
@@ -102,3 +105,14 @@ def d1_edited_statement(new: str = "9,99,999.00") -> bytes:
     drawn = draw_statement(identity(1), rows=12, seed=1)
     pdf, _ = d1_incremental_edit(drawn.pdf, money(next(r["credit"] for r in drawn.truth["rows"] if r["credit"])), new)
     return pdf
+
+
+def rechain(cd, seq: int) -> None:
+    """The audit trail of a case with the data of event `seq` changed and every hash from there on worked out again: a chain that verifies."""
+    prev, out = GENESIS, []
+    for e in AuditLog(cd.audit_path).events():
+        data = {"i": "changed"} if e.seq == seq else e.data
+        h = _digest(e.seq, e.ts, e.actor, e.event, data, prev)
+        out.append(AuditEvent(seq=e.seq, ts=e.ts, actor=e.actor, event=e.event, data=data, prev_hash=prev, hash=h))
+        prev = h
+    cd.audit_path.write_text("".join(x.model_dump_json() + "\n" for x in out), encoding="utf-8")

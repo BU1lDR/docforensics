@@ -387,3 +387,33 @@ def test_audit_endpoint_reports_a_broken_chain(case):
     path.write_bytes(b"\n".join(lines) + b"\n")
     b = client.get(f"/api/cases/{cid}/audit").json()
     assert b["chain_ok"] is False and "event 2" in b["problem"]
+
+
+def test_a_finished_run_is_signed_and_the_audit_endpoint_says_so(case):
+    client, cid, _ = case
+    a = client.get(f"/api/cases/{cid}/audit").json()
+    s = a["signing"]
+    assert s["status"] == "signed" and s["problem"] is None and s["algorithm"] == "Ed25519" and s["uncovered"] == 0
+    assert s["last"]["events"] == len(a["events"]) and s["last"]["case"] == cid
+
+
+def test_a_crashed_run_is_signed_up_to_its_failure(tmp_path, monkeypatch):
+    def boom(cd, th=None, stages=None, on_stage=None, llm=None):
+        raise RuntimeError("disk full")
+
+    monkeypatch.setattr(web, "run_case", boom)
+    client = make_client(tmp_path / "data")
+    cid = upload(client, ("a.pdf", pdf_bytes()))
+    assert wait_done(client, cid)["status"] == "failed"
+    a = client.get(f"/api/cases/{cid}/audit").json()
+    assert a["events"][-1]["event"] == "run_failed"
+    assert a["signing"]["status"] == "signed" and a["signing"]["uncovered"] == 0 and a["signing"]["last"]["events"] == len(a["events"])
+
+
+def test_a_review_and_a_dossier_download_leave_nothing_unsigned(case):
+    client, cid, _ = case
+    assert client.post(f"/api/cases/{cid}/findings/F-001/review", json={"status": "needs_verification"}).status_code == 200
+    assert client.get(f"/api/cases/{cid}/dossier").status_code == 200
+    a = client.get(f"/api/cases/{cid}/audit").json()
+    assert a["events"][-1]["event"] == "dossier_generated"
+    assert a["signing"]["status"] == "signed" and a["signing"]["uncovered"] == 0 and a["signing"]["last"]["events"] == len(a["events"])
