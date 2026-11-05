@@ -73,9 +73,78 @@ The suite takes several minutes because some tests load the OCR engine; `python 
 
 ## Demonstration documents
 
-The `datagen/` package draws fictional bank statements, payslips and loan applications as PDFs whose content is known, applies manipulations to them (each one records what was done and where, in the pixel frame the tool reports) and simulates scans at several quality levels. Institutions carry TEST in their names; no real logo, person or identity document is used. The tests use it to check each detector against known truth. The generator's font-substitution manipulation reads Arial from the Windows fonts folder and does not run elsewhere. The tool does not use the generator.
+The `datagen/` package draws fictional bank statements, payslips and loan applications as PDFs whose content is known, applies one planted change to some of the cases (each change records what was done and where, in the pixel frame the tool reports) and simulates scans at several quality levels. Institutions carry TEST in their names; no real logo, person or identity document is used. The tests use it to check each detector against known truth. The generator's font-substitution manipulation reads Arial from the Windows fonts folder and does not run elsewhere. The tool does not use the generator.
 
-A ready-made dataset of genuine and manipulated documents, and an evaluation on cases held out from the tuning of the thresholds, are not in this repository yet. Until they are, **no accuracy figure is claimed**.
+The demonstration dataset is its output: a development split of 80 cases and a test split of 144, each case being one applicant's statement, payslip and loan application (a statement submitted twice adds a fourth file). In the test split 48 cases are genuine and 96 carry one change each, of twelve kinds: in a digital PDF an incremental edit, a cover retyped in the same font or in a near font, a metadata edit, a picture pasted over text; in a scan a paste from another scan, or text erased and retyped; across the documents a pay figure changed so that the payslip still adds up, a name, address, employer or month changed in one document, a statement submitted twice, a signature in another hand, another logo or stamp. A `manifest.json` per split holds the truth for every case. The test split is about 130 MB, so it is generated, not committed (from the repository folder; `data/` is not part of the repository):
+
+```
+python -m datagen.build test data/test-split --cases 144
+```
+
+## Evaluation
+
+The figures below come from `python -m evaluation.run_eval`. Its reports are committed as they were written: [eval/dev.md](eval/dev.md) for the development split and [eval/test.md](eval/test.md) for the test split. Each one states how a result is counted, lists every miss and every flag on a genuine document, and ends with the limits of its measurement.
+
+**How it was run.** The detectors were written and their thresholds set on the development split (80 cases, one drawn layout, "A"). The test split (144 cases, layouts A and B) was generated and run once, after the code was frozen (git tag `spec-freeze`, commit 28ef833), and nothing was changed in response to its results. It holds what development never showed: a second layout, "B", drawn after the extraction specs were final, and two kinds of change (a cover retyped in a near font, a scan erased and retyped). One defect in label matching, found by reading layout B once on digital drawings before the test split was built, was fixed; eval/test.md says so. A change counts as found when the tool raised an observation, an inconsistency or a potential-manipulation finding on the changed document, at the changed place where the change has one. A limitation ("could not be checked") is never a find. A finding on a genuine document is a flag.
+
+**Result on the test split** (the pipeline without a language model):
+
+- Changes found: 79 of 96 (82 %). Of the 48 with a place on a page, 37 were located (boxes overlapping at 0.5 or more).
+- Genuine documents: 1 flag on 144 documents, a scan at 120 dpi (placement check). The tool also raised 116 limitations on genuine cases, apart from that flag.
+- Document type recognised: 440 of 440.
+- Time and memory on the author's laptop (6 cores, CPU only): 0.53 s per digital page and 4.39 s per scanned page, peak 866 MB. Timing depends on machine load; the development rerun took 4.16 s per scanned page.
+
+| Change | What | Found (of 8) | Located |
+|---|---|---|---|
+| D1 | incremental edit of a PDF | 8 | 8 |
+| D2 | white cover, text retyped in the same font | 8 | 8 |
+| D3 | white cover, text retyped in a near font | 8 | 8 |
+| D4 | metadata edit | 8 | n/a |
+| D5 | picture pasted over text | 8 | 8 |
+| S1 | scan spliced from another scan | 3 | 2 |
+| S2 | scan erased and retyped | 3 | 3 |
+| C1 | pay figure changed so the payslip still adds up | 5 | n/a |
+| C2 | name, address, employer or month changed in one document | 6 | n/a |
+| C3 | statement submitted twice | 8 | n/a |
+| C4 | signed in another hand | 8 | n/a |
+| C5 | another logo or stamp | 6 | n/a |
+
+By medium: digital 58 of 60, mild scan 13 of 18, 150 dpi scan 6 of 9, 120 dpi scan 2 of 9. The development split, which the thresholds were set on and is therefore not a held-out figure, gave 50 of 54 changes found and no flag on 78 genuine documents.
+
+**Misses.** All 17 are listed in eval/test.md, each with what the tool did raise. Fifteen left only limitations on the changed document: a value a check needed was not read, so the tool said it could not make the comparison, or a conflict on a 120 dpi scan was shown as a possible extraction error to verify. One has no finding on the changed document (test-0043) and one has a finding elsewhere on it (test-0079). They fall in these groups: spliced or retyped scans (10 of 16), a pay figure changed with fewer deductions (all 3), a small logo (both), a month shift (mild scan) and a major address change (120 dpi).
+
+**Extraction**, on the documents nobody changed, value by value against the generator's truth (16,226 values: 13,105 read right, 155 wrong, 2,966 missing). Share read right:
+
+| Layout | Medium | Amounts | Dates | Ids | Text |
+|---|---|---|---|---|---|
+| A | digital | 100 % | 100 % | 100 % | 100 % |
+| A | mild scan | 100 % | 100 % | 100 % | 99.4 % |
+| A | 150 dpi | 89.6 % | 100 % | 100 % | 97.9 % |
+| A | 120 dpi | 20.3 % | 96.8 % | 95.8 % | 61.0 % |
+| B | digital | 91.1 % | 96.8 % | 0 % | 34.0 % |
+| B | mild scan | 85.6 % | 94.6 % | 0 % | 46.9 % |
+| B | 150 dpi | 78.8 % | 91.6 % | 0 % | 49.1 % |
+| B | 120 dpi | 11.4 % | 60.8 % | 0 % | 21.4 % |
+
+A value the tool does not find is reported missing and never guessed. A value read wrongly and still given a confidence of 0.6 or more is the dangerous case, because nothing warns of it: there were 16, all of them text; no amount, date or id. Pages at 120 dpi are classed degraded by their sharpness, which caps the confidence of what is read from them and turns conflicts that rest on them into "verify" limitations.
+
+**What these figures do not show.**
+
+- They are about synthetic documents drawn by one generator. The two splits share its six logo and stamp designs and its lists of names, addresses and employers. Nothing is measured on real documents, scanners or layouts.
+- The extraction specs list the wordings of labels, column headings and captions of layout A. Layout B uses other wordings for about half of them, and it is read far worse than A (no id, 34 % of the text on digital pages). Whatever depends on a value that is not read is left unchecked; for every genuine statement and payslip of layout B the within-document checks said so.
+- 8 cases per kind of change is a small sample, and one run. A difference of one or two cases between kinds of change means little. The overall 82 % is a count over this particular mix of changes, not a property of the tool: it is 58 of 60 on digital files and 21 of 36 on scans.
+- The flag rate of 1 in 144 holds for clean synthetic documents. Real genuine documents differ in more ways, and the ordinary causes of each finding are in [docs/limitations.md](docs/limitations.md).
+- The obligations rule is not tested on genuine documents (the generator holds obligations to 40 % of income), the grouping of findings is not scored, and no language model took part in the evaluation.
+
+No accuracy is claimed beyond these figures. A document with no finding is not thereby shown to be unchanged, and a finding is a lead for a reviewer.
+
+**To repeat it.** The run takes about 20 minutes on the laptop and, like the generator's near-font cover, needs Windows with Arial. `--out` keeps it from overwriting the committed reports:
+
+```
+python -m evaluation.run_eval --split test --out data/eval-test
+```
+
+The report records the commit it ran on and whether the working tree had changes. The tool's code has not changed since `spec-freeze`: `git diff spec-freeze HEAD -- src` shows only the wording of the capability notes in `capabilities.json`.
 
 ## Capability matrix
 
@@ -117,6 +186,8 @@ Each capability is marked Implemented, Partial, Planned or Unsupported. A status
 The full list of limitations and assumptions, and a table of the ordinary things that raise each finding, is in [docs/limitations.md](docs/limitations.md). In short:
 
 - Nothing was evaluated on real documents, real scanners or real layouts.
+- Extraction is tied to the wordings of labels that the specs list. On a layout that words them differently, values are reported missing and the checks that need them are not made, and the tool says so (held-out layout B: no id read, 34 % of the text on digital pages).
+- On scans the tool found little: 6 of 16 pasted or retyped scans, and 2 of 9 changes at 120 dpi. A scan with no finding says little about whether it was changed.
 - A finding is a measurement for a reviewer, with the ordinary causes of the same result written next to it. The tool never concludes anything about authenticity or intent.
 - Files are opened by PDF and image parsers in the same process as the tool. Limits on size, pages and time apply, and there is no sandbox.
 - A check that cannot run is reported as not checked. It is never reported as clear.
