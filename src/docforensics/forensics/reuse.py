@@ -3,12 +3,11 @@ two pressings of one stamp, come out close but never the same. Two documents of 
 or of a stamp, are worth a look. This is what signature.py and marks.py cannot see: they report marks that differ, and a mark copied
 from another document does not differ from it.
 
-The canvases those two compare are measured again, tighter, in two ways. The ink gap is their own distance with a reach of 1 px and a slide
-of 1 px and no turn: the share of the ink of the one that lies farther than 1 px from the ink of the other. The hash distance is the number
-of bits in which the 64-bit difference hashes (dHash) of the two canvases differ. A pair is the same image when its ink gap is at most
-`repeat_ink` and its hash distance at most `repeat_hash` (config.py, fitted on the generated ext-dev pack, eval/reuse-dev.md). The hash
-is coarse (a 9 x 8 grid of ink densities) and can say that two canvases are alike but not that they are identical; the tight ink gap is
-what separates a copy from a second signing, and the report says what each measure alone does.
+The canvases those two compare are measured again, tighter. The ink gap is their own distance with a reach of 1 px and a slide of 1 px
+and no turn: the share of the ink of the one that lies farther than 1 px from the ink of the other. A pair is the same image when its
+ink gap is at most `repeat_ink` (config.py, fitted on the generated ext-dev pack, eval/reuse-dev.md). The 64-bit difference hash (dHash)
+of each canvas is worked out too and its distance is logged with the pair, but it does not decide: on ext-dev it did not separate copies
+from genuine pairs (stamp copies differ by up to 15 bits), so a rule that required it only lost copies.
 
 Only signatures and stamps are looked at, not logos: a logo is the issuer's one design and is meant to repeat. A pair of documents that
 are the same file is skipped, since cross_duplicate reports it. The result is an observation, never an inconsistency: a stored image
@@ -60,9 +59,9 @@ def _pair(kind: str, a: _Sig | _Mark, b: _Sig | _Mark, ca: np.ndarray, cb: np.nd
         return None
     th = ctx.th
     gap, apart = ink_gap(ca, cb), bits(dhash(ca, pad), dhash(cb, pad))
-    same = bool(gap <= th.repeat_ink and apart <= th.repeat_hash)
+    same = bool(gap <= th.repeat_ink)
     ctx.audit.append("system", "reuse_compared", {"kind": kind, "docs": [a.doc.id, b.doc.id], "pages": [a.page, b.page], "ink": round(gap, 2),
-                                                  "hash": apart, "limit_ink": th.repeat_ink, "limit_hash": th.repeat_hash, "repeat": same})
+                                                  "limit_ink": th.repeat_ink, "hash_bits": apart, "repeat": same})
     if not same:
         return None
     w, h = ca.shape[1] - 2 * pad, ca.shape[0] - 2 * pad
@@ -72,9 +71,8 @@ def _pair(kind: str, a: _Sig | _Mark, b: _Sig | _Mark, ca: np.ndarray, cb: np.nd
         detail=f"The {kind} on page {a.page} of {label(a.doc)} and the one on page {b.page} of {label(b.doc)} match as closely as one image "
                f"matches itself. Each was straightened by the turn of its page, cut to its ink and scaled to {w} x {h} px. Then {gap:.1f} % of "
                f"the ink of the one lies more than {_REACH:g} px from the ink of the other, at the best placement of one over the other within "
-               f"{_SHIFT} px and with no turn allowed (the limit is {th.repeat_ink:g} %), and their 64-bit difference hashes differ in {apart} "
-               f"bits (the limit is {th.repeat_hash}). Two separate {_ACT[kind]}s did not match this closely in the synthetic documents the "
-               f"limits were fitted on. There are ordinary causes: software that places one stored image of the {kind} on each document it "
+               f"{_SHIFT} px and with no turn allowed (the limit is {th.repeat_ink:g} %). Two separate {_ACT[kind]}s did not match this closely "
+               f"in most of the synthetic documents the limit was fitted on. There are ordinary causes: software that places one stored image of the {kind} on each document it "
                f"makes, one page submitted in two forms, or a scan of one page used for two documents. This does not say how the {kind} came "
                f"to be on both documents, or whether either document is in doubt; the signatory or the issuer can say.",
         evidence=[Evidence(doc=m.doc.id, page=m.page, box=m.box, note=f"{kind} on page {m.page}") for m in (a, b)])

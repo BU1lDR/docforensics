@@ -97,9 +97,9 @@ def test_a_signature_drawn_twice_is_one_observation_that_points_at_both_and_name
     (f,) = reuse_findings(case)
     assert (f.fclass, f.family) == ("observation", "visual") and "signature" in f.title.lower()
     assert not VERDICT.search(f.title + f.detail) and "ordinary" in f.detail.lower() and "does not say" in f.detail.lower()
-    assert f"{TH.repeat_ink:g}" in f.detail and f"{TH.repeat_hash}" in f.detail
+    assert f"{TH.repeat_ink:g}" in f.detail
     (done,) = compared(events, "signature")
-    assert done["repeat"] is True and done["ink"] <= TH.repeat_ink and done["hash"] <= TH.repeat_hash
+    assert done["repeat"] is True and done["ink"] <= TH.repeat_ink and 0 <= done["hash_bits"] <= 64
     truth = {name: box[1:] for name, box in entry["reuse"][0]["boxes"].items()}
     by_doc = {c.id: c.filename for c in case.documents}
     assert len(f.evidence) == 2
@@ -125,8 +125,7 @@ def test_a_genuine_case_is_compared_and_raises_nothing(tmp_path):
     assert reuse_findings(case) == []
     for kind in ("signature", "stamp"):
         (done,) = compared(events, kind)
-        assert done["repeat"] is False and done["limit_ink"] == TH.repeat_ink and done["limit_hash"] == TH.repeat_hash
-        assert done["ink"] > done["limit_ink"] or done["hash"] > done["limit_hash"]
+        assert done["repeat"] is False and done["limit_ink"] == TH.repeat_ink and done["ink"] > done["limit_ink"]
 
 
 def test_a_document_submitted_twice_is_not_reported_again_for_its_marks(tmp_path):
