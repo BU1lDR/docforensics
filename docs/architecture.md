@@ -24,7 +24,7 @@ flowchart TD
         read --> classify --> extract --> forensics --> checks --> link --> explain --> crops --> dossier
     end
 
-    llm["Optional local model<br/>Ollama on this computer only<br/>words cluster headlines, behind a guard"]
+    llm["Optional local model (--llm)<br/>Ollama on this computer only<br/>words cluster headlines and reads the case, behind a guard"]
     llm -.-> explain
     casefolder[("Case folder<br/>files, pages, crops, case.json")]
     audit[("audit trail<br/>hash-chained events")]
@@ -46,7 +46,7 @@ flowchart TD
 | forensics | [forensics/](../src/docforensics/forensics/) | One detector per kind of trace, each on its own under `guarded()`. Digital PDFs: saved revisions, covered or hidden text, fonts of figures and dates, file metadata. Scans: image grain and placement of words. Across the case: shape of the signature, the logo and the stamp | observations and limitations |
 | checks | [checks/](../src/docforensics/checks/) | Within a document: balance chain, dates, totals, net pay against its words, weekday. Across documents: name, address, employer, account, net pay against the bank, income, dates, duplicates, producing software. Context rules against a synthetic reference | inconsistencies, observations, limitations |
 | link | [link.py](../src/docforensics/link.py) | Groups findings that cite the same field, lie on the same place of a page, or concern the same name, address, employer or account. A group with two or more independent kinds of check gets a headline finding | clusters |
-| explain | [explain/](../src/docforensics/explain/) | Fixed wording per detector and class, with next steps. If a local model is given, it words the headline of each cluster instead, when the guard accepts what it says | explanation, next steps, source of the wording |
+| explain | [explain/](../src/docforensics/explain/) | Fixed wording per detector and class, with next steps. If a local model is given, it words the headline of each cluster instead, when the guard accepts what it says, and reads the case once for relations between findings, a summary and a reading order | explanation, next steps, source of the wording, the model's reading |
 | crops | [evidence.py](../src/docforensics/evidence.py) | Cuts out the part of the page that each finding cites and outlines the cited box | `crops/` |
 | dossier | [dossier.py](../src/docforensics/dossier.py) | Writes the dossier twice from one dict: `dossier.json` for machines and a self-contained `dossier.html` (crops embedded, no script, nothing fetched). It records the length and last hash of the audit trail | `dossier.html`, `dossier.json` |
 
@@ -62,7 +62,9 @@ A stage that raises an error, or does not finish in its time limit, is written t
 
 Digits, arithmetic, dates, revision differences and shapes are measured by code, not by a model. The explanation of a finding is fixed wording from [explain/templates.py](../src/docforensics/explain/templates.py).
 
-The one place a model can take part is the headline wording of a cluster, and only if one is given to the run. It is given structured findings (ids, kinds of check, titles, the values the checks used), never page text, a finding's detail or a box. Its answer is used only if [explain/guard.py](../src/docforensics/explain/guard.py) accepts it: it must cite only the ids it was given, state no number or date that those findings do not hold, and pass no verdict. Otherwise the template wording stays. Where it is used it is labelled "AI-generated wording (inference)", and each attempt, accepted or not, is an audit event. The client talks to a loopback address and refuses any other host. At this build the commands do not switch it on, and no real model has been run against it; see the capability table in the [README](../README.md).
+The one place a model can take part is the explain stage, and only if one is given to the run (`--llm`). It does two things. It words the headline of a cluster ([explain/llm.py](../src/docforensics/explain/llm.py)), and it reads the case once and suggests relations between findings, a short summary and an order to read them in ([explain/reason.py](../src/docforensics/explain/reason.py)). It is given structured findings (ids, kinds of check, titles, the values the checks used), never page text, a finding's detail or a box. It adds, ranks and explains; it cannot change, confirm, remove or add a finding, and the order it returns always holds every finding once.
+
+[explain/guard.py](../src/docforensics/explain/guard.py) judges each part alone. The wording, the summary and the reason of a relation must cite only the ids the model was given, state no number or date that those findings do not hold, and pass no verdict. A relation of kind same_value, same_field or same_document is also kept only if its two findings cite a common figure, field or document (follows_from is a judgement and stays inference). What fails is dropped, kept with the reading as dropped, and the template wording stays. What is used is labelled "AI-generated wording (inference)" or "AI reading of the case (inference)", and each call, accepted or not, is an audit event with the model, its digest and the hashes of what went in and out. The client talks to a loopback address and refuses any other host. A call starts only if its timeout fits in the time the stage has left, and a reply is cut at 1024 tokens. The guard checks ids, figures, dates and verdict words, not meaning; the capability table in the [README](../README.md) and limitation 30 say what was measured and what was not.
 
 ## Case folder and audit trail
 
