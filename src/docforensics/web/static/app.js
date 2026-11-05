@@ -698,7 +698,7 @@ function signingLine(s) {
   const late = s.uncovered ? ` ${s.uncovered} later event(s) are not covered.` : "";
   return h("div", {},
     h("p", {class: "ok"}, `Signed: ${s.checkpoints} checkpoint(s) by key ${s.key_id.slice(0, 16)}..., the last covers events 1-${s.last.events}.${late}`),
-    h("p", {class: "hint"}, "The key is a file on this computer. A signature shows the trail unchanged since it was signed, as far as the key stayed private; it does not show who signed or when."));
+    h("p", {class: "hint"}, "The key is a file on this computer. A signature shows the trail unchanged since it was signed, as far as the key stayed private and the checkpoint is still in the file; it does not show who signed or when."));
 }
 
 function renderAudit() {

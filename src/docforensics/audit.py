@@ -36,7 +36,7 @@ class AuditLog:
     def _lines(self) -> list[str]:
         if not self.path.exists():
             return []
-        return [ln for ln in self.path.read_text(encoding="utf-8").splitlines() if ln.strip()]
+        return [ln for ln in self.path.read_text(encoding="utf-8").split("\n") if ln.strip()]  # not splitlines(): pydantic writes U+2028, U+2029 and U+0085 raw, and that splits them
 
     def append(self, actor: str, event: str, data: dict) -> AuditEvent:
         data = json.loads(json.dumps(data, default=str))  # what is hashed is what is stored

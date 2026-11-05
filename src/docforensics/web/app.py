@@ -102,7 +102,7 @@ def create_app(data_root: Path | str, th: Thresholds | None = None, llm: OllamaC
                 error = f"{type(e).__name__}: {e}"[:300]
                 try:
                     AuditLog(cd.audit_path).append("system", "run_failed", {"error": error})
-                    checkpoint(cd)
+                    checkpoint(cd, start=True)
                 except Exception:
                     pass  # the failure is reported to the browser either way
                 jobs[cd.id] = {"status": "failed", "stage": "", "error": error}

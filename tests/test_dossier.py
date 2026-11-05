@@ -10,7 +10,7 @@ import pytest
 
 from docforensics.audit import AuditLog
 from docforensics.config import Thresholds
-from docforensics.dossier import READING_LABEL, build_dossier, dossier_dict
+from docforensics.dossier import READING_LABEL, build_dossier, dossier_dict, dossier_stage
 from docforensics.findings import add_findings
 from docforensics.ingest import create_case
 from docforensics.model import Evidence, Field, Finding, Reasoning, Relation
@@ -427,15 +427,16 @@ def test_a_dossier_whose_trail_could_not_be_signed_says_so(tmp_path):
     (tmp_path / "data").mkdir()
     (tmp_path / "data" / "signing").write_text("a file where the key folder should be", encoding="utf-8")
     case, ctx = fresh(tmp_path)
-    build_dossier(case, ctx)
+    dossier_stage(case, ctx)  # the stage of a run, which tries to begin the chain
     part = audit_part(ctx.cd.dossier_html.read_text(encoding="utf-8"))
     assert "No signed checkpoint" in part and "Signed:" not in part
     assert json.loads(ctx.cd.dossier_json.read_bytes())["appendices"]["audit_trail"]["signing"]["status"] == "unsigned"
+    assert "checkpoint_failed" in [e.event for e in ctx.audit.events()]
 
 
 def test_a_checkpoint_that_does_not_hold_is_a_warning_in_the_dossier(tmp_path):
     case, ctx = fresh(tmp_path)
-    build_dossier(case, ctx)
+    dossier_stage(case, ctx)
     first = json.loads(ctx.cd.checkpoints_path.read_text(encoding="utf-8").splitlines()[0])
     ctx.cd.checkpoints_path.write_text(json.dumps({**first, "head": "0" * 64}) + "\n", encoding="utf-8")
     build_dossier(case, ctx)  # a trail that does not check out is reported in the dossier, not a reason to refuse to make one

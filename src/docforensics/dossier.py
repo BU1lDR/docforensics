@@ -322,9 +322,10 @@ def _signing_paragraph(s: dict) -> str:
     later = f' {esc(s["uncovered"])} later event(s) are not covered.' if s["uncovered"] else ""
     return (f'<p>Signed: {esc(s["checkpoints"])} checkpoint(s) by the {esc(s["algorithm"])} key {esc(s["key_id"][:16])}. The last, made {esc(last["ts"])}, '
             f'covers events 1 to {esc(last["events"])}, ending in hash {esc(last["head"][:16])}, signature {esc(last["sig"][:16])}.{later} A checkpoint shows '
-            'that the events it covers were not changed or cut off after it was signed, as far as the key stayed private. It does not show who signed '
-            'or when: the time is the clock of the machine that signed. The signatures are in checkpoints.jsonl in the case folder; verify-audit checks them, and '
-            'its --pubkey option checks them against a key you know from elsewhere.</p>')
+            'that the events it covers were not changed or cut off after it was signed, as far as the key stayed private and the checkpoint is still in the file. '
+            'It does not show who signed or when: the time is the clock of the machine that signed. The signatures are in checkpoints.jsonl in the case folder; '
+            'verify-audit checks them, and its --pubkey option checks them against a key you know from elsewhere. The last checkpoints could be deleted '
+            'together with the events they cover; only a copy of the head, kept outside the case folder, would show that.</p>')
 
 
 def _audit_section(d: dict) -> str:
@@ -395,8 +396,9 @@ def _write(path: Path, data: bytes) -> None:
 
 
 def build_dossier(case: Case, ctx: Ctx) -> tuple[Path, Path]:
-    """Write dossier.html and dossier.json into the case folder and audit both files' hashes. Returns (html path, json path). The trail is
-    signed first, so the dossier carries a signed anchor, and again after `dossier_generated`, so that event is covered too."""
+    """Write dossier.html and dossier.json into the case folder and audit both files' hashes. Returns (html path, json path). Where the case
+    already has signed checkpoints the trail is signed first, so the dossier carries a signed anchor, and again after `dossier_generated`,
+    so that event is covered too. Asking for a dossier never begins a chain: only a run does (signing.checkpoint)."""
     checkpoint(ctx.cd)
     d = dossier_dict(case, ctx)
     js, page = json.dumps(d, indent=1).encode("ascii"), _page(d, ctx).encode("utf-8")
@@ -409,4 +411,5 @@ def build_dossier(case: Case, ctx: Ctx) -> tuple[Path, Path]:
 
 
 def dossier_stage(case: Case, ctx: Ctx) -> None:
+    checkpoint(ctx.cd, start=True)  # the stage of a run: it begins the chain, so the dossier it writes carries a signed anchor
     build_dossier(case, ctx)

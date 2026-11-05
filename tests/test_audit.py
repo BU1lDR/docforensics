@@ -2,6 +2,8 @@ import hashlib
 import json
 import threading
 
+import pytest
+
 from docforensics.audit import AuditLog
 
 
@@ -114,3 +116,14 @@ def test_non_json_values_are_stored_as_text(tmp_path):
     ev = log.append("system", "file", {"path": tmp_path})
     assert ev.data["path"] == str(tmp_path)
     assert log.verify() == (True, None)
+
+
+@pytest.mark.parametrize("sep", ["\u2028", "\u2029", "\x85"])
+def test_a_note_with_a_unicode_line_separator_does_not_split_a_line_of_the_trail(tmp_path, sep):
+    """str.splitlines() ends a line at these three, and a JSON string may hold them unescaped: one such note in a reviewer's text cut the
+    line in two, and the trail could no longer be read."""
+    log = fill(tmp_path / "audit.jsonl", 2)
+    log.append("reviewer", "reviewer_action", {"note": f"a{sep}b"})
+    log.append("system", "stage_end", {"i": 9})
+    assert log.verify() == (True, None)
+    assert [e.seq for e in log.events()] == [1, 2, 3, 4] and log.events()[2].data["note"] == f"a{sep}b"

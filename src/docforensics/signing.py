@@ -3,11 +3,19 @@
 The hash chain in audit.py shows that an event was edited or removed in the middle of the trail. It cannot show that someone with write access
 changed an event and worked every later hash out again, or cut the end off. A checkpoint can: it is the case, the number of events and the
 hash of the last one, signed with an Ed25519 key, and kept as one line of checkpoints.jsonl in the case folder. A trail that was changed or cut
-no longer matches a checkpoint signed before the change.
+no longer matches a checkpoint signed before the change, as long as that checkpoint is still in the file.
+
+The chain of checkpoints begins when a run ends (`checkpoint(cd, start=True)`). After that every action extends it, but only while the trail
+verifies, every checkpoint already in the file still holds against the trail, and the data folder's key is the one that signed them: a
+trail that fails any of that is not signed again, and the refusal is written to the trail. An action does not begin a chain where there is
+none, so a trail changed, chained again and stripped of checkpoints.jsonl is not signed afresh by the next reviewer action.
 
 What it does not show: who held the key, or when. The private key is made once per data folder, in <data>/signing/, so that a case folder can
 be copied without it, but it is a plain file with no password, and no outside clock stamps a checkpoint. Whoever can read that folder can
-sign a trail of their own, and a reader can tell only if they know the public key from somewhere else (`verify-audit --pubkey`).
+sign a trail of their own, and a reader can tell only if they know the public key from somewhere else (`verify-audit --pubkey`). Nor are
+the checkpoints tied to each other or kept anywhere but the case folder: the last ones can be deleted together with the events they cover
+(a cut back to an earlier checkpoint), and a run on the cut trail then signs what is left. Only a copy of a checkpoint or of the head that
+verify-audit printed, kept outside the folder, shows that.
 """
 import hashlib
 import json
@@ -51,24 +59,35 @@ def public_key_bytes(pem: bytes) -> bytes:
     return _raw(key)
 
 
-def _private_key(cd: CaseDir) -> Ed25519PrivateKey:
-    """The key of this data folder, made the first time one is needed. A key file that is there is read, never replaced: if it cannot be
-    read that is an error, because a new key would sign over the old one's checkpoints."""
+def _private_key(cd: CaseDir, chain_key: bytes | None) -> Ed25519PrivateKey:
+    """The key of this data folder. A key file that is there is read, never replaced: if it cannot be read that is an error. A key is made
+    only for a case that has no checkpoint yet (`chain_key` is None) and only if the folder has none, because a new key would sign over
+    the checkpoints of the old one. For a case that has checkpoints, `chain_key` is the public key that signed them, and the key must be it."""
     folder = cd.root.parent.parent / "signing"
     path = folder / "private.pem"
     with _key_lock:  # ponytail: two processes making the first key at the same moment can read each other's half-written file; the loser reports checkpoint_failed and the next checkpoint works
-        if not path.exists():
+        if path.exists():
+            try:
+                key = load_pem_private_key(path.read_bytes(), None)
+            except (ValueError, TypeError, UnsupportedAlgorithm) as e:  # TypeError: the file has a password and none was given
+                raise ValueError(f"private.pem cannot be read as a key ({type(e).__name__})") from e
+            if not isinstance(key, Ed25519PrivateKey):
+                raise ValueError("private.pem is not an Ed25519 private key")
+        elif chain_key is None:
             folder.mkdir(parents=True, exist_ok=True)
             key = Ed25519PrivateKey.generate()
             with path.open("xb") as f:
                 f.write(key.private_bytes(Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()))
             path.chmod(0o600)
-            (folder / "public.pem").write_bytes(key.public_key().public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo))
-            return key
-    key = load_pem_private_key(path.read_bytes(), None)
-    if not isinstance(key, Ed25519PrivateKey):
-        raise ValueError("private.pem is not an Ed25519 private key")
-    return key
+        else:
+            raise ValueError("this data folder has no signing key, and the earlier checkpoints of this case were signed by one: a new key "
+                             "would sign over them")
+        if chain_key is not None and _raw(key.public_key()) != chain_key:
+            raise ValueError("the key of this data folder is not the one that signed the earlier checkpoints of this case")
+        public = folder / "public.pem"
+        if not public.exists():  # made with the key just now, or lost since
+            public.write_bytes(key.public_key().public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo))
+        return key
 
 
 def _why(e: Exception) -> str:
@@ -76,34 +95,32 @@ def _why(e: Exception) -> str:
     return f"{type(e).__name__}: {e.strerror if isinstance(e, OSError) and e.strerror else e}"[:200]
 
 
-def _last(cd: CaseDir) -> dict | None:
-    """The last line of checkpoints.jsonl as it reads, or None. Read loosely: a damaged file is reported by signing_view, not here."""
-    try:
-        lines = [ln for ln in cd.checkpoints_path.read_text(encoding="utf-8").splitlines() if ln.strip()]
-        last = json.loads(lines[-1]) if lines else None
-    except (OSError, ValueError):
-        return None
-    return last if isinstance(last, dict) else None
-
-
-def checkpoint(cd: CaseDir) -> dict | None:
+def checkpoint(cd: CaseDir, start: bool = False) -> dict | None:
     """Sign the trail as it stands and add the checkpoint to checkpoints.jsonl, unless the last checkpoint already says the same. Returns
-    that checkpoint, or None if there is nothing to sign (an empty trail) or signing failed. A trail that fails its own chain is not signed:
-    a checkpoint says the trail was whole. Failing never stops the work: it is written to the trail as `checkpoint_failed` (if the trail
-    can take an event), and verify-audit then shows the events as not covered."""
+    that checkpoint, or None if there is nothing to sign or signing failed.
+
+    A checkpoint says the trail was whole when it was signed, so nothing is signed on top of a trail or a checkpoint file that is not: the
+    chain must verify, every checkpoint already in the file must hold against the trail, and the key must be the one that signed them.
+    Only a run begins a chain (`start=True`); any other caller extends one that is there and otherwise returns None without a word, so a
+    trail that was changed, chained again and stripped of its checkpoints is not signed afresh by the next reviewer action.
+
+    Failing never stops the work: a refusal or an error is written to the trail as `checkpoint_failed` (if the trail can take an event),
+    and verify-audit then shows the events as not covered."""
     log = AuditLog(cd.audit_path)
     try:
-        with _lock_for(cd.checkpoints_path):
+        with _lock_for(cd.audit_path), _lock_for(cd.checkpoints_path):  # the trail may not grow between what is checked and what is signed
             ok, at = log.verify()
             if not ok:
                 raise ValueError(f"the trail does not verify (event {at}), so it was not signed")
+            cps = _checkpoints(cd)
+            if problem := _problem(cd, cps, None):
+                raise ValueError(problem)
             count, head = log.head()
-            if count == 0:
+            if count == 0 or (not cps and not start):
                 return None
-            last = _last(cd)
-            if last and last.get("events") == count and last.get("head") == head:
-                return last
-            key = _private_key(cd)
+            if cps and cps[-1]["events"] == count and cps[-1]["head"] == head:
+                return cps[-1]
+            key = _private_key(cd, bytes.fromhex(cps[0]["key"]) if cps else None)
             cp = {"v": 1, "case": cd.id, "events": count, "head": head, "ts": datetime.now(timezone.utc).isoformat(timespec="milliseconds")}
             cp |= {"key": _raw(key.public_key()).hex(), "sig": key.sign(_message(cp)).hex()}
             with cd.checkpoints_path.open("a", encoding="utf-8", newline="\n") as f:
@@ -118,11 +135,16 @@ def checkpoint(cd: CaseDir) -> dict | None:
 
 
 def _checkpoints(cd: CaseDir) -> list[dict]:
-    """Every line of checkpoints.jsonl, each checked for its shape. ValueError, worded as the problem, if one is not a checkpoint."""
-    if not cd.checkpoints_path.exists():
+    """Every line of checkpoints.jsonl, each checked for its shape. ValueError, worded as the problem, if the file cannot be read or a
+    line of it is not a checkpoint."""
+    try:
+        text = cd.checkpoints_path.read_text(encoding="utf-8")
+    except FileNotFoundError:
         return []
+    except (OSError, ValueError) as e:  # ValueError: not UTF-8
+        raise ValueError(f"UNREADABLE: checkpoints.jsonl cannot be read ({type(e).__name__}).") from e
     out = []
-    for n, ln in enumerate(cd.checkpoints_path.read_text(encoding="utf-8").splitlines(), 1):
+    for n, ln in enumerate(text.split("\n"), 1):  # not splitlines(): that also splits on U+2028 and the like
         if not ln.strip():
             continue
         try:
@@ -147,20 +169,24 @@ def _signed(cp: dict) -> bool:
 
 
 def _problem(cd: CaseDir, cps: list[dict], pinned: bytes | None) -> str | None:
-    try:
-        events = AuditLog(cd.audit_path).events()
-    except ValueError:  # a line that is not an event: the chain check says where
-        events = []
+    """The first way in which `cps` does not hold against the trail, worded as the problem, or None. What is quoted from the file goes
+    through ascii(): the text is printed by verify-audit, and a checkpoint can come with a key of its own and any text in it."""
+    events = []
+    if cps:
+        try:
+            events = AuditLog(cd.audit_path).events()
+        except (OSError, ValueError):
+            return "UNREADABLE: a line of the audit trail is not an event, or the trail cannot be read, so the checkpoints cannot be checked against it."
     for i, cp in enumerate(cps, 1):
         if not _signed(cp):
             return f"BAD SIGNATURE: checkpoint {i} (events 1-{cp['events']}) was not signed by the key it names."
         if cp["case"] != cd.id:
-            return f"WRONG CASE: checkpoint {i} was made for {cp['case']}, not for {cd.id}."
+            return f"WRONG CASE: checkpoint {i} was made for {ascii(cp['case'])}, not for {cd.id}."
         if len(events) < cp["events"]:
             return (f"TRUNCATED: checkpoint {i} covers {cp['events']} events and the trail has {len(events)}: "
                     "the end of the trail was cut off, or these checkpoints belong to a longer trail.")
         if events[cp["events"] - 1].hash != cp["head"]:
-            return (f"REWRITTEN: checkpoint {i} signed event {cp['events']} as ending in {cp['head'][:16]}, and the trail has "
+            return (f"REWRITTEN: checkpoint {i} signed event {cp['events']} as ending in {ascii(cp['head'][:16])}, and the trail has "
                     f"{events[cp['events'] - 1].hash[:16]} there: events up to {cp['events']} were changed and chained again.")
     keys = {cp["key"] for cp in cps}
     if len(keys) > 1:

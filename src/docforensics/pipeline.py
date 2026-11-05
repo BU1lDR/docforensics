@@ -120,5 +120,5 @@ def run_case(cd: CaseDir, th: Thresholds | None = None, stages: dict[str, Callab
         ctx.audit.append("system", "stage_end", {"stage": name, "ok": ok, "seconds": round(time.monotonic() - t0, 3),
                                                  "tool": "docforensics", "version": __version__})
         save_case(case, cd)
-    checkpoint(cd)  # the whole trail of the run, signed
+    checkpoint(cd, start=True)  # the whole trail of the run, signed: a run is what begins the chain of checkpoints
     return case
