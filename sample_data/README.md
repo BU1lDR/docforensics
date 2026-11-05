@@ -19,7 +19,7 @@ From the repository folder, after the set-up in the main README:
 python -m docforensics run sample_data/dev-0000
 ```
 
-It prints the case id, the documents it recognised and the findings, and writes the case, with `dossier.html` and `dossier.json`, to `data/cases/<case id>/`. The last line shows how to follow a finding to its source (`trace`); `verify-audit` checks the audit trail. Run another case the same way, with its folder. A scanned case takes longer, because OCR reads its pages (0.53 s per digital page and 4.39 s per scanned page in the held-out run on a CPU-only laptop).
+It prints the case id, the documents it recognised and the findings, and writes the case, with `dossier.html` and `dossier.json`, to `data/cases/<case id>/`. The last line shows how to follow a finding to its source (`trace`); `verify-audit` checks the audit trail. Run another case the same way, with its folder. A scanned case takes longer, because OCR reads its pages (0.53 s per digital page and 4.39 s per scanned page in the held-out run on a CPU-only laptop; the same split run again took 0.35 s and 2.33 s).
 
 The date and time in a case id, in the audit trail and in the dossier are UTC. IST is UTC+05:30, so a run at 16:00 IST has 10:30 in its id.
 
