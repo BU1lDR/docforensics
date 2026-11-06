@@ -139,6 +139,7 @@ table { border-collapse: collapse; width: 100%; font-size: .86rem; }
 th, td { padding: .3rem .45rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: break-word; }
 th { border-bottom-color: var(--line2); background: var(--bg2); color: var(--muted); font: 600 .76rem var(--mono); }
 td.low { background: var(--warn-bg); }
+th.n, td.n { text-align: right; font-variant-numeric: tabular-nums; }
 td.data { font: .78rem var(--mono); overflow-wrap: anywhere; }
 td.ts { white-space: nowrap; }
 tr.now td { background: var(--sel); }

@@ -57,6 +57,9 @@ const state = {
   relSel: null,   // the box picked in it: a document, entity or finding id
   relError: null, // why it could not be loaded, shown in its place
   relBusy: false, // a request for it is on its way
+  dec: null,      // the reviewer decisions of the open case, counted per detector: {rows, tally}
+  decError: null, // why they could not be read, shown in their place
+  decReq: null,   // the request for them that is on its way; an answer to any other one is dropped
 };
 
 const $ = (id) => document.getElementById(id);
@@ -152,7 +155,8 @@ async function api(url, opts) {
 
 async function openCase(id, finding) {
   clearTimeout(state.timer);
-  Object.assign(state, {id, info: null, doc: null, page: 1, finding: finding || null, mark: null, audit: null, rel: null, relSel: null, relError: null, relBusy: false});
+  Object.assign(state, {id, info: null, doc: null, page: 1, finding: finding || null, mark: null, audit: null, rel: null, relSel: null, relError: null, relBusy: false,
+    dec: null, decError: null, decReq: null});
   history.replaceState(null, "", finding ? `#${id}/${finding}` : `#${id}`);
   say("");
   render();
@@ -325,7 +329,7 @@ async function review(f, status) {
       body: JSON.stringify(body),
     });
     Object.assign(f, out); // the server's copy is the record
-    state.audit = null;
+    Object.assign(state, {audit: null, dec: null, decError: null, decReq: null}); // both are read again when next opened
     say(`${f.id} saved as "${STATUS_LABEL[f.status]}". The action is in the audit trail.`);
   } catch (e) {
     say(`Not saved: ${e.message}`, true);
@@ -364,6 +368,7 @@ function showTab(name) {
     if (state.caps) renderCaps();
     else loadCaps();
   }
+  if (name === "dossier" && data() && !state.dec && !state.decError && !state.decReq) loadDecisions();
 }
 
 function renderCaseLine() {
@@ -771,7 +776,47 @@ function renderDossier() {
     h("p", {}, "The dossier is built when you click, so it holds the reviewer actions made so far. Each build is recorded in the audit trail."),
     h("ul", {},
       h("li", {}, h("a", {href: `${cases()}/dossier`, download: `dossier-${state.id}.html`, click: stale}, "Dossier as a self-contained HTML file")),
-      h("li", {}, h("a", {href: `${cases()}/dossier.json`, download: `dossier-${state.id}.json`, click: stale}, "Dossier as JSON, with its own hash"))));
+      h("li", {}, h("a", {href: `${cases()}/dossier.json`, download: `dossier-${state.id}.json`, click: stale}, "Dossier as JSON, with its own hash"))),
+    h("h3", {}, "Reviewer decisions"),
+    ...decisionsView());
+}
+
+async function loadDecisions() {
+  const req = (state.decReq = {});
+  renderDossier();
+  let dec = null, error = null;
+  try {
+    dec = await api(`${cases()}/decisions`);
+  } catch (e) {
+    error = e.message;
+  }
+  if (state.decReq !== req) return; // another case was opened, or a review was saved, while this answer was on its way
+  Object.assign(state, {dec, decError: error, decReq: null});
+  renderDossier();
+}
+
+/* What a person decided, counted per detector and class. The server reads it from the audit trail and refuses a trail that does not
+   verify; here it is only shown, as counts. No rate, no score: nothing in it says how often a detector is right. */
+function decisionsView() {
+  const intro = h("p", {},
+    "What a person decided about each finding of this case, counted per detector and class. It is read from the audit trail once the trail's hash chain and signatures check out. ",
+    "These are counts of decisions, not accuracy figures: a dismissal is one person's judgement, not proof that a finding was wrong. Nothing is learned from them; ",
+    "they are for someone who adjusts a threshold file by hand.");
+  if (state.decError) return [intro, h("p", {class: "bad"}, `The decisions could not be read: ${state.decError}`)];
+  if (!state.dec) return [intro, h("p", {class: "empty"}, "Reading the decisions...")];
+  if (!state.dec.tally.length) return [intro, h("p", {class: "empty"}, "This case has no findings, so there is nothing to count.")];
+  const states = Object.entries(STATUS_LABEL);
+  return [intro,
+    h("div", {class: "scroll"}, h("table", {},
+      h("thead", {}, h("tr", {},
+        h("th", {scope: "col"}, "Detector"), h("th", {scope: "col"}, "Class"),
+        h("th", {scope: "col", class: "n"}, "Raised"), states.map(([, label]) => h("th", {scope: "col", class: "n"}, label)))),
+      h("tbody", {}, state.dec.tally.map((t) => h("tr", {},
+        h("td", {}, t.detector),
+        h("td", {}, icon(t.class), CLASS_LABEL[t.class]),
+        h("td", {class: "n"}, String(t.raised)),
+        states.map(([key]) => h("td", {class: "n"}, String(t[key])))))))),
+    h("p", {}, h("a", {href: `${cases()}/decisions.jsonl`, download: `decisions-${state.id}.jsonl`}, "Decisions as JSON lines, one row per finding"))];
 }
 
 async function loadAudit() {
