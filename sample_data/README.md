@@ -20,7 +20,7 @@ From the repository folder, after the set-up in the main README:
 python -m docforensics run sample_data/dev-0000
 ```
 
-It prints the case id, the documents it recognised and the findings, and writes the case, with `dossier.html` and `dossier.json`, to `data/cases/<case id>/`. The last line shows how to follow a finding to its source (`trace`); `verify-audit` checks the audit trail. Run another case the same way, with its folder. A scanned case takes longer, because OCR reads its pages (0.53 s per digital page and 4.39 s per scanned page in the held-out run at spec-freeze on a CPU-only laptop; the same split run again took 0.35 s and 2.33 s; the JPEG-history check, added later, makes a scanned JPEG case slower by a few seconds).
+It prints the case id, the documents it recognised and the findings, and writes the case, with `dossier.html` and `dossier.json`, to `data/cases/<case id>/`. The last line shows how to follow a finding to its source (`trace`); `verify-audit` checks the audit trail. Run another case the same way, with its folder. A scanned case takes longer, because OCR reads its pages (0.53 s per digital page and 4.39 s per scanned page in the held-out run at spec-freeze on a CPU-only laptop; the same split run again took 0.35 s and 2.33 s). Those runs are from before the JPEG-history check was added. On 6 Nov, with it in, `run` took 4 to 5 s for a case of one scanned JPEG and 10 s for a case of three (single runs on the same laptop; how much of that is the check was not measured).
 
 The date and time in a case id, in the audit trail and in the dossier are UTC. IST is UTC+05:30, so a run at 16:00 IST has 10:30 in its id.
 
