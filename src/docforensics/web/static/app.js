@@ -943,9 +943,10 @@ function renderRelations() {
     return;
   }
   box.append(h("p", {class: "hint"},
-    "Which names, addresses, employers and account numbers the documents write, and which findings touch them. Two writings are one entity when "
-    + "the cross-document checks grade them the same, or the same apart from form. A writing those checks grade as a mismatch is an entity of "
-    + "its own, and the finding that reports the mismatch touches both. This is a map of what was read, not a conclusion."));
+    "Which names, addresses, employers and account numbers the documents write, and which findings touch them. Two writings share an entity only "
+    + "when the cross-document checks grade them the same, or the same apart from form, and a writing joins an entity only if it grades so "
+    + "against every writing in it. A writing those checks grade as a mismatch against one of them is an entity of its own, and the finding "
+    + "that reports the mismatch touches both. This is a map of what was read, not a conclusion."));
   if (!r.entities.length) {
     box.append(h("p", {class: "empty"}, "No name, address, employer or account number was read from these documents, so there is nothing to relate."));
     return;

@@ -72,6 +72,28 @@ def test_a_value_that_differs_is_another_entity_and_the_numbering_follows_the_do
         ("E1", "name", "Divyu C. Menon"), ("E2", "account", "1234 5678"), ("E3", "name", "Divya C. Menon"), ("E4", "employer", "Alpha Test Pvt Ltd")]
 
 
+BRIDGES = [("name", "Mohan Varghese", "M. Varghese", "Manoj Varghese"),  # an initial stands for any name it starts
+           ("account", "12345678", "XXXX5678", "99995678")]  # a masked number stands for any number that ends the same way
+
+
+@pytest.mark.parametrize("role, first, bridge, last", BRIDGES)
+def test_a_writing_that_matches_a_bridge_but_not_the_writing_beside_it_is_another_entity(role, first, bridge, last):
+    """The first and the last are a mismatch; the bridge matches both. If the last joined the entity of the bridge, the finding that reports
+    the mismatch would touch one entity and the view would hold the two in one row."""
+    def case(order):
+        docs = [document(f"D{n}", f"{n}.pdf", fld(f"D{n}", "x", v, NAME, role)) for n, v in enumerate(order, 1)]
+        return docs, [d.fields[0] for d in docs]
+
+    docs, (a, b, c) = case([first, bridge, last])
+    mismatch = finding(1, "inconsistency", f"cross_{role}", "cross_document", field_evidence(a, "first"), field_evidence(c, "last"))
+    rel = build_relations(case_of(docs, mismatch))
+    assert [(e["id"], e["writings"]) for e in rel["entities"]] == [("E1", [first, bridge]), ("E2", [last])]
+    assert [n["entities"] for n in rel["findings"]] == [["E1", "E2"]]
+    # the bridge sits with whichever of the two the documents mention first, so the rows depend on the order they are read in
+    docs, _ = case([last, bridge, first])
+    assert [(e["id"], e["writings"]) for e in build_relations(case_of(docs))["entities"]] == [("E1", [last, bridge]), ("E2", [first])]
+
+
 def test_the_same_words_under_two_roles_are_two_entities():
     docs = [document("D1", "a.pdf", fld("D1", "holder", "Alpha Test", NAME, "name")),
             document("D2", "b.pdf", fld("D2", "employer", "Alpha Test", EMPLOYER, "employer"))]

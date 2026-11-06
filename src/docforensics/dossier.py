@@ -264,9 +264,10 @@ def _entities(d: dict) -> str:
     for e in d["contextual_analysis"]["relationships"]["entities"]:
         where = Raw("<br>".join(f"{esc(m['file'])}, page {esc(m['page'])}, {esc(m['name'])}: {esc(m['value'])}" for m in e["mentions"]))
         rows.append([e["id"], e["role"], where, Raw(", ".join(_link(f) for f in e["findings"])) if e["findings"] else "none"])
-    return ("<p>Entities are numbered in the order the documents mention them. Two writings share a row when the cross-document checks "
-            "grade them the same, or the same apart from form. A writing those checks grade as a mismatch has a row of its own, and the "
-            "finding that reports the mismatch is listed against both. It is a listing of what was read, not a conclusion.</p>"
+    return ("<p>Entities are numbered in the order the documents mention them. Two writings share a row only when the cross-document checks "
+            "grade them the same, or the same apart from form, and a writing joins a row only if it grades so against every writing in it. "
+            "A writing those checks grade as a mismatch against one of them has a row of its own, and the finding that reports the mismatch "
+            "is listed against both. It is a listing of what was read, not a conclusion.</p>"
             + _table(["Entity", "Role", "Where it is written", "Findings that touch it"], rows))
 
 

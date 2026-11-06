@@ -59,7 +59,7 @@ flowchart TD
 
 A stage that raises an error, or does not finish in its time limit, is written to the audit trail and shown as a limitation. The run goes on with what it has. A step stuck in native code is abandoned, not killed.
 
-The entity relationship view ([relations.py](../src/docforensics/relations.py)) is not a stage. It is worked out from the case when the dossier is written and when the review desk's Relationships tab asks for it, it stores nothing, and it leaves the case as it was. It lists the names, addresses, employers and account numbers the documents write (two writings are one entity when the cross-document checks grade them as the same, or the same apart from form), the places where each is written, and the findings that cite one of those fields or lie over one of those places. The headline of a group of findings and limitations are left out. No model takes part.
+The entity relationship view ([relations.py](../src/docforensics/relations.py)) is not a stage. It is worked out from the case when the dossier is written and when the review desk's Relationships tab asks for it, it stores nothing, and it leaves the case as it was. It lists the names, addresses, employers and account numbers the documents write (two writings share an entity only when the cross-document checks grade them as the same, or the same apart from form, and a writing joins an entity only if it grades so against every writing in it), the places where each is written, and the findings that cite one of those fields or lie over one of those places. The headline of a group of findings and limitations are left out. No model takes part.
 
 ## Findings
 

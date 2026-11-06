@@ -1,8 +1,10 @@
 """Relationship view: which names, addresses, employers and account numbers in the documents are one thing, and which findings touch
-them. Two writings are one entity when the cross-document checks grade them as the same (alike, or alike apart from form). A writing
-those checks grade as a mismatch is another entity, and the finding that reports the mismatch touches both. A finding touches an entity
-when it cites a field that holds it, or a place that lies on one. The view is worked out from the case on request: the case is not
-changed, no model takes part, and nothing in it says what a difference means."""
+them. A writing joins the first entity, in the order the documents mention them, in which every writing is graded by the cross-document
+checks as the same as it (alike, or alike apart from form); otherwise it is an entity of its own. So two writings those checks grade as a
+mismatch are never in one entity, and the finding that reports the mismatch touches both. An initial or a masked number matches several
+writings that do not match each other and sits with the first. A finding touches an entity when it cites a field that holds it, or a
+place that lies on one. The view is worked out from the case on request: the case is not changed, no model takes part, and nothing in
+it says what a difference means."""
 import re
 
 from .checks.cross import FORM, ROLES, SAME
@@ -26,7 +28,8 @@ def build_relations(case: Case, th: Thresholds | None = None) -> dict:
             if f.role not in ENTITY_ROLES or not f.value or not re.search(r"\w", f.value):
                 continue
             same = lambda m: ROLES[f.role][2](m["value"], f.value, th)[0] in (SAME, FORM)  # noqa: E731
-            e = next((e for e in entities if e["role"] == f.role and any(same(m) for m in e["mentions"])), None)
+            # every writing in the entity, not any: an initial or a masked number matches several that do not match each other
+            e = next((e for e in entities if e["role"] == f.role and all(same(m) for m in e["mentions"])), None)
             if e is None:
                 e = {"id": f"E{len(entities) + 1}", "role": f.role, "label": f.value, "writings": [], "mentions": [], "findings": []}
                 entities.append(e)
