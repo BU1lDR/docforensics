@@ -15,7 +15,7 @@ flowchart TD
         read["read<br/>render pages, find words with boxes<br/>text layer of a digital PDF, RapidOCR for a scan"]
         classify["classify<br/>keyword weights on page 1 give a document type, or unknown"]
         extract["extract<br/>fields and table cells from a spec per type,<br/>each with a confidence and a location"]
-        forensics["forensics<br/>digital: revisions, covered text, fonts, metadata<br/>scans: image grain, placement<br/>case: signature, logo and stamp shape"]
+        forensics["forensics<br/>digital: revisions, covered text, fonts, metadata<br/>scans: image grain, placement, compression history<br/>case: signature, logo and stamp shape"]
         checks["checks<br/>within a document, across documents, context rules"]
         link["link<br/>group findings that share a field, a place or a value"]
         explain["explain<br/>fixed templates per detector and class"]
@@ -50,7 +50,7 @@ flowchart TD
 | read | [read/](../src/docforensics/read/) | Renders every page at a stated resolution and locates its words. A digital PDF is read from its text layer (with font, size and colour), a scan or an image with RapidOCR. Scanned pages get a quality class from their sharpness | `pages/`, words with boxes |
 | classify | [understand/classify.py](../src/docforensics/understand/classify.py) | Keyword weights over page 1 give a document type. A page that fits no type, or two equally, stays `unknown` | document type |
 | extract | [understand/](../src/docforensics/understand/) | Reads header fields by their label and table cells by their column heading, using a TOML spec per document type. A field that cannot be found is kept, empty, at confidence 0 | fields: value, confidence, location |
-| forensics | [forensics/](../src/docforensics/forensics/) | One detector per kind of trace, each on its own under `guarded()`. Digital PDFs: saved revisions, covered or hidden text, fonts of figures and dates, file metadata. Scans: image grain and placement of words. Across the case: shape of the signature, the logo and the stamp | observations and limitations |
+| forensics | [forensics/](../src/docforensics/forensics/) | One detector per kind of trace, each on its own under `guarded()`. Digital PDFs: saved revisions, covered or hidden text, fonts of figures and dates, file metadata. Scans: image grain, placement of words and compression history of the JPEG picture. Across the case: shape of the signature, the logo and the stamp | observations and limitations |
 | checks | [checks/](../src/docforensics/checks/) | Within a document: balance chain, dates, totals, net pay against its words, weekday. Across documents: name, address, employer, account, net pay against the bank, income, dates, duplicates, producing software. Context rules against a synthetic reference | inconsistencies, observations, limitations |
 | link | [link.py](../src/docforensics/link.py) | Groups findings that cite the same field, lie on the same place of a page, or concern the same name, address, employer or account. A group with two or more independent kinds of check gets a headline finding | clusters |
 | explain | [explain/](../src/docforensics/explain/) | Fixed wording per detector and class, with next steps. If a local model is given, it words the headline of each cluster instead, when the guard accepts what it says, and reads the case once for relations between findings, a summary and a reading order | explanation, next steps, source of the wording, the model's reading |
