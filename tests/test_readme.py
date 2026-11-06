@@ -112,7 +112,7 @@ def test_limitations_document_has_a_false_positive_row_for_every_detector():
 
 def test_readme_commands_parse_and_cover_the_cli():
     lines = re.findall(r"^\s*(?:\$ )?python -m docforensics (.+)$", text(README), re.M)
-    assert {shlex.split(line)[0] for line in lines} == {"run", "trace", "verify-audit", "serve"}
+    assert {shlex.split(line)[0] for line in lines} == {"run", "trace", "verify-audit", "decisions", "serve"}
     for line in lines:
         cli._parser().parse_args(shlex.split(line))  # an unknown flag or a missing argument exits
 
