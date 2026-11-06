@@ -170,8 +170,14 @@ def _table(head: list[str], rows: list[list]) -> Raw:
     if not rows:
         return Raw('<p class="none">None.</p>')
     th = "".join(f"<th>{esc(h)}</th>" for h in head)
-    body = "".join("<tr>" + "".join(f"<td>{esc(c)}</td>" for c in row) + "</tr>" for row in rows)
+    body = "".join("<tr>" + "".join(_td(c) for c in row) + "</tr>" for row in rows)
     return Raw(f"<table><tr>{th}</tr>{body}</table>")
+
+
+def _td(c) -> str:
+    """A table cell. One that holds a long unbroken token (a sha256, a stored path) may break anywhere, so the table fits the page; words never do."""
+    s = esc(c)
+    return f'<td class="w">{s}</td>' if any(len(w) > 30 for w in s.split()) else f"<td>{s}</td>"
 
 
 def _link(fid: str) -> Raw:
@@ -355,14 +361,41 @@ def _limits_section(d: dict) -> str:
     return f'<h3>Limitations</h3>{items(x["limitations"])}<h3>Assumptions</h3>{items(x["assumptions"])}'
 
 
-CSS = ("body{font:14px/1.45 system-ui,sans-serif;max-width:1100px;margin:1.5em auto;padding:0 1em;color:#111}"
+# The page's own style, inline so the file stands alone: system fonts, no image files, no other origin. On screen it has the review desk's dark
+# terminal look; in print the same page on light paper (only the variables change). The four finding classes keep their colour, their border
+# style (solid, solid, dashed, dotted) and their name in the card's heading, so colour is never the only cue. Colour is on borders and markers;
+# text stays in the ink colours.
+CSS = (":root{color-scheme:dark;--bg:#090c11;--panel:#0d1117;--bg2:#111827;--line:#1f2937;--line2:#4b5563;--ink:#e6edf3;--muted:#8b98a8;"
+       "--accent:#00ffcc;--warn:#f2b84b;--observation:#3082f6;--inconsistency:#e15247;--potential_manipulation:#e34cbb;--processing_limitation:#78838f;"
+       '--mono:"Cascadia Mono","Cascadia Code",ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono","Liberation Mono",monospace}'
+       "body{font:13.5px/1.6 var(--mono);max-width:1100px;margin:1.5em auto;padding:0 1em;background:var(--bg);color:var(--ink)}"
+       "h1{margin:0 0 .4em;font-size:1.25em}h1::before{content:'$ ';color:var(--accent)}"
+       "h2{margin:1.6em 0 .5em;padding-bottom:.25em;border-bottom:1px solid var(--line2);font-size:1.1em}h2::before{content:'## ';color:var(--muted)}"
+       "h3{margin:1.2em 0 .4em;font-size:1em}h3::before{content:'### ';color:var(--muted)}h4{margin:.5em 0;font-size:1em}"
+       "h5{margin:.9em 0 .2em;color:var(--muted);font-size:.95em}h2,h3,h4,h5{break-after:avoid}"
+       "a{color:var(--accent)}nav a{white-space:nowrap}nav{margin:.8em 0;padding:.45em .7em;border:1px solid var(--line);background:var(--panel);color:var(--muted);line-height:1.9}"
+       "p,li{max-width:80ch}"
        "table{border-collapse:collapse;width:100%;margin:.5em 0;font-size:12px}"
-       "td,th{border:1px solid #bbb;padding:3px 6px;text-align:left;vertical-align:top;overflow-wrap:break-word}th{background:#eee}"
-       "article{border:1px solid #bbb;border-left-width:6px;padding:.3em .9em;margin:.8em 0;break-inside:avoid}"
-       ".observation{border-left-color:#2b6cb0}.inconsistency{border-left-color:#c05621}"
-       ".potential_manipulation{border-left-color:#b83280}.processing_limitation{border-left-color:#718096}"
-       ".tag{font-weight:600}.meta,.sha{color:#555;font-size:12px}.warn{color:#b00020;font-weight:600}.notice{background:#f6f6f0;padding:.5em}"
-       "img{max-width:100%;border:1px solid #888}@media print{nav{display:none}}")
+       "td,th{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left;vertical-align:top;overflow-wrap:break-word}"
+       "td.w{overflow-wrap:anywhere;min-width:30ch}td:first-child{min-width:9ch}"
+       "th{background:var(--bg2);border-bottom-color:var(--line2);color:var(--muted)}"
+       "article{border:1px solid var(--line);border-left:6px solid var(--line2);background:var(--panel);padding:.3em .9em;margin:.8em 0;break-inside:avoid}"
+       "article:target{outline:2px solid var(--accent);outline-offset:2px}"
+       "article.observation{border-left-color:var(--observation)}article.inconsistency{border-left-color:var(--inconsistency)}"
+       "article.potential_manipulation{border-left:6px dashed var(--potential_manipulation)}"
+       "article.processing_limitation{border-left:6px dotted var(--processing_limitation)}"
+       ".tag{padding:0 .4em;border:1px solid var(--line2);font-weight:600}"
+       "article.observation .tag{border-color:var(--observation)}article.inconsistency .tag{border-color:var(--inconsistency)}"
+       "article.potential_manipulation .tag{border:1px dashed var(--potential_manipulation)}"
+       "article.processing_limitation .tag{border:1px dotted var(--processing_limitation)}"
+       ".meta,.sha{color:var(--muted);font-size:12px}.sha{overflow-wrap:anywhere}"
+       ".warn{color:var(--warn);font-weight:600}.warn::before{content:'[!] '}"
+       ".notice{padding:.5em .8em;border:1px solid var(--line);background:var(--panel);color:var(--muted)}.notice::before{content:'# ';color:var(--accent)}"
+       ".none{color:var(--muted)}.none::before{content:'// '}code{padding:0 .25em;background:var(--bg2)}"
+       "summary{cursor:pointer;color:var(--accent)}img{max-width:100%;border:1px solid var(--line2);background:var(--bg2)}"
+       "@page{margin:14mm}"
+       "@media print{:root{color-scheme:light;--bg:#fff;--panel:#f6f7f9;--bg2:#eceff3;--line:#d5dbe3;--line2:#9aa4b2;--ink:#111827;--muted:#4b5563;"
+       "--accent:#0a6a5b;--warn:#8a5a00}body{max-width:none;margin:0;font-size:11px}table{font-size:10px}nav{display:none}a{color:inherit}}")
 
 
 def _page(d: dict, ctx: Ctx) -> str:
