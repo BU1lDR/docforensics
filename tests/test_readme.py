@@ -50,6 +50,11 @@ def test_readme_quotes_the_capability_matrix():
     assert between(text(README), "capabilities") == table, STALE
     assert len(table.splitlines()) == len(rows) + 2  # a header, a rule and one line per capability
     assert all(f"| {r['name']} | {r['status']} | {len(r['evidence'])} |" in table for r in rows)
+    # the count is of evidence entries, as in the dossier's column: three rows list evaluation reports as well as tests, so it is not "Tests"
+    assert table.splitlines()[0] == "| Capability | Status | Evidence | Note |"
+    assert "Evidence counts the automated tests" in text(README) and "evaluation reports" in text(README)
+    with_reports = [r["name"] for r in rows if any(not e.startswith("tests/") for e in r["evidence"])]
+    assert len(with_reports) == 3, with_reports  # the legend names three rows: say so again there when this changes
 
 
 def test_matrix_text_cannot_break_the_table():

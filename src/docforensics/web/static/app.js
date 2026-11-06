@@ -744,12 +744,12 @@ function renderCaps() {
     h("td", {}, h("span", {class: `chip status-${x.status.toLowerCase()}`}, x.status)),
     h("td", {}, x.note || ""),
     h("td", {}, x.evidence.length
-      ? h("details", {}, h("summary", {}, `${x.evidence.length} test(s)`), h("ul", {}, x.evidence.map((t) => h("li", {}, h("code", {}, t)))))
+      ? h("details", {}, h("summary", {}, `${x.evidence.length} item(s)`), h("ul", {}, x.evidence.map((t) => h("li", {}, h("code", {}, t)))))
       : "none yet"));
   box.append(
-    h("p", {}, "What this build does, partly does, plans and declines. A recorded demo does not establish a capability; the tests listed here do."),
+    h("p", {}, "What this build does, partly does, plans and declines. A recorded demo does not establish a capability; the tests and evaluation reports listed here do."),
     h("div", {class: "scroll"}, h("table", {},
-      h("thead", {}, h("tr", {}, ["Capability", "Status", "Note", "Tests"].map((t) => h("th", {scope: "col"}, t)))),
+      h("thead", {}, h("tr", {}, ["Capability", "Status", "Note", "Evidence"].map((t) => h("th", {scope: "col"}, t)))),
       h("tbody", {}, c.capabilities.map(row)))),
     h("h3", {}, "Limitations"),
     h("ul", {}, c.limitations.map((t) => h("li", {}, t))),

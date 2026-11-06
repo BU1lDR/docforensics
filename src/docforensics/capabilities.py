@@ -17,9 +17,10 @@ def _cell(s: str) -> str:
 
 
 def matrix_markdown(data: dict | None = None) -> str:
-    """The matrix as the README's table: capability, status, how many tests back it, and the note."""
+    """The matrix as the README's table: capability, status, how many evidence entries back it (tests, and for three rows evaluation
+    reports as well, as in the dossier's column), and the note."""
     rows = (data or load_capabilities())["capabilities"]
-    return "\n".join(["| Capability | Status | Tests | Note |", "|---|---|---|---|",
+    return "\n".join(["| Capability | Status | Evidence | Note |", "|---|---|---|---|",
                       *(f"| {_cell(r['name'])} | {r['status']} | {len(r['evidence'])} | {_cell(r.get('note', ''))} |" for r in rows)])
 
 
