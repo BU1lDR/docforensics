@@ -13,7 +13,7 @@ out: two separate pressings of the generated stamp often matched as closely as a
 best fit (eval/h/reuse-ext-dev-stamps.md), so no limit could keep the copies and drop the separate pressings. A pair of documents that
 are the same file is skipped, since cross_duplicate reports it. So is a mark that fills more than half of its canvas (`_MAX_FILL`): a canvas is the
 ink cut to its box and scaled to a fixed size, so a printed rule, a dot or a block fills it whatever its size, any two of them are the same
-image, and none is a signature. The skip is logged (`reuse_skipped`). A plain mark that is hollow or thin is not skipped, and one printed
+image, and none is a signature. The skip is logged (`reuse_skipped`). A plain mark that is not solid (a hollow box, a diagonal stroke) is compared, and one printed
 the same on two documents will be reported. The result is an observation, never an inconsistency: a stored image of
 a signature, placed by software, is an ordinary way for it to repeat. It says nothing about who signed. A signature that was drawn again
 or traced is not found, and a scan adds noise that a tight limit cannot always see through."""
