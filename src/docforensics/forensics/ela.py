@@ -129,7 +129,7 @@ def jpeg_history(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
         if not r.regions:
             continue
         shown = r.regions[:LISTED]
-        more = f" and {len(r.regions) - LISTED} more" if len(r.regions) > LISTED else ""
+        more = f" ({LISTED} of them listed)" if len(r.regions) > LISTED else ""
         noun, verb, poss, obj = ("region", "does", "its", "the region") if len(r.regions) == 1 else ("regions", "do", "their", "them")
         ev = [Evidence(doc=doc.id, page=pg.n, box=g.box,
                        note=f"saving again at quality {r.earlier} changes its ink by {g.error:.1f} grey levels on average, against {r.median:.1f} for the page's median cell")

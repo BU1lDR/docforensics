@@ -85,21 +85,34 @@ def test_a_pasted_piece_is_an_observation_with_its_box_the_two_qualities_and_no_
     assert "95" in f.detail and "50" in f.detail and not VERDICT.search(f.title + f.detail)
 
 
-def test_one_region_is_counted_as_a_region_and_two_as_regions(tmp_path, monkeypatch):
+def stubbed_regions(tmp_path, monkeypatch):
+    """A function n -> the finding for a page on which the check returned n regions. The pixels are not the point, only the sentence about the regions."""
     scan, _ = made("pasted-field")
     case, doc, ctx = page_of(tmp_path, scan, "s.jpg")
 
-    def detail_of(n):  # the pixels are not the point here, only the sentence about the n regions the check returned
+    def finding_of(n):
         regions = [Region((16.0, 16.0 + 80 * i, 80.0, 80.0 + 80 * i), 4, 9.0) for i in range(n)]
         monkeypatch.setattr("docforensics.forensics.ela.ela_regions", lambda gray: Result(95, 50, 3.0, 2.0, regions))
         (f,) = jpeg_history(case, doc, ctx)
-        assert len(f.evidence) == n
-        return f.detail
+        return f
 
-    one, two = detail_of(1), detail_of(2)
-    assert "1 compact region does not share that trace" in one and "changes its ink" in one and "alters the region as much (its own dip" in one
-    assert "regions" not in one and "their" not in one
-    assert "2 compact regions do not share that trace" in two and "changes their ink" in two and "alters them as much (their own dip" in two
+    return finding_of
+
+
+def test_one_region_is_counted_as_a_region_and_two_as_regions(tmp_path, monkeypatch):
+    finding_of = stubbed_regions(tmp_path, monkeypatch)
+    one, two = finding_of(1), finding_of(2)
+    assert (len(one.evidence), len(two.evidence)) == (1, 2)
+    assert "1 compact region does not share that trace" in one.detail and "changes its ink" in one.detail and "alters the region as much (its own dip" in one.detail
+    assert "regions" not in one.detail and "their" not in one.detail
+    assert "2 compact regions do not share that trace" in two.detail and "changes their ink" in two.detail and "alters them as much (their own dip" in two.detail
+
+
+def test_more_regions_than_are_listed_say_how_many_are_listed_and_do_not_count_them_twice(tmp_path, monkeypatch):
+    finding_of = stubbed_regions(tmp_path, monkeypatch)
+    nine, six = finding_of(9), finding_of(6)
+    assert len(nine.evidence) == 6 and "9 compact regions (6 of them listed) do not share that trace" in nine.detail and "and 3 more" not in nine.detail
+    assert len(six.evidence) == 6 and "6 compact regions do not share that trace" in six.detail and "listed" not in six.detail
 
 
 def test_a_page_with_nothing_to_report_gives_no_finding_at_all(tmp_path):
