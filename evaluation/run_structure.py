@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
@@ -54,6 +55,7 @@ def format_report(split: str, rows: list[dict], run: dict) -> str:
     planted = [r for r in rows if r["kind"] in structure_pack.PLANTED]
     names = lambda sel: ", ".join(r["case"] for r in sel) or "none"  # noqa: E731
     shown_all = sum(len(r["expect"]) - len(r["missed"]) for r in planted)
+    lims = Counter((r["kind"], t) for r in rows for t in r["limitations"])
     out = [f"# Raw file-structure check on the {split} pack (whole tool)", "",
            f"Run: {run['date']}, commit {run['commit']}{', working tree not clean' if run['dirty'] else ''}, {run['machine']}.",
            f"{len(rows)} cases (seeds {run['seeds'][0]} to {run['seeds'][1]}), {sum(r['seconds'] for r in rows):.0f} s in all, "
@@ -69,8 +71,8 @@ def format_report(split: str, rows: list[dict], run: dict) -> str:
            f"{shown_all} of {sum(len(r['expect']) for r in planted)} expected observations shown. Missed: {names([r for r in planted if r['missed']])}.",
            f"- Observations that were not expected: {sum(len(r['stray']) for r in rows)}"
            + (f" (on {names([r for r in rows if r['stray']])})." if any(r["stray"] for r in rows) else "."),
-           f"- Limitations the check raised: {sum(len(r['limitations']) for r in rows)}"
-           + (": " + "; ".join(f"{r['case']} ({r['kind']}): {', '.join(r['limitations'])}" for r in rows if r["limitations"]) if any(r["limitations"] for r in rows) else "."),
+           f"- Limitations the check raised: {sum(lims.values())}"
+           + (": " + "; ".join(f"{kind}: {title} ({n})" for (kind, title), n in lims.items()) + "." if lims else "."),
            "", "## By kind", "", "| kind | planted | files | expected observations shown | missed | stray |", "|---|---|---|---|---|---|"]
     for kind in structure_pack.KINDS:
         sel = [r for r in rows if r["kind"] == kind]

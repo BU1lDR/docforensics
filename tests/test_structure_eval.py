@@ -21,12 +21,13 @@ def test_the_report_names_false_flags_misses_and_strays_and_uses_no_verdict_word
             row("c2", "tail", expect=pack.TITLES["tail"], shown=pack.TITLES["tail"]), row("c3", "records", expect=pack.TITLES["records"]),
             row("c4", "attached", expect=pack.TITLES["attached"], shown=pack.TITLES["attached"][:1]),
             row("c5", "signed-then-added", expect=pack.TITLES["signed-then-added"], shown=pack.TITLES["signed-then-added"],
-                limitations=["Signature present, not verified"])]
+                limitations=["Signature present, not verified"]), row("c6", "signed-then-added", expect=pack.TITLES["signed-then-added"],
+                                                                        shown=pack.TITLES["signed-then-added"], limitations=["Signature present, not verified"])]
     text = run_structure.format_report("ext-dev", rows, RUN)
     assert "Files without a planted change (2): an observation on 1, which is a false flag (c0)." in text
-    assert "every expected observation shown on 2; 3 of 5 expected observations shown. Missed: c3, c4." in text
+    assert "every expected observation shown on 3; 4 of 6 expected observations shown. Missed: c3, c4." in text
     assert "Observations that were not expected: 1 (on c0)." in text
-    assert "signed-then-added): Signature present, not verified" in text
+    assert "Limitations the check raised: 2: signed-then-added: Signature present, not verified (2)." in text  # grouped, not one entry a case
     assert "nothing about files made by other programs" in text
     assert not re.search(r"fraud|forg|fake|counterfeit|tamper", text, re.I)
 
