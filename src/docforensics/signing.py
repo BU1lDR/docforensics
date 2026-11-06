@@ -14,9 +14,9 @@ What it does not show: who held the key, or when. The private key is made once p
 be copied without it, but it is a plain file with no password, and no outside clock stamps a checkpoint. Whoever can read that folder can
 sign a trail of their own, and a reader can tell only if they know the public key from somewhere else (`verify-audit --pubkey`). Nor are
 the checkpoints tied to each other or kept anywhere but the case folder: the last ones can be deleted together with the events they cover
-(a cut back to an earlier checkpoint), and the events after the last checkpoint can be replaced before a run signs them. A run on the
-cut or replaced trail signs what is there. Only a copy of a checkpoint or of the head that
-verify-audit printed, kept outside the folder, shows that.
+(a cut back to an earlier checkpoint), and the events after the last checkpoint can be replaced before the next action signs them. An
+action on the cut or replaced trail signs what is there. A copy of a checkpoint or of the head that verify-audit printed, kept outside
+the folder, shows the cut; only a copy of the head, taken while those events were there, shows the replacement.
 """
 import hashlib
 import json
@@ -212,6 +212,8 @@ def signing_view(cd: CaseDir, pinned: bytes | None = None) -> dict:
         problem = _problem(cd, cps, pinned)
     except ValueError as e:
         cps, problem = [], str(e)
+    except OSError:  # its text carries the path, and `problem` goes into the shared dossier
+        cps, problem = [], "UNREADABLE: the audit trail cannot be read, so the checkpoints cannot be checked against it."
     if problem:
         return view | {"status": "broken", "problem": problem}
     try:

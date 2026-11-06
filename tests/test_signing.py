@@ -466,3 +466,12 @@ def test_a_public_key_file_left_behind_by_an_earlier_key_is_replaced_by_the_half
     second = started(b)
     assert second["key"] != first["key"]
     assert public_key_bytes(public_pem(b)) == bytes.fromhex(second["key"])
+
+
+def test_a_trail_that_cannot_be_read_at_all_is_reported_as_unreadable_without_the_path_and_does_not_raise(tmp_path):
+    cd, _ = trail(tmp_path)
+    started(cd)
+    cd.audit_path.unlink()
+    cd.audit_path.mkdir()  # a folder where the trail should be
+    view = signing_view(cd)
+    assert view["status"] == "broken" and view["problem"].startswith("UNREADABLE") and str(tmp_path) not in view["problem"] and view["last"] is None
