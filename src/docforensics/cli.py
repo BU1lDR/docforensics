@@ -8,11 +8,13 @@ from pathlib import Path
 
 from .audit import AuditLog
 from .config import Thresholds
+from .decisions import case_dirs, decisions, jsonl, tally
 from .explain.llm import DEFAULT_MODEL, OllamaClient
 from .findings import quote
 from .ingest import create_case
 from .model import Case, Document, Evidence
 from .pipeline import run_case
+from .review import STATUSES
 from .signing import public_key_bytes, signing_view
 from .store import CaseDir, load_case
 
@@ -188,6 +190,40 @@ def _verify(args: argparse.Namespace) -> int:
     return 0
 
 
+def _counts(rows: list[dict], cases: int) -> None:
+    t = tally(rows)
+    if not t:
+        print("No findings in the cases that could be read, so there is nothing to count.")
+        return
+    print(f"Reviewer decisions by detector: {cases} case{'s' * (cases != 1)}, {len(rows)} finding{'s' * (len(rows) != 1)}. "
+          "Counts of what a person decided, not accuracy figures.")
+    head = ["detector", "class", "raised", *STATUSES]
+    cells = [head] + [[quote(x["detector"], 60), x["class"], *(str(x[k]) for k in head[2:])] for x in t]
+    width = [max(len(r[i]) for r in cells) for i in range(len(head))]
+    for r in cells:
+        print("  ".join(c.ljust(width[i]) if i < 2 else c.rjust(width[i]) for i, c in enumerate(r)))
+
+
+def _decisions(args: argparse.Namespace) -> int:
+    cds = [_case_dir(args)] if args.case else case_dirs(args.data)
+    if not cds:
+        raise UsageError(f"no cases in {args.data}")
+    rows, read, refused = [], 0, 0
+    for cd in cds:
+        try:
+            got = decisions(cd)
+        except ValueError as e:  # a case that cannot be trusted or read is named; the others are still exported
+            print(f"docforensics: {quote(str(e), 300)}", file=sys.stderr)
+            refused += 1
+            continue
+        rows, read = rows + got, read + 1
+        if not args.tally:
+            sys.stdout.write(jsonl(got))
+    if args.tally:
+        _counts(rows, read)
+    return 1 if refused else 0
+
+
 def _serve(args: argparse.Namespace) -> int:
     import uvicorn  # only this command needs the web stack
 
@@ -214,6 +250,10 @@ def _parser() -> argparse.ArgumentParser:
     verify.add_argument("--pubkey", metavar="PEM", help="the public key (a PEM file) that must have signed the case; a case that is unsigned, "
                         "or signed by another key, then fails")
     verify.set_defaults(fn=_verify)
+    dec = sub.add_parser("decisions", help="what a reviewer decided about each finding, read from the verified audit trail (JSON lines)")
+    dec.add_argument("case", nargs="?", help="one case; without it, every case in --data")
+    dec.add_argument("--tally", action="store_true", help="print counts per detector and class as a table instead of the rows")
+    dec.set_defaults(fn=_decisions)
     serve = sub.add_parser("serve", help="open the review desk in a browser (127.0.0.1 only)")
     serve.add_argument("--port", type=int, default=8000)
     serve.add_argument("--config", metavar="TOML", help="thresholds to use instead of the defaults")
@@ -223,7 +263,7 @@ def _parser() -> argparse.ArgumentParser:
                        "relate and reads facts on pages of a type the tool has no spec for (its output is labelled inference, and it "
                        "cannot remove or confirm a finding)")
         s.add_argument("--llm-model", metavar="NAME", help="use this Ollama model instead of the default (implies --llm)")
-    for s in (run, trace, verify, serve):
+    for s in (run, trace, verify, dec, serve):
         s.add_argument("--data", default="data", metavar="DIR", help="where cases are kept (default: data)")
     return p
 
