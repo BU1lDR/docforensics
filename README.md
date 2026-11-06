@@ -69,7 +69,7 @@ python -m docforensics verify-audit C-20261104-153000-ab12
 
 ### Try it on the sample data
 
-[sample_data/](sample_data/) holds five small cases, each a bank statement, a payslip and a loan application: one genuine, three with a planted change that the tool finds and one with a planted change that it misses. Run the first:
+[sample_data/](sample_data/) holds eleven small cases. Eight are a bank statement, a payslip and a loan application of one fictional applicant: five of the development split (one genuine, three with a planted change that the tool finds, one with a planted change that it misses) and three of the `ext-dev` split of the reused-signature pack (one genuine, one with the same signature image on two documents that the tool finds, one with the same that it misses). The other three are single payslip scans of the `ext-dev` split of the compression-history pack (one genuine, one with a pasted field that the tool finds, one genuine scan that the check cannot examine). Run the first:
 
 ```
 python -m docforensics run sample_data/dev-0000
@@ -84,7 +84,7 @@ python -m docforensics verify-audit C-20261105-103000-ab12
 
 The date and time in a case id, in the audit trail and in the dossier are UTC. IST is UTC+05:30, so a run at 16:00 IST has 10:30 in its id. The dossier is `data/cases/<case id>/dossier.html`. One made from dev-0000 is kept as [sample_data/dossier-dev-0000.html](sample_data/dossier-dev-0000.html), with its data in [dossier-dev-0000.json](sample_data/dossier-dev-0000.json): open the HTML file in a browser after cloning, because GitHub shows only its source.
 
-These five cases are from the development split, the split on which the thresholds were tuned. They show the tool working from files to dossier; they are not evidence of how well it detects. The held-out figures are in [eval/test.md](eval/test.md). One of the five, dev-0043 (a slightly changed logo), is a miss. [sample_data/README.md](sample_data/README.md) says what the tool reports on each case, and `python -m pytest tests/test_e2e_sample.py` checks those statements against a real run.
+The five cases of the development split are from the split on which the thresholds were tuned, and the six `ext-dev` cases from the split on which the two newer checks were set up. They show the tool working from files to dossier; they are not evidence of how well it detects. The held-out figures are in [eval/test.md](eval/test.md); they are those of the tool at `spec-freeze` plus two fixes, not of the final tool (see Evaluation). Two of the eleven are misses: dev-0043 (a slightly changed logo) and ext-dev-h-0046 (a reused signature on 120 dpi scans). A third, ext-dev-e-0012, is a genuine scan whose last save is under quality 40: the compression-history check cannot examine such a picture, and the dossier does not say so (the capability matrix lists the limit). [sample_data/README.md](sample_data/README.md) says what the tool reports on each case, and `python -m pytest tests/test_e2e_sample.py tests/test_e2e_sample_packs.py` checks those statements against a real run.
 
 ### Tests
 

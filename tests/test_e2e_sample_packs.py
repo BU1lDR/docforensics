@@ -135,7 +135,7 @@ def test_a_pack_case_runs_end_to_end(tmp_path, name):
         at = [f for f in mine if len(f.evidence) == 2 and {names[e.doc] for e in f.evidence} == set(truth)
               and all(iou(e.box, truth[names[e.doc]]) >= PLACE for e in f.evidence)]
         assert len(mine) == len(at) == int(same)  # found at its place and no stray one, or nothing at all
-        figures = [f"{pair['ink']:.1f}", f"{pair['limit_ink']:g}", "do not differ" if bits == 0 else f"{bits} bits apart"]
+        figures = [f"{pair['ink']:.1f}", f"limit of {pair['limit_ink']:g} %", "do not differ" if bits == 0 else f"{bits} bits apart"]
         if at:  # the finding leads to the two documents that carry the signature, and its boxes lie on the planted ones
             assert {row["file"] for row in trace if row["finding"] == at[0].id} == set(truth)
             assert all(iou(e.box, truth[names[e.doc]]) > 0.9 for e in at[0].evidence)
@@ -159,10 +159,10 @@ def test_a_pack_case_runs_end_to_end(tmp_path, name):
             figures.append(f"quality {LOW}")
         if mine:  # the finding leads to the scan, with a marked crop, and says which earlier save it found no trace of
             assert [row["file"] for row in trace if row["finding"] == mine[0].id and row["crop"]] == [entry["file"]]
-            earlier, grey, median = re.search(r"quality (\d+) changes its ink by ([\d.]+) grey levels on average, against ([\d.]+) for", mine[0].evidence[0].note).groups()
+            earlier = re.search(r"quality (\d+) changes its ink by", mine[0].evidence[0].note).group(1)
             assert int(earlier) == entry["host_quality"]
             best = max(iou(b, entry["box"]) for b in boxes)
-            figures += [grey, median, f"{best:.2f}", "{} and {} pixels".format(*entry["shift"])]
+            figures += [mine[0].evidence[0].note, f"{best:.2f}", "{} and {} pixels".format(*entry["shift"])]
 
     # the README's section on the case gives every finding by its title and these figures
     text = section((SAMPLE / "README.md").read_text(encoding="utf-8"), name)
