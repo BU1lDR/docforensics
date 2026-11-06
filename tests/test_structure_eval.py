@@ -4,7 +4,9 @@ import re
 import pytest
 
 from datagen import structure_pack as pack
+from docforensics.audit import AuditLog
 from docforensics.config import Thresholds
+from docforensics.pipeline import STAGE_ORDER
 from evaluation import run_structure
 
 RUN = {"date": "d", "commit": "abc", "dirty": False, "seeds": (1, 2), "machine": "m"}
@@ -45,3 +47,5 @@ def test_the_whole_tool_shows_what_was_planted_in_one_file(tmp_path):
     data, entry = pack.build_case(p)
     r = run_structure.look(entry, data, tmp_path, Thresholds())
     assert r["shown"] == r["expect"] == pack.TITLES["tail"] and r["missed"] == r["stray"] == []
+    (audit,) = tmp_path.rglob("audit.jsonl")
+    assert [e.data["stage"] for e in AuditLog(audit).events() if e.event == "stage_end"] == list(STAGE_ORDER)  # every registered stage, not read and forensics only

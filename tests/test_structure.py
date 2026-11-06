@@ -366,3 +366,15 @@ def test_through_the_stage_a_finding_has_an_id_and_the_run_is_logged(tmp_path):
     assert f.id.startswith("F-") and f.fclass == "observation" and "APPENDED-LATER" in f.detail
     ran = [e.data for e in AuditLog(cd.audit_path).events() if e.event == "doc_forensics" and e.data["detector"] == "file_structure"]
     assert ran == [{"doc": "D1", "detector": "file_structure", "findings": 1}]
+
+
+def test_a_finding_goes_through_every_stage_to_the_dossier(tmp_path):
+    """Run as the tool runs it, all stages: none fails, the observation is explained from its own template and the dossier shows it."""
+    _, cd, _ = create_case(tmp_path, [("a.pdf", SALARY + b"\nAPPENDED-LATER")], TH)
+    case = run_case(cd, TH)
+    (f,) = [x for x in case.findings if x.detector == DETECTOR]
+    assert f.explanation_source == "template" and "structural fact" in f.explanation and f.next_steps
+    ended = [e.data for e in AuditLog(cd.audit_path).events() if e.event == "stage_end"]
+    assert len(ended) == 9 and all(e["ok"] for e in ended), ended
+    html = cd.dossier_html.read_text(encoding="utf-8")
+    assert f.title in html and "APPENDED-LATER" in html

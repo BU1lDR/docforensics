@@ -2,7 +2,7 @@
 
     python -m evaluation.run_structure ext-dev [--cases N] [--start S] [--out DIR]
 
-The pack is written to a temporary folder, each file goes through the tool (ingest, read, forensics), and the observations of the
+The pack is written to a temporary folder, each file goes through the tool (ingest, then every registered stage), and the observations of the
 file-structure check are set against the manifest's `expect`, which datagen/structure_pack.py fixed before the check was run on the pack.
 Missed: an expected observation that was not shown. Stray: an observation that was shown and is not expected (on a file without a planted
 change, a false flag). The report lists every case. ext-test is read once, at the freeze, with --once-at-freeze."""
@@ -22,11 +22,9 @@ import psutil
 
 from datagen import structure_pack
 from docforensics.config import Thresholds
-from docforensics.forensics import run_forensics
 from docforensics.forensics.structure import DETECTOR
 from docforensics.ingest import create_case
 from docforensics.pipeline import run_case
-from docforensics.read import read_stage
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -42,7 +40,7 @@ def look(entry: dict, data: bytes, work: Path, th: Thresholds) -> dict:
     """What the check shows of one file when the whole tool runs on it."""
     t0 = time.perf_counter()
     _, cd, _ = create_case(work / "data", [(entry["file"], data)], th)
-    mine = [f for f in run_case(cd, th, stages={"read": read_stage, "forensics": run_forensics}).findings if f.detector == DETECTOR]
+    mine = [f for f in run_case(cd, th).findings if f.detector == DETECTOR]  # every registered stage, as the tool runs
     shown = sorted(f.title for f in mine if f.fclass == "observation")
     return {"case": entry["case"], "kind": entry["kind"], "file": entry["file"], "bytes": len(data), "expect": sorted(entry["expect"]), "shown": shown,
             "limitations": sorted(f.title for f in mine if f.fclass == "processing_limitation"),
