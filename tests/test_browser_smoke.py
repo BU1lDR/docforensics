@@ -107,7 +107,7 @@ class Page:
             return m["result"]
 
     def js(self, expression: str):
-        r = self.call("Runtime.evaluate", expression=expression, returnByValue=True)
+        r = self.call("Runtime.evaluate", expression=expression, returnByValue=True, awaitPromise=True)  # a promise is waited for
         assert "exceptionDetails" not in r, r["exceptionDetails"]
         return r["result"].get("value")
 
@@ -214,4 +214,22 @@ def test_every_tab_draws_its_content_and_the_page_raises_no_error(desk, page):
         text = page.js(f"document.getElementById('tab-{tab}').innerText")
         assert not re.search(r"Loading|could not be (loaded|read)", text), f"the {tab} tab is still waiting or shows an error:\n{text[:600]}"
     time.sleep(1)  # a short last wait, so that an error raised by a timer or a late request of the last tab is seen as well
+    assert page.problems() == []
+
+
+def test_a_finding_opens_with_its_evidence_and_a_reviewer_decision_is_recorded(desk, page):
+    base, cid = desk
+    page.call("Page.navigate", url=f"{base}/#{cid}/F-003")  # the address of one finding of the case
+    page.wait_for("document.getElementById('detail').innerText.includes('F-003: The balance in row 2')")
+    page.wait_for("document.querySelector('#page svg rect.ev.sel') !== null")  # its own box is drawn on the page it points to
+    href = page.js("document.querySelector('#page svg image').getAttribute('href')")
+    assert page.js(f"new Promise((r) => {{ const i = new Image(); i.onload = () => r(i.naturalWidth); i.onerror = () => r(0); i.src = {json.dumps(href)}; }})") > 0
+    page.wait_for("(() => { const c = [...document.querySelectorAll('#detail img.crop')]; return c.length > 0 && c.every((i) => i.complete && i.naturalWidth > 0); })()")
+    page.js("[...document.querySelectorAll('#detail button')].find((b) => b.textContent === 'Show on page').click()")
+    page.wait_for("document.querySelector('#page svg rect.hl') !== null")  # the evidence is marked on the page
+    page.js("[...document.querySelectorAll('#detail .actions button')].find((b) => b.textContent === 'Needs verification').click()")
+    page.wait_for("document.getElementById('detail').innerText.includes('Status: Needs verification')")
+    rows = page.js(f"fetch('/api/cases/{cid}/decisions').then((r) => r.json()).then((d) => d.rows)")  # what the reviewer did is read back from the audit trail
+    assert {r["finding"]: r["status"] for r in rows}["F-003"] == "needs_verification"
+    time.sleep(1)
     assert page.problems() == []
