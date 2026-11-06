@@ -170,6 +170,22 @@ def test_ui_labels_match_the_dossier_and_say_no_verdict():
         assert not VERDICT.search(p.read_text(encoding="utf-8")), p.name
 
 
+def test_every_id_app_js_looks_up_exists_in_the_page():
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    made = set(re.findall(r'\bid: "([\w-]+)"', js))  # ids app.js gives to the elements it builds itself
+    have = set(re.findall(r'\bid="([\w-]+)"', html)) | made
+    asked = set(re.findall(r'\$\("([\w-]+)"\)', js))
+    assert asked and not asked - have, asked - have
+    for new in ("drop", "picked", "tiles"):  # the drop zone, the list of picked files and the per-case counts
+        assert new in have, new
+
+
+def test_a_file_dropped_outside_the_drop_zone_does_not_navigate_the_page_away():
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    assert 'window.addEventListener("dragover"' in js and 'window.addEventListener("drop"' in js
+
+
 def test_index_has_all_tabs(case):
     client, _, _ = case
     r = client.get("/")

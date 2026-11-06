@@ -104,6 +104,24 @@ function svgEl(tag, props, title) {
 const rect = (b, cls, title, extra) =>
   svgEl("rect", {x: b[0], y: b[1], width: b[2] - b[0], height: b[3] - b[1], class: cls, ...extra}, title);
 
+/* Small line icons, built here because the page's policy allows no image files. They draw in the text colour. The four finding classes
+   each have their own shape (eye, not-equal, crosshair, i in a circle), so a class is never told apart by colour alone. */
+const ICONS = {
+  observation: [["path", {d: "M1.5 8s2.4-4.5 6.5-4.5S14.5 8 14.5 8s-2.4 4.5-6.5 4.5S1.5 8 1.5 8z"}], ["circle", {cx: 8, cy: 8, r: 2}]],
+  inconsistency: [["path", {d: "M3 6h10M3 10h10M10.5 3.5l-5 9"}]],
+  potential_manipulation: [["circle", {cx: 8, cy: 8, r: 4.5}], ["path", {d: "M8 1v3.5M8 11.5V15M1 8h3.5M11.5 8H15"}]],
+  processing_limitation: [["circle", {cx: 8, cy: 8, r: 6}], ["path", {d: "M8 7.2v4"}], ["circle", {cx: 8, cy: 4.9, r: 0.4}]],
+  upload: [["path", {d: "M8 11V2.5M4.5 6L8 2.5 11.5 6M2.5 11v2.5h11V11"}]],
+  file: [["path", {d: "M4 1.5h5.5l3 3v10H4zM9.5 1.5v3h3"}]],
+  lines: [["path", {d: "M2 4h12M2 8h12M2 12h8"}]],
+};
+
+function icon(name) {
+  const svg = svgEl("svg", {viewBox: "0 0 16 16", width: 16, height: 16, class: `ico ${name}`, "aria-hidden": "true", focusable: "false"});
+  for (const [tag, props] of ICONS[name]) svg.append(svgEl(tag, props));
+  return svg;
+}
+
 function say(text, bad) {
   const m = $("message");
   m.textContent = text;
@@ -231,6 +249,7 @@ async function onUpload(ev) {
   try {
     const out = await api("/api/cases", {method: "POST", body: form});
     input.value = "";
+    renderPicked();
     await openCase(out.case_id);
     say(`Case ${out.case_id} created; analysing.`);
   } catch (e) {
@@ -238,6 +257,56 @@ async function onUpload(ev) {
   } finally {
     $("go").disabled = false;
   }
+}
+
+const kb = (n) => (n >= 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`);
+
+// The files picked for the next analysis, listed under the file chooser.
+function renderPicked() {
+  $("picked").replaceChildren(...Array.from($("files").files).map((f) => h("li", {}, icon("file"), f.name, h("span", {class: "meta"}, kb(f.size)))));
+}
+
+// Dropped files replace the chooser's selection, as choosing again would. Analysing still waits for the Analyse button.
+function takeFiles(list) {
+  if (!list.length) return;
+  try {
+    $("files").files = list;
+  } catch (e) {
+    say("This browser did not take the dropped files. Use the file chooser instead.", true);
+    return;
+  }
+  renderPicked();
+  showTab("documents");
+  say(`${list.length} file(s) picked; press Analyse to start.`);
+}
+
+// Files can be dropped anywhere on the page. Without these listeners the browser would open a dropped PDF in place of the desk.
+function watchDrops() {
+  const carriesFiles = (ev) => ev.dataTransfer && Array.from(ev.dataTransfer.types || []).includes("Files");
+  let depth = 0; // dragenter and dragleave fire for every element the pointer crosses, so count them
+  const lit = (on) => document.body.classList.toggle("dragging", on);
+  window.addEventListener("dragenter", (ev) => {
+    if (!carriesFiles(ev)) return;
+    depth += 1;
+    lit(true);
+  });
+  window.addEventListener("dragleave", (ev) => {
+    if (!carriesFiles(ev)) return;
+    depth = Math.max(0, depth - 1);
+    if (!depth) lit(false);
+  });
+  window.addEventListener("dragover", (ev) => {
+    if (!carriesFiles(ev)) return;
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = "copy";
+  });
+  window.addEventListener("drop", (ev) => {
+    if (!carriesFiles(ev)) return;
+    ev.preventDefault();
+    depth = 0;
+    lit(false);
+    takeFiles(ev.dataTransfer.files);
+  });
 }
 
 async function review(f, status) {
@@ -271,6 +340,7 @@ function render() {
   renderViewerBar();
   renderPage();
   renderDocuments();
+  renderTiles();
   renderFields();
   renderFindings();
   renderClusters();
@@ -336,7 +406,9 @@ function renderPage() {
   box.replaceChildren();
   if (!d || !p) {
     const waiting = state.info && state.info.status === "processing";
-    box.append(h("p", {class: "empty"}, waiting ? "Pages appear here when the analysis finishes." : "Nothing to show yet."));
+    box.append(waiting
+      ? emptyBox("file", "Analysis running", "Pages appear here when the analysis finishes.")
+      : emptyBox("file", "No page to show", "Pick documents on the Documents tab, or drop them anywhere on this page."));
     return;
   }
   if (!p.image_path) {
@@ -401,11 +473,16 @@ function renderPage() {
   } else box.scrollTo(keep[0], keep[1]);
 }
 
+function emptyBox(name, title, text) {
+  return h("div", {class: "emptybox"}, icon(name), h("div", {}, h("strong", {}, title), h("p", {}, text)));
+}
+
 function progress(i) {
   const k = STAGES.findIndex((s) => s[0] === i.stage);
   const out = [
     h("p", {}, k < 0 ? "Waiting to start..." : `Step ${k + 1} of ${STAGES.length}: ${STAGES[k][1]}`),
     h("progress", {max: STAGES.length, value: k + 1}),
+    h("ol", {class: "stages"}, STAGES.map(([, label], n) => h("li", {class: n < k ? "done" : n === k ? "now" : "todo"}, label))),
   ];
   if (i.intake) {
     out.push(
@@ -448,7 +525,9 @@ function renderDocuments() {
   box.replaceChildren();
   const i = state.info;
   if (!i) {
-    box.append(h("p", {class: "empty"}, state.id ? "Loading..." : "No case open."));
+    box.append(state.id
+      ? h("p", {class: "empty"}, "Loading...")
+      : emptyBox("upload", "No case open", "Pick documents above, or drop them anywhere on this page, then press Analyse."));
     return;
   }
   if (i.status === "processing") box.append(progress(i));
@@ -464,6 +543,24 @@ function renderDocuments() {
   if (refused.length) {
     box.append(h("h3", {}, "Not analysed"), h("ul", {}, refused.map((f) => h("li", {}, f.detail || f.title))));
   }
+}
+
+// Counts for the open case. A count of things to look at, not a score and not a verdict.
+function renderTiles() {
+  const box = $("tiles");
+  box.replaceChildren();
+  if (!data()) return;
+  const ds = docsOf();
+  const all = findingsOf();
+  const fields = ds.reduce((n, d) => n + d.fields.length, 0);
+  const weak = ds.reduce((n, d) => n + d.fields.filter((f) => f.conf < lowConf()).length, 0);
+  const tile = (tag, cls, ico, label, n, sub, props) => h(tag, {class: `tile ${cls}${n ? "" : " zero"}`, ...props},
+    h("span", {class: "name"}, icon(ico), label), h("span", {class: "count"}, String(n)), sub ? h("span", {class: "sub"}, sub) : null);
+  box.append(
+    tile("div", "", "file", "Documents", ds.length),
+    tile("div", "", "lines", "Fields read", fields, weak ? `${weak} below the confidence threshold` : null),
+    ...CLASS_ORDER.map((c) => tile("button", c, c, CLASS_LABEL[c], all.filter((f) => f.fclass === c).length, null, {type: "button", click: () => showTab("findings")})),
+    h("p", {class: "hint"}, "Counts only. They are not a score and not a verdict about the documents."));
 }
 
 function cellButton(d, f) {
@@ -524,7 +621,7 @@ function findingButton(f) {
     "aria-pressed": String(f.id === state.finding),
     click: () => selectFinding(f.id),
   },
-  h("strong", {}, f.id), ` ${f.title}`,
+  icon(f.fclass), h("strong", {}, f.id), ` ${f.title}`,
   h("span", {class: "meta"}, `${STATUS_LABEL[f.status]} \u00b7 confidence ${conf(f.conf)} \u00b7 priority ${f.review_priority}`));
 }
 
@@ -543,7 +640,7 @@ function renderFindings() {
   for (const c of CLASS_ORDER) {
     const group = all.filter((f) => f.fclass === c).sort((a, b) => b.review_priority - a.review_priority);
     box.append(h("section", {},
-      h("h3", {}, `${CLASS_LABEL[c]} (${group.length})`),
+      h("h3", {class: "withico"}, icon(c), `${CLASS_LABEL[c]} (${group.length})`),
       group.length
         ? h("ul", {class: "plain"}, group.map((f) => h("li", {}, findingButton(f))))
         : h("p", {class: "empty"}, "None reported.")));
@@ -584,7 +681,7 @@ function renderDetail() {
   box.append(h("div", {}, // h() drops the null children; a bare append() would print them as the word "null"
     h("h3", {}, `${f.id}: ${f.title}`),
     h("p", {},
-      h("span", {class: `tag ${f.fclass}`}, CLASS_LABEL[f.fclass]),
+      h("span", {class: `tag ${f.fclass}`}, icon(f.fclass), CLASS_LABEL[f.fclass]),
       h("span", {class: "tag"}, `${f.family} / ${f.detector}`),
       h("span", {class: "tag"}, `confidence ${conf(f.conf)}`),
       h("span", {class: "tag"}, `review priority ${f.review_priority}`),
@@ -719,7 +816,7 @@ function renderAudit() {
       h("thead", {}, h("tr", {}, ["#", "Time (UTC)", "Actor", "Event", "Data"].map((t) => h("th", {scope: "col"}, t)))),
       h("tbody", {}, a.events.map((e) => h("tr", {},
         h("td", {}, String(e.seq)),
-        h("td", {}, e.ts),
+        h("td", {class: "ts"}, e.ts),
         h("td", {}, e.actor),
         h("td", {}, e.event),
         h("td", {class: "data"}, shorten(JSON.stringify(e.data), 240))))))));
@@ -962,6 +1059,9 @@ function boot() {
   renderLegend();
   for (const b of document.querySelectorAll("[data-tab]")) b.addEventListener("click", () => showTab(b.dataset.tab));
   $("upload").addEventListener("submit", onUpload);
+  $("drop").prepend(icon("upload"));
+  $("files").addEventListener("change", renderPicked);
+  watchDrops();
   $("doc-select").addEventListener("change", (ev) => showDoc(ev.target.value));
   $("prev").addEventListener("click", () => turn(-1));
   $("next").addEventListener("click", () => turn(1));

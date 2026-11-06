@@ -47,11 +47,15 @@
 
     <div id="tab-documents" role="tabpanel" aria-labelledby="btn-documents">
       <form id="upload">
-        <label for="files">Documents to analyse together (PDF, PNG or JPEG)</label>
-        <input type="file" id="files" multiple accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">
+        <div id="drop">
+          <label for="files">Documents to analyse together (PDF, PNG or JPEG). Drop them anywhere on this page, or choose them here.</label>
+          <input type="file" id="files" multiple accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">
+          <ul id="picked" class="plain"></ul>
+        </div>
         <button type="submit" id="go">Analyse</button>
         <p class="hint">Files stay on this machine. A file that is too large, too long or not a PDF or image is listed with the reason, and the rest are still analysed.</p>
       </form>
+      <div id="tiles"></div>
       <div id="docs"></div>
       <div id="fields"></div>
     </div>
