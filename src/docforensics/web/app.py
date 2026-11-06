@@ -17,6 +17,7 @@ from starlette.datastructures import UploadFile
 from ..audit import AuditLog
 from ..capabilities import load_capabilities
 from ..config import Thresholds
+from ..decisions import decisions, jsonl, tally
 from ..dossier import audit_view, build_dossier
 from ..explain.llm import OllamaClient
 from ..ingest import create_case
@@ -187,6 +188,28 @@ def create_app(data_root: Path | str, th: Thresholds | None = None, llm: OllamaC
         except (ValueError, OSError) as e:  # said in a line, as case_status says it: an OS error would carry the path
             raise HTTPException(500, f"case.json cannot be read ({type(e).__name__})")
         return build_relations(case, th)
+
+    def decided(case_id: str) -> tuple[CaseDir, list[dict]]:
+        """What the reviewer decided, read from the verified audit trail. A trail that cannot be trusted is refused with the reason
+        (our own ValueError names the case and the event, never a path); a file that cannot be read is said in a line, as case_status says it."""
+        cd = settled(case_id)
+        try:
+            with edit_lock:
+                return cd, decisions(cd)
+        except (ValueError, OSError) as e:
+            if type(e) is ValueError:
+                raise HTTPException(409, str(e))
+            raise HTTPException(500, f"the case files cannot be read ({type(e).__name__})")
+
+    @app.get("/api/cases/{case_id}/decisions")
+    def reviewer_decisions(case_id: str):
+        rows = decided(case_id)[1]
+        return {"rows": rows, "tally": tally(rows)}
+
+    @app.get("/api/cases/{case_id}/decisions.jsonl")
+    def reviewer_decisions_file(case_id: str):
+        cd, rows = decided(case_id)
+        return Response(jsonl(rows), media_type="application/x-ndjson", headers={"Content-Disposition": f'attachment; filename="decisions-{cd.id}.jsonl"'})
 
     def dossier_download(case_id: str, kind: str) -> Response:
         """Built at the moment of the request, so it holds the reviewer's actions so far; each build is in the audit trail. The bytes are

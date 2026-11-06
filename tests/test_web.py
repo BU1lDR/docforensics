@@ -1,6 +1,7 @@
 """The review app (design 7.8): upload, a background run, pages and crops served by validated name, reviewer actions in the audit trail,
 nothing from a document reaching the page as markup, and nothing listening but the loopback address."""
 import hashlib
+import json
 import re
 import shutil
 import threading
@@ -13,6 +14,7 @@ from docforensics import cli
 from docforensics.audit import AuditLog
 from docforensics.capabilities import load_capabilities
 from docforensics.config import Thresholds
+from docforensics.decisions import decisions, jsonl, tally
 from docforensics.dossier import CLASS_LABEL, READING_LABEL, SOURCE_LABEL
 from docforensics.ingest import create_case
 from docforensics.model import MODEL_READ_LABEL, Reasoning, Relation
@@ -296,7 +298,7 @@ def test_case_is_withheld_while_processing(tmp_path, monkeypatch):
         assert s["intake"]["accepted"] == [{"id": "D1", "filename": "a.pdf", "size": len(pdf)}]  # what the page shows while it waits
         assert len(s["intake"]["rejected"]) == 1 and "notes.txt" in s["intake"]["rejected"][0]
         assert s["low_conf"] == Thresholds().low_conf
-        for url in ("/audit", "/relations", "/dossier", "/dossier.json", "/pages/D1/1.png", "/crops/F-001-1.png"):
+        for url in ("/audit", "/relations", "/decisions", "/decisions.jsonl", "/dossier", "/dossier.json", "/pages/D1/1.png", "/crops/F-001-1.png"):
             assert client.get(f"/api/cases/{cid}{url}").status_code == 409, url
         assert client.post(f"/api/cases/{cid}/findings/F-001/review", json={"note": "x"}).status_code == 409
     finally:
@@ -443,3 +445,58 @@ def test_a_review_and_a_dossier_download_leave_nothing_unsigned(case):
     a = client.get(f"/api/cases/{cid}/audit").json()
     assert a["events"][-1]["event"] == "dossier_generated"
     assert a["signing"]["status"] == "signed" and a["signing"]["uncovered"] == 0 and a["signing"]["last"]["events"] == len(a["events"])
+
+
+def test_reviewer_decisions_are_counted_per_detector_from_the_trail(case):
+    client, cid, data = case
+    findings = client.get(f"/api/cases/{cid}").json()["case"]["findings"]
+    fid = next(f["id"] for f in findings if f["fclass"] == "inconsistency")
+    assert client.post(f"/api/cases/{cid}/findings/{fid}/review", json={"status": "dismissed", "note": "Re-typed by the branch"}).status_code == 200
+    got = client.get(f"/api/cases/{cid}/decisions")
+    rows = decisions(CaseDir.open(data, cid))
+    assert got.status_code == 200 and got.headers["content-type"] == "application/json"
+    assert got.json() == {"rows": rows, "tally": tally(rows)} and len(rows) == len(findings)
+    one = next(r for r in rows if r["finding"] == fid)
+    assert (one["status"], one["note"], one["actions"]) == ("dismissed", "Re-typed by the branch", 1)
+    assert all(r["status"] == "open" and r["actions"] == 0 for r in rows if r["finding"] != fid)
+    assert sum(t["raised"] for t in got.json()["tally"]) == len(findings)
+    assert len(events_of(client, cid, "reviewer_action")) == 1  # looking at the decisions leaves nothing in the trail
+
+
+def test_the_decisions_download_is_the_json_lines_of_the_command_and_stays_inert(case):
+    client, cid, data = case
+    hostile = "<script>alert(1)</script> \u202e reversed \x1b[31m red \x7f del"
+    assert client.post(f"/api/cases/{cid}/findings/F-001/review", json={"status": "needs_verification", "note": hostile}).status_code == 200
+    r = client.get(f"/api/cases/{cid}/decisions.jsonl")
+    rows = decisions(CaseDir.open(data, cid))
+    assert r.status_code == 200 and r.headers["content-type"].startswith("application/x-ndjson")
+    assert r.headers["content-disposition"] == f'attachment; filename="decisions-{cid}.jsonl"'
+    assert r.content == jsonl(rows).encode("ascii") and r.content.isascii()  # control and bidi characters arrive escaped
+    assert [json.loads(x) for x in r.text.splitlines()] == rows and rows[0]["note"] == hostile
+
+
+def test_decisions_of_a_case_that_is_not_there_are_404(case):
+    client, _, _ = case
+    for url in ("decisions", "decisions.jsonl"):
+        assert client.get(f"/api/cases/{ABSENT}/{url}").status_code == 404, url
+
+
+def test_a_trail_that_does_not_verify_gives_no_decisions_and_the_reason_without_a_path(case):
+    client, cid, data = case
+    path = data / "cases" / cid / "audit.jsonl"
+    lines = path.read_bytes().splitlines()
+    lines[1] = lines[1].replace(b"file_ingested", b"file_ingestes")
+    path.write_bytes(b"\n".join(lines) + b"\n")
+    for url in ("decisions", "decisions.jsonl"):
+        r = client.get(f"/api/cases/{cid}/{url}")
+        assert r.status_code == 409 and "does not verify" in r.json()["detail"] and "event 2" in r.json()["detail"], url
+        assert str(data) not in r.text and "content-disposition" not in r.headers  # nothing is offered as a file
+
+
+def test_a_case_file_that_cannot_be_read_gives_a_plain_error_on_the_decisions_with_no_path_in_it(case):
+    client, cid, data = case
+    CaseDir.open(data, cid).case_json.write_bytes(b"{not json")
+    for url in ("decisions", "decisions.jsonl"):
+        r = client.get(f"/api/cases/{cid}/{url}")
+        assert r.status_code == 500 and r.json() == {"detail": "the case files cannot be read (ValidationError)"}, url
+        assert str(data) not in r.text and cid not in r.text
