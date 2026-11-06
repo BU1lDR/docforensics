@@ -1,0 +1,1302 @@
+{
+ "run": {
+  "split": "ext-dev",
+  "when": "06 Nov 2026 13:41",
+  "commit": "b892e5c",
+  "dirty": false,
+  "seconds": 534.9762598999996,
+  "peak_mb": 761.8,
+  "machine": "Windows 10, Python 3.11.9"
+ },
+ "rows": [
+  {
+   "case": "ext-dev-h-0000",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 0.93,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 17.73,
+     "hash_bits": 5,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0001",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 0.91,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 0,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0002",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 0.94,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 30.53,
+     "hash_bits": 6,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0003",
+   "kind": "genuine",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 10.18,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 23.11,
+     "hash_bits": 11,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0004",
+   "kind": "signature",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 9.0,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 5,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0005",
+   "kind": "stamp",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 10.26,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 19.8,
+     "hash_bits": 8,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0006",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 0.98,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 44.16,
+     "hash_bits": 12,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0007",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 0.98,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 4,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0008",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 0.99,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 13.69,
+     "hash_bits": 1,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0009",
+   "kind": "genuine",
+   "medium": "150dpi",
+   "layout": "A",
+   "seconds": 13.93,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 20.31,
+     "hash_bits": 8,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0010",
+   "kind": "signature",
+   "medium": "150dpi",
+   "layout": "A",
+   "seconds": 9.58,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 1.0,
+     "hash_bits": 8,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0011",
+   "kind": "stamp",
+   "medium": "150dpi",
+   "layout": "A",
+   "seconds": 13.42,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 18.37,
+     "hash_bits": 14,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0012",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.43,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 23.53,
+     "hash_bits": 5,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0013",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.45,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 0,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0014",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.47,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 10.33,
+     "hash_bits": 7,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0015",
+   "kind": "genuine",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 13.06,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 22.83,
+     "hash_bits": 14,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0016",
+   "kind": "signature",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 11.46,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.12,
+     "hash_bits": 3,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0017",
+   "kind": "stamp",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 12.29,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 30.63,
+     "hash_bits": 7,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0018",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.1,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 22.68,
+     "hash_bits": 6,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0019",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.07,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 0,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0020",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.06,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 20.07,
+     "hash_bits": 2,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0021",
+   "kind": "genuine",
+   "medium": "120dpi",
+   "layout": "A",
+   "seconds": 12.35,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 38.23,
+     "hash_bits": 8,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0022",
+   "kind": "signature",
+   "medium": "120dpi",
+   "layout": "A",
+   "seconds": 12.38,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 3.0,
+     "hash_bits": 8,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0023",
+   "kind": "stamp",
+   "medium": "120dpi",
+   "layout": "A",
+   "seconds": 11.54,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 10.97,
+     "hash_bits": 3,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0024",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.09,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 31.31,
+     "hash_bits": 10,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0025",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.2,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 3,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0026",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.09,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 36.0,
+     "hash_bits": 10,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0027",
+   "kind": "genuine",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 12.15,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 14.1,
+     "hash_bits": 7,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0028",
+   "kind": "signature",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 11.14,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.53,
+     "hash_bits": 0,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0029",
+   "kind": "stamp",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 12.26,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 9.31,
+     "hash_bits": 11,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0030",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.1,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 16.26,
+     "hash_bits": 2,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0031",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.14,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 1,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0032",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.23,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 9.56,
+     "hash_bits": 4,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0033",
+   "kind": "genuine",
+   "medium": "150dpi",
+   "layout": "A",
+   "seconds": 10.98,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 12.86,
+     "hash_bits": 8,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0034",
+   "kind": "signature",
+   "medium": "150dpi",
+   "layout": "A",
+   "seconds": 12.21,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 2,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0035",
+   "kind": "stamp",
+   "medium": "150dpi",
+   "layout": "A",
+   "seconds": 12.2,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 17.64,
+     "hash_bits": 9,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0036",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.32,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 20.13,
+     "hash_bits": 6,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0037",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.08,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 1,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0038",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.11,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 8.79,
+     "hash_bits": 0,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0039",
+   "kind": "genuine",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 12.38,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 12.69,
+     "hash_bits": 2,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0040",
+   "kind": "signature",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 11.41,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.62,
+     "hash_bits": 3,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0041",
+   "kind": "stamp",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 11.71,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 13.51,
+     "hash_bits": 9,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0042",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.2,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 15.93,
+     "hash_bits": 4,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0043",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.11,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 1,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0044",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.09,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 11.07,
+     "hash_bits": 6,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0045",
+   "kind": "genuine",
+   "medium": "120dpi",
+   "layout": "A",
+   "seconds": 12.26,
+   "pairs": [],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0046",
+   "kind": "signature",
+   "medium": "120dpi",
+   "layout": "A",
+   "seconds": 11.96,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 6.72,
+     "hash_bits": 3,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0047",
+   "kind": "stamp",
+   "medium": "120dpi",
+   "layout": "A",
+   "seconds": 12.41,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 32.29,
+     "hash_bits": 13,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0048",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.24,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 35.0,
+     "hash_bits": 16,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0049",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.13,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 1,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0050",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.11,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 15.81,
+     "hash_bits": 6,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0051",
+   "kind": "genuine",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 12.03,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 42.49,
+     "hash_bits": 4,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0052",
+   "kind": "signature",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 12.83,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 5,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0053",
+   "kind": "stamp",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 12.11,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 24.65,
+     "hash_bits": 9,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0054",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.08,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 16.59,
+     "hash_bits": 10,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0055",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.16,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 0,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0056",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.1,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 23.92,
+     "hash_bits": 9,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0057",
+   "kind": "genuine",
+   "medium": "150dpi",
+   "layout": "A",
+   "seconds": 12.18,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 19.43,
+     "hash_bits": 6,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0058",
+   "kind": "signature",
+   "medium": "150dpi",
+   "layout": "A",
+   "seconds": 11.36,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 7,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0059",
+   "kind": "stamp",
+   "medium": "150dpi",
+   "layout": "A",
+   "seconds": 12.45,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 29.01,
+     "hash_bits": 13,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0060",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.17,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 22.9,
+     "hash_bits": 7,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0061",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.19,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 3,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0062",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.19,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 29.43,
+     "hash_bits": 7,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0063",
+   "kind": "genuine",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 12.42,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 22.84,
+     "hash_bits": 12,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0064",
+   "kind": "signature",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 11.5,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.16,
+     "hash_bits": 4,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0065",
+   "kind": "stamp",
+   "medium": "mild",
+   "layout": "A",
+   "seconds": 11.92,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 31.79,
+     "hash_bits": 10,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0066",
+   "kind": "genuine",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.21,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 19.06,
+     "hash_bits": 7,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0067",
+   "kind": "signature",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.19,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 0.0,
+     "hash_bits": 0,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0068",
+   "kind": "stamp",
+   "medium": "digital",
+   "layout": "A",
+   "seconds": 1.16,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 19.39,
+     "hash_bits": 4,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  },
+  {
+   "case": "ext-dev-h-0069",
+   "kind": "genuine",
+   "medium": "120dpi",
+   "layout": "A",
+   "seconds": 13.05,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 36.68,
+     "hash_bits": 15,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0070",
+   "kind": "signature",
+   "medium": "120dpi",
+   "layout": "A",
+   "seconds": 12.18,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 1.01,
+     "hash_bits": 3,
+     "repeat": true
+    }
+   ],
+   "found": true,
+   "stray": 0,
+   "compared": true
+  },
+  {
+   "case": "ext-dev-h-0071",
+   "kind": "stamp",
+   "medium": "120dpi",
+   "layout": "A",
+   "seconds": 12.02,
+   "pairs": [
+    {
+     "kind": "signature",
+     "ink": 18.14,
+     "hash_bits": 5,
+     "repeat": false
+    }
+   ],
+   "found": false,
+   "stray": 0,
+   "compared": false
+  }
+ ]
+}
