@@ -45,6 +45,10 @@ NOTES = {"off-grid": "The hosts were saved at qualities 82, 47 and 33 (the pack'
                          "qualities, 71 and 59, stand in for the host quality in the pack's `expect` rule. The last saves are libjpeg's."}
 PRESET = {71: "web_medium", 59: "web_low"}
 KNOBS = ("QUALITIES", "GAP", "MIN_DIP", "INK", "BLOCK", "MIN_INK", "Z", "MAX_DIP", "MIN_CELLS", "MIN_RATIO", "LISTED")
+# A page whose last save is under this has no quality at least GAP below it to look for an earlier save at: the check cannot examine it, and
+# "no region" on such a scan says nothing, so the reports count those scans next to every count of false flags.
+LOW = ela_module.QUALITIES[1] + ela_module.GAP
+CANNOT = f"last save under quality {LOW}, or none found"
 
 
 def _git(*args: str) -> str:
@@ -52,6 +56,10 @@ def _git(*args: str) -> str:
         return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, timeout=30).stdout.strip()
     except (OSError, subprocess.SubprocessError):
         return ""
+
+
+def cannot_examine(row: dict) -> bool:
+    return row["final"] is None or row["final"] < LOW
 
 
 def touches(a, b) -> bool:
@@ -103,7 +111,8 @@ def format_report(split: str, mode: str, rows: list[dict], run: dict) -> str:
            "earlier one). That is fixed in datagen/ela_pack.py. Located: a region whose IoU with the edited box is above "
            f"{LOCATED}. Stray: a region that does not touch the edited box.", "", "## In short", "",
            f"- Scans without an edit ({c['n']}): a region on {c['region']}, which is a false flag"
-           + (f" ({names([r for r in controls if r['regions']])})." if c["region"] else "."),
+           + (f" ({names([r for r in controls if r['regions']])})." if c["region"] else ".")
+           + (f" {sum(map(cannot_examine, controls))} of them cannot be examined ({CANNOT})." if mode == "pixels" else ""),  # the other mode does not record the saves
            f"- Edits the check is meant to see ({s['n']}): a region at the edit on {s['located']}; a region anywhere on {s['region']}; "
            f"a stray region on {s['stray']}" + (f" ({names([r for r in seen if r['stray']])})." if s["stray"] else "."),
            f"- Edits it cannot see ({b['n']}, listed apart, not claimed): a region anyway on {b['region']}, touching the edit on {b['touch']}, at the edit (IoU above {LOCATED}) on {b['located']}"
@@ -199,6 +208,8 @@ def format_dev(rows: list[dict], n: int, run: dict) -> str:
         line = f"- {label}: {len(sel)} scans, a region on {sum(r['regions'] > 0 for r in sel)}"
         if key in ("S1", "S2"):
             line += f", touching the edit on {sum(r['touch'] for r in sel)}, at the edit (IoU above {LOCATED}) on {sum(r['located'] for r in sel)}"
+        else:
+            line += f"; {sum(map(cannot_examine, sel))} of the {len(sel)} cannot be examined ({CANNOT})"
         out.append(line + ".")
     out += ["", "## S1 and S2 scans", "", "| case | file | edit | level | last save found | earlier save found | regions | touching | located |", "|---|---|---|---|---|---|---|---|---|"]
     for r in (r for r in rows if r["key"] in ("S1", "S2")):
