@@ -55,6 +55,8 @@ const state = {
   caps: null,
   rel: null,      // the relationship view of the open case, as the server worked it out
   relSel: null,   // the box picked in it: a document, entity or finding id
+  relError: null, // why it could not be loaded, shown in its place
+  relBusy: false, // a request for it is on its way
 };
 
 const $ = (id) => document.getElementById(id);
@@ -132,7 +134,7 @@ async function api(url, opts) {
 
 async function openCase(id, finding) {
   clearTimeout(state.timer);
-  Object.assign(state, {id, info: null, doc: null, page: 1, finding: finding || null, mark: null, audit: null, rel: null, relSel: null});
+  Object.assign(state, {id, info: null, doc: null, page: 1, finding: finding || null, mark: null, audit: null, rel: null, relSel: null, relError: null, relBusy: false});
   history.replaceState(null, "", finding ? `#${id}/${finding}` : `#${id}`);
   say("");
   render();
@@ -767,15 +769,19 @@ async function loadRelations() {
     renderRelations();
     return;
   }
+  if (state.relBusy) return;
   const id = state.id;
+  Object.assign(state, {relBusy: true, relError: null});
+  renderRelations();
   try {
     const r = await api(`${cases()}/relations`);
-    if (state.id === id) {
-      state.rel = r;
-      renderRelations();
-    }
+    if (state.id === id) state.rel = r;
   } catch (e) {
-    say(`The relationship view could not be loaded: ${e.message}`, true);
+    if (state.id === id) state.relError = e.message;
+  }
+  if (state.id === id) {
+    state.relBusy = false;
+    renderRelations();
   }
 }
 
@@ -926,6 +932,11 @@ function renderRelations() {
   const box = $("relations");
   box.replaceChildren();
   const r = state.rel;
+  if (!r && state.relError) {
+    box.append(h("p", {class: "bad"}, `The relationship view could not be loaded: ${state.relError}`),
+      h("button", {type: "button", click: loadRelations}, "Try again"));
+    return;
+  }
   if (!r) {
     const wait = data() ? "Loading the relationship view..." : state.info ? "The relationship view appears when the analysis finishes." : "No case open.";
     box.append(h("p", {class: "empty"}, wait));

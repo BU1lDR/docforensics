@@ -181,8 +181,11 @@ def create_app(data_root: Path | str, th: Thresholds | None = None, llm: OllamaC
     @app.get("/api/cases/{case_id}/relations")
     def relations(case_id: str):
         cd = settled(case_id)
-        with edit_lock:
-            case = load_case(cd)
+        try:
+            with edit_lock:
+                case = load_case(cd)
+        except (ValueError, OSError) as e:  # said in a line, as case_status says it: an OS error would carry the path
+            raise HTTPException(500, f"case.json cannot be read ({type(e).__name__})")
         return build_relations(case, th)
 
     def dossier_download(case_id: str, kind: str) -> Response:

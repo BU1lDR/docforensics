@@ -372,6 +372,14 @@ def test_relations_are_worked_out_from_the_case_on_request(case):
     assert client.get(f"/api/cases/{ABSENT}/relations").status_code == 404
 
 
+def test_a_case_file_that_cannot_be_read_is_a_plain_error_on_the_relationship_view_with_no_path_in_it(case):
+    client, cid, data = case
+    CaseDir.open(data, cid).case_json.write_bytes(b"{not json")
+    got = client.get(f"/api/cases/{cid}/relations")
+    assert got.status_code == 500 and got.json() == {"detail": "case.json cannot be read (ValidationError)"}
+    assert str(data) not in got.text and cid not in got.text
+
+
 def test_capabilities_are_served_from_the_one_matrix(case):
     client, _, _ = case
     assert client.get("/api/capabilities").json() == load_capabilities()
