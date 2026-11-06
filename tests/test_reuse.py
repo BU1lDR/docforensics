@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import pytest
 
-from datagen import reuse_pack
+from datagen import reuse_pack, signatures
 from datagen.fictional import identity
 from datagen.layouts.application import draw_application
 from datagen.layouts.payslip import draw_payslip
@@ -121,6 +121,40 @@ def test_a_genuine_case_is_compared_and_raises_nothing(tmp_path):
     assert reuse_findings(case) == []
     (done,) = compared(events)
     assert done["kind"] == "signature" and done["repeat"] is False and done["limit_ink"] == TH.repeat_ink and done["ink"] > done["limit_ink"]
+
+
+def test_the_fill_of_a_canvas_is_its_share_of_ink_without_the_padding():
+    from docforensics.forensics.reuse import fill
+    assert fill(np.pad(np.ones((64, 192), bool), 4), 4) == 1.0 and 0.0 < fill(squiggle(3), 4) < 0.2
+
+
+def test_a_compared_pair_logs_how_much_of_each_canvas_is_ink_and_a_hand_stays_under_the_limit(tmp_path):
+    files, _ = pack_files(tmp_path, "genuine")
+    _, events = run(tmp_path, *files)
+    (done,) = compared(events, "signature")
+    assert len(done["fill"]) == 2 and all(0 < x < 0.5 for x in done["fill"])
+
+
+def test_a_plain_stroke_in_the_place_of_the_signatures_is_skipped_and_the_skip_is_logged(tmp_path, monkeypatch):
+    """A printed rule, a dot or a smudge above the caption is cut to its box and scaled to the canvas like a signature. A bar then fills
+    the canvas whatever its length, and any two bars are the same image: not a signature to compare."""
+    drawn = []
+
+    def stroke(sheet, person, rng, x, caption_y):
+        drawn.append(1)
+        n = len(drawn)
+        y = caption_y - signatures.GAP - signatures.H * 0.5
+        x1 = x + 50 + 25 * n
+        sheet.page.draw_polyline([(x, y), (x1, y)], color=signatures.INK, width=2.0 + n)
+        sheet.region("signature", x - 1, y - 2 - n, x1 + 1, y + 2 + n)
+
+    monkeypatch.setattr(signatures, "draw", stroke)
+    files, _ = pack_files(tmp_path, "genuine")
+    case, events = run(tmp_path, *files)
+    skipped = [e.data for e in events if e.event == "reuse_skipped"]
+    assert len(drawn) == 2 and len(skipped) == 2  # the strokes were found, and not taken for signatures
+    assert all(s["fill"] > s["limit_fill"] for s in skipped)
+    assert reuse_findings(case) == [] and compared(events) == []
 
 
 def test_a_document_submitted_twice_is_not_reported_again_for_its_marks(tmp_path):

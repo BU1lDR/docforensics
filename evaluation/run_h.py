@@ -25,6 +25,7 @@ from datagen import reuse_pack
 from docforensics.audit import AuditLog
 from docforensics.config import Thresholds
 from docforensics.forensics import run_forensics
+from docforensics.forensics.reuse import _MAX_FILL
 from docforensics.ingest import create_case
 from docforensics.pipeline import run_case
 from docforensics.read import read_stage
@@ -38,6 +39,11 @@ KINDS = ("signature", "stamp")  # the kinds of case the pack makes; only the sig
 LIMITS = (0.5, 1.0, 2.0, 3.0, 5.0, 8.0, 10.0, 15.0)  # the limits the counts are repeated at, to show what the choice costs
 
 
+def was_compared(kind: str, pairs: list[dict]) -> bool:
+    """Whether a pair of the kind a case plants was compared (a genuine case plants none, and is compared when a pair of signatures was)."""
+    return any(d["kind"] == ("signature" if kind == "genuine" else kind) for d in pairs)
+
+
 def run_one(p: dict, th: Thresholds, tmp: Path) -> dict:
     files, entry = reuse_pack.build_pack_case(p)
     t0 = time.perf_counter()
@@ -46,7 +52,8 @@ def run_one(p: dict, th: Thresholds, tmp: Path) -> dict:
     seconds = time.perf_counter() - t0
     names = {c.id: c.filename for c in case.documents}
     truth = {r["kind"]: {n: b[1:] for n, b in r["boxes"].items()} for r in entry["reuse"]}
-    pairs = [{k: e.data[k] for k in ("kind", "ink", "hash_bits", "repeat")} for e in AuditLog(cd.audit_path).events() if e.event == "reuse_compared"]
+    events = AuditLog(cd.audit_path).events()
+    pairs = [{k: e.data[k] for k in ("kind", "ink", "hash_bits", "repeat", "fill")} for e in events if e.event == "reuse_compared"]
     found, stray = False, 0
     for f in (f for f in case.findings if f.detector == "reuse"):
         kind = f.evidence[0].note.split()[0]
@@ -57,7 +64,8 @@ def run_one(p: dict, th: Thresholds, tmp: Path) -> dict:
         else:
             stray += 1
     return {"case": p["case"], "kind": p["kind"], "medium": p["medium"], "layout": p["layout"], "seconds": round(seconds, 2), "pairs": pairs,
-            "found": found, "stray": stray, "compared": p["kind"] == "genuine" or any(d["kind"] == p["kind"] for d in pairs)}
+            "found": found, "stray": stray, "compared": was_compared(p["kind"], pairs),
+            "skipped": sum(e.event == "reuse_skipped" for e in events)}
 
 
 def gaps(rows: list[dict], copies: bool, media=None, key: str = "ink") -> list[float]:
@@ -90,17 +98,22 @@ def format_report(rows: list[dict], run: dict) -> str:
                 L.append(f"| {kind} | {medium} | {len(sub)} | {sum(r['found'] for r in sub)} | {sum(not r['compared'] for r in sub)} | {sum(r['stray'] for r in sub)} |")
         sub = [r for r in rows if r["kind"] == kind]
         L.append(f"| **{kind}** | all | {len(sub)} | {sum(r['found'] for r in sub)} | {sum(not r['compared'] for r in sub)} | {sum(r['stray'] for r in sub)} |")
-    L += ["", "## Genuine cases (every document signed afresh)", "", "| Medium | Cases | Cases with a reuse observation | Observations |", "|---|---|---|---|"]
+    L += ["", "## Genuine cases (every document signed afresh)", "", "| Medium | Cases | Not compared | Cases with a reuse observation | Observations |", "|---|---|---|---|---|"]
     for medium in (*MEDIA, None):
         sub = [r for r in rows if r["kind"] == "genuine" and (medium is None or r["medium"] == medium)]
         if sub:
-            L.append(f"| {medium or '**all**'} | {len(sub)} | {sum(r['stray'] > 0 for r in sub)} | {sum(r['stray'] for r in sub)} |")
+            L.append(f"| {medium or '**all**'} | {len(sub)} | {sum(not r['compared'] for r in sub)} | {sum(r['stray'] > 0 for r in sub)} | {sum(r['stray'] for r in sub)} |")
     scanned = ("mild", "150dpi", "120dpi")
     L += ["", "## The ink gap of the compared signature pairs (%)", "", "Repeated pairs are the pair in a case that repeats the signature; separate pairs are "
           "every other pair, which two signings made.", "", "| Pair | Medium | Pairs | Smallest | Median | Largest |", "|---|---|---|---|---|---|"]
     for copies in (True, False):
         for label, media in (("digital", ("digital",)), ("scanned", scanned), ("all", None)):
             L.append(f"| {'repeated' if copies else 'separate'} | {label} | {stats(gaps(rows, copies, media))} |")
+    fills = [x for r in rows for d in r["pairs"] for x in d.get("fill", [])]
+    if fills:
+        L += ["", f"Ink share of the canvases of the compared signatures (two to a pair): smallest {min(fills):.2f}, median {statistics.median(fills):.2f}, "
+              f"largest {max(fills):.2f}. A mark that fills more than {_MAX_FILL:g} of its canvas is a bar, a dot or a block and is not compared: "
+              f"{sum(r.get('skipped', 0) for r in rows)} marks skipped."]
     L += ["", "## The same counts at other limits", "", "Repeated pairs at or under the limit would be found; separate pairs at or under it would be false observations.", "",
           "| Limit (%) | Repeated pairs found | Separate pairs flagged |", "|---|---|---|"]
     c, s = gaps(rows, True), gaps(rows, False)
