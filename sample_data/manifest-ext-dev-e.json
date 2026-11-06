@@ -1,0 +1,59 @@
+{
+ "split": "ext-dev",
+ "pack": "e",
+ "cases": [
+  {
+   "case": "ext-dev-e-0000",
+   "seed": 3100000,
+   "kind": "genuine",
+   "level": "mild",
+   "layout": "A",
+   "file": "scan.jpg",
+   "host_quality": 85,
+   "final_quality": 85,
+   "expect": "none",
+   "box": null,
+   "shift": null,
+   "note": "the scan as saved",
+   "sha256": "fe1fb4c8f36e4347120b7c0986cf987223ba9e21f729b9db624888f333a58adb"
+  },
+  {
+   "case": "ext-dev-e-0002",
+   "seed": 3100002,
+   "kind": "pasted-field",
+   "level": "mild",
+   "layout": "A",
+   "file": "scan.jpg",
+   "host_quality": 85,
+   "final_quality": 95,
+   "expect": "seen",
+   "box": [
+    420,
+    589,
+    547,
+    642
+   ],
+   "shift": [
+    3,
+    5
+   ],
+   "note": "a region of another payslip's scan pasted in off the JPEG grid",
+   "sha256": "53b2f19749cc1690f95c0764558e2557d0e6194dc687cff56f10fec88540b4fa"
+  },
+  {
+   "case": "ext-dev-e-0012",
+   "seed": 3100012,
+   "kind": "genuine",
+   "level": "120dpi",
+   "layout": "A",
+   "file": "scan.jpg",
+   "host_quality": 35,
+   "final_quality": 35,
+   "expect": "none",
+   "box": null,
+   "shift": null,
+   "note": "the scan as saved",
+   "sha256": "a6dcfda175ebd1d4641ec87c3faeae08893ca96f74f386d2d98bfaf00711aa03"
+  }
+ ]
+}

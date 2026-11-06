@@ -18,7 +18,7 @@ from pathlib import Path
 
 import pytest
 
-from datagen.sample import CASES as BUILT, SPLIT, build_sample
+from datagen.sample import CASES as BUILT, PACKS, SPLIT, build_sample
 from docforensics.audit import AuditLog
 from docforensics.cli import main
 from docforensics.config import Thresholds
@@ -77,7 +77,9 @@ def moment(text: str) -> datetime:
 def test_the_manifest_describes_the_files_beside_it():
     m = manifest()
     assert m["split"] == "dev"
-    assert [e["case"] for e in m["cases"]] == list(EXPECT) == sorted(p.name for p in SAMPLE.iterdir() if p.is_dir())
+    assert [e["case"] for e in m["cases"]] == list(EXPECT)
+    # beside the five cases are the pack cases, which tests/test_e2e_sample_packs.py checks against their own manifests
+    assert sorted(p.name for p in SAMPLE.iterdir() if p.is_dir()) == sorted([*EXPECT, *(n for names in PACKS.values() for n in names)])
     for e in m["cases"]:
         assert {n: sha256(d) for n, d in files_of(e["case"])} == {d["file"]: d["sha256"] for d in e["docs"]}, e["case"]
 
