@@ -1,8 +1,8 @@
 {
  "overview": {
-  "case": "C-20261106-132300-1a1a",
-  "created": "2026-11-06T13:23:00+00:00",
-  "generated": "2026-11-06T13:23:45+00:00",
+  "case": "C-20261106-175405-c56d",
+  "created": "2026-11-06T17:54:05+00:00",
+  "generated": "2026-11-06T17:54:50+00:00",
   "tool": {
    "name": "docforensics",
    "version": "0.1.0"
@@ -4968,11 +4968,11 @@
    "events": [
     {
      "seq": 1,
-     "ts": "2026-11-06T13:23:00.343+00:00",
+     "ts": "2026-11-06T17:54:05.079+00:00",
      "actor": "system",
      "event": "case_created",
      "data": {
-      "case": "C-20261106-132300-1a1a",
+      "case": "C-20261106-175405-c56d",
       "thresholds": {
        "low_conf": 0.6,
        "amount_abs": 1.0,
@@ -5012,11 +5012,11 @@
       }
      },
      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-     "hash": "6ed9092307aeec9d5c653a6d85b943f0064c8327a7a66c06a3db695bc4b10061"
+     "hash": "1d73f565165007d7fa1e9c9de570f1be6064496b6bd5017b5243d74365f2e50f"
     },
     {
      "seq": 2,
-     "ts": "2026-11-06T13:23:00.352+00:00",
+     "ts": "2026-11-06T17:54:05.087+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -5026,12 +5026,12 @@
       "size": 38236,
       "type": "pdf"
      },
-     "prev_hash": "6ed9092307aeec9d5c653a6d85b943f0064c8327a7a66c06a3db695bc4b10061",
-     "hash": "9f17cea546a97cb86d95b6ad43d6ff29f9c39f7baba2d5ead193374254f8481a"
+     "prev_hash": "1d73f565165007d7fa1e9c9de570f1be6064496b6bd5017b5243d74365f2e50f",
+     "hash": "13bbd35a6f7d7f143f496fc3c891086e4c6073ac7d54c78623f99cd74f89b21c"
     },
     {
      "seq": 3,
-     "ts": "2026-11-06T13:23:00.360+00:00",
+     "ts": "2026-11-06T17:54:05.096+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -5041,12 +5041,12 @@
       "size": 9719,
       "type": "pdf"
      },
-     "prev_hash": "9f17cea546a97cb86d95b6ad43d6ff29f9c39f7baba2d5ead193374254f8481a",
-     "hash": "315be075cf14d98beea4d3150c01148940ad77afc67f3837b05a83f74f1e2fba"
+     "prev_hash": "13bbd35a6f7d7f143f496fc3c891086e4c6073ac7d54c78623f99cd74f89b21c",
+     "hash": "71c844fd68a7d58dec4923b2cd686b86ea58efbc5e8388f2573d0c2806ea261f"
     },
     {
      "seq": 4,
-     "ts": "2026-11-06T13:23:00.368+00:00",
+     "ts": "2026-11-06T17:54:05.104+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -5056,12 +5056,12 @@
       "size": 8471,
       "type": "pdf"
      },
-     "prev_hash": "315be075cf14d98beea4d3150c01148940ad77afc67f3837b05a83f74f1e2fba",
-     "hash": "4af172ef308e67c235c5b9cfda6ba480a6a6b5a969894df06f212032ead11227"
+     "prev_hash": "71c844fd68a7d58dec4923b2cd686b86ea58efbc5e8388f2573d0c2806ea261f",
+     "hash": "62a2c88bec9f930596cf995ad48f1a19cfeedd10f63a8c65bd62a627e9546a70"
     },
     {
      "seq": 5,
-     "ts": "2026-11-06T13:23:00.475+00:00",
+     "ts": "2026-11-06T17:54:05.222+00:00",
      "actor": "system",
      "event": "run_started",
      "data": {
@@ -5078,23 +5078,23 @@
        "pydantic": "2.14.2"
       }
      },
-     "prev_hash": "4af172ef308e67c235c5b9cfda6ba480a6a6b5a969894df06f212032ead11227",
-     "hash": "9892752918f2f230109548b7db19ec57838e283054574d980d61dc91ffe23f65"
+     "prev_hash": "62a2c88bec9f930596cf995ad48f1a19cfeedd10f63a8c65bd62a627e9546a70",
+     "hash": "519e8a45218fced48602507a161a2c6802223c14ea2026e3887294f7206d7908"
     },
     {
      "seq": 6,
-     "ts": "2026-11-06T13:23:00.481+00:00",
+     "ts": "2026-11-06T17:54:05.231+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "read"
      },
-     "prev_hash": "9892752918f2f230109548b7db19ec57838e283054574d980d61dc91ffe23f65",
-     "hash": "78625c556b16afe04a00eba2289c0800795c16b8aebc8447417bad8f2c715db4"
+     "prev_hash": "519e8a45218fced48602507a161a2c6802223c14ea2026e3887294f7206d7908",
+     "hash": "678d81c2388f720773015064fbc50ecf43a9ca83c8b001c5f4b36424bd70ebc8"
     },
     {
      "seq": 7,
-     "ts": "2026-11-06T13:23:00.627+00:00",
+     "ts": "2026-11-06T17:54:05.380+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -5103,12 +5103,12 @@
       "kind": "pdf-digital",
       "words": 223
      },
-     "prev_hash": "78625c556b16afe04a00eba2289c0800795c16b8aebc8447417bad8f2c715db4",
-     "hash": "901711d2dc0dd008bfeccfa6b5f559c76f31a97897820560f53787c95505d524"
+     "prev_hash": "678d81c2388f720773015064fbc50ecf43a9ca83c8b001c5f4b36424bd70ebc8",
+     "hash": "7acdb23af5b8e87cba7de3e836ba087d04195b7e45263c1370f9cede715e0162"
     },
     {
      "seq": 8,
-     "ts": "2026-11-06T13:23:00.695+00:00",
+     "ts": "2026-11-06T17:54:05.458+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -5117,12 +5117,12 @@
       "kind": "pdf-digital",
       "words": 85
      },
-     "prev_hash": "901711d2dc0dd008bfeccfa6b5f559c76f31a97897820560f53787c95505d524",
-     "hash": "33f78e56feff190f7412db97f4ca577bb1ab0fb229d55f227286bff5e90531c1"
+     "prev_hash": "7acdb23af5b8e87cba7de3e836ba087d04195b7e45263c1370f9cede715e0162",
+     "hash": "e51d338386b56afa6098ce8be88e984c62d9e28cdcfb2e44ebcb0471f7346f98"
     },
     {
      "seq": 9,
-     "ts": "2026-11-06T13:23:00.775+00:00",
+     "ts": "2026-11-06T17:54:05.530+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -5131,12 +5131,12 @@
       "kind": "pdf-digital",
       "words": 72
      },
-     "prev_hash": "33f78e56feff190f7412db97f4ca577bb1ab0fb229d55f227286bff5e90531c1",
-     "hash": "c5ddf3bbe54c588ab24afedc64152f514fcef8a42132beaffd84bd88f625d6ac"
+     "prev_hash": "e51d338386b56afa6098ce8be88e984c62d9e28cdcfb2e44ebcb0471f7346f98",
+     "hash": "bc6bd1b312f94d81828f2d5ad39ef168782d76b20b301ebff57517e2516b5163"
     },
     {
      "seq": 10,
-     "ts": "2026-11-06T13:23:00.775+00:00",
+     "ts": "2026-11-06T17:54:05.538+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
@@ -5146,23 +5146,23 @@
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "c5ddf3bbe54c588ab24afedc64152f514fcef8a42132beaffd84bd88f625d6ac",
-     "hash": "b7711f4048e1192f6fd68ef06fb66359f2c76c3372928cfe4a45454e9db9497d"
+     "prev_hash": "bc6bd1b312f94d81828f2d5ad39ef168782d76b20b301ebff57517e2516b5163",
+     "hash": "2453b2b2f8771c9caf8fb4b754b2022618cf880c9f11f367635ec4f3fd53c4a7"
     },
     {
      "seq": 11,
-     "ts": "2026-11-06T13:23:00.791+00:00",
+     "ts": "2026-11-06T17:54:05.548+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "classify"
      },
-     "prev_hash": "b7711f4048e1192f6fd68ef06fb66359f2c76c3372928cfe4a45454e9db9497d",
-     "hash": "b6e85649a8e504c03b420d675827dff8f810856814dc79f1235524c710b4ae26"
+     "prev_hash": "2453b2b2f8771c9caf8fb4b754b2022618cf880c9f11f367635ec4f3fd53c4a7",
+     "hash": "00962e68df3ae11d0242d67faa1b0963f38574182c86ad88ef84c063c9ec4340"
     },
     {
      "seq": 12,
-     "ts": "2026-11-06T13:23:00.838+00:00",
+     "ts": "2026-11-06T17:54:05.594+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -5170,12 +5170,12 @@
       "type": "bank_statement",
       "conf": 1.0
      },
-     "prev_hash": "b6e85649a8e504c03b420d675827dff8f810856814dc79f1235524c710b4ae26",
-     "hash": "660001ce4efc750cb792c93af71c835ec74dd44295e2cad25f5028586363827d"
+     "prev_hash": "00962e68df3ae11d0242d67faa1b0963f38574182c86ad88ef84c063c9ec4340",
+     "hash": "69c35a73d57bb2a0266ca004f90c2860d10136af145973b425c0999c07b10548"
     },
     {
      "seq": 13,
-     "ts": "2026-11-06T13:23:00.874+00:00",
+     "ts": "2026-11-06T17:54:05.625+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -5183,12 +5183,12 @@
       "type": "payslip",
       "conf": 1.0
      },
-     "prev_hash": "660001ce4efc750cb792c93af71c835ec74dd44295e2cad25f5028586363827d",
-     "hash": "3ecf0f4f4cfd7278238cef3dfabe50f9aef2525bf2d194087db5bc234bbd9b69"
+     "prev_hash": "69c35a73d57bb2a0266ca004f90c2860d10136af145973b425c0999c07b10548",
+     "hash": "40d5def1e5456db29015edbeb4c92e988ce736542c06e6e54c5f1299cc5c054b"
     },
     {
      "seq": 14,
-     "ts": "2026-11-06T13:23:00.893+00:00",
+     "ts": "2026-11-06T17:54:05.652+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -5196,38 +5196,38 @@
       "type": "loan_application",
       "conf": 1.0
      },
-     "prev_hash": "3ecf0f4f4cfd7278238cef3dfabe50f9aef2525bf2d194087db5bc234bbd9b69",
-     "hash": "37f0096f22d973380a2a82a50f5b6b47cca6d4d846eac8a76fe3226e1b641ea8"
+     "prev_hash": "40d5def1e5456db29015edbeb4c92e988ce736542c06e6e54c5f1299cc5c054b",
+     "hash": "9971546897062a4b758f4b5ece7e2ed6fdb41a216048b4cb6491860992f6e146"
     },
     {
      "seq": 15,
-     "ts": "2026-11-06T13:23:00.909+00:00",
+     "ts": "2026-11-06T17:54:05.660+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "classify",
       "ok": true,
-      "seconds": 0.109,
+      "seconds": 0.094,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "37f0096f22d973380a2a82a50f5b6b47cca6d4d846eac8a76fe3226e1b641ea8",
-     "hash": "41315fd8bd3ace57f771122ecf3030e2c4f22b512c8dfd3cb185b2266660ba2b"
+     "prev_hash": "9971546897062a4b758f4b5ece7e2ed6fdb41a216048b4cb6491860992f6e146",
+     "hash": "527b1bbe809014c6633ba1332d0542de40b70e2d8454f1b3ad420e10e22ea790"
     },
     {
      "seq": 16,
-     "ts": "2026-11-06T13:23:00.915+00:00",
+     "ts": "2026-11-06T17:54:05.674+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "extract"
      },
-     "prev_hash": "41315fd8bd3ace57f771122ecf3030e2c4f22b512c8dfd3cb185b2266660ba2b",
-     "hash": "cba285545ee75faca3f77366011f906cc6eef366d7e4e274e4db02a48f4b3eef"
+     "prev_hash": "527b1bbe809014c6633ba1332d0542de40b70e2d8454f1b3ad420e10e22ea790",
+     "hash": "5d5c7fbc383bbf64f3ce1ef80a8406c1e0a6cbdf78b5175ee0cc20112a9f4475"
     },
     {
      "seq": 17,
-     "ts": "2026-11-06T13:23:00.957+00:00",
+     "ts": "2026-11-06T17:54:05.712+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -5236,12 +5236,12 @@
       "fields": 188,
       "empty": 36
      },
-     "prev_hash": "cba285545ee75faca3f77366011f906cc6eef366d7e4e274e4db02a48f4b3eef",
-     "hash": "c99b73f0ed18bf6b4bfee8c717fa1386fbed4f50c1c6feec86acd2bad993d002"
+     "prev_hash": "5d5c7fbc383bbf64f3ce1ef80a8406c1e0a6cbdf78b5175ee0cc20112a9f4475",
+     "hash": "e240db67847bd25a889b534868cc4d4b1f44208ec2467237bbad7d7397c7bc67"
     },
     {
      "seq": 18,
-     "ts": "2026-11-06T13:23:00.972+00:00",
+     "ts": "2026-11-06T17:54:05.740+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -5250,12 +5250,12 @@
       "fields": 27,
       "empty": 2
      },
-     "prev_hash": "c99b73f0ed18bf6b4bfee8c717fa1386fbed4f50c1c6feec86acd2bad993d002",
-     "hash": "774cd4a3c6095ae19221d01730dac962413633bf5961119359fbcec85252b5ef"
+     "prev_hash": "e240db67847bd25a889b534868cc4d4b1f44208ec2467237bbad7d7397c7bc67",
+     "hash": "7718ae4b921fc7b5f246ca55621ce036d5c4a54f05fc54775ce0e0a4de67aa76"
     },
     {
      "seq": 19,
-     "ts": "2026-11-06T13:23:01.009+00:00",
+     "ts": "2026-11-06T17:54:05.766+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -5264,38 +5264,38 @@
       "fields": 9,
       "empty": 0
      },
-     "prev_hash": "774cd4a3c6095ae19221d01730dac962413633bf5961119359fbcec85252b5ef",
-     "hash": "aec0c25cc41602c0435eb594f01909bd4dd6f41f14dc036ced940c684face992"
+     "prev_hash": "7718ae4b921fc7b5f246ca55621ce036d5c4a54f05fc54775ce0e0a4de67aa76",
+     "hash": "3ae69e99eb767ee6ea8648fbbca9a082efb34cbd85f561576b1cd13ecb6ad7d9"
     },
     {
      "seq": 20,
-     "ts": "2026-11-06T13:23:01.020+00:00",
+     "ts": "2026-11-06T17:54:05.774+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "extract",
       "ok": true,
-      "seconds": 0.109,
+      "seconds": 0.094,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "aec0c25cc41602c0435eb594f01909bd4dd6f41f14dc036ced940c684face992",
-     "hash": "90c3ace8991efc69caf557084329ba19658c7a8f6c83cda72b4441d305cd864d"
+     "prev_hash": "3ae69e99eb767ee6ea8648fbbca9a082efb34cbd85f561576b1cd13ecb6ad7d9",
+     "hash": "e500fa0456d794ce2b60dd7067f30f78701f1335dbd327396fe1c67dfc37730c"
     },
     {
      "seq": 21,
-     "ts": "2026-11-06T13:23:01.026+00:00",
+     "ts": "2026-11-06T17:54:05.785+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "forensics"
      },
-     "prev_hash": "90c3ace8991efc69caf557084329ba19658c7a8f6c83cda72b4441d305cd864d",
-     "hash": "2d8f03ef2f13e83ea51aeb3956a1e7c77de8f07d99bd3a9e8e93191084c2f585"
+     "prev_hash": "e500fa0456d794ce2b60dd7067f30f78701f1335dbd327396fe1c67dfc37730c",
+     "hash": "186ebca3cd84e466180a53ffb99461bafef8d10c571d53505d9879bee332c3c3"
     },
     {
      "seq": 22,
-     "ts": "2026-11-06T13:23:01.042+00:00",
+     "ts": "2026-11-06T17:54:05.808+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5304,12 +5304,12 @@
       "fclass": "observation",
       "title": "Text changed in revision 2 (page 1)"
      },
-     "prev_hash": "2d8f03ef2f13e83ea51aeb3956a1e7c77de8f07d99bd3a9e8e93191084c2f585",
-     "hash": "2fc6015aba5204375f38a2e5262c9991608fab8ddbb5accabe774ae73a2db7a7"
+     "prev_hash": "186ebca3cd84e466180a53ffb99461bafef8d10c571d53505d9879bee332c3c3",
+     "hash": "0c480fb4c88f98e7d93355de13190d0b7159a687066aacb88ddd4cb8e8c3aa97"
     },
     {
      "seq": 23,
-     "ts": "2026-11-06T13:23:01.058+00:00",
+     "ts": "2026-11-06T17:54:05.815+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5317,12 +5317,12 @@
       "detector": "revision_diff",
       "findings": 1
      },
-     "prev_hash": "2fc6015aba5204375f38a2e5262c9991608fab8ddbb5accabe774ae73a2db7a7",
-     "hash": "fbb781ba77a52e1ce562022cc33b3ea7ab8b0ff119586bd0cf66cb3442b1f7c8"
+     "prev_hash": "0c480fb4c88f98e7d93355de13190d0b7159a687066aacb88ddd4cb8e8c3aa97",
+     "hash": "413fc971c33fe5c976aa46e9a3ecced602f76635f6889b09ef2f44269a2ac1a7"
     },
     {
      "seq": 24,
-     "ts": "2026-11-06T13:23:01.074+00:00",
+     "ts": "2026-11-06T17:54:05.832+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5330,12 +5330,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "fbb781ba77a52e1ce562022cc33b3ea7ab8b0ff119586bd0cf66cb3442b1f7c8",
-     "hash": "00c9224eb3f642a122433a7b226b880aad459047065b0b8158c6e287f8863d47"
+     "prev_hash": "413fc971c33fe5c976aa46e9a3ecced602f76635f6889b09ef2f44269a2ac1a7",
+     "hash": "63b339d72b019e1e38f11a49a173f8ee2205124183442bb26783725f3590482b"
     },
     {
      "seq": 25,
-     "ts": "2026-11-06T13:23:01.090+00:00",
+     "ts": "2026-11-06T17:54:05.848+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5343,12 +5343,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "00c9224eb3f642a122433a7b226b880aad459047065b0b8158c6e287f8863d47",
-     "hash": "038219839b04325d6d5f9d274745579c3cbd5a08bc9d88ae061dca427ac05c7c"
+     "prev_hash": "63b339d72b019e1e38f11a49a173f8ee2205124183442bb26783725f3590482b",
+     "hash": "2557a04db36e81333b1bd33a16f79e0b40780a2ca3781c5f7a13e22effbcf5e0"
     },
     {
      "seq": 26,
-     "ts": "2026-11-06T13:23:01.090+00:00",
+     "ts": "2026-11-06T17:54:05.855+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5356,12 +5356,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "038219839b04325d6d5f9d274745579c3cbd5a08bc9d88ae061dca427ac05c7c",
-     "hash": "102ef5f4c6f2252c907ff02ac2ac29ce731246f04e9775e8f9f5736b4188217b"
+     "prev_hash": "2557a04db36e81333b1bd33a16f79e0b40780a2ca3781c5f7a13e22effbcf5e0",
+     "hash": "0cefe902ec2eed77d9e1fd37a3c09a6f2f01bf7a1a3f30eee699d13aafd5c176"
     },
     {
      "seq": 27,
-     "ts": "2026-11-06T13:23:01.105+00:00",
+     "ts": "2026-11-06T17:54:05.863+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5369,12 +5369,12 @@
       "detector": "revision_diff",
       "findings": 0
      },
-     "prev_hash": "102ef5f4c6f2252c907ff02ac2ac29ce731246f04e9775e8f9f5736b4188217b",
-     "hash": "9559c6a1bc3903e80de33028b9198e6cc3484d41b774b4f71ad237c46304eb93"
+     "prev_hash": "0cefe902ec2eed77d9e1fd37a3c09a6f2f01bf7a1a3f30eee699d13aafd5c176",
+     "hash": "6f5bae879368371ac144b2ce9e7578794e463de5d12ef356041358a77a30308d"
     },
     {
      "seq": 28,
-     "ts": "2026-11-06T13:23:01.105+00:00",
+     "ts": "2026-11-06T17:54:05.875+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5382,12 +5382,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "9559c6a1bc3903e80de33028b9198e6cc3484d41b774b4f71ad237c46304eb93",
-     "hash": "27d608d90f8d214a0ef0dd4fb12bc7efcf3dc88bf7b1890630870fd789689bda"
+     "prev_hash": "6f5bae879368371ac144b2ce9e7578794e463de5d12ef356041358a77a30308d",
+     "hash": "8c35de32151a5d7c12911114d619e073c2c87d1026bc56f373023ef3ae18b2ff"
     },
     {
      "seq": 29,
-     "ts": "2026-11-06T13:23:01.121+00:00",
+     "ts": "2026-11-06T17:54:05.887+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5395,12 +5395,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "27d608d90f8d214a0ef0dd4fb12bc7efcf3dc88bf7b1890630870fd789689bda",
-     "hash": "edb9e189ee3d79f77a51844f61ad8ea01294ee773d7d3999bd7333e96fd08718"
+     "prev_hash": "8c35de32151a5d7c12911114d619e073c2c87d1026bc56f373023ef3ae18b2ff",
+     "hash": "29f17d4ce74d2615137382e0c4405443a054779c2bec4961b38f28eaf136186d"
     },
     {
      "seq": 30,
-     "ts": "2026-11-06T13:23:01.121+00:00",
+     "ts": "2026-11-06T17:54:05.894+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5408,12 +5408,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "edb9e189ee3d79f77a51844f61ad8ea01294ee773d7d3999bd7333e96fd08718",
-     "hash": "f5b8a752ac320bfa830f542c0f2e1a75f3fcaca861e3e878294510f2e2dce088"
+     "prev_hash": "29f17d4ce74d2615137382e0c4405443a054779c2bec4961b38f28eaf136186d",
+     "hash": "46dce0a4ed57e996f5d1f70510a4b03bcab20fd51c40fac09f333c830de0c413"
     },
     {
      "seq": 31,
-     "ts": "2026-11-06T13:23:01.142+00:00",
+     "ts": "2026-11-06T17:54:05.901+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5421,12 +5421,12 @@
       "detector": "revision_diff",
       "findings": 0
      },
-     "prev_hash": "f5b8a752ac320bfa830f542c0f2e1a75f3fcaca861e3e878294510f2e2dce088",
-     "hash": "99bb1b85da86e8176f540d05f96a21db3c8b21bdb0aeae00bd1df85029723b2a"
+     "prev_hash": "46dce0a4ed57e996f5d1f70510a4b03bcab20fd51c40fac09f333c830de0c413",
+     "hash": "18a6129f6e7ee0cd581fa6ba3f764f0180c69072458abbcacd26efdff6f7be4a"
     },
     {
      "seq": 32,
-     "ts": "2026-11-06T13:23:01.153+00:00",
+     "ts": "2026-11-06T17:54:05.912+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5434,12 +5434,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "99bb1b85da86e8176f540d05f96a21db3c8b21bdb0aeae00bd1df85029723b2a",
-     "hash": "04eee67ce5cf9d0522db6e9a5a7e4945808756078ec5f2eb7fb5c54cd798ff80"
+     "prev_hash": "18a6129f6e7ee0cd581fa6ba3f764f0180c69072458abbcacd26efdff6f7be4a",
+     "hash": "faed926c1f2025262141c20ec2014a8899f56bde9b116c39213fdf5fb4552cd9"
     },
     {
      "seq": 33,
-     "ts": "2026-11-06T13:23:01.156+00:00",
+     "ts": "2026-11-06T17:54:05.922+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5447,12 +5447,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "04eee67ce5cf9d0522db6e9a5a7e4945808756078ec5f2eb7fb5c54cd798ff80",
-     "hash": "6af8682b0cde5ab6ef31f6e9709e8fbad2107cebd52c1e2dd366d080f8dd3292"
+     "prev_hash": "faed926c1f2025262141c20ec2014a8899f56bde9b116c39213fdf5fb4552cd9",
+     "hash": "6bcfdc9a6a604bb5ca505b782ba8e369d1cc2fab863b0f2842f6eace690359d0"
     },
     {
      "seq": 34,
-     "ts": "2026-11-06T13:23:01.169+00:00",
+     "ts": "2026-11-06T17:54:05.930+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5460,12 +5460,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "6af8682b0cde5ab6ef31f6e9709e8fbad2107cebd52c1e2dd366d080f8dd3292",
-     "hash": "6fb7ae41a4180847d653114e081241f95e4fa5104929a697db8415eeab16e961"
+     "prev_hash": "6bcfdc9a6a604bb5ca505b782ba8e369d1cc2fab863b0f2842f6eace690359d0",
+     "hash": "3e2d02bca76337a03d5cbadc370bcf9aff281b0121a1dd09b0d1c0266b93c761"
     },
     {
      "seq": 35,
-     "ts": "2026-11-06T13:23:01.241+00:00",
+     "ts": "2026-11-06T17:54:06.004+00:00",
      "actor": "system",
      "event": "signature_compared",
      "data": {
@@ -5481,12 +5481,12 @@
       "limit": 9.4,
       "differs": false
      },
-     "prev_hash": "6fb7ae41a4180847d653114e081241f95e4fa5104929a697db8415eeab16e961",
-     "hash": "ca188dafe4cc8a301c3e012b8dee6c07b337d8a8a9fc47dde496c805665d635b"
+     "prev_hash": "3e2d02bca76337a03d5cbadc370bcf9aff281b0121a1dd09b0d1c0266b93c761",
+     "hash": "530be4b2d0ee0dd20801e1dd5ca56ac226b52bdbc54ad26a338d55a43ed7bc39"
     },
     {
      "seq": 36,
-     "ts": "2026-11-06T13:23:01.294+00:00",
+     "ts": "2026-11-06T17:54:06.054+00:00",
      "actor": "system",
      "event": "mark_compared",
      "data": {
@@ -5503,12 +5503,12 @@
       "limit": 10.5,
       "differs": false
      },
-     "prev_hash": "ca188dafe4cc8a301c3e012b8dee6c07b337d8a8a9fc47dde496c805665d635b",
-     "hash": "6eeb3070cd065065c3b2548463dd075d73e08de1e6c7da34097cf2811b8a43b8"
+     "prev_hash": "530be4b2d0ee0dd20801e1dd5ca56ac226b52bdbc54ad26a338d55a43ed7bc39",
+     "hash": "70dd5c7fcb618e64b3d803873435fc04e84ed901b86cba7c11a1a641a8f05403"
     },
     {
      "seq": 37,
-     "ts": "2026-11-06T13:23:01.366+00:00",
+     "ts": "2026-11-06T17:54:06.139+00:00",
      "actor": "system",
      "event": "mark_compared",
      "data": {
@@ -5525,12 +5525,12 @@
       "limit": 3.0,
       "differs": false
      },
-     "prev_hash": "6eeb3070cd065065c3b2548463dd075d73e08de1e6c7da34097cf2811b8a43b8",
-     "hash": "8d99959b963ad638427f9604813305725c4e42d757c59448a9da6da55f0e3bc2"
+     "prev_hash": "70dd5c7fcb618e64b3d803873435fc04e84ed901b86cba7c11a1a641a8f05403",
+     "hash": "bf013932d3ec44f7056c69b047070fe1cd5f472e5f06fe825a1d413bbdac8b55"
     },
     {
      "seq": 38,
-     "ts": "2026-11-06T13:23:01.403+00:00",
+     "ts": "2026-11-06T17:54:06.188+00:00",
      "actor": "system",
      "event": "reuse_compared",
      "data": {
@@ -5552,50 +5552,50 @@
        0.127
       ]
      },
-     "prev_hash": "8d99959b963ad638427f9604813305725c4e42d757c59448a9da6da55f0e3bc2",
-     "hash": "1d73e530ff9525626c7febcf9dc735d4c57452770126547df9fdc4aa9f7d6ec0"
+     "prev_hash": "bf013932d3ec44f7056c69b047070fe1cd5f472e5f06fe825a1d413bbdac8b55",
+     "hash": "f42dd705add4c1d5ad44fac55196b26ad74e529f829aebd1f40e2df9ba1d8614"
     },
     {
      "seq": 39,
-     "ts": "2026-11-06T13:23:01.425+00:00",
+     "ts": "2026-11-06T17:54:06.199+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "forensics",
       "ok": true,
-      "seconds": 0.375,
+      "seconds": 0.406,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "1d73e530ff9525626c7febcf9dc735d4c57452770126547df9fdc4aa9f7d6ec0",
-     "hash": "e5ab34c1bd93a60bcdbb36a44d393cf3f60321efcdb17d707ce01f3db4946484"
+     "prev_hash": "f42dd705add4c1d5ad44fac55196b26ad74e529f829aebd1f40e2df9ba1d8614",
+     "hash": "dbbf339ecb3db7e819afd410832a428b5f123f5edd6d15474c1b9b34ecdf469b"
     },
     {
      "seq": 40,
-     "ts": "2026-11-06T13:23:01.435+00:00",
+     "ts": "2026-11-06T17:54:06.211+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "checks"
      },
-     "prev_hash": "e5ab34c1bd93a60bcdbb36a44d393cf3f60321efcdb17d707ce01f3db4946484",
-     "hash": "cc1a51fb2a86fd52327644963ec09d275bfb219d539005ad09d862ea61739054"
+     "prev_hash": "dbbf339ecb3db7e819afd410832a428b5f123f5edd6d15474c1b9b34ecdf469b",
+     "hash": "2b5d1f05a42df51d049d7b6f6d8c9c47eb84d4cdaabe4793b3901cc6af958101"
     },
     {
      "seq": 41,
-     "ts": "2026-11-06T13:23:01.437+00:00",
+     "ts": "2026-11-06T17:54:06.216+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D1",
       "findings": 1
      },
-     "prev_hash": "cc1a51fb2a86fd52327644963ec09d275bfb219d539005ad09d862ea61739054",
-     "hash": "4e24d9eca57c1ff259c773893f0d4898263317496d4f98913d872fc49bb76d6a"
+     "prev_hash": "2b5d1f05a42df51d049d7b6f6d8c9c47eb84d4cdaabe4793b3901cc6af958101",
+     "hash": "d41bd3fef97022c19e09c14e2e72df2ceb5cf7daacd3a016a6ed959e24a3b1ea"
     },
     {
      "seq": 42,
-     "ts": "2026-11-06T13:23:01.437+00:00",
+     "ts": "2026-11-06T17:54:06.230+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5604,85 +5604,85 @@
       "fclass": "inconsistency",
       "title": "The closing balance does not follow from the transactions"
      },
-     "prev_hash": "4e24d9eca57c1ff259c773893f0d4898263317496d4f98913d872fc49bb76d6a",
-     "hash": "bc1e9329995ec3673253282671675f75228de89b7d835969028e76a41a3abcf2"
+     "prev_hash": "d41bd3fef97022c19e09c14e2e72df2ceb5cf7daacd3a016a6ed959e24a3b1ea",
+     "hash": "305e02672c7d271ad03f2de5b73b167ec71c646781968695d9caf4e6a862db6e"
     },
     {
      "seq": 43,
-     "ts": "2026-11-06T13:23:01.450+00:00",
+     "ts": "2026-11-06T17:54:06.239+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D2",
       "findings": 0
      },
-     "prev_hash": "bc1e9329995ec3673253282671675f75228de89b7d835969028e76a41a3abcf2",
-     "hash": "7001d0c177c7b9300403be141a186c46f61a4a91e09afd94aecb5c82f6ed2146"
+     "prev_hash": "305e02672c7d271ad03f2de5b73b167ec71c646781968695d9caf4e6a862db6e",
+     "hash": "859207fcb59665793d56a061f71d0cd8e5e1ec4d19f743526eb200845236cbfd"
     },
     {
      "seq": 44,
-     "ts": "2026-11-06T13:23:01.461+00:00",
+     "ts": "2026-11-06T17:54:06.249+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D3",
       "findings": 0
      },
-     "prev_hash": "7001d0c177c7b9300403be141a186c46f61a4a91e09afd94aecb5c82f6ed2146",
-     "hash": "81fdefe2025c3fe6ffd2ed56705b6fd4d2c5217f9c1d323d926376f56e7556f2"
+     "prev_hash": "859207fcb59665793d56a061f71d0cd8e5e1ec4d19f743526eb200845236cbfd",
+     "hash": "5a75483cdf479e81f1112a6a8236479bb0cb42bfe0a3fd3bd97c360f497c07be"
     },
     {
      "seq": 45,
-     "ts": "2026-11-06T13:23:01.466+00:00",
+     "ts": "2026-11-06T17:54:06.266+00:00",
      "actor": "system",
      "event": "cross_checked",
      "data": {
       "documents": 3,
       "findings": 0
      },
-     "prev_hash": "81fdefe2025c3fe6ffd2ed56705b6fd4d2c5217f9c1d323d926376f56e7556f2",
-     "hash": "1c77e6dced572f29a241d6c95f570271d068ea45b5e68977464e14c3ce7ea73d"
+     "prev_hash": "5a75483cdf479e81f1112a6a8236479bb0cb42bfe0a3fd3bd97c360f497c07be",
+     "hash": "b1e937957783df057ca66beffa00cf2507e9e27559f639ae8b0ced31bde696ed"
     },
     {
      "seq": 46,
-     "ts": "2026-11-06T13:23:01.466+00:00",
+     "ts": "2026-11-06T17:54:06.272+00:00",
      "actor": "system",
      "event": "context_checked",
      "data": {
       "findings": 0
      },
-     "prev_hash": "1c77e6dced572f29a241d6c95f570271d068ea45b5e68977464e14c3ce7ea73d",
-     "hash": "6b09ae64aa71d23a349c9cf14416c8b19e66cdc979135f1e68eb340f2db13325"
+     "prev_hash": "b1e937957783df057ca66beffa00cf2507e9e27559f639ae8b0ced31bde696ed",
+     "hash": "7be9aca47e8ddc11b3187a6fd7b0f0188c387c939dbd1d7c4a28da8ad7ba25bf"
     },
     {
      "seq": 47,
-     "ts": "2026-11-06T13:23:01.488+00:00",
+     "ts": "2026-11-06T17:54:06.277+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "checks",
       "ok": true,
-      "seconds": 0.031,
+      "seconds": 0.062,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "6b09ae64aa71d23a349c9cf14416c8b19e66cdc979135f1e68eb340f2db13325",
-     "hash": "5fed236544fadfdfd03838914b9c77fc747b265d40e1f412310f33eb42e9d588"
+     "prev_hash": "7be9aca47e8ddc11b3187a6fd7b0f0188c387c939dbd1d7c4a28da8ad7ba25bf",
+     "hash": "d4f1b7c331b71ef7f6f6b5acf1d20030721893c3157277ebfeb0dc5f35424c3a"
     },
     {
      "seq": 48,
-     "ts": "2026-11-06T13:23:01.500+00:00",
+     "ts": "2026-11-06T17:54:06.293+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "link"
      },
-     "prev_hash": "5fed236544fadfdfd03838914b9c77fc747b265d40e1f412310f33eb42e9d588",
-     "hash": "d4a8238a634213ecd9b46945a434aa190f1c4e2d18fb79cba54febe58c5b0ec2"
+     "prev_hash": "d4f1b7c331b71ef7f6f6b5acf1d20030721893c3157277ebfeb0dc5f35424c3a",
+     "hash": "293ee7c7ae24472bbafb911ad47781b91eb39905e26ec498d57d7984c234c7c6"
     },
     {
      "seq": 49,
-     "ts": "2026-11-06T13:23:01.511+00:00",
+     "ts": "2026-11-06T17:54:06.300+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5691,12 +5691,12 @@
       "fclass": "potential_manipulation",
       "title": "Closing balance on 01_statement.pdf: 2 findings from 2 kinds of check"
      },
-     "prev_hash": "d4a8238a634213ecd9b46945a434aa190f1c4e2d18fb79cba54febe58c5b0ec2",
-     "hash": "9c23f88d1c63211da6753ddb8d980fd1133776477bb566f85248d74e7cd8a5a8"
+     "prev_hash": "293ee7c7ae24472bbafb911ad47781b91eb39905e26ec498d57d7984c234c7c6",
+     "hash": "d94f87f6ad7d388b040ef3417a8ed322d01e61836b805b8a4f3f9ecfee95d1ed"
     },
     {
      "seq": 50,
-     "ts": "2026-11-06T13:23:01.516+00:00",
+     "ts": "2026-11-06T17:54:06.307+00:00",
      "actor": "system",
      "event": "findings_linked",
      "data": {
@@ -5704,50 +5704,50 @@
       "linked": 2,
       "clusters": 1
      },
-     "prev_hash": "9c23f88d1c63211da6753ddb8d980fd1133776477bb566f85248d74e7cd8a5a8",
-     "hash": "333296df212f4ed3cf362cc139ab719911e1d5a7b299f739327d2ff0b53308c8"
+     "prev_hash": "d94f87f6ad7d388b040ef3417a8ed322d01e61836b805b8a4f3f9ecfee95d1ed",
+     "hash": "5fc693aae3157a56607a56522e437db165d97bef65a9c51fa5c513375c6b242e"
     },
     {
      "seq": 51,
-     "ts": "2026-11-06T13:23:01.516+00:00",
+     "ts": "2026-11-06T17:54:06.314+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "link",
       "ok": true,
-      "seconds": 0.016,
+      "seconds": 0.015,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "333296df212f4ed3cf362cc139ab719911e1d5a7b299f739327d2ff0b53308c8",
-     "hash": "52fade6935212b0b22eb2c26aa5a6d983cad46b4bf3d11f6ffed2d8ed64f632b"
+     "prev_hash": "5fc693aae3157a56607a56522e437db165d97bef65a9c51fa5c513375c6b242e",
+     "hash": "1899e01a08b14167d084adf56f9821086d980c46645fb1ea410611167a196644"
     },
     {
      "seq": 52,
-     "ts": "2026-11-06T13:23:01.533+00:00",
+     "ts": "2026-11-06T17:54:06.327+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "explain"
      },
-     "prev_hash": "52fade6935212b0b22eb2c26aa5a6d983cad46b4bf3d11f6ffed2d8ed64f632b",
-     "hash": "227b153b241b8f1b5e52d7540471149f3b088ea218745f5ce1a57165df84e687"
+     "prev_hash": "1899e01a08b14167d084adf56f9821086d980c46645fb1ea410611167a196644",
+     "hash": "6272cc8782ae89680d68b53b038c2fff355dfaa15eec2f181db4841c92996748"
     },
     {
      "seq": 53,
-     "ts": "2026-11-06T13:23:01.533+00:00",
+     "ts": "2026-11-06T17:54:06.334+00:00",
      "actor": "system",
      "event": "findings_explained",
      "data": {
       "findings": 3,
       "source": "template"
      },
-     "prev_hash": "227b153b241b8f1b5e52d7540471149f3b088ea218745f5ce1a57165df84e687",
-     "hash": "00e8f5d82244c4166de485e991163eb1a12403acffc41c1f9afcf421c86821a9"
+     "prev_hash": "6272cc8782ae89680d68b53b038c2fff355dfaa15eec2f181db4841c92996748",
+     "hash": "cae1c535c4104a071c7657302ebaced6aeeaf97c89f8a18be5362d6522f21eef"
     },
     {
      "seq": 54,
-     "ts": "2026-11-06T13:23:27.544+00:00",
+     "ts": "2026-11-06T17:54:31.204+00:00",
      "actor": "system",
      "event": "llm_reasoning",
      "data": {
@@ -5767,12 +5767,12 @@
        ]
       ]
      },
-     "prev_hash": "00e8f5d82244c4166de485e991163eb1a12403acffc41c1f9afcf421c86821a9",
-     "hash": "4368294fe1dc1e54e57fcd8963fcd7a64300294a6f43a5b072bdf4db147a8199"
+     "prev_hash": "cae1c535c4104a071c7657302ebaced6aeeaf97c89f8a18be5362d6522f21eef",
+     "hash": "56c79bc444d7773f4f2eb1b5e52dd8e9a3e5ae5ba0946b6392286526f0908afc"
     },
     {
      "seq": 55,
-     "ts": "2026-11-06T13:23:45.802+00:00",
+     "ts": "2026-11-06T17:54:49.911+00:00",
      "actor": "system",
      "event": "llm_wording",
      "data": {
@@ -5784,91 +5784,91 @@
       "accepted": true,
       "reason": ""
      },
-     "prev_hash": "4368294fe1dc1e54e57fcd8963fcd7a64300294a6f43a5b072bdf4db147a8199",
-     "hash": "bc8ea849d0c51df6c86752c7aacc29189cee2dd0c2a942e02d6f4993e58d0694"
+     "prev_hash": "56c79bc444d7773f4f2eb1b5e52dd8e9a3e5ae5ba0946b6392286526f0908afc",
+     "hash": "61d9d4bc7c76e855fcd4e3b0562042e40c4f438b75d2dc5d72e422625003f375"
     },
     {
      "seq": 56,
-     "ts": "2026-11-06T13:23:45.811+00:00",
+     "ts": "2026-11-06T17:54:49.923+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "explain",
       "ok": true,
-      "seconds": 44.265,
+      "seconds": 43.578,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "bc8ea849d0c51df6c86752c7aacc29189cee2dd0c2a942e02d6f4993e58d0694",
-     "hash": "1844ebef9a9478c83d3937394e9a8241789b7f6db9e1aedfbc8ef41083a58cc9"
+     "prev_hash": "61d9d4bc7c76e855fcd4e3b0562042e40c4f438b75d2dc5d72e422625003f375",
+     "hash": "45d513599a98ecf556bd7a3ba36fe96bade65df3bbeea8b83c984ea4cd2c7ed5"
     },
     {
      "seq": 57,
-     "ts": "2026-11-06T13:23:45.815+00:00",
+     "ts": "2026-11-06T17:54:49.935+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "crops"
      },
-     "prev_hash": "1844ebef9a9478c83d3937394e9a8241789b7f6db9e1aedfbc8ef41083a58cc9",
-     "hash": "889bf54305a92106d244c748adfbdb69962187d265b129daeb2cf4ebea86cd89"
+     "prev_hash": "45d513599a98ecf556bd7a3ba36fe96bade65df3bbeea8b83c984ea4cd2c7ed5",
+     "hash": "8e598e8f9a497dcf2029fc5fec6f5b1ca82c75a950dda3c64a67458cccea9d03"
     },
     {
      "seq": 58,
-     "ts": "2026-11-06T13:23:45.857+00:00",
+     "ts": "2026-11-06T17:54:49.966+00:00",
      "actor": "system",
      "event": "crops_made",
      "data": {
       "crops": 5
      },
-     "prev_hash": "889bf54305a92106d244c748adfbdb69962187d265b129daeb2cf4ebea86cd89",
-     "hash": "b4e70431bd49404ee553776d85e2aaee4de56eb559b29075c9a9a4a1b271930e"
+     "prev_hash": "8e598e8f9a497dcf2029fc5fec6f5b1ca82c75a950dda3c64a67458cccea9d03",
+     "hash": "29cd7b7d513221db041035b1195b17abe5e426062c0d8a40d31d3423155c37d8"
     },
     {
      "seq": 59,
-     "ts": "2026-11-06T13:23:45.873+00:00",
+     "ts": "2026-11-06T17:54:49.982+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "crops",
       "ok": true,
-      "seconds": 0.047,
+      "seconds": 0.031,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "b4e70431bd49404ee553776d85e2aaee4de56eb559b29075c9a9a4a1b271930e",
-     "hash": "1e78363841a92a6d0a87871146cb7ec1765786bbe35f89f19e9f067a31e2e242"
+     "prev_hash": "29cd7b7d513221db041035b1195b17abe5e426062c0d8a40d31d3423155c37d8",
+     "hash": "6431077b2184ac3cf2884bb9b73371766f84c12ad07c6178def71fa645a57330"
     },
     {
      "seq": 60,
-     "ts": "2026-11-06T13:23:45.873+00:00",
+     "ts": "2026-11-06T17:54:49.998+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "dossier"
      },
-     "prev_hash": "1e78363841a92a6d0a87871146cb7ec1765786bbe35f89f19e9f067a31e2e242",
-     "hash": "82f9f6490098d71a879b808172b6409333610bbde02884b9de80d1f04f479a97"
+     "prev_hash": "6431077b2184ac3cf2884bb9b73371766f84c12ad07c6178def71fa645a57330",
+     "hash": "b0ea23245cb7dac8caf73f9c7129aa5f818a025c6f333b02ee75fb6a4227c3dd"
     }
    ],
    "anchor": {
     "events": 60,
-    "head": "82f9f6490098d71a879b808172b6409333610bbde02884b9de80d1f04f479a97"
+    "head": "b0ea23245cb7dac8caf73f9c7129aa5f818a025c6f333b02ee75fb6a4227c3dd"
    },
    "chain_ok": true,
    "problem": null,
    "signing": {
     "status": "signed",
     "algorithm": "Ed25519",
-    "key_id": "9b50280ea9260ec805b1735455448a5af2418f270bc0247bd4f705b2adb8fbf0",
+    "key_id": "15d856115e4cbcb1edf80e44a6926675634b80b5d7eaa34ef1421eb2bf13cf59",
     "checkpoints": 1,
     "last": {
-     "case": "C-20261106-132300-1a1a",
+     "case": "C-20261106-175405-c56d",
      "events": 60,
-     "head": "82f9f6490098d71a879b808172b6409333610bbde02884b9de80d1f04f479a97",
-     "key": "1e7da09c4ba323cd35c2a474e0c1e3b38a8bbfdead2fd4418ccc8b38a798f7ea",
-     "sig": "52ea8e41e47b53688aee24cba3f2c4e60a3aa85604229e630912b6a078be37d5f9695379f15105449db5620561599f7cda480d23749c4deec7fecb5a811d4302",
-     "ts": "2026-11-06T13:23:45.897+00:00",
+     "head": "b0ea23245cb7dac8caf73f9c7129aa5f818a025c6f333b02ee75fb6a4227c3dd",
+     "key": "24b2281cc0cf35e949936563b7ad99b9a2b30066d45eff2ab2e13e3c76f16f2a",
+     "sig": "7f5a5cb544675b4241739b3ea073bf21a19dfc80051e8671ec5b4a638880b572647ebef1985400f0f1028c4fb9b1658b2861ede7586796de09d681fd1b54a70c",
+     "ts": "2026-11-06T17:54:50.015+00:00",
      "v": 1
     },
     "uncovered": 0,
@@ -6332,7 +6332,7 @@
   }
  },
  "integrity": {
-  "json_sha256": "a17d14f7d05289e4f0c5853086d2eb289d5c9eb53cb9373cb3763681a13cf71b",
+  "json_sha256": "cf3c5bad6dba71ee0a5c2b12222d63f35ec835f4d1df5c7151b2ce2cff2a0623",
   "method": "sha256 of this document without this block, as JSON with sorted keys, compact separators and ASCII escapes"
  }
 }
