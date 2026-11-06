@@ -2,9 +2,12 @@
 
     python -m evaluation.run_x ext-dev --model phi4-mini:3.8b --cases 8 --out eval/x [--budget MINUTES]
     python -m evaluation.run_x ext-dev --cases 8 --replay eval/x/ext-dev-phi4-mini-3-8b.json --out eval/x
+    python -m evaluation.run_x ext-test --once-at-freeze --model phi4-mini:3.8b --cases N --out DIR
 
 The model's replies are saved with the scores, so the scoring can be repeated without the model. A prompt the saved file does not hold
-reads nothing. A case that cannot finish counts every fact of its documents as missing, with the error beside it."""
+reads nothing. A case that cannot finish counts every fact of its documents as missing, with the error beside it. ext-test is read once, on
+the frozen code, and says so with --once-at-freeze (a replay of it too). A live run in which the model answered nothing (Ollama not
+running, the model not pulled, every call failing) exits 1 and writes no report: the scores of a model that was not there say nothing."""
 import argparse
 import copy
 import json
@@ -26,6 +29,10 @@ from docforensics.pipeline import run_case
 
 from .run_eval import _git
 from .score_x import OUTCOMES, format_report, score_case, summarise
+
+
+class NoModelReply(RuntimeError):
+    """A live run in which the model answered nothing: its report would score a model that was not there as having read nothing."""
 
 
 class Tape:
@@ -69,11 +76,13 @@ def slug(model: str) -> str:
 
 def run(split: str, n: int, start: int, out_dir, client=None, replay=None, model: str = DEFAULT_MODEL, budget_min: float | None = None) -> dict:
     """Cases `start` to `start + n` of the pack, read with `client` (default: Ollama, `model`) or from the saved file `replay`; the scores
-    are returned, and the report (.md) and the replies with the per-fact rows (.json) are written to `out_dir`."""
+    are returned, and the report (.md) and the replies with the per-fact rows (.json) are written to `out_dir`. A live run in which the model
+    answered nothing raises NoModelReply and writes nothing."""
     out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
     saved = json.loads(Path(replay).read_text(encoding="utf-8")) if replay else None
     tape = Tape(None if replay else (client or OllamaClient(model)), saved)
+    if not replay and not tape.digest():
+        raise NoModelReply(f"Ollama does not have {tape.model} (is it running, and is the model pulled?): nothing was run and no report was written")
     th, work, t_start = Thresholds(), Path(tempfile.mkdtemp(prefix="docforensics-x-")), time.monotonic()
     try:
         manifest = json.loads(build_split(split, work / "pack", n, start).read_text(encoding="utf-8"))
@@ -93,6 +102,9 @@ def run(split: str, n: int, start: int, out_dir, client=None, replay=None, model
             results.append(score_case(entry, case, events, tape.seconds(events)))
             got = Counter(r["outcome"] for r in results[-1]["fields"])
             print(f"{entry['case']} ({entry['medium']}): " + ", ".join(f"{got[o]} {o}" for o in OUTCOMES), flush=True)
+        if not replay and not any("reply" in r for r in tape.replies.values()):
+            why = next((r["error"] for r in tape.replies.values() if "error" in r), "no call was made")
+            raise NoModelReply(f"the model answered no call ({why}): no report was written")
         s = summarise(results)
         seeds = [e["seed"] for e in manifest["cases"][:len(results)]]
         s["run"] = {"model": tape.model, "digest": tape.digest(), "timeout": tape.timeout, "split": split, "start": start, "requested": n,
@@ -100,6 +112,7 @@ def run(split: str, n: int, start: int, out_dir, client=None, replay=None, model
                     "date": datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z"), "commit": _git("rev-parse", "--short", "HEAD") or "unknown",
                     "dirty": bool(_git("status", "--porcelain")),
                     "machine": f"{platform.system()} {platform.release()}, Python {platform.python_version()}, CPU only"}
+        out_dir.mkdir(parents=True, exist_ok=True)
         stem = out_dir / f"{split}-{slug(tape.model)}"
         stem.with_suffix(".md").write_text(format_report(s), encoding="utf-8", newline="\n")
         stem.with_suffix(".json").write_text(json.dumps({"run": s["run"], "replies": tape.replies, "results": results}, indent=1), encoding="utf-8", newline="\n")
@@ -117,8 +130,15 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--replay", metavar="FILE", help="score from the replies saved in FILE instead of running the model")
     p.add_argument("--budget", type=float, metavar="MINUTES", help="start no new case after this many minutes")
     p.add_argument("--out", default="eval/x", help="where the report and the saved replies go (default: eval/x)")
+    p.add_argument("--once-at-freeze", action="store_true", help="required for ext-test, which is read once, on the frozen code")
     a = p.parse_args(argv)
-    s = run(a.split, a.cases, a.start, a.out, replay=a.replay, model=a.model, budget_min=a.budget)
+    if a.split == "ext-test" and not a.once_at_freeze:
+        p.error("ext-test is read once, on the frozen code: pass --once-at-freeze")
+    try:
+        s = run(a.split, a.cases, a.start, a.out, replay=a.replay, model=a.model, budget_min=a.budget)
+    except NoModelReply as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 1
     print(f"{a.split}: {s['cases']} cases, {s['facts']} facts: " + ", ".join(f"{s['outcomes'][k]} {k}" for k in OUTCOMES))
     return 0
 
