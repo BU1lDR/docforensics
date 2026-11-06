@@ -1,14 +1,15 @@
-"""Score the reused-mark detector (scope D, package H) on the pack of datagen/reuse_pack.py:
+"""Score the reused-signature detector (scope D, package H) on the pack of datagen/reuse_pack.py:
 
     python -m evaluation.run_h ext-dev [--cases N] [--start S] [--out DIR]
     python -m evaluation.run_h ext-test --once-at-freeze [--cases N] [--out DIR]
 
 Each case is written to a temporary folder and run through read, classify and forensics, the stages the detector needs. The result is set
-against the manifest, which only this scorer reads. In a case that repeats a signature or a stamp, the reuse observation of that kind whose two
-marks lie on the manifest's boxes (IoU of at least score.PLACE) is a find; any other reuse observation is a stray one. In a genuine case every
-reuse observation is a false one. The ink gap of every compared pair is kept, by kind and medium, so that the limit can be read against the
-pairs, and the same counts are given at other limits. ext-dev is what the limit was fitted on, so its figures are in-sample; ext-test is read
-once, on the frozen code."""
+against the manifest, which only this scorer reads. In a case that repeats a signature, the reuse observation whose two signatures lie on the
+manifest's boxes (IoU of at least score.PLACE) is a find; any other reuse observation is a stray one. In a genuine case every reuse observation
+is a false one. A third of the cases repeat a stamp instead: the detector does not look at stamps (eval/h/reuse-ext-dev-stamps.md is the run that
+shows why), so those cases are listed as not compared, and an observation in one of them would be a stray one. The ink gap and the hash distance
+of every compared pair are kept, by medium, so that the limit can be read against the pairs, and the same counts are given at other limits.
+ext-dev is what the limit was fitted on, so its figures are in-sample; ext-test is read once, on the frozen code."""
 import argparse
 import json
 import platform
@@ -33,7 +34,7 @@ from .run_eval import _git, peak_rss_mb
 from .score import MEDIA, PLACE, iou
 
 STAGES = {"read": read_stage, "classify": classify_stage, "forensics": run_forensics}
-KINDS = ("signature", "stamp")
+KINDS = ("signature", "stamp")  # the kinds of case the pack makes; only the signatures are compared
 LIMITS = (0.5, 1.0, 2.0, 3.0, 5.0, 8.0, 10.0, 15.0)  # the limits the counts are repeated at, to show what the choice costs
 
 
@@ -59,24 +60,26 @@ def run_one(p: dict, th: Thresholds, tmp: Path) -> dict:
             "found": found, "stray": stray, "compared": p["kind"] == "genuine" or any(d["kind"] == p["kind"] for d in pairs)}
 
 
-def gaps(rows: list[dict], kind: str, copies: bool, media=None) -> list[float]:
-    """The ink gap of the compared pairs of a kind: the repeated pairs (`copies`) or the separate ones, optionally of some media."""
-    return [d["ink"] for r in rows if media is None or r["medium"] in media for d in r["pairs"]
-            if d["kind"] == kind and (r["kind"] == kind) == copies]
+def gaps(rows: list[dict], copies: bool, media=None, key: str = "ink") -> list[float]:
+    """The ink gap (or, with key="hash_bits", the hash distance) of the compared signature pairs: the repeated pairs (`copies`) or the separate
+    ones, optionally of some media."""
+    return [d[key] for r in rows if media is None or r["medium"] in media for d in r["pairs"]
+            if d["kind"] == "signature" and (r["kind"] == "signature") == copies]
 
 
-def stats(xs: list[float]) -> str:
-    return f"{len(xs)} | {min(xs):.1f} | {statistics.median(xs):.1f} | {max(xs):.1f}" if xs else "0 | - | - | -"
+def stats(xs: list[float], fmt: str = ".1f") -> str:
+    return f"{len(xs)} | {min(xs):{fmt}} | {statistics.median(xs):{fmt}} | {max(xs):{fmt}}" if xs else "0 | - | - | -"
 
 
 def format_report(rows: list[dict], run: dict) -> str:
     th = Thresholds()
     L = [f"# Reused marks (scope D, package H): {run['split']}, {run['when']}", "",
-         f"Tool: commit {run['commit']}{' (tree not clean)' if run['dirty'] else ''}. Limit: repeat_ink = {th.repeat_ink:g} % (ink gap; the 64-bit "
-         f"hash is logged and does not decide). {len(rows)} cases of datagen/reuse_pack.py, {run['seconds']:.0f} s in all, peak memory {run['peak_mb']:.0f} MB. "
-         f"{run['machine']}.", "",
-         "A find is the observation of the right kind with both marks on the manifest's boxes (IoU of at least "
+         f"Tool: commit {run['commit']}{' (tree not clean)' if run['dirty'] else ''}. Limit: repeat_ink = {th.repeat_ink:g} % (ink gap of two "
+         f"signatures; the 64-bit hash is logged and does not decide; stamps and logos are not looked at). {len(rows)} cases of datagen/reuse_pack.py, "
+         f"{run['seconds']:.0f} s in all, peak memory {run['peak_mb']:.0f} MB. {run['machine']}.", "",
+         "A find is the observation whose two signatures lie on the manifest's boxes (IoU of at least "
          f"{PLACE:g}). A stray observation is any other reuse observation; in a genuine case every one is a false observation. "
+         "The stamp cases are listed to show that they are not compared. "
          + ("ext-dev is what the limit was fitted on, so these figures are in-sample." if run["split"] == "ext-dev"
             else "This split was read once, on the frozen code."), "", "## Repeated marks found, by kind and medium", "",
          "| Kind | Medium | Cases | Found at their place | Not compared | Stray observations |", "|---|---|---|---|---|---|"]
@@ -87,24 +90,30 @@ def format_report(rows: list[dict], run: dict) -> str:
                 L.append(f"| {kind} | {medium} | {len(sub)} | {sum(r['found'] for r in sub)} | {sum(not r['compared'] for r in sub)} | {sum(r['stray'] for r in sub)} |")
         sub = [r for r in rows if r["kind"] == kind]
         L.append(f"| **{kind}** | all | {len(sub)} | {sum(r['found'] for r in sub)} | {sum(not r['compared'] for r in sub)} | {sum(r['stray'] for r in sub)} |")
-    L += ["", "## Genuine cases (every document signed and pressed afresh)", "", "| Medium | Cases | Cases with a reuse observation | Observations |", "|---|---|---|---|"]
+    L += ["", "## Genuine cases (every document signed afresh)", "", "| Medium | Cases | Cases with a reuse observation | Observations |", "|---|---|---|---|"]
     for medium in (*MEDIA, None):
         sub = [r for r in rows if r["kind"] == "genuine" and (medium is None or r["medium"] == medium)]
         if sub:
             L.append(f"| {medium or '**all**'} | {len(sub)} | {sum(r['stray'] > 0 for r in sub)} | {sum(r['stray'] for r in sub)} |")
-    L += ["", "## The ink gap of the compared pairs (%)", "", "Repeated pairs are the pair of the case's own kind in a case that repeats a mark; separate pairs are "
-          "every other pair, which two signings or two pressings made.", "", "| Pair | Medium | Pairs | Smallest | Median | Largest |", "|---|---|---|---|---|---|"]
-    for kind in KINDS:
-        for copies in (True, False):
-            for label, media in (("digital", ("digital",)), ("scanned", ("mild", "150dpi", "120dpi")), ("all", None)):
-                L.append(f"| {kind}, {'repeated' if copies else 'separate'} | {label} | {stats(gaps(rows, kind, copies, media))} |")
+    scanned = ("mild", "150dpi", "120dpi")
+    L += ["", "## The ink gap of the compared signature pairs (%)", "", "Repeated pairs are the pair in a case that repeats the signature; separate pairs are "
+          "every other pair, which two signings made.", "", "| Pair | Medium | Pairs | Smallest | Median | Largest |", "|---|---|---|---|---|---|"]
+    for copies in (True, False):
+        for label, media in (("digital", ("digital",)), ("scanned", scanned), ("all", None)):
+            L.append(f"| {'repeated' if copies else 'separate'} | {label} | {stats(gaps(rows, copies, media))} |")
     L += ["", "## The same counts at other limits", "", "Repeated pairs at or under the limit would be found; separate pairs at or under it would be false observations.", "",
-          "| Limit (%) | Signatures found | Stamps found | Separate signature pairs flagged | Separate stamp pairs flagged |", "|---|---|---|---|---|"]
+          "| Limit (%) | Repeated pairs found | Separate pairs flagged |", "|---|---|---|"]
+    c, s = gaps(rows, True), gaps(rows, False)
     for lim in LIMITS:
-        c = {k: gaps(rows, k, True) for k in KINDS}
-        s = {k: gaps(rows, k, False) for k in KINDS}
-        L.append(f"| {lim:g} | {sum(x <= lim for x in c['signature'])} of {len(c['signature'])} | {sum(x <= lim for x in c['stamp'])} of {len(c['stamp'])} | "
-                 f"{sum(x <= lim for x in s['signature'])} of {len(s['signature'])} | {sum(x <= lim for x in s['stamp'])} of {len(s['stamp'])} |")
+        L.append(f"| {lim:g} | {sum(x <= lim for x in c)} of {len(c)} | {sum(x <= lim for x in s)} of {len(s)} |")
+    cb, sb = gaps(rows, True, key="hash_bits"), gaps(rows, False, key="hash_bits")
+    L += ["", "## The 64-bit hash of the compared signature pairs (bits that differ; logged, does not decide)", "",
+          "| Pair | Medium | Pairs | Smallest | Median | Largest |", "|---|---|---|---|---|---|"]
+    for copies in (True, False):
+        for label, media in (("digital", ("digital",)), ("scanned", scanned), ("all", None)):
+            L.append(f"| {'repeated' if copies else 'separate'} | {label} | {stats(gaps(rows, copies, media, 'hash_bits'), 'g')} |")
+    if cb and sb:
+        L += ["", f"Separate pairs no farther apart than the farthest repeated pair ({max(cb):g} bits): {sum(x <= max(cb) for x in sb)} of {len(sb)}."]
     L += ["", "## Cases", "", "| Case | Kind | Medium | Layout | Found | Stray | Pairs (kind: ink gap, hash bits) |", "|---|---|---|---|---|---|---|"]
     for r in rows:
         L.append(f"| {r['case']} | {r['kind']} | {r['medium']} | {r['layout']} | {'yes' if r['found'] else '-'} | {r['stray']} | "

@@ -97,12 +97,14 @@ def _distance(kind: str, a: _Mark, b: _Mark) -> float:
     return min(distance(ca, canvas(b.ink, b.turn, _SIZE, _SHIFT, rot), _REACH, _SHIFT) for rot in _TURNS[kind])
 
 
-def issuer_groups(case: Case, ctx: Ctx) -> tuple[list[Document], list[list[tuple[Document, Line]]], list[tuple[Document, str, str]]]:
-    """The documents that may carry a logo or a stamp, those of them grouped by the line that names their issuer (each with its line),
-    and, for the ones that could not be grouped, (document, what was not compared, why)."""
-    specs = load_specs()
+def compare_marks(case: Case, ctx: Ctx) -> list[Finding]:
+    """Draft findings for the logos and stamps of the case: the documents are grouped by the line that names their issuer, every pair
+    of one group that carries a mark of a kind is compared and logged, and a pair that differs is an inconsistency. When two or more
+    documents were meant to carry a mark and not all could be compared, one limitation says which and why. A document that is the
+    only one of its issuer has nothing to be compared with, and says nothing."""
+    th, specs = ctx.th, load_specs()
     candidates = [d for d in case.documents if (s := specs.get(d.doc_type)) and (s.logo or s.stamp)]
-    issues: list[tuple[Document, str, str]] = []
+    issues: list[tuple[Document, str, str]] = []  # document, what was not compared, why
     groups: list[list[tuple[Document, Line]]] = []
     for doc in candidates:
         pg = doc.pages[0]
@@ -115,21 +117,11 @@ def issuer_groups(case: Case, ctx: Ctx) -> tuple[list[Document], list[list[tuple
                                          "could not be grouped with those of one issuer"))
             continue
         for g in groups:
-            if similar(text_of(g[0][1].words), text_of(line.words), ctx.th.text_sim):
+            if similar(text_of(g[0][1].words), text_of(line.words), th.text_sim):
                 g.append((doc, line))
                 break
         else:
             groups.append([(doc, line)])
-    return candidates, groups, issues
-
-
-def compare_marks(case: Case, ctx: Ctx) -> list[Finding]:
-    """Draft findings for the logos and stamps of the case: the documents are grouped by the line that names their issuer, every pair
-    of one group that carries a mark of a kind is compared and logged, and a pair that differs is an inconsistency. When two or more
-    documents were meant to carry a mark and not all could be compared, one limitation says which and why. A document that is the
-    only one of its issuer has nothing to be compared with, and says nothing."""
-    th, specs = ctx.th, load_specs()
-    candidates, groups, issues = issuer_groups(case, ctx)
     out: list[Finding] = []
     paired: set[str] = set()  # the kinds of which two documents of one issuer were compared
     for g in groups:

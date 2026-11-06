@@ -1,5 +1,5 @@
 """H (reused marks): the two measures, and the detector that raises an observation when two documents of one case carry the same
-signature or the same stamp image."""
+signature image. A stamp is not looked at (eval/h/reuse-ext-dev-stamps.md says why)."""
 import re
 
 import cv2
@@ -107,25 +107,20 @@ def test_a_signature_drawn_twice_is_one_observation_that_points_at_both_and_name
         assert iou(e.box, truth[by_doc[e.doc]]) > 0.8
 
 
-def test_a_stamp_pressed_twice_is_one_observation_that_points_at_both_and_a_logo_is_not_looked_at(tmp_path):
-    files, entry = pack_files(tmp_path, "stamp")
+def test_a_stamp_pressed_twice_is_not_looked_at_and_neither_is_a_logo(tmp_path):
+    """Separate pressings of the generated stamp can match as closely as a copy (eval/h/reuse-ext-dev-stamps.md), so a stamp is left out."""
+    files, _ = pack_files(tmp_path, "stamp")
     case, events = run(tmp_path, *files)
-    (f,) = reuse_findings(case)  # the signatures of this case are two signings: only the stamp is flagged
-    assert f.fclass == "observation" and "stamp" in f.title.lower()
-    assert sorted(d["kind"] for d in compared(events)) == ["signature", "stamp"]  # one pair of each, and no logo
-    truth = {name: box[1:] for name, box in entry["reuse"][0]["boxes"].items()}
-    by_doc = {c.id: c.filename for c in case.documents}
-    for e in f.evidence:
-        assert iou(e.box, truth[by_doc[e.doc]]) > 0.8
+    assert reuse_findings(case) == []  # the stamps of this case are one pressing, and the signatures are two signings
+    assert {d["kind"] for d in compared(events)} == {"signature"}  # one pair, of signatures; none of stamps or logos
 
 
 def test_a_genuine_case_is_compared_and_raises_nothing(tmp_path):
     files, _ = pack_files(tmp_path, "genuine")
     case, events = run(tmp_path, *files)
     assert reuse_findings(case) == []
-    for kind in ("signature", "stamp"):
-        (done,) = compared(events, kind)
-        assert done["repeat"] is False and done["limit_ink"] == TH.repeat_ink and done["ink"] > done["limit_ink"]
+    (done,) = compared(events)
+    assert done["kind"] == "signature" and done["repeat"] is False and done["limit_ink"] == TH.repeat_ink and done["ink"] > done["limit_ink"]
 
 
 def test_a_document_submitted_twice_is_not_reported_again_for_its_marks(tmp_path):

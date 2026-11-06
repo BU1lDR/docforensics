@@ -284,13 +284,13 @@ TEMPLATES.update(_across(
     "Whether the marks agree is unknown."))
 TEMPLATES.update({
     ("reuse", "observation"): (
-        "A signature or a stamp on one document is the same image as the one on another document, by the measures the finding states. "
-        "A hand signs afresh each time and a stamp is pressed afresh each time, so two separate ones come out close but not the same. "
-        "There are ordinary causes all the same: software that places one stored image of a signature or a stamp on every document it "
+        "A signature on one document is the same image as the one on another document, by the measures the finding states. "
+        "A hand signs afresh each time, so two separate signings come out close but not the same. "
+        "There are ordinary causes all the same: software that places one stored image of a signature on every document it "
         "makes, one page submitted in two forms, or one scan used for two documents. The comparison reads shapes only: it does not say "
-        "who signed or stamped, or how the image came to be on both documents.",
-        ["Open the two marks and compare them at full size.",
-         "Ask the signatory or the issuer how the mark is put on a document: by hand, or by software from a stored image."]),
+        "who signed, or how the image came to be on both documents.",
+        ["Open the two signatures and compare them at full size.",
+         "Ask the signatory how the signature is put on a document: by hand, or by software from a stored image."]),
 })
 TEMPLATES.update({
     ("cross_duplicate", "observation"): (
