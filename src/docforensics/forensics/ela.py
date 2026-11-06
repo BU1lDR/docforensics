@@ -107,7 +107,7 @@ def _why_not(doc: Document, pg, ctx: Ctx) -> str | None:
     if fmt == "PNG":
         return "is a PNG picture, which is lossless and has no JPEG save to examine"
     if fmt != "JPEG":  # ingest types a file by its first bytes, so this is a JPEG-typed file Pillow reads as another format (a camera's MPO)
-        return f"is a picture in the {fmt} format, not a plain JPEG file, so there is no JPEG save to examine"
+        return f"is a picture in the {fmt} format, not a plain JPEG file, so it holds no JPEG save that this check can examine"
     if size != (pg.width, pg.height):
         return "was scaled or turned when it was read, so its pixels are not those of the saved JPEG"
     if turn != 1:
@@ -130,6 +130,7 @@ def jpeg_history(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
             continue
         shown = r.regions[:LISTED]
         more = f" and {len(r.regions) - LISTED} more" if len(r.regions) > LISTED else ""
+        noun, verb, poss, obj = ("region", "does", "its", "the region") if len(r.regions) == 1 else ("regions", "do", "their", "them")
         ev = [Evidence(doc=doc.id, page=pg.n, box=g.box,
                        note=f"saving again at quality {r.earlier} changes its ink by {g.error:.1f} grey levels on average, against {r.median:.1f} for the page's median cell")
               for g in shown]
@@ -138,9 +139,9 @@ def jpeg_history(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
             detail=f"Page {pg.n} was last saved as a JPEG at about quality {r.final}, and most of its ink still carries a trace of an earlier save: "
                    f"saving it again at about quality {r.earlier} changes it less than at the qualities beside it (by a factor of {r.dip:.1f}). "
                    f"That is where the trace shows, which is not always the quality of the earlier save. "
-                   f"{len(r.regions)} compact regions{more} do not share that trace: saving again at {r.earlier} changes their ink "
+                   f"{len(r.regions)} compact {noun}{more} {verb} not share that trace: saving again at {r.earlier} changes {poss} ink "
                    f"by at least {MIN_RATIO:g} times the page's median ({r.median:.1f} grey levels) and by more than {Z:g} robust standard "
-                   f"deviations, and saving at the qualities either side of it alters them as much (their own dip is under {MAX_DIP:g}, against "
+                   f"deviations, and saving at the qualities either side of it alters {obj} as much ({poss} own dip is under {MAX_DIP:g}, against "
                    f"{r.dip:.1f} for the page as a whole). Qualities were tried in steps of {QUALITIES[1] - QUALITIES[0]}, so the figures are "
                    f"approximate.", evidence=ev))
     if issues:  # one clause for each reason, with the first page it applies to and how many more: a long scanned file stays short

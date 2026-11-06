@@ -14,7 +14,7 @@ from PIL import Image
 from datagen.ela_pack import build_case, plan_cases
 from docforensics.config import Thresholds
 from docforensics.explain.templates import TEMPLATES
-from docforensics.forensics.ela import DETECTOR, ela_regions, jpeg_history
+from docforensics.forensics.ela import DETECTOR, Region, Result, ela_regions, jpeg_history
 from docforensics.ingest import create_case
 from docforensics.model import Page
 from docforensics.pipeline import Ctx
@@ -85,6 +85,23 @@ def test_a_pasted_piece_is_an_observation_with_its_box_the_two_qualities_and_no_
     assert "95" in f.detail and "50" in f.detail and not VERDICT.search(f.title + f.detail)
 
 
+def test_one_region_is_counted_as_a_region_and_two_as_regions(tmp_path, monkeypatch):
+    scan, _ = made("pasted-field")
+    case, doc, ctx = page_of(tmp_path, scan, "s.jpg")
+
+    def detail_of(n):  # the pixels are not the point here, only the sentence about the n regions the check returned
+        regions = [Region((16.0, 16.0 + 80 * i, 80.0, 80.0 + 80 * i), 4, 9.0) for i in range(n)]
+        monkeypatch.setattr("docforensics.forensics.ela.ela_regions", lambda gray: Result(95, 50, 3.0, 2.0, regions))
+        (f,) = jpeg_history(case, doc, ctx)
+        assert len(f.evidence) == n
+        return f.detail
+
+    one, two = detail_of(1), detail_of(2)
+    assert "1 compact region does not share that trace" in one and "changes its ink" in one and "alters the region as much (its own dip" in one
+    assert "regions" not in one and "their" not in one
+    assert "2 compact regions do not share that trace" in two and "changes their ink" in two and "alters them as much (their own dip" in two
+
+
 def test_a_page_with_nothing_to_report_gives_no_finding_at_all(tmp_path):
     for kind in ("genuine", "resaved"):
         scan, _ = made(kind)
@@ -105,6 +122,7 @@ def test_a_multi_picture_jpeg_is_named_as_such_and_not_called_lossless(tmp_path)
     im.save(mpo, "MPO", save_all=True, append_images=[im.copy()])  # a camera's two-picture file: typed as a JPEG, read by Pillow as an MPO
     (f,) = jpeg_history(*page_of(tmp_path, mpo.getvalue(), "s.jpg"))
     assert f.fclass == "processing_limitation" and "MPO" in f.detail and "not a plain JPEG" in f.detail and "lossless" not in f.detail
+    assert "this check can examine" in f.detail and "no JPEG save to examine" not in f.detail  # an MPO's pictures are JPEG-compressed: the check cannot read them, which is not "there is none"
 
 
 def test_pages_that_cannot_be_examined_for_one_reason_are_one_clause_with_a_count(tmp_path):
