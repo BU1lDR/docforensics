@@ -9,7 +9,10 @@ last save lies close to the earlier one, or when the edit shares the page's grid
 observation: a page assembled from several scans, a stamp or a date added by the scanner, or a picture inserted by a program leaves the
 same mark. Qualities are tried in steps of 5 with the standard tables of libjpeg, as Pillow writes them. An earlier save at a quality
 between the steps still shows, at a neighbouring or related step (so the quality named is where the trace shows, not always the quality
-of the save); an earlier save written with other tables (Photoshop's presets in the one test made, see docs/spike-e-ela.md) shows not at all."""
+of the save); an earlier save written with other tables (Photoshop's presets in the one test made, see docs/spike-e-ela.md) shows not at all.
+The idea is that of JPEG ghosts (H. Farid, IEEE Transactions on Information Forensics and Security 4(1), 2009); error-level analysis is the same
+idea at one assumed quality, and here the quality is searched for. The last-save search, the dip rule and the cell statistics are written for
+this project on numpy, OpenCV and Pillow, with no code from the paper or from a library for it."""
 import io
 from dataclasses import dataclass, field
 
@@ -95,29 +98,31 @@ def ela_regions(gray: np.ndarray) -> Result:
 
 
 def _why_not(doc: Document, pg, ctx: Ctx) -> str | None:
-    """Why this page's pixels are not the saved JPEG's, or None if they are."""
+    """Why this page's pixels are not the saved JPEG's (what follows "page N" in the limitation), or None if they are."""
     try:
         with Image.open(ctx.cd.root / doc.stored_path) as im:
             fmt, size, turn = im.format, im.size, im.getexif().get(274, 1)
     except Exception:
-        return f"page {pg.n} comes from a file that is not a picture, so there is no JPEG save to examine"
-    if fmt != "JPEG":
-        return f"page {pg.n} is a {fmt} picture, which is lossless and has no JPEG save to examine"
+        return "comes from a file that is not a picture, so there is no JPEG save to examine"
+    if fmt == "PNG":
+        return "is a PNG picture, which is lossless and has no JPEG save to examine"
+    if fmt != "JPEG":  # ingest types a file by its first bytes, so this is a JPEG-typed file Pillow reads as another format (a camera's MPO)
+        return f"is a picture in the {fmt} format, not a plain JPEG file, so there is no JPEG save to examine"
     if size != (pg.width, pg.height):
-        return f"page {pg.n} was scaled or turned when it was read, so its pixels are not those of the saved JPEG"
+        return "was scaled or turned when it was read, so its pixels are not those of the saved JPEG"
     if turn != 1:
-        return f"page {pg.n} was turned upright when it was read (the picture says so), so its pixels are not laid on the grid of the saved JPEG"
+        return "was turned upright when it was read (the picture says so), so its pixels are not laid on the grid of the saved JPEG"
     return None
 
 
 def jpeg_history(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
     out: list[Finding] = []
-    issues: list[str] = []
+    issues: dict[str, list[int]] = {}  # the reason a page was not examined: the pages it applies to
     for pg in doc.pages:
         if pg.read_mode != "ocr":
             continue
         if why := _why_not(doc, pg, ctx):
-            issues.append(why)
+            issues.setdefault(why, []).append(pg.n)
             continue
         with Image.open(ctx.cd.root / pg.image_path) as im:
             r = ela_regions(np.asarray(im.convert("L")))
@@ -138,7 +143,9 @@ def jpeg_history(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
                    f"deviations, and saving at the qualities either side of it alters them as much (their own dip is under {MAX_DIP:g}, against "
                    f"{r.dip:.1f} for the page as a whole). Qualities were tried in steps of {QUALITIES[1] - QUALITIES[0]}, so the figures are "
                    f"approximate.", evidence=ev))
-    if issues:
-        out.append(limitation(DETECTOR, "Compression history not examined", "The JPEG history of a page was not examined: " + "; ".join(issues[:10]) + ".",
+    if issues:  # one clause for each reason, with the first page it applies to and how many more: a long scanned file stays short
+        clauses = [f"page {ns[0]} {why}" + (f" (and {len(ns) - 1} more page{'s' if len(ns) > 2 else ''} for the same reason)" if len(ns) > 1 else "")
+                   for why, ns in issues.items()]
+        out.append(limitation(DETECTOR, "Compression history not examined", "The JPEG history of a page was not examined: " + "; ".join(clauses) + ".",
                               [doc_evidence(doc.id, "scanned pages")]))
     return out

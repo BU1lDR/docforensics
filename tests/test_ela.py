@@ -99,6 +99,39 @@ def test_a_lossless_picture_is_a_limitation_and_never_a_pass(tmp_path):
     assert (f.fclass, f.detector) == ("processing_limitation", DETECTOR) and "JPEG" in f.detail and f.evidence[0].page == 0
 
 
+def test_a_multi_picture_jpeg_is_named_as_such_and_not_called_lossless(tmp_path):
+    scan, _ = made("pasted-field")
+    im, mpo = Image.open(io.BytesIO(scan)), io.BytesIO()
+    im.save(mpo, "MPO", save_all=True, append_images=[im.copy()])  # a camera's two-picture file: typed as a JPEG, read by Pillow as an MPO
+    (f,) = jpeg_history(*page_of(tmp_path, mpo.getvalue(), "s.jpg"))
+    assert f.fclass == "processing_limitation" and "MPO" in f.detail and "not a plain JPEG" in f.detail and "lossless" not in f.detail
+
+
+def test_pages_that_cannot_be_examined_for_one_reason_are_one_clause_with_a_count(tmp_path):
+    scan, _ = made("pasted-field")
+    png = io.BytesIO()
+    Image.open(io.BytesIO(scan)).save(png, "PNG")
+    case, doc, ctx = page_of(tmp_path, png.getvalue(), "s.png")
+    doc.pages = [doc.pages[0].model_copy(update={"n": n}) for n in range(1, 15)]  # a long scanned file of 14 pages
+    (f,) = jpeg_history(case, doc, ctx)
+    assert f.detail.count("PNG picture") == 1 and "page 1 is a PNG picture" in f.detail and "and 13 more pages for the same reason" in f.detail
+    assert len(f.detail) < 250
+
+
+def test_pages_that_cannot_be_examined_for_two_reasons_are_two_clauses(tmp_path):
+    scan, _ = made("pasted-field")
+    exif = Image.Exif()
+    exif[274] = 3
+    out = io.BytesIO()
+    Image.open(io.BytesIO(scan)).save(out, "JPEG", quality=95, exif=exif)
+    case, doc, ctx = page_of(tmp_path, out.getvalue(), "s.jpg")
+    first = doc.pages[0]
+    doc.pages = [first, first.model_copy(update={"n": 2, "width": first.width - 100}), first.model_copy(update={"n": 3})]
+    (f,) = jpeg_history(case, doc, ctx)
+    assert "page 1 was turned upright" in f.detail and "(and 1 more page for the same reason)" in f.detail and "page 2 was scaled" in f.detail
+    assert f.detail.count("; ") == 1
+
+
 def test_a_page_that_is_not_the_saved_picture_is_a_limitation(tmp_path):
     scan, _ = made("pasted-field")
     case, doc, ctx = page_of(tmp_path, scan, "s.jpg")
