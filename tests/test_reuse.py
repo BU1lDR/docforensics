@@ -157,6 +157,23 @@ def test_a_plain_stroke_in_the_place_of_the_signatures_is_skipped_and_the_skip_i
     assert reuse_findings(case) == [] and compared(events) == []
 
 
+def test_a_hollow_box_printed_the_same_on_both_documents_is_compared_and_reported(tmp_path, monkeypatch):
+    """A mark that is not solid fills well under half of its canvas, so the guard leaves it alone: it is compared like a signature, and
+    printed the same on two documents it is one observation. This is the limit of the guard, stated in the README and the limitations."""
+    def box(sheet, person, rng, x, caption_y):
+        y = caption_y - signatures.GAP - signatures.H
+        sheet.page.draw_rect((x, y, x + signatures.W, y + signatures.H), color=signatures.INK, width=1.1)
+        sheet.region("signature", x - 1, y - 1, x + signatures.W + 1, y + signatures.H + 1)
+
+    monkeypatch.setattr(signatures, "draw", box)
+    files, _ = pack_files(tmp_path, "genuine")
+    case, events = run(tmp_path, *files)
+    assert [e for e in events if e.event == "reuse_skipped"] == []
+    (done,) = compared(events, "signature")
+    assert done["repeat"] is True and all(0 < x < 0.5 for x in done["fill"])
+    assert len(reuse_findings(case)) == 1
+
+
 def test_a_document_submitted_twice_is_not_reported_again_for_its_marks(tmp_path):
     ident = identity(1)
     slip = draw_payslip(ident, seed=31).pdf
