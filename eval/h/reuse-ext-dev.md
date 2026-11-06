@@ -1,6 +1,6 @@
-# Reused marks (scope D, package H): ext-dev, 06 Nov 2026 13:41
+# Reused marks (scope D, package H): ext-dev, 06 Nov 2026 14:37
 
-Tool: commit b892e5c. Limit: repeat_ink = 5 % (ink gap of two signatures; the 64-bit hash is logged and does not decide; stamps and logos are not looked at). 72 cases of datagen/reuse_pack.py, 535 s in all, peak memory 762 MB. Windows 10, Python 3.11.9.
+Tool: commit 30257ed. Limit: repeat_ink = 5 % (ink gap of two signatures; the 64-bit hash is logged and does not decide; stamps and logos are not looked at). 72 cases of datagen/reuse_pack.py, 385 s in all, peak memory 762 MB. Windows 10, Python 3.11.9.
 
 A find is the observation whose two signatures lie on the manifest's boxes (IoU of at least 0.5). A stray observation is any other reuse observation; in a genuine case every one is a false observation. The stamp cases are listed to show that they are not compared. ext-dev is what the limit was fitted on, so these figures are in-sample.
 
@@ -21,13 +21,13 @@ A find is the observation whose two signatures lie on the manifest's boxes (IoU 
 
 ## Genuine cases (every document signed afresh)
 
-| Medium | Cases | Cases with a reuse observation | Observations |
-|---|---|---|---|
-| digital | 12 | 0 | 0 |
-| mild | 6 | 0 | 0 |
-| 150dpi | 3 | 0 | 0 |
-| 120dpi | 3 | 0 | 0 |
-| **all** | 24 | 0 | 0 |
+| Medium | Cases | Not compared | Cases with a reuse observation | Observations |
+|---|---|---|---|---|
+| digital | 12 | 0 | 0 | 0 |
+| mild | 6 | 0 | 0 | 0 |
+| 150dpi | 3 | 0 | 0 | 0 |
+| 120dpi | 3 | 1 | 0 | 0 |
+| **all** | 24 | 1 | 0 | 0 |
 
 ## The ink gap of the compared signature pairs (%)
 
@@ -41,6 +41,8 @@ Repeated pairs are the pair in a case that repeats the signature; separate pairs
 | separate | digital | 24 | 8.8 | 19.7 | 44.2 |
 | separate | scanned | 23 | 9.3 | 20.3 | 42.5 |
 | separate | all | 47 | 8.8 | 20.1 | 44.2 |
+
+Ink share of the canvases of the compared signatures (two to a pair): smallest 0.09, median 0.12, largest 0.18. A mark that fills more than 0.5 of its canvas is a bar, a dot or a block and is not compared: 0 marks skipped.
 
 ## The same counts at other limits
 
