@@ -1,4 +1,5 @@
 import hashlib
+import io
 import stat
 
 import pymupdf
@@ -73,3 +74,20 @@ def test_same_file_twice_gets_two_documents(tmp_path):
     assert len(list(cd.files.iterdir())) == 1
     assert [e.event for e in audit.events()].count("file_ingested") == 2
     assert [e.event for e in audit.events()][0] == "case_created"
+
+
+def test_a_cut_off_pdf_is_read_without_the_library_printing_each_broken_object(tmp_path, monkeypatch):
+    """MuPDF wrote a line to stdout for every broken object of a damaged file (440 lines for one cut-off statement), which buried the summary
+    the command line prints; the damage is a finding of the case, so the library's own lines are switched off. What the library prints is
+    caught where it is sent (pymupdf keeps the stdout it found at import, which a test's capture does not replace)."""
+    from datagen.fictional import identity
+    from datagen.layouts.statement import draw_statement
+    from docforensics.pipeline import run_case
+
+    printed = io.StringIO()
+    monkeypatch.setattr(pymupdf, "_g_out_message", printed)
+    good = draw_statement(identity(1), seed=1).pdf
+    _, cd, _ = create_case(tmp_path / "data", [("cut.pdf", good[: len(good) // 2]), ("good.pdf", good)], TH)
+    case = run_case(cd, TH)
+    assert "MuPDF" not in printed.getvalue()
+    assert any(f.detector == "file_structure" for f in case.findings)  # the damage is still reported, in the case

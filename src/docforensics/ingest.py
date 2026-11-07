@@ -14,6 +14,10 @@ from .model import Case, Document
 from .pipeline import Ctx
 from .store import CaseDir, save_case
 
+# A damaged file becomes a finding. The library's own line for each broken object (440 for one cut-off statement) buried the summary
+# the command line prints.
+pymupdf.TOOLS.mupdf_display_errors(False)
+
 _EXT = {"pdf": "pdf", "png": "png", "jpeg": "jpg"}
 
 
