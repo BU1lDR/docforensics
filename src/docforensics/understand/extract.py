@@ -241,9 +241,24 @@ class _Extractor:
         return not ((kind == "amount" and parse_amount(text_of(words)) is None) or (kind == "date" and not _date_runs(words)))
 
     def label_like(self, words: list[Word]) -> bool:
-        """A cell that ends in a colon or reads as one of the type's labels or headings: the next label, not a value."""
+        """A cell that ends in a colon, reads as one of the type's labels or headings, or opens a longer one that wraps ('Declared
+        Monthly' over 'Income'): the next label, not a value."""
         text = text_of(words)
-        return text.endswith(":") or any(similar(text.replace(":", " "), label, self.th.label_sim) for label in self.labels)
+        return text.endswith(":") or any(similar(text.replace(":", " "), label, self.th.label_sim) for label in self.labels) \
+            or self.opens_label(text)
+
+    def opens_label(self, text: str) -> bool:
+        """Whether the text is the first words, two at least, of a longer label or heading: the first line of one that wraps."""
+        n = len(text.split())
+        return n >= 2 and any(len(label.split()) > n and similar(text, " ".join(label.split()[:n]), self.th.label_sim)
+                              for label in self.labels)
+
+    def finishes_label(self, label_words: list[Word], cell: list[Word]) -> bool:
+        """Whether the cell is the rest of the label ('Salary Account' over 'Number' reads as 'Salary Account Number', a longer
+        label of the type): the label wraps, and the cell under it is not its value. 'Tenure in Months' over '48' does not: the
+        label is whole, and nothing longer that the type knows starts with it."""
+        both = text_of([*label_words, *cell])
+        return any(len(label.split()) > len(label_words) and similar(both, label, self.th.label_sim) for label in self.labels)
 
     @staticmethod
     def colon_after(words: list[Word], hit: tuple[int, int, float]) -> bool:
@@ -277,7 +292,8 @@ class _Extractor:
         value, how = right, ""
         if not (right and self.plausible(fs.kind, right)):  # nothing readable beside the label: the value may stand under it
             under = self.below(line, label_words)
-            if under and not self.label_like(under) and (not right or self.plausible(fs.kind, under)):
+            if (under and not self.label_like(under) and not self.finishes_label(label_words, under)
+                    and (not right or self.plausible(fs.kind, under))):
                 value = under
                 if fs.position != "below":
                     how, score = "value read from under the label", score * BELOW_SCORE
