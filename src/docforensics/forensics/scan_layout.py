@@ -15,6 +15,7 @@ from ..findings import doc_evidence, limitation, quote
 from ..model import Case, Document, Evidence, Finding, Word
 from ..pipeline import Ctx
 from ..understand.layout import MIN_WORDS, page_turn, upright  # noqa: F401 (re-exported: signature and the tests take them from here)
+from .grain import lacks_grain
 
 DETECTOR = "scan_layout"
 LISTED = 12         # words named in one finding; the rest are counted
@@ -62,6 +63,8 @@ def layout_consistency(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
             continue
         if pg.quality_class == "poor":
             issues.append(f"page {pg.n} is of poor quality (class poor), so the placement of its words was not compared")
+            continue
+        if lacks_grain(ctx, pg):  # grain_gate says so, once per document
             continue
         words = pg.words
         if len(words) < MIN_WORDS:

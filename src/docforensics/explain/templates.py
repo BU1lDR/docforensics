@@ -87,6 +87,12 @@ TEMPLATES: dict[tuple[str, str], tuple[str, list[str]]] = {
         f"{_LIMIT} The image grain of some scanned words could not be compared, so a changed word may exist among them and would "
         "not have been shown.",
         _UNCHECKED),
+    ("scan_grain", "processing_limitation"): (
+        f"{_LIMIT} The picture of a scanned page has no scanner grain on its paper, as a page printed or rendered to an image has none, "
+        "and the checks of image grain, of placement and of learned word measures were built on scans that do. They were not applied to "
+        "that page, so a changed word may exist there and would not have been shown. A scan that is very clean or cut at white may be "
+        "taken for such a page.",
+        _UNCHECKED),
     ("scan_layout", "observation"): (
         "Some words on a scanned page sit out of line with the text around them: a word higher or lower than the rest of its row, a "
         "figure whose right edge does not line up with its column, or a figure of another size than the page's other figures. A piece "

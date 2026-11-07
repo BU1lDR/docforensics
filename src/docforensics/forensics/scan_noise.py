@@ -10,6 +10,7 @@ from PIL import Image
 from ..findings import doc_evidence, limitation, quote
 from ..model import Case, Document, Evidence, Finding, Page
 from ..pipeline import Ctx
+from .grain import lacks_grain
 
 DETECTOR = "scan_noise"
 LISTED = 12      # words named in one finding; more are counted
@@ -42,6 +43,8 @@ def noise_residual(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
             continue
         if pg.quality_class == "poor":
             issues.append(f"page {pg.n} is of poor quality (class poor), so the grain of its words was not compared")
+            continue
+        if lacks_grain(ctx, pg):  # grain_gate says so, once per document
             continue
         with Image.open(ctx.cd.root / pg.image_path) as im:
             gray = np.asarray(im.convert("L"), dtype=np.float32)
