@@ -9,7 +9,6 @@ import base64
 import http.client
 import json
 import os
-import re
 import shutil
 import socket
 import struct
@@ -227,8 +226,13 @@ def test_every_tab_draws_its_content_and_the_page_raises_no_error(desk, page):
         page.wait_for(f"!document.getElementById('tab-{tab}').hidden")
         for word in words:  # the tabs that fetch their data fill in after the click, so wait for the words and do not sleep
             page.wait_for(f"document.getElementById('tab-{tab}').innerText.includes({json.dumps(word)})", seconds=15)
-        text = page.js(f"document.getElementById('tab-{tab}').innerText")
-        assert not re.search(r"Loading|could not be (loaded|read)", text), f"the {tab} tab is still waiting or shows an error:\n{text[:600]}"
+        # the desk's own signs of waiting or failing, not words in the text: a capability note may say that a narration "could not be read"
+        waiting = page.js(
+            f"(() => {{ const t = document.getElementById('tab-{tab}'), m = document.getElementById('message'); "
+            "return [...t.querySelectorAll('.bad')].map((e) => e.innerText)"
+            ".concat(m.className === 'bad' ? [m.innerText] : [])"
+            ".concat([...t.querySelectorAll('p.empty')].map((e) => e.innerText).filter((s) => /^(Loading|Reading)/.test(s))); })()")
+        assert waiting == [], f"the {tab} tab is still waiting or shows an error: {waiting}"
     time.sleep(1)  # a short last wait, so that an error raised by a timer or a late request of the last tab is seen as well
     assert page.problems() == []
 
