@@ -49,9 +49,14 @@ measures new seeds and layout B of the same edit kinds, not unseen kinds. No pro
     python -m evaluation.train_patches confirm --root D:/tmp/patches --once   # the confirm slices, once; writes eval/patches/ and the weights
 Heavy runs go under the window protocol (D:/tmp/eval-window.txt)."""
 import argparse
+import datetime
 import hashlib
+import json
 import math
+import os
 import pickle
+import platform
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -201,8 +206,13 @@ def threshold(page_best: list[float], allowed: int) -> float:
     return float("-inf") if len(s) <= allowed else float(np.nextafter(s[allowed], np.inf))
 
 
+def listed(s: np.ndarray, t: float) -> list[int]:
+    """The words of a page that a flag at threshold t names: those scoring at least t, best first, at most LISTED."""
+    return [int(j) for j in np.argsort(-s)[:LISTED] if s[j] >= t] if len(s) else []
+
+
 def learned_flags(page: dict, s: np.ndarray, t: float) -> list[list[float]]:
-    return [page["boxes"][j].tolist() for j in np.argsort(-s)[:LISTED] if s[j] >= t] if len(s) else []
+    return [page["boxes"][j].tolist() for j in listed(s, t)]
 
 
 def baseline_flags(page: dict, checks=BASELINE) -> list[list[float]]:
@@ -232,15 +242,17 @@ def judge(pages: list[dict], scores: list[np.ndarray], t: float, only=lambda p: 
     return (tally(sub, [baseline_flags(p) for p in sub]), tally(sub, [learned_flags(pages[i], scores[i], t) for i in keep]))
 
 
-def design(root: Path, grid=((0.1, 1.0), (1.0, 1.0), (10.0, 1.0), (1.0, 10.0), (1.0, 100.0))) -> None:
-    pages = load(DESIGN, root)
-    dev = [i for i, p in enumerate(pages) if p["slice"] == "dev-design"]
+def design(root: Path, names=DESIGN, grid=((0.1, 1.0), (1.0, 1.0), (10.0, 1.0), (1.0, 10.0), (1.0, 100.0))) -> None:
+    if set(names) & set(CONFIRM):
+        raise SystemExit("the confirm slices are scored once, by `confirm`, not looked at while designing")
+    pages = load(names, root)
+    dev = [i for i, p in enumerate(pages) if p["slice"] == "dev-design"] or list(range(len(pages)))  # (no dev-design yet: exploring)
     base_false = len(tally([pages[i] for i in dev], [baseline_flags(pages[i]) for i in dev])["false"])
     for lam, pos_weight in grid:
         scores = out_of_fold(pages, lam, pos_weight)
         t = threshold([scores[i].max() if len(scores[i]) else -math.inf for i in dev if not pages[i]["edit"]], base_false)
         print(f"\n=== lambda {lam:g}, positive weight {pos_weight:g}, t* = {t:.3f} (baseline false pages on unedited dev-design: {base_false})")
-        for name in DESIGN:
+        for name in names:
             b, n = judge(pages, scores, t, lambda p, name=name: p["slice"] == name)
             print(describe(b, n, name))
         for kind in sorted({p["kind"] for p in pages if p["slice"] == "xdev-design"}):
@@ -248,16 +260,168 @@ def design(root: Path, grid=((0.1, 1.0), (1.0, 1.0), (10.0, 1.0), (1.0, 10.0), (
             print("   " + describe(b, n, f"xdev-design {kind}"))
 
 
+# ---- the one scoring of the confirm slices ---------------------------------------------------------------------------------------
+REPO = Path(__file__).resolve().parents[1]
+WEIGHTS = REPO / "src" / "docforensics" / "forensics" / "learned_patches.json"
+EXISTING = ("grain", "placement", "jpeg_history")  # the scan checks that exist today
+ORDER = ("dev-design", "xdev-design", "dev-confirm", "xdev-confirm")
+COMBOS = {"grain": ("grain",), "placement": ("placement",), "jpeg_history": ("jpeg_history",), "baseline (grain, placement)": BASELINE,
+          "learned": ("learned",), "the three existing": EXISTING, "the three existing and learned": EXISTING + ("learned",)}
+BASE, NEW = "baseline (grain, placement)", "learned"
+
+
+def flags_of(page: dict, s: np.ndarray, t: float, who: tuple[str, ...]) -> list[list[float]]:
+    return [b for w in who for b in (learned_flags(page, s, t) if w == "learned" else page["flags"][w])]
+
+
+def verdict(rows: dict) -> dict:
+    """The parts of the bar from {slice: (baseline tally, learned tally)}; the last entry is for information, not part of the bar."""
+    def higher(s):
+        b, n = rows[s]
+        return len(n["found"]) - len(b["found"]) >= margin(b["changed"])
+
+    def no_more(s, allow=0):
+        b, n = rows[s]
+        return len(n["false"]) <= len(b["false"]) + allow and n["false_regions"] <= b["false_regions"] + allow * LISTED
+
+    b_slices = ("dev-design", "dev-confirm", "xdev-confirm")
+    return {"a": all(higher(s) for s in ("dev-design", "dev-confirm")), "b": all(no_more(s) for s in b_slices), "c": higher("xdev-confirm"),
+            "b_with_one_page_allowed": all(no_more(s, 1) for s in b_slices)}
+
+
+def confirm(root: Path, lam: float, pos_weight: float, out: Path = REPO / "eval" / "patches", weights: Path = WEIGHTS) -> dict:
+    """Score the confirm slices, once: t* and the weights come from the design slices alone, with lam and pos_weight as fixed beforehand."""
+    guard = root / "confirm.pkl"
+    if guard.exists():
+        raise SystemExit(f"{guard} exists: the confirm slices were scored already (`report` writes the same results up again)")
+    design_pages, confirm_pages = load(DESIGN, root), load(CONFIRM, root)
+    dev = [i for i, p in enumerate(design_pages) if p["slice"] == "dev-design"]
+    allowed = len(tally([design_pages[i] for i in dev], [baseline_flags(design_pages[i]) for i in dev])["false"])
+    oof = out_of_fold(design_pages, lam, pos_weight)
+    t = threshold([oof[i].max() if len(oof[i]) else -math.inf for i in dev if not design_pages[i]["edit"]], allowed)
+    model = train(design_pages, lam, pos_weight)
+    git = lambda *a: subprocess.run(["git", "-C", str(REPO), *a], capture_output=True, text=True).stdout.strip()
+    result = {"lam": lam, "pos_weight": pos_weight, "t": t, "model": model, "pages": design_pages + confirm_pages,
+              "scores": oof + [scores_of(model, p) for p in confirm_pages], "commit": git("rev-parse", "--short", "HEAD"),
+              "dirty": bool(git("status", "--porcelain", "--untracked-files=no")), "when": datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z"),
+              "machine": f"{platform.system()} {platform.release()}, Python {platform.python_version()}, {os.cpu_count()} cores, CPU only"}
+    with guard.open("xb") as f:  # exclusive: a second run cannot get past here, whatever happens to the report below
+        pickle.dump(result, f)
+    return report(root, out, weights)
+
+
+def export(r: dict, path: Path) -> None:
+    """The weights, with what they were trained on. Only a detector that passed the bar gets this file."""
+    m, trained = r["model"], [p for p in r["pages"] if p["slice"] in DESIGN]
+    assert math.isfinite(r["t"])
+    manifest = sorted((p["slice"], p["case"], p["file"], p["page"], p["edit"]) for p in trained)
+    path.write_text(json.dumps({
+        "features": list(FEATURES), "mean": m["mu"].tolist(), "scale": m["sd"].tolist(), "clip": CLIP, "beta": m["beta"].tolist(),
+        "threshold": r["t"], "listed": LISTED, "ridge": r["lam"], "positive_weight": r["pos_weight"],
+        "random_numbers": "none: Newton steps from zero weights, so the same data gives the same weights",
+        "training": {"slices": list(DESIGN), "cases": len({p["case"] for p in trained}), "pages": len(trained), "words": m["words"],
+                     "positive_words": m["positives"], "manifest_sha256": hashlib.sha256(json.dumps(manifest).encode()).hexdigest(),
+                     "manifest_is": "sha256 of the sorted (slice, case, file, page, edit box) of every page trained on"}},
+        indent=1) + "\n", encoding="utf-8")
+
+
+def report(root: Path, out: Path = REPO / "eval" / "patches", weights: Path = WEIGHTS) -> dict:
+    """Write the results of the one confirm run (read back from root/confirm.pkl) to out/acceptance.md and .json; the weights on a pass."""
+    with (root / "confirm.pkl").open("rb") as f:
+        r = pickle.load(f)
+    pages, scores, t = r["pages"], r["scores"], r["t"]
+    ids = {n: [i for i, p in enumerate(pages) if p["slice"] == n] for n in ORDER}
+    tallies, found, false = {}, {}, {}  # by combination and slice; the sets hold indices into `pages`
+    for name, who in COMBOS.items():
+        found[name], false[name] = set(), set()
+        for n in ORDER:
+            tl = tally([pages[i] for i in ids[n]], [flags_of(pages[i], scores[i], t, who) for i in ids[n]])
+            tallies[name, n] = tl
+            found[name] |= {ids[n][k] for k in tl["found"]}
+            false[name] |= {ids[n][k] for k in tl["false"]}
+    ok = verdict({n: (tallies[BASE, n], tallies[NEW, n]) for n in ORDER})
+    go = ok["a"] and ok["b"] and ok["c"]
+
+    def cells(tl):
+        return f"{len(tl['found'])} of {tl['changed']} | {len(tl['false'])} of {tl['unedited']} | {tl['false_regions']}"
+
+    md = [f"# Learned patch detector: the confirm run (Task 29)\n",
+          f"Run: {r['when']}, commit {r['commit']}{' (tree with uncommitted changes)' if r['dirty'] else ''}, {r['machine']}.",
+          f"Fixed before the run, from the design slices: ridge {r['lam']:g}, positive weight {r['pos_weight']:g}, threshold t* = {t:.4f} "
+          f"(the smallest at which the out-of-fold unedited dev-design pages are flagged no more often than the baseline flags them). "
+          f"Weights trained on {len([i for n in DESIGN for i in ids[n]])} design pages ({r['model']['words']} words, {r['model']['positives']} positive).",
+          "The bar is in the docstring of evaluation/train_patches.py (commit 76c1f42). \"Higher\" means by at least max(2, 10 % of the changed pages).\n",
+          "## Verdict\n",
+          f"- (a) recall higher on dev-design (out of fold) and dev-confirm: **{'met' if ok['a'] else 'not met'}**",
+          f"- (b) false regions and falsely flagged unedited pages no higher, on dev-design, dev-confirm, xdev-confirm: **{'met' if ok['b'] else 'not met'}**",
+          f"- (c) recall higher on xdev-confirm: **{'met' if ok['c'] else 'not met'}**",
+          f"- {'All three met: the detector goes in.' if go else 'The bar is not met: the detector is dropped (code on the branch, not registered).'}",
+          f"- For information, not part of the bar: (b) with one more falsely flagged page allowed would be "
+          f"{'met' if ok['b_with_one_page_allowed'] else 'not met'}.\n",
+          "## Every combination on every slice\n", "A page is found when a region of a flag has IoU >= 0.1 with the edit box.\n",
+          "| slice | checks | changed pages found | unedited pages falsely flagged | false regions |", "|---|---|---|---|---|"]
+    for n in ORDER:
+        md += [f"| {n} | {name} | {cells(tallies[name, n])} |" for name in COMBOS]
+    md += ["\n## What the learned detector adds to the three existing checks\n", "| slice | changed pages only the learned detector finds | "
+           "changed pages the three existing find that it does not | unedited pages only it flags |", "|---|---|---|---|"]
+    for n in ORDER:
+        s, e, l = set(ids[n]), "the three existing", NEW
+        md.append(f"| {n} | {len((found[l] - found[e]) & s)} | {len((found[e] - found[l]) & s)} | {len((false[l] - false[e]) & s)} |")
+    md += ["\n## By kind\n", "| slice | kind | changed: baseline | changed: learned | unedited falsely flagged: baseline | learned |", "|---|---|---|---|---|---|"]
+    for n in ORDER:
+        for kind in sorted({pages[i]["kind"] for i in ids[n]}):
+            g = [i for i in ids[n] if pages[i]["kind"] == kind]
+            ch, un = [i for i in g if pages[i]["edit"]], [i for i in g if not pages[i]["edit"]]
+            md.append(f"| {n} | {kind} | {len(set(ch) & found[BASE])} of {len(ch)} | {len(set(ch) & found[NEW])} of {len(ch)} | "
+                      f"{len(set(un) & false[BASE])} of {len(un)} | {len(set(un) & false[NEW])} of {len(un)} |")
+    md += ["\n## Every changed page\n", "| slice | case | kind | level | baseline | jpeg_history | learned |", "|---|---|---|---|---|---|---|"]
+    for n in ORDER:
+        for i in ids[n]:
+            if pages[i]["edit"]:
+                p, yes = pages[i], lambda name, i=i: "found" if i in found[name] else "missed"
+                md.append(f"| {n} | {p['case']} | {p['kind']} | {p['level']} | {yes(BASE)} | {yes('jpeg_history')} | {yes(NEW)} |")
+    md += ["\n## Every false region on an unedited page\n", "| slice | case | file | page | by | regions |", "|---|---|---|---|---|---|"]
+    for n in ORDER:
+        for i in ids[n]:
+            p = pages[i]
+            if p["edit"]:
+                continue
+            for name, who in ((BASE, BASELINE), (NEW, ("learned",))):
+                boxes = flags_of(p, scores[i], t, who)
+                if boxes:
+                    words = ", ".join(f"{p['text'][j]!r}" for j in listed(scores[i], t)) if name == NEW else ""
+                    md.append(f"| {n} | {p['case']} | {p['file']} | {p['page']} | {name} | {len(boxes)} {words} |")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "acceptance.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    summary = {"run": {k: r[k] for k in ("when", "commit", "dirty", "machine", "lam", "pos_weight", "t")}, "verdict": ok, "go": go,
+               "counts": {f"{name} | {n}": {k: (len(v) if isinstance(v, list) else v) for k, v in tallies[name, n].items()}
+                          for name in COMBOS for n in ORDER}}
+    (out / "acceptance.json").write_text(json.dumps(summary, indent=1) + "\n", encoding="utf-8")
+    if go:
+        export(r, weights)
+    return summary
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(prog="python -m evaluation.train_patches")
-    ap.add_argument("what", choices=("features", "design"))
+    ap.add_argument("what", choices=("features", "design", "confirm", "report"))
     ap.add_argument("slice", nargs="?", choices=sorted(pdta.SLICES))
     ap.add_argument("--root", required=True, type=Path)
+    ap.add_argument("--slices", nargs="+", default=list(DESIGN), choices=sorted(pdta.SLICES))
+    ap.add_argument("--once", action="store_true", help="confirm: yes, this is the one scoring of the confirm slices")
+    ap.add_argument("--lam", type=float)
+    ap.add_argument("--pos-weight", type=float)
     a = ap.parse_args()
     if a.what == "features":
         print(features(a.slice, a.root))
+    elif a.what == "design":
+        design(a.root, tuple(a.slices))
+    elif a.what == "report":
+        print(json.dumps(report(a.root)["verdict"]))
     else:
-        design(a.root)
+        if not (a.once and a.lam is not None and a.pos_weight is not None):
+            raise SystemExit("confirm needs --once --lam L --pos-weight W (the values fixed on the design slices)")
+        print(json.dumps(confirm(a.root, a.lam, a.pos_weight)["verdict"]))
 
 
 if __name__ == "__main__":
