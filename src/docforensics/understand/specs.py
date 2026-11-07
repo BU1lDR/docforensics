@@ -40,10 +40,26 @@ class ColumnSpec(_Spec):
         return self
 
 
+class MarkedSpec(_Spec):
+    """A statement that prints one column of amounts and, beside it, a column that marks each amount Dr or Cr, in place of a debit
+    column and a credit column. Looked for only when the heading names neither of those."""
+    amount: list[str]  # the heading of the column of amounts, in the wordings this type is known to use
+    marker: list[str]  # ... of the column of marks
+    debit: list[str]  # what the mark of a debit reads
+    credit: list[str]  # ... of a credit
+
+
 class TableSpec(_Spec):
     prefix: str = "txn"  # cells are fields named "<prefix>.<column>"
     columns: list[ColumnSpec]  # the first column anchors the rows: a line is a row if it reads there
     ends_at: list[str] = []  # names of fields whose labels (gross_earnings) end the table: the first line that holds one is below its rows
+    marked: MarkedSpec | None = None  # fills in the columns debit and credit, so the table needs both
+
+    @model_validator(mode="after")
+    def _marked_fills_debit_and_credit(self) -> "TableSpec":
+        if self.marked and not {"debit", "credit"} <= {c.name for c in self.columns}:
+            raise ValueError("`marked` fills in the columns debit and credit: the table needs both")
+        return self
 
 
 class TypeSpec(_Spec):

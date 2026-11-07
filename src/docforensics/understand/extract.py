@@ -38,6 +38,13 @@ _MISREAD = re.compile(r"(?=(?:\D*\d){4})\d[\d.,]*[.,][\d.,]*\d", re.A)  # four d
 _DATEISH = re.compile(r"[\dOoIl|SB]{1,4}(?P<sep>[/.-])[\dOoIl|SB]{1,2}(?P=sep)[\dOoIl|SB]{2,4}", re.A)  # the shape of a numeric date, digits or what they are misread as
 _CURRENCY = re.compile(rf"{chr(0x20B9)}|\brs\b|\binr\b|/-", re.I)
 _UNIT = re.compile(rf"\s*\((?:in\s+)?(?:inr|rs\.?|rupees|{chr(0x20B9)})\)\s*$", re.I)  # '(INR)' after a heading: the currency, not the name
+_AMOUNT = ColumnSpec(name="amount", kind="amount", headers=[])  # the two columns of a table that marks its amounts Dr or Cr (TableSpec.marked)
+_MARK = ColumnSpec(name="marker", kind="text", headers=[])
+
+
+def _said(text: str) -> str:
+    """The letters of a mark in lower case: 'Dr', 'DR.' and '(dr)' read the same."""
+    return re.sub(r"[^a-z]", "", text.casefold())
 
 
 @dataclass
@@ -372,7 +379,8 @@ class _Extractor:
     def heads_of(self, cells: list[list[Word]], tb: TableSpec) -> list[_Head]:
         """What the cells of a heading name. A column that two of them claim goes to the closer wording (the leftmost, on a tie). A
         heading that no column claims but a column's shared wording reads ('Amount') names that column if it is the heading right
-        after the one the column follows (Earnings, Amount, Deductions, Amount)."""
+        after the one the column follows (Earnings, Amount, Deductions, Amount). A table with no debit and no credit heading may have
+        a column of amounts and a column of marks instead (marked_heads)."""
         heads = [self.head(cell, tb) for cell in cells]
         order = sorted(range(len(heads)), key=lambda k: heads[k].x0 + heads[k].x1)  # left to right
         best: dict[str, int] = {}
@@ -396,7 +404,30 @@ class _Extractor:
             nxt = left_to_right[at + 1]
             if score := max((similar(nxt.text, w, self.th.label_sim) for w in c.shared), default=0.0):
                 nxt.col, nxt.score = c.name, score
+        if tb.marked and not any(h.col in ("debit", "credit") for h in heads):
+            self.marked_heads(heads, tb)
         return heads
+
+    def marked_heads(self, heads: list[_Head], tb: TableSpec) -> None:
+        """When both are there, the heading that no column claims and a wording of TableSpec.marked reads names the column of amounts
+        (the best wording, the leftmost on a tie) and the one nearest to it the column of marks. One of the two alone names nothing."""
+        def named(wordings: list[str]) -> list[tuple[float, int]]:
+            return [(s, k) for k, h in enumerate(heads)
+                    if h.col is None and (s := max((similar(h.text, w, self.th.label_sim) for w in wordings), default=0.0))]
+
+        def centre(k: int) -> float:
+            return heads[k].x0 + heads[k].x1
+
+        amounts = named(tb.marked.amount)
+        if not amounts:
+            return
+        sa, ka = max(amounts, key=lambda t: (t[0], -centre(t[1])))
+        marks = [(s, k) for s, k in named(tb.marked.marker) if k != ka]
+        if not marks:
+            return
+        sm, km = min(marks, key=lambda t: (-t[0], abs(centre(t[1]) - centre(ka))))
+        heads[ka].col, heads[ka].score = "amount", sa
+        heads[km].col, heads[km].score = "marker", sm
 
     def find_header(self, lines: list[Line], tb: TableSpec) -> tuple[int, int, list[_Head]] | None:
         """(first line, last line, headings) of the first line of three or more digit-free cells whose heading, read alone or with the
@@ -477,6 +508,41 @@ class _Extractor:
         return self.make(name, col.kind, words, page, union(w.box for w in words), value, validator,
                          min(heads[k].score, ROW_DOUBT) if k in doubt else heads[k].score, row=row, note="; ".join(filter(None, notes)))
 
+    def marked(self, tb: TableSpec, page: int, line: Line, row: int, heads: list[_Head], cells: dict[int, list[Word]],
+               over: dict[int, int], doubt: set[int]) -> list[Field]:
+        """The debit, the credit and the mark of a row of a table that has one column of amounts and, beside it, a column that marks each
+        amount Dr or Cr (TableSpec.marked). The amount goes to the side its mark names, with the words and the place of the amount alone,
+        and the other side is found empty. A row with neither an amount nor a mark moved nothing. Anything else leaves both sides
+        unread and says why: a mark that is neither Dr nor Cr is not guessed at, nor is an amount with no mark."""
+        amount = self.cell(tb, _AMOUNT, page, line, row, heads, cells, over, doubt)
+        mark = self.cell(tb, _MARK, page, line, row, heads, cells, over, doubt)
+        ka, km = (next(k for k, h in enumerate(heads) if h.col == c) for c in ("amount", "marker"))
+        box = (heads[ka].x0, line.box[1], heads[ka].x1, line.box[3])
+        col = heads[km].text
+
+        def state(f: Field) -> str:  # a value, found empty (see within.py), or not read
+            return "value" if f.value is not None else "empty" if not f.word_ids and f.conf > 0 else "unread"
+
+        def empty(name: str) -> Field:
+            return self.make(name, "amount", [], page, box, None, 1.0, heads[ka].score, row=row)
+
+        names = f"{tb.prefix}.debit", f"{tb.prefix}.credit"
+        sa, sm = state(amount), state(mark)
+        said = _said(mark.value or "")
+        side = next((i for i, ws in enumerate((tb.marked.debit, tb.marked.credit)) if said in [_said(w) for w in ws]), None)
+        if sa == "empty" and sm == "empty":
+            return [empty(names[0]), empty(names[1]), mark]
+        if sa == "value" and sm == "value" and side is not None:
+            note = "; ".join(filter(None, [f"a {('debit', 'credit')[side]}: the {col} column of this row reads {mark.raw!r}", amount.note, mark.note]))
+            got = amount.model_copy(update={"name": names[side], "conf": min(amount.conf, mark.conf), "note": note})
+            return [got, empty(names[1]), mark] if side == 0 else [empty(names[0]), got, mark]
+        why = (f"the amount of this row: {amount.note}" if sa == "unread"
+               else f"the {col} column of this row: {mark.note}" if sm == "unread"
+               else f"a mark, {mark.raw!r}, stands in the {col} column of this row with no amount beside it" if sa == "empty"
+               else f"the {col} column of this row is empty, so the amount is neither a debit nor a credit" if sm == "empty"
+               else f"the {col} column of this row reads {mark.raw!r}, which is neither Dr nor Cr")
+        return [*(self.missing(n, "amount", why, page=page, box=box, row=row) for n in names), mark]
+
     @staticmethod
     def aligned(cells: dict[int, list[Word]], mine: dict[int, list[Word]], height: float) -> bool:
         """In each column the two lines share, the words of `cells` start where those of `mine` do, or stand centred on them."""
@@ -529,7 +595,8 @@ class _Extractor:
     def table(self, tb: TableSpec) -> list[Field]:
         """Rows are the lines that read as a value in the first column (or in a column marked as an anchor), under the last
         heading seen (a page without its own heading continues the previous page's columns), down to the line that holds the label
-        of a total. Row numbers count from 1 through the document."""
+        of a total. Row numbers count from 1 through the document. A table that marks its amounts Dr or Cr, with no debit and no
+        credit column, gets both from the amount and its mark (marked)."""
         out: list[Field] = []
         heads, row, first = None, 0, tb.columns[0]
         for p in self.doc.pages:
@@ -541,6 +608,7 @@ class _Extractor:
             if not any(h.col == first.name for h in heads):  # no way to tell a row from any other line
                 continue
             anchors = [(k, c.kind) for k, h in enumerate(heads) for c in tb.columns if h.col == c.name and (c is first or c.anchor)]
+            marked = bool(tb.marked) and any(h.col == "amount" for h in heads)
             end = next((i for i in range(start, len(lines)) if self.ends(lines[i])), len(lines))
             for stretched in (False, True):  # the second time with each column as wide as its cells (see stretch)
                 body = [(line, self.assign(line, heads)) for line in lines[start:end]]
@@ -556,7 +624,12 @@ class _Extractor:
                     pieces = sorted([(body[j][0].box[1], body[j][1][k]) for j in taken[i] if k in body[j][1]]
                                     + ([(line.box[1], cells[k])] if cells.get(k) else []), key=lambda piece: piece[0])
                     cells[k], over[k] = [w for _, words in pieces for w in words], len(pieces)
-                out += [self.cell(tb, col, p.n, line, row, heads, cells, over, doubt.get(i, set())) for col in tb.columns]
+                args = (p.n, line, row, heads, cells, over, doubt.get(i, set()))
+                for col in tb.columns:
+                    if marked and col.name == "debit":
+                        out += self.marked(tb, *args)  # the debit, the credit and the mark of the row
+                    elif not (marked and col.name == "credit"):
+                        out.append(self.cell(tb, col, *args))
         return out
 
     def restore(self, fields: list[Field]) -> list[Field]:

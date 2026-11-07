@@ -88,3 +88,11 @@ name = "balance"
 kind = "amount"
 signed = true
 headers = ["balance", "running balance", "running bal", "closing balance", "closing bal"]
+
+# Some statements print one column of amounts and, beside it, a column that marks each amount Dr or Cr. Read only when the heading
+# names neither a debit nor a credit column. A mark is matched on its letters (Dr, DR., (Dr), Debit); no other mark is guessed at.
+[table.marked]
+amount = ["amount", "txn amount", "transaction amount", "amt"]
+marker = ["dr/cr", "cr/dr", "dr / cr", "cr / dr", "dr cr", "debit/credit"]
+debit = ["dr", "debit"]
+credit = ["cr", "credit"]
