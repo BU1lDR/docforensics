@@ -278,6 +278,18 @@ TEMPLATES.update(_across(
     "The declared income could not be compared with the gross earnings here, or a difference was found that could not be trusted "
     "because a figure was unreadable or read with low confidence. Whether they agree is unknown."))
 TEMPLATES.update(_across(
+    "cross_emi",
+    "The existing EMI declared on the application is lower than the instalments that debits on the bank statement name, by more "
+    "than the stated tolerance. A loan left out of the declaration would cause this, and so would a debit that is not an "
+    "instalment of the applicant's own (a payment for someone else, or a transfer whose narration only says loan), a loan taken "
+    "since the application was written, a declared figure that covers part of the debts, or a misread digit or word. The "
+    "comparison reads narrations for the words EMI, instalment and loan, so an instalment paid under a lender's name alone is "
+    "not seen.",
+    ["Compare the declared EMI and the marked debits with each page, digit by digit and word by word.",
+     "Ask the applicant which loans the declared figure covers, and the lender for the repayment record."],
+    "The declared existing EMI could not be compared with the instalments here, because the figure, an amount, a date or a "
+    "narration was unreadable, or a page was too poor to use. Whether they agree is unknown."))
+TEMPLATES.update(_across(
     "cross_dates",
     "One or more documents are dated after the application they were submitted with. A wrongly entered or changed date would "
     "cause this, and so would an application filled in earlier than it was submitted, a document re-issued afterwards, a date "

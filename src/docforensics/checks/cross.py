@@ -15,15 +15,16 @@ from ..model import Case, Document, Field, Finding
 from ..pipeline import Ctx
 from ..understand.normalise import _month, name_similarity, plain, text_similarity
 from . import collect, inconsistency, maybe_demote, observation, poor_page, usable
-from .within import SHOWN, _amount, _cells, _day, _flow, _inr
+from .within import SHOWN, _amount, _cap, _cells, _day, _flow, _inr, _rows_text
 
 GAPS, PAYER, NET_PAY, INCOME, DATES = "cross_checks", "cross_payer", "cross_net_pay", "cross_income", "cross_dates"
-DUPLICATE, PRODUCER = "cross_duplicate", "cross_producer"
+DUPLICATE, PRODUCER, EMI = "cross_duplicate", "cross_producer", "cross_emi"
 TYPES = {"bank_statement": "bank statement", "payslip": "payslip", "loan_application": "loan application"}
 DATED = {"bank_statement": ("period_end", "period end"), "payslip": ("pay_date", "pay date")}  # the date a document is of
 NEEDS = (  # (types on one side, types on the other, what is left uncompared when only one side was submitted)
     (("payslip",), ("bank_statement",), "net pay was not compared with the credits on a bank statement"),
     (("loan_application",), ("payslip",), "declared income was not compared with payslip gross earnings"),
+    (("loan_application",), ("bank_statement",), "the declared existing EMI was not compared with the instalment debits on a bank statement"),
     (("loan_application",), ("bank_statement", "payslip"), "the application date was not compared with the dates of the other documents"),
 )
 
@@ -309,6 +310,99 @@ def check_income(case: Case, th: Thresholds) -> list[Finding]:
     return out
 
 
+_INSTALMENT = re.compile(r"(?<![a-z])(?:emis?|instal+ments?|instl|loans?)(?![a-z])")
+_NOT_PAID = re.compile(r"(?<![a-z])(?:fees?|charges?|penalty|penal|gst|tax|reversal|reversed|refund|bounce|bounced|returns?|returned|"
+                       r"waiver|insurance|premium|closure|foreclosure|prepayment)(?![a-z])")
+
+
+def is_instalment(narration: str) -> bool:
+    """A narration that names a loan instalment: the whole word EMI, instalment or loan, and no word that makes it a fee, a
+    reversal or a closing payment. Whole words only: 'Emirates', 'remittance' and 'seminar' contain the letters emi."""
+    t = narration.lower()
+    return bool(_INSTALMENT.search(t)) and not _NOT_PAID.search(t)
+
+
+def _instalments(case: Case, st: Document):
+    """What one bank statement shows being paid as instalments: {(year, month): [(amount, debit cell, narration cell, row)]}; the
+    rows that name an instalment whose amount or date could not be read, as (row, month or None); and whether a page of poor
+    quality held narrations that were not used. A credit is not a payment, and a narration on a poor page is not trusted."""
+    paid: dict[tuple[int, int], list[tuple[Decimal, Field, Field, int]]] = {}
+    unread: list[tuple[int, tuple[int, int] | None]] = []
+    poor = False
+    for n, cell in _cells(st).items():
+        text = cell.get("description")
+        if text is None or text.value is None:
+            continue
+        if poor_page(case, text):
+            poor = True
+            continue
+        if not is_instalment(text.value):
+            continue
+        debit = cell.get("debit")
+        x = None if debit is None or poor_page(case, debit) else _flow(debit)
+        if x == 0:
+            continue
+        day = _day(cell.get("date"))
+        month = (day.year, day.month) if day else None
+        if x is None or x < 0 or month is None:
+            unread.append((n, month))
+        else:
+            paid.setdefault(month, []).append((x, debit, text, n))
+    return paid, unread, poor
+
+
+def check_emi(case: Case, th: Thresholds) -> list[Finding]:
+    """The existing EMI declared on an application against the instalments each bank statement shows being paid. Debits that
+    name an instalment are added up per calendar month, and the month with the most paid is compared with the declared figure,
+    one statement at a time. Only a total above the declared figure by more than the tolerance is a finding: a declared figure
+    above what the statement shows has ordinary causes (an instalment paid from another account, or in cash), and a statement
+    with no instalment debit leaves the declared figure alone. Rows or pages that could not be used are gaps."""
+    apps, stmts = _of(case, "loan_application"), _of(case, "bank_statement")
+    out: list[Finding] = []
+    if not apps or not stmts:
+        return out
+    floor, rel = Decimal(str(th.amount_abs)), Decimal(str(th.emi_rel))
+    seen = {st.id: _instalments(case, st) for st in stmts}
+    for app in apps:
+        field = _header(app, "existing_emi")
+        declared = _amount(field) if field is not None and usable(case, field) else None
+        for st in stmts:
+            paid, unread, poor = seen[st.id]
+            if poor:
+                out.append(gap(f"{_who(st)} has rows on a page of poor quality, so any instalment among them was not compared with "
+                               f"the existing EMI in {_who(app)}", st.id, app.id))
+            if not paid and not unread:
+                continue
+            if declared is None:
+                out.append(gap(f"the existing EMI in {_who(app)} could not be read, so the instalment debits in {_who(st)} were not "
+                               "compared with it", app.id, st.id))
+                continue
+            if paid:
+                month, rows = max(paid.items(), key=lambda kv: sum(r[0] for r in kv[1]))  # the first month if two are level
+                total = sum((r[0] for r in rows), Decimal(0))
+                tol = max(floor, rel * total)  # the total is the larger amount whenever it is the one in question
+                if total - declared > tol:
+                    out.append(_emi_finding(app, st, field, declared, month, rows, total, tol, floor,
+                                            [n for n, m in unread if m in (None, month)], th))
+                    continue
+            if unread:
+                out.append(gap(f"{_rows_text([n for n, _ in unread])} in {_who(st)} named an instalment but its amount or date could "
+                               f"not be read, so the instalments paid were not compared in full with the existing EMI in {_who(app)}",
+                               st.id, app.id))
+    return out
+
+
+def _emi_finding(app, st, field, declared, month, rows, total, tol, floor, unread, th) -> Finding:
+    unseen = f" {_cap(_rows_text(unread))} could not be read, so the total is a minimum." if unread else ""
+    detail = (f"The existing EMI declared in {_who(app)} is {_inr(declared)}. {_who(st)} shows debits that name an instalment "
+              f"({_rows_text([r[3] for r in rows])}) totalling {_inr(total)} in {datetime(*month, 1):%B %Y}, {_inr(total - declared)} "
+              f"more than declared.{unseen} Tolerance: {_inr(tol)} ({th.emi_rel:.0%} of the instalments paid, at least {_inr(floor)}).")
+    cited = [(field, "declared existing EMI")]
+    for amount, debit, text, n in rows[:SHOWN]:
+        cited += [(debit, f"instalment debit, row {n}"), (text, f"narration, row {n}")]
+    return inconsistency(EMI, "cross_document", "Declared existing EMI is lower than the instalments on the bank statement", detail, cited)
+
+
 def check_application_dates(case: Case, th: Thresholds) -> list[Finding]:
     """Documents submitted with an application cannot be dated after it: a statement's period end, a payslip's pay date."""
     apps = _of(case, "loan_application")
@@ -401,8 +495,8 @@ def check_inputs(case: Case, th: Thresholds) -> list[Finding]:
     return out
 
 
-CROSS_CHECKS = [check_inputs, check_roles, check_payer, check_net_pay, check_income, check_application_dates, check_duplicates,
-                check_producer]
+CROSS_CHECKS = [check_inputs, check_roles, check_payer, check_net_pay, check_income, check_emi, check_application_dates,
+                check_duplicates, check_producer]
 
 
 def run_cross_checks(case: Case, ctx: Ctx) -> None:

@@ -14,6 +14,7 @@ class Thresholds:
     label_sim: float = 0.86           # fuzzy label match; "closing balance" vs "opening balance" scores 0.8, so they stay apart
     income_rel: float = 0.05
     emi_ratio_max: float = 0.5
+    emi_rel: float = 0.10             # the declared existing EMI is the applicant's own figure and is often rounded: instalments on the statement are noted only when above it by more than this share of the larger amount (chosen before any run over the pack)
     max_doc_age_days: int = 90
     text_sim: float = 0.8             # an address or employer written twice matches when the text is at least this alike
     same_tool_minutes: int = 10       # documents of different kinds made by the same software this close together are noted
