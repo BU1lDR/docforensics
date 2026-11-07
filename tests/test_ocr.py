@@ -40,6 +40,18 @@ def test_split_line_box_by_characters():
     assert split_line_box("  ", (0, 0, 10, 10), "D1", 1, 1.0) == []
 
 
+def test_the_count_of_turned_lines_is_the_engines_own_and_a_changed_engine_costs_the_count_not_the_reading():
+    """The count reaches into the engine's angle test. A result in another shape than the pinned version's must leave the reading as it
+    is and the count at (0, 0), which says nothing about the page."""
+    from types import SimpleNamespace
+    ocr = object.__new__(Ocr)
+    ocr._engine = SimpleNamespace(text_cls=SimpleNamespace(cls_thresh=0.9))
+    known = ("imgs", SimpleNamespace(cls_res=[("180", 0.95), ("180", 0.5), ("0", 0.99)]))
+    assert ocr._count_turned(known) is known and ocr.turned == (1, 3)  # only a half turn the engine was sure of
+    for odd in ("not a tuple", ("imgs", object()), ("imgs", SimpleNamespace(cls_res=[("180",)]))):
+        assert ocr._count_turned(odd) is odd and ocr.turned == (0, 0)
+
+
 @ocr
 def test_ocr_reads_clean_render():
     words = Ocr.shared().read(as_array(render_lines(STATEMENT_LINES)), "D1", 1)

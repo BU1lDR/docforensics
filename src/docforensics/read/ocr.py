@@ -43,16 +43,19 @@ class Ocr:
         self._engine = RapidOCR(params={"Global.log_level": "error"})
         self.turned = (0, 0)  # of the last read: (lines the engine's angle test turned half a turn, lines it tested)
         classify = self._engine.cls_and_rotate
+        self._engine.cls_and_rotate = lambda crops: self._count_turned(classify(crops))
 
-        def count_turned(crops):
-            """The engine turns an upside-down line before it reads it and does not say so: count the lines it turned."""
-            out = classify(crops)
+    def _count_turned(self, out):
+        """The engine turns an upside-down line before it reads it and does not say so: count the lines it turned. `out` is what its
+        angle step returned, passed on as it is. The count reaches into the engine's own result: if that is not the shape the pinned
+        version returns, the page loses the count (0, 0 says nothing) and keeps its reading."""
+        try:
             tested = out[1].cls_res or ()
             sure = self._engine.text_cls.cls_thresh  # the engine's own bar for turning a line
             self.turned = (sum(1 for label, score in tested if "180" in label and score > sure), len(tested))
-            return out
-
-        self._engine.cls_and_rotate = count_turned
+        except (AttributeError, IndexError, TypeError, ValueError):
+            self.turned = (0, 0)
+        return out
 
     @classmethod
     def shared(cls) -> "Ocr":
