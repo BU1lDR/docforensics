@@ -1,0 +1,836 @@
+{
+ "run": {
+  "date": "2026-11-07 16:31 India Standard Time",
+  "commit": "97ed34c",
+  "dirty": false,
+  "seeds": [
+   3400000,
+   3400043
+  ],
+  "machine": "Windows 10, Python 3.11.9, 6 cores, CPU only"
+ },
+ "rows": [
+  {
+   "case": "ext-dev-m-0000",
+   "kind": "none",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "4000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [
+    "context_emi: Context rule: monthly obligations are 92% of declared income"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 1.0
+  },
+  {
+   "case": "ext-dev-m-0001",
+   "kind": "match",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "11500.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0002",
+   "kind": "rounded",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "8000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0003",
+   "kind": "two-loans",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "37000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0004",
+   "kind": "declared-higher",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "17000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0005",
+   "kind": "fee-not-emi",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "3000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0006",
+   "kind": "lookalike",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "2000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 1.0
+  },
+  {
+   "case": "ext-dev-m-0007",
+   "kind": "under-zero",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "0.00",
+   "total": "18000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "total_ok": true,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 1.0
+  },
+  {
+   "case": "ext-dev-m-0008",
+   "kind": "under-part",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "3000.00",
+   "total": "8000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "total_ok": true,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 1.0
+  },
+  {
+   "case": "ext-dev-m-0009",
+   "kind": "under-some",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "8000.00",
+   "total": "12000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "total_ok": true,
+   "limitations": [],
+   "gap": false,
+   "other": [
+    "context_emi: Context rule: monthly obligations are 54% of declared income"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 1.1
+  },
+  {
+   "case": "ext-dev-m-0010",
+   "kind": "lender-only",
+   "layout": "A",
+   "medium": "digital",
+   "declared": "0.00",
+   "total": "2500.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0011",
+   "kind": "none",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "6000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 1.0
+  },
+  {
+   "case": "ext-dev-m-0012",
+   "kind": "match",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "5000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0013",
+   "kind": "rounded",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "7000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0014",
+   "kind": "two-loans",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "36000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 1.0
+  },
+  {
+   "case": "ext-dev-m-0015",
+   "kind": "declared-higher",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "15500.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0016",
+   "kind": "fee-not-emi",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "0.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 1.0
+  },
+  {
+   "case": "ext-dev-m-0017",
+   "kind": "lookalike",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "10000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0018",
+   "kind": "under-zero",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "0.00",
+   "total": "3000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0019",
+   "kind": "under-part",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "2000.00",
+   "total": "21500.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 0.9
+  },
+  {
+   "case": "ext-dev-m-0020",
+   "kind": "under-some",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "4000.00",
+   "total": "7000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 1.0
+  },
+  {
+   "case": "ext-dev-m-0021",
+   "kind": "lender-only",
+   "layout": "B",
+   "medium": "digital",
+   "declared": "0.00",
+   "total": "17000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 1.0
+  },
+  {
+   "case": "ext-dev-m-0022",
+   "kind": "none",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "9000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 7.6
+  },
+  {
+   "case": "ext-dev-m-0023",
+   "kind": "match",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "3500.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.8
+  },
+  {
+   "case": "ext-dev-m-0024",
+   "kind": "rounded",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "7000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 7.0
+  },
+  {
+   "case": "ext-dev-m-0025",
+   "kind": "two-loans",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "30500.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [
+    "context_emi: Context rule: monthly obligations are 116% of declared income"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.8
+  },
+  {
+   "case": "ext-dev-m-0026",
+   "kind": "declared-higher",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "15500.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [
+    "context_emi: Context rule: monthly obligations are 69% of declared income"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 7.0
+  },
+  {
+   "case": "ext-dev-m-0027",
+   "kind": "fee-not-emi",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "2000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.7
+  },
+  {
+   "case": "ext-dev-m-0028",
+   "kind": "lookalike",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "5000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.7
+  },
+  {
+   "case": "ext-dev-m-0029",
+   "kind": "under-zero",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "0.00",
+   "total": "10000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "total_ok": true,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 7.2
+  },
+  {
+   "case": "ext-dev-m-0030",
+   "kind": "under-part",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "17000.00",
+   "total": "26500.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "total_ok": true,
+   "limitations": [],
+   "gap": false,
+   "other": [
+    "context_emi: Context rule: monthly obligations are 53% of declared income"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 7.1
+  },
+  {
+   "case": "ext-dev-m-0031",
+   "kind": "under-some",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "9000.00",
+   "total": "13000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "total_ok": true,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.9
+  },
+  {
+   "case": "ext-dev-m-0032",
+   "kind": "lender-only",
+   "layout": "A",
+   "medium": "scan",
+   "declared": "0.00",
+   "total": "5500.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 6.8
+  },
+  {
+   "case": "ext-dev-m-0033",
+   "kind": "none",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "6000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 7.0
+  },
+  {
+   "case": "ext-dev-m-0034",
+   "kind": "match",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "18000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.8
+  },
+  {
+   "case": "ext-dev-m-0035",
+   "kind": "rounded",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "10000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.9
+  },
+  {
+   "case": "ext-dev-m-0036",
+   "kind": "two-loans",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "32500.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.9
+  },
+  {
+   "case": "ext-dev-m-0037",
+   "kind": "declared-higher",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "24000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.7
+  },
+  {
+   "case": "ext-dev-m-0038",
+   "kind": "fee-not-emi",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "10000.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.9
+  },
+  {
+   "case": "ext-dev-m-0039",
+   "kind": "lookalike",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "0.00",
+   "total": null,
+   "expect": [],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 6.9
+  },
+  {
+   "case": "ext-dev-m-0040",
+   "kind": "under-zero",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "0.00",
+   "total": "9000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 7.3
+  },
+  {
+   "case": "ext-dev-m-0041",
+   "kind": "under-part",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "18500.00",
+   "total": "36500.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 7.2
+  },
+  {
+   "case": "ext-dev-m-0042",
+   "kind": "under-some",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "13000.00",
+   "total": "19000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 7.3
+  },
+  {
+   "case": "ext-dev-m-0043",
+   "kind": "lender-only",
+   "layout": "B",
+   "medium": "scan",
+   "declared": "0.00",
+   "total": "3000.00",
+   "expect": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "shown": [],
+   "total_ok": null,
+   "limitations": [],
+   "gap": false,
+   "other": [],
+   "missed": [
+    "Declared existing EMI is lower than the instalments on the bank statement"
+   ],
+   "stray": [],
+   "seconds": 7.2
+  }
+ ]
+}
