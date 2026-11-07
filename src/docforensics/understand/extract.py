@@ -253,6 +253,11 @@ class _Extractor:
         """Whether the words could be a value of the kind: an amount or a date has to read as one; text and ids may be anything."""
         return not ((kind == "amount" and parse_amount(text_of(words)) is None) or (kind == "date" and not _date_runs(words)))
 
+    @staticmethod
+    def lettered(fs: FieldSpec, words: list[Word]) -> bool:
+        """Whether the words could be the value of a name or an employer, which hold a letter at least: '48' is not one."""
+        return fs.role not in ("name", "employer") or any(c.isalpha() for c in text_of(words))
+
     def label_like(self, words: list[Word]) -> bool:
         """A cell that ends in a colon, reads as one of the type's labels or headings, or opens a longer one that wraps ('Declared
         Monthly' over 'Income'): the next label, not a value."""
@@ -303,13 +308,13 @@ class _Extractor:
             rest = rest[1:]  # the colon, and the rest of a label that the type knows only in part ('Name', 'No.', '(INR)')
         # the value is the cell it starts in: what follows a label inside one cell, or else the next cell
         right = [] if fs.position == "below" or not rest else [w for w in rest if cell_of[w.id] == cell_of[rest[0].id]]
-        right = [] if self.label_like(right) else right  # the next label is not a value
+        right = [] if self.label_like(right) or not self.lettered(fs, right) else right  # the next label, or a number for a name, is not a value
         value, how = right, ""
         if not (right and self.plausible(fs.kind, right)):  # nothing readable beside the label: the value may stand under it
             under = self.below(line, label_words)
             if dated and re.fullmatch(r"(?:19|20)\d\d", text_of(under)):
                 under = []  # the year of that date, wrapped onto the next line: not a value
-            if (under and not self.label_like(under) and not self.finishes_label(label_words, under)
+            if (under and not self.label_like(under) and not self.finishes_label(label_words, under) and self.lettered(fs, under)
                     and (not right or self.plausible(fs.kind, under))):
                 value = under
                 if fs.position != "below":
