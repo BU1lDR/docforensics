@@ -1,8 +1,8 @@
 {
  "overview": {
-  "case": "C-20261107-132952-4ad2",
-  "created": "2026-11-07T13:29:52+00:00",
-  "generated": "2026-11-07T13:29:54+00:00",
+  "case": "C-20261107-184642-0075",
+  "created": "2026-11-07T18:46:42+00:00",
+  "generated": "2026-11-07T18:46:44+00:00",
   "tool": {
    "name": "docforensics",
    "version": "0.1.0"
@@ -4952,11 +4952,11 @@
    "events": [
     {
      "seq": 1,
-     "ts": "2026-11-07T13:29:52.929+00:00",
+     "ts": "2026-11-07T18:46:42.712+00:00",
      "actor": "system",
      "event": "case_created",
      "data": {
-      "case": "C-20261107-132952-4ad2",
+      "case": "C-20261107-184642-0075",
       "thresholds": {
        "low_conf": 0.6,
        "amount_abs": 1.0,
@@ -4997,11 +4997,11 @@
       }
      },
      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-     "hash": "aa0140455754b65da142ea09d4322e826647cb1b68679f7c069e04fcc51d3ae3"
+     "hash": "2bdd20cd84918c84438d40e817f89b1f0b86067dd3f1ea605449fad60f2ac0c7"
     },
     {
      "seq": 2,
-     "ts": "2026-11-07T13:29:52.936+00:00",
+     "ts": "2026-11-07T18:46:42.720+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -5011,12 +5011,12 @@
       "size": 38236,
       "type": "pdf"
      },
-     "prev_hash": "aa0140455754b65da142ea09d4322e826647cb1b68679f7c069e04fcc51d3ae3",
-     "hash": "27b848302d71730572903c96e7b8e5ecf3f4e1285b0e863f8d91f846946cd63a"
+     "prev_hash": "2bdd20cd84918c84438d40e817f89b1f0b86067dd3f1ea605449fad60f2ac0c7",
+     "hash": "c5c97939b665a6ad966b2df5bc2c5f5d8562c7606e4d167929c1eab9678a038c"
     },
     {
      "seq": 3,
-     "ts": "2026-11-07T13:29:52.950+00:00",
+     "ts": "2026-11-07T18:46:42.731+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -5026,12 +5026,12 @@
       "size": 9719,
       "type": "pdf"
      },
-     "prev_hash": "27b848302d71730572903c96e7b8e5ecf3f4e1285b0e863f8d91f846946cd63a",
-     "hash": "e1ecbe8dc1fdb56a2f68821cbc0abdf53e60040c35e11e523b3d5a864f878525"
+     "prev_hash": "c5c97939b665a6ad966b2df5bc2c5f5d8562c7606e4d167929c1eab9678a038c",
+     "hash": "2f96daa9b21a988adf89a6c768972889a77bb2b735f028d7656bf916783fc311"
     },
     {
      "seq": 4,
-     "ts": "2026-11-07T13:29:52.957+00:00",
+     "ts": "2026-11-07T18:46:42.741+00:00",
      "actor": "system",
      "event": "file_ingested",
      "data": {
@@ -5041,12 +5041,12 @@
       "size": 8471,
       "type": "pdf"
      },
-     "prev_hash": "e1ecbe8dc1fdb56a2f68821cbc0abdf53e60040c35e11e523b3d5a864f878525",
-     "hash": "943b1fc6602c9142041a48bb7767da5ffa52fe6327a44433b58e5c1687fd2003"
+     "prev_hash": "2f96daa9b21a988adf89a6c768972889a77bb2b735f028d7656bf916783fc311",
+     "hash": "8dc399b3d70b1a4f9584190b11b241b0d7ebcd86b2d44e164d47ff8f1cf356b1"
     },
     {
      "seq": 5,
-     "ts": "2026-11-07T13:29:53.143+00:00",
+     "ts": "2026-11-07T18:46:42.937+00:00",
      "actor": "system",
      "event": "run_started",
      "data": {
@@ -5063,23 +5063,23 @@
        "pydantic": "2.14.2"
       }
      },
-     "prev_hash": "943b1fc6602c9142041a48bb7767da5ffa52fe6327a44433b58e5c1687fd2003",
-     "hash": "b84f877b3c81fd5c4a523eb9facbf5db4f04f2ed86f235be3496ed2f9cf7bc29"
+     "prev_hash": "8dc399b3d70b1a4f9584190b11b241b0d7ebcd86b2d44e164d47ff8f1cf356b1",
+     "hash": "70ac4d4ce20c4297b3a192a28e061590d6b33a24b90225453bb2344fe8e63d18"
     },
     {
      "seq": 6,
-     "ts": "2026-11-07T13:29:53.158+00:00",
+     "ts": "2026-11-07T18:46:42.947+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "read"
      },
-     "prev_hash": "b84f877b3c81fd5c4a523eb9facbf5db4f04f2ed86f235be3496ed2f9cf7bc29",
-     "hash": "7c734405e719ddcad9aedccf2e0849b9917f6d7f09d254ef6f277951b0058bce"
+     "prev_hash": "70ac4d4ce20c4297b3a192a28e061590d6b33a24b90225453bb2344fe8e63d18",
+     "hash": "208a31e5abf9d2b5baff2386b0a471e2abca0421709c1678388265fbd0ce6f49"
     },
     {
      "seq": 7,
-     "ts": "2026-11-07T13:29:53.311+00:00",
+     "ts": "2026-11-07T18:46:43.099+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -5088,12 +5088,12 @@
       "kind": "pdf-digital",
       "words": 223
      },
-     "prev_hash": "7c734405e719ddcad9aedccf2e0849b9917f6d7f09d254ef6f277951b0058bce",
-     "hash": "1d873521e1c83a955323c9db4d298d6de85b8a6be501a67ba70f789895dd745f"
+     "prev_hash": "208a31e5abf9d2b5baff2386b0a471e2abca0421709c1678388265fbd0ce6f49",
+     "hash": "1504328f910da1054a962ba352677c6ecc307d424a20d35320a009abfa04493b"
     },
     {
      "seq": 8,
-     "ts": "2026-11-07T13:29:53.381+00:00",
+     "ts": "2026-11-07T18:46:43.180+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -5102,12 +5102,12 @@
       "kind": "pdf-digital",
       "words": 85
      },
-     "prev_hash": "1d873521e1c83a955323c9db4d298d6de85b8a6be501a67ba70f789895dd745f",
-     "hash": "a39ee52eacf62f340d77c89cb8ffaab15c8378770df8e4c7c4bcae07680f0c66"
+     "prev_hash": "1504328f910da1054a962ba352677c6ecc307d424a20d35320a009abfa04493b",
+     "hash": "00cb71c02bd541ac93b46d7320697eb9a35c068a99760e2b1d08cf775150dd04"
     },
     {
      "seq": 9,
-     "ts": "2026-11-07T13:29:53.464+00:00",
+     "ts": "2026-11-07T18:46:43.255+00:00",
      "actor": "system",
      "event": "doc_read",
      "data": {
@@ -5116,38 +5116,38 @@
       "kind": "pdf-digital",
       "words": 72
      },
-     "prev_hash": "a39ee52eacf62f340d77c89cb8ffaab15c8378770df8e4c7c4bcae07680f0c66",
-     "hash": "0bdfe40c84801c26cf579c0c1f450f797628021bbe24f2e4a285809b2167ae55"
+     "prev_hash": "00cb71c02bd541ac93b46d7320697eb9a35c068a99760e2b1d08cf775150dd04",
+     "hash": "4f47360d446f928e040dccba7108b623c4110d58e6ee67c9a28ba96528854420"
     },
     {
      "seq": 10,
-     "ts": "2026-11-07T13:29:53.474+00:00",
+     "ts": "2026-11-07T18:46:43.262+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "read",
       "ok": true,
-      "seconds": 0.297,
+      "seconds": 0.312,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "0bdfe40c84801c26cf579c0c1f450f797628021bbe24f2e4a285809b2167ae55",
-     "hash": "d0b84faac7345a1d542fdaa07a545fe75ea59461395cc6fbc1a204849aa964ce"
+     "prev_hash": "4f47360d446f928e040dccba7108b623c4110d58e6ee67c9a28ba96528854420",
+     "hash": "96940eb072b9bb77986abd4971df4a72957a21e7ae6ed855f2d2df4afbf2a06a"
     },
     {
      "seq": 11,
-     "ts": "2026-11-07T13:29:53.484+00:00",
+     "ts": "2026-11-07T18:46:43.266+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "classify"
      },
-     "prev_hash": "d0b84faac7345a1d542fdaa07a545fe75ea59461395cc6fbc1a204849aa964ce",
-     "hash": "cb922cf9e19deddb4536398506a8f07f830e820eb59c41c9d97025687c572e97"
+     "prev_hash": "96940eb072b9bb77986abd4971df4a72957a21e7ae6ed855f2d2df4afbf2a06a",
+     "hash": "ac15d939e04638a5f89aec16867998e8d67e8df2edecd8f7cbd40c67a476a72b"
     },
     {
      "seq": 12,
-     "ts": "2026-11-07T13:29:53.539+00:00",
+     "ts": "2026-11-07T18:46:43.345+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -5155,12 +5155,12 @@
       "type": "bank_statement",
       "conf": 1.0
      },
-     "prev_hash": "cb922cf9e19deddb4536398506a8f07f830e820eb59c41c9d97025687c572e97",
-     "hash": "d9d234ec4ce13960dfc4e244d3dc146bc1231462003210fea76c69171c3bbdf5"
+     "prev_hash": "ac15d939e04638a5f89aec16867998e8d67e8df2edecd8f7cbd40c67a476a72b",
+     "hash": "fb03f1d7ea8b04c8fc3a1f78d9cd22754be025cbc7e991ccd7de5dc911053c49"
     },
     {
      "seq": 13,
-     "ts": "2026-11-07T13:29:53.567+00:00",
+     "ts": "2026-11-07T18:46:43.377+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -5168,12 +5168,12 @@
       "type": "payslip",
       "conf": 1.0
      },
-     "prev_hash": "d9d234ec4ce13960dfc4e244d3dc146bc1231462003210fea76c69171c3bbdf5",
-     "hash": "0f8565b3733db9a85fc84fe14d570eefe9ba2c95532d43948588dbbd13394b5f"
+     "prev_hash": "fb03f1d7ea8b04c8fc3a1f78d9cd22754be025cbc7e991ccd7de5dc911053c49",
+     "hash": "1f044d4b4fc947b4782dd4fd492f03376ef97e0319fb6b0b2afc5d71ccadb169"
     },
     {
      "seq": 14,
-     "ts": "2026-11-07T13:29:53.602+00:00",
+     "ts": "2026-11-07T18:46:43.423+00:00",
      "actor": "system",
      "event": "doc_classified",
      "data": {
@@ -5181,38 +5181,38 @@
       "type": "loan_application",
       "conf": 1.0
      },
-     "prev_hash": "0f8565b3733db9a85fc84fe14d570eefe9ba2c95532d43948588dbbd13394b5f",
-     "hash": "0cdddab517c62006cd65c9f0a95562484af28a2e75464fcf9572dc9514314ca5"
+     "prev_hash": "1f044d4b4fc947b4782dd4fd492f03376ef97e0319fb6b0b2afc5d71ccadb169",
+     "hash": "f1243b0b190787a328e5a61e5c622b7b1db59943e9d3cc4316ae31a15873daf9"
     },
     {
      "seq": 15,
-     "ts": "2026-11-07T13:29:53.610+00:00",
+     "ts": "2026-11-07T18:46:43.424+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "classify",
       "ok": true,
-      "seconds": 0.109,
+      "seconds": 0.156,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "0cdddab517c62006cd65c9f0a95562484af28a2e75464fcf9572dc9514314ca5",
-     "hash": "288bb96f9247edf34d5d9f551474de1d9d38a7496a70a72e8f494a65cbee2dbf"
+     "prev_hash": "f1243b0b190787a328e5a61e5c622b7b1db59943e9d3cc4316ae31a15873daf9",
+     "hash": "87b0afcfca7bf825a91ca289f16ab5203afec8fffbb8e622343403776da7b4a1"
     },
     {
      "seq": 16,
-     "ts": "2026-11-07T13:29:53.623+00:00",
+     "ts": "2026-11-07T18:46:43.433+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "extract"
      },
-     "prev_hash": "288bb96f9247edf34d5d9f551474de1d9d38a7496a70a72e8f494a65cbee2dbf",
-     "hash": "73f61a87845425c4dc3d8d140cbde0b0e454fda5160aeb18f1aaeac1264c8daa"
+     "prev_hash": "87b0afcfca7bf825a91ca289f16ab5203afec8fffbb8e622343403776da7b4a1",
+     "hash": "c5296458477b55ee30edda388940aeadc0f5b9075f1f5894c528ce26bcc5b98a"
     },
     {
      "seq": 17,
-     "ts": "2026-11-07T13:29:53.667+00:00",
+     "ts": "2026-11-07T18:46:43.488+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -5221,12 +5221,12 @@
       "fields": 188,
       "empty": 36
      },
-     "prev_hash": "73f61a87845425c4dc3d8d140cbde0b0e454fda5160aeb18f1aaeac1264c8daa",
-     "hash": "bc098eac3a26ae8d057eee120ed1fbf73504a8df18ef6b4c9326e43d8f30ca0d"
+     "prev_hash": "c5296458477b55ee30edda388940aeadc0f5b9075f1f5894c528ce26bcc5b98a",
+     "hash": "5ab5a369988c31144251deb70d758fe300706b960ca5e97358ef50954664ca40"
     },
     {
      "seq": 18,
-     "ts": "2026-11-07T13:29:53.692+00:00",
+     "ts": "2026-11-07T18:46:43.523+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -5235,12 +5235,12 @@
       "fields": 27,
       "empty": 2
      },
-     "prev_hash": "bc098eac3a26ae8d057eee120ed1fbf73504a8df18ef6b4c9326e43d8f30ca0d",
-     "hash": "7a449f539525aa16d4af5214c3ab8f9042dee3f4ab3a22edd2617198b78b75fe"
+     "prev_hash": "5ab5a369988c31144251deb70d758fe300706b960ca5e97358ef50954664ca40",
+     "hash": "bf5cce482e6a678efb40855e1bd911da78e3cc4da50a5f740617c035dda9ee9a"
     },
     {
      "seq": 19,
-     "ts": "2026-11-07T13:29:53.720+00:00",
+     "ts": "2026-11-07T18:46:43.555+00:00",
      "actor": "system",
      "event": "doc_extracted",
      "data": {
@@ -5249,38 +5249,38 @@
       "fields": 9,
       "empty": 0
      },
-     "prev_hash": "7a449f539525aa16d4af5214c3ab8f9042dee3f4ab3a22edd2617198b78b75fe",
-     "hash": "a179a4ca21450762f845a75521447d984c0fde167227f9a4581e6ac750444809"
+     "prev_hash": "bf5cce482e6a678efb40855e1bd911da78e3cc4da50a5f740617c035dda9ee9a",
+     "hash": "e16d4490addf14ab0117834d2b689c73f2b2de27f116217c5357149d461366c7"
     },
     {
      "seq": 20,
-     "ts": "2026-11-07T13:29:53.736+00:00",
+     "ts": "2026-11-07T18:46:43.560+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "extract",
       "ok": true,
-      "seconds": 0.094,
+      "seconds": 0.125,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "a179a4ca21450762f845a75521447d984c0fde167227f9a4581e6ac750444809",
-     "hash": "ad0955198b38749d09cf2a11829b18712ff72ebd042e91344711e4535fc682a1"
+     "prev_hash": "e16d4490addf14ab0117834d2b689c73f2b2de27f116217c5357149d461366c7",
+     "hash": "31bd09778ca32bb372e7e089cf4b1e55491ebe453a021833040a45b3f1113d89"
     },
     {
      "seq": 21,
-     "ts": "2026-11-07T13:29:53.748+00:00",
+     "ts": "2026-11-07T18:46:43.574+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "forensics"
      },
-     "prev_hash": "ad0955198b38749d09cf2a11829b18712ff72ebd042e91344711e4535fc682a1",
-     "hash": "eb01b7c2b166fa6bd348b82929d509967f07746d64dbf2624c75cd5f42ead23f"
+     "prev_hash": "31bd09778ca32bb372e7e089cf4b1e55491ebe453a021833040a45b3f1113d89",
+     "hash": "6e09b951a521b1965c47d4aea8e964f58cf3cf864ebda388b3c2f612e03d0a0e"
     },
     {
      "seq": 22,
-     "ts": "2026-11-07T13:29:53.775+00:00",
+     "ts": "2026-11-07T18:46:43.599+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5289,12 +5289,12 @@
       "fclass": "observation",
       "title": "Text changed in revision 2 (page 1)"
      },
-     "prev_hash": "eb01b7c2b166fa6bd348b82929d509967f07746d64dbf2624c75cd5f42ead23f",
-     "hash": "089ac99dd65f980f7718c0622197c9b1b577091dde86187fb275e866523f3d27"
+     "prev_hash": "6e09b951a521b1965c47d4aea8e964f58cf3cf864ebda388b3c2f612e03d0a0e",
+     "hash": "88a1e1a3cd6a27d0757c3f2310b5e0e54ab39bef92bd6e54dc45f41a915cfa5f"
     },
     {
      "seq": 23,
-     "ts": "2026-11-07T13:29:53.785+00:00",
+     "ts": "2026-11-07T18:46:43.607+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5302,12 +5302,12 @@
       "detector": "revision_diff",
       "findings": 1
      },
-     "prev_hash": "089ac99dd65f980f7718c0622197c9b1b577091dde86187fb275e866523f3d27",
-     "hash": "6c0a1f309751c0647160e084f542c4724375752b24cae7dc8098422b781455a8"
+     "prev_hash": "88a1e1a3cd6a27d0757c3f2310b5e0e54ab39bef92bd6e54dc45f41a915cfa5f",
+     "hash": "d49c10d19465999964d5c20d098a7ca3ddeb526c438cf961dc1abc7a3f79837e"
     },
     {
      "seq": 24,
-     "ts": "2026-11-07T13:29:53.803+00:00",
+     "ts": "2026-11-07T18:46:43.627+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5315,12 +5315,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "6c0a1f309751c0647160e084f542c4724375752b24cae7dc8098422b781455a8",
-     "hash": "623845bfdb18cde09e9e002bc9420af642c5bfce13c81f700eb92fdaa385cf6d"
+     "prev_hash": "d49c10d19465999964d5c20d098a7ca3ddeb526c438cf961dc1abc7a3f79837e",
+     "hash": "5bcc3fdd6a561ef291d285a98ede16fe4e5312b9ab18094f7f2f01dc13ca011e"
     },
     {
      "seq": 25,
-     "ts": "2026-11-07T13:29:53.825+00:00",
+     "ts": "2026-11-07T18:46:43.654+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5328,12 +5328,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "623845bfdb18cde09e9e002bc9420af642c5bfce13c81f700eb92fdaa385cf6d",
-     "hash": "36c0989d1d4340b879eccb97e08862e0feb0f575881f25dd2e426650971b6908"
+     "prev_hash": "5bcc3fdd6a561ef291d285a98ede16fe4e5312b9ab18094f7f2f01dc13ca011e",
+     "hash": "5890668f93737e09ec5255e9c548926b756bf673c0fe3a97990014145868f2f1"
     },
     {
      "seq": 26,
-     "ts": "2026-11-07T13:29:53.831+00:00",
+     "ts": "2026-11-07T18:46:43.665+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5341,12 +5341,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "36c0989d1d4340b879eccb97e08862e0feb0f575881f25dd2e426650971b6908",
-     "hash": "ba00dabbc6ce873aaf14b45e8a4fef90155fd62bd7885d35ba6cfb3de7a489e3"
+     "prev_hash": "5890668f93737e09ec5255e9c548926b756bf673c0fe3a97990014145868f2f1",
+     "hash": "5b0636a5c60cd35c6ef12912af296099fbe6c6a30389f256aea5e4559faeab08"
     },
     {
      "seq": 27,
-     "ts": "2026-11-07T13:29:53.838+00:00",
+     "ts": "2026-11-07T18:46:43.679+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5354,12 +5354,12 @@
       "detector": "file_structure",
       "findings": 0
      },
-     "prev_hash": "ba00dabbc6ce873aaf14b45e8a4fef90155fd62bd7885d35ba6cfb3de7a489e3",
-     "hash": "4ba5d3af6af5d4e5180f46adfa3368a7902f9392e605af247362f8fcbedc7e7d"
+     "prev_hash": "5b0636a5c60cd35c6ef12912af296099fbe6c6a30389f256aea5e4559faeab08",
+     "hash": "cb1808717f47118673b4a4fbf15d8ed7b1e296a81e8e2c7d686f73a4953fb6ee"
     },
     {
      "seq": 28,
-     "ts": "2026-11-07T13:29:53.852+00:00",
+     "ts": "2026-11-07T18:46:43.685+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5367,12 +5367,12 @@
       "detector": "revision_diff",
       "findings": 0
      },
-     "prev_hash": "4ba5d3af6af5d4e5180f46adfa3368a7902f9392e605af247362f8fcbedc7e7d",
-     "hash": "7704abb1c9fa5b840b1767e7082b46492fed9aac7dc58a20dc30463527ddb70d"
+     "prev_hash": "cb1808717f47118673b4a4fbf15d8ed7b1e296a81e8e2c7d686f73a4953fb6ee",
+     "hash": "cea56089c26bbac51ce308aa51feb6ea41fbf8bf158102c6b0bb3fafeecda110"
     },
     {
      "seq": 29,
-     "ts": "2026-11-07T13:29:53.866+00:00",
+     "ts": "2026-11-07T18:46:43.699+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5380,12 +5380,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "7704abb1c9fa5b840b1767e7082b46492fed9aac7dc58a20dc30463527ddb70d",
-     "hash": "eab96c14d42c568d717a46fab3754fb3be21e67d0410679e78255c597fa9ef04"
+     "prev_hash": "cea56089c26bbac51ce308aa51feb6ea41fbf8bf158102c6b0bb3fafeecda110",
+     "hash": "47632d03e206d91294913c4cc40ba602f506ac84f77912df0736f8cbb907f6ce"
     },
     {
      "seq": 30,
-     "ts": "2026-11-07T13:29:53.881+00:00",
+     "ts": "2026-11-07T18:46:43.711+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5393,12 +5393,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "eab96c14d42c568d717a46fab3754fb3be21e67d0410679e78255c597fa9ef04",
-     "hash": "55fd04298cffacd26aab4a344cb4119bad91656b3193cbf28e34debf3ed2b3a9"
+     "prev_hash": "47632d03e206d91294913c4cc40ba602f506ac84f77912df0736f8cbb907f6ce",
+     "hash": "1dfec8fabb408d0e20d8818e23b18523daadc5d7b08f00d025ea6b0f844cb0ac"
     },
     {
      "seq": 31,
-     "ts": "2026-11-07T13:29:53.886+00:00",
+     "ts": "2026-11-07T18:46:43.718+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5406,12 +5406,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "55fd04298cffacd26aab4a344cb4119bad91656b3193cbf28e34debf3ed2b3a9",
-     "hash": "7fede3492ffaaf0bde69c667c37057a96b5423f56243960c73dd6c23ad3cfe10"
+     "prev_hash": "1dfec8fabb408d0e20d8818e23b18523daadc5d7b08f00d025ea6b0f844cb0ac",
+     "hash": "0f5b87b831221a44642f5578dd88474ecb735525bcaf9b11e1723900a43b5c65"
     },
     {
      "seq": 32,
-     "ts": "2026-11-07T13:29:53.898+00:00",
+     "ts": "2026-11-07T18:46:43.729+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5419,12 +5419,12 @@
       "detector": "file_structure",
       "findings": 0
      },
-     "prev_hash": "7fede3492ffaaf0bde69c667c37057a96b5423f56243960c73dd6c23ad3cfe10",
-     "hash": "65df9a2dbc20cf226c63e2ded43be17d186c56560c294c7d66b7a0e02230958c"
+     "prev_hash": "0f5b87b831221a44642f5578dd88474ecb735525bcaf9b11e1723900a43b5c65",
+     "hash": "35be740727d94b67e52bffb6cec6a938dd32ad6d3e3557d1e4500486708d2ec1"
     },
     {
      "seq": 33,
-     "ts": "2026-11-07T13:29:53.908+00:00",
+     "ts": "2026-11-07T18:46:43.738+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5432,12 +5432,12 @@
       "detector": "revision_diff",
       "findings": 0
      },
-     "prev_hash": "65df9a2dbc20cf226c63e2ded43be17d186c56560c294c7d66b7a0e02230958c",
-     "hash": "50a43719fbb5f24d5af9d6c70e0893551cb1b4dfdf4e07af039bea5f80c1320c"
+     "prev_hash": "35be740727d94b67e52bffb6cec6a938dd32ad6d3e3557d1e4500486708d2ec1",
+     "hash": "1a6ac73afe387a21d1367ad4c97ffbf4d860724e09e96fc5858d64bcf73a3472"
     },
     {
      "seq": 34,
-     "ts": "2026-11-07T13:29:53.921+00:00",
+     "ts": "2026-11-07T18:46:43.752+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5445,12 +5445,12 @@
       "detector": "covered_or_hidden_text",
       "findings": 0
      },
-     "prev_hash": "50a43719fbb5f24d5af9d6c70e0893551cb1b4dfdf4e07af039bea5f80c1320c",
-     "hash": "b434957661fed3856e235769acc11d2c46c37195d65f3eccbfb447b835cfb968"
+     "prev_hash": "1a6ac73afe387a21d1367ad4c97ffbf4d860724e09e96fc5858d64bcf73a3472",
+     "hash": "3b1d5149b7d0fd566da9a910e8c5b71654879e21b80b71cff64004a00a8c9358"
     },
     {
      "seq": 35,
-     "ts": "2026-11-07T13:29:53.921+00:00",
+     "ts": "2026-11-07T18:46:43.763+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5458,12 +5458,12 @@
       "detector": "font_outliers",
       "findings": 0
      },
-     "prev_hash": "b434957661fed3856e235769acc11d2c46c37195d65f3eccbfb447b835cfb968",
-     "hash": "ed33ddc3fbfb2e5e30c76bf6ee2fe75162c9afdd3468f26642c771a8a6b60794"
+     "prev_hash": "3b1d5149b7d0fd566da9a910e8c5b71654879e21b80b71cff64004a00a8c9358",
+     "hash": "a658b62e38b905104c9ca61b245ada63752965fadffb13e980c789ec34084af6"
     },
     {
      "seq": 36,
-     "ts": "2026-11-07T13:29:53.935+00:00",
+     "ts": "2026-11-07T18:46:43.774+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5471,12 +5471,12 @@
       "detector": "metadata_observations",
       "findings": 0
      },
-     "prev_hash": "ed33ddc3fbfb2e5e30c76bf6ee2fe75162c9afdd3468f26642c771a8a6b60794",
-     "hash": "4dbebd519042105e09dea9ebf27d01bf51afb4192073ca49db7bf1d8a72d85e5"
+     "prev_hash": "a658b62e38b905104c9ca61b245ada63752965fadffb13e980c789ec34084af6",
+     "hash": "81fe24041ff2e2c7a56236991e3da0c7adfc3302c6ff807ae6962a6d8e700ef3"
     },
     {
      "seq": 37,
-     "ts": "2026-11-07T13:29:53.951+00:00",
+     "ts": "2026-11-07T18:46:43.782+00:00",
      "actor": "system",
      "event": "doc_forensics",
      "data": {
@@ -5484,12 +5484,12 @@
       "detector": "file_structure",
       "findings": 0
      },
-     "prev_hash": "4dbebd519042105e09dea9ebf27d01bf51afb4192073ca49db7bf1d8a72d85e5",
-     "hash": "d2fe37d4b90ea5383f771366afe80f3a5a73588cacc472049829dd6920b8da2e"
+     "prev_hash": "81fe24041ff2e2c7a56236991e3da0c7adfc3302c6ff807ae6962a6d8e700ef3",
+     "hash": "9d8ea6c5ee0776257cd456239f7522f3c874a5e915029a8b714b18c90917b68c"
     },
     {
      "seq": 38,
-     "ts": "2026-11-07T13:29:54.039+00:00",
+     "ts": "2026-11-07T18:46:43.870+00:00",
      "actor": "system",
      "event": "signature_compared",
      "data": {
@@ -5505,12 +5505,12 @@
       "limit": 9.4,
       "differs": false
      },
-     "prev_hash": "d2fe37d4b90ea5383f771366afe80f3a5a73588cacc472049829dd6920b8da2e",
-     "hash": "5b04e8a3113b7c3c33d8f1232e71c9cfc28a50eb8f2034de08e284d663448421"
+     "prev_hash": "9d8ea6c5ee0776257cd456239f7522f3c874a5e915029a8b714b18c90917b68c",
+     "hash": "00195d488cf7041860d4fbcbcda96cfe1d248abb2dd15b4748c72fa2bcdf54df"
     },
     {
      "seq": 39,
-     "ts": "2026-11-07T13:29:54.096+00:00",
+     "ts": "2026-11-07T18:46:43.924+00:00",
      "actor": "system",
      "event": "mark_compared",
      "data": {
@@ -5527,12 +5527,12 @@
       "limit": 10.5,
       "differs": false
      },
-     "prev_hash": "5b04e8a3113b7c3c33d8f1232e71c9cfc28a50eb8f2034de08e284d663448421",
-     "hash": "5265d4bd63fb5f1b4afb835ab910722dabc59d27e89aff181794c356a828e2f9"
+     "prev_hash": "00195d488cf7041860d4fbcbcda96cfe1d248abb2dd15b4748c72fa2bcdf54df",
+     "hash": "5043709f9077b8f342853e062fa4cbfbf24d5d4acee2fb3bd3ecec3b25391fbc"
     },
     {
      "seq": 40,
-     "ts": "2026-11-07T13:29:54.193+00:00",
+     "ts": "2026-11-07T18:46:44.003+00:00",
      "actor": "system",
      "event": "mark_compared",
      "data": {
@@ -5549,12 +5549,12 @@
       "limit": 3.0,
       "differs": false
      },
-     "prev_hash": "5265d4bd63fb5f1b4afb835ab910722dabc59d27e89aff181794c356a828e2f9",
-     "hash": "e42c94d584a367b1f11ca9619d166c9e78b3480c155f5e99a16aef891a5c4b06"
+     "prev_hash": "5043709f9077b8f342853e062fa4cbfbf24d5d4acee2fb3bd3ecec3b25391fbc",
+     "hash": "b7f9a69fc366634ae8d389c72dc2eff951a1c13e4c9e3a0f9cd7c38cb4fb11bc"
     },
     {
      "seq": 41,
-     "ts": "2026-11-07T13:29:54.242+00:00",
+     "ts": "2026-11-07T18:46:44.060+00:00",
      "actor": "system",
      "event": "reuse_compared",
      "data": {
@@ -5576,50 +5576,50 @@
        0.127
       ]
      },
-     "prev_hash": "e42c94d584a367b1f11ca9619d166c9e78b3480c155f5e99a16aef891a5c4b06",
-     "hash": "d4216925db2f75fc6bc3204ee1b902a1ccf6bdb9f4808ca1e14aeada8b4d4b58"
+     "prev_hash": "b7f9a69fc366634ae8d389c72dc2eff951a1c13e4c9e3a0f9cd7c38cb4fb11bc",
+     "hash": "8e0e6cd11f9c428112ac3b293c1ca3495620bc736ff5adacf58fcdbd22177271"
     },
     {
      "seq": 42,
-     "ts": "2026-11-07T13:29:54.255+00:00",
+     "ts": "2026-11-07T18:46:44.072+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "forensics",
       "ok": true,
-      "seconds": 0.485,
+      "seconds": 0.5,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "d4216925db2f75fc6bc3204ee1b902a1ccf6bdb9f4808ca1e14aeada8b4d4b58",
-     "hash": "7680f3fb345c166646c790a09733a2bb099e5844509877ace1d09a98f7a5b582"
+     "prev_hash": "8e0e6cd11f9c428112ac3b293c1ca3495620bc736ff5adacf58fcdbd22177271",
+     "hash": "7de8c3ef0cbe5f380800d298de06b44dff9864adc6ddb1ba06f964a02bbb5b7f"
     },
     {
      "seq": 43,
-     "ts": "2026-11-07T13:29:54.262+00:00",
+     "ts": "2026-11-07T18:46:44.085+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "checks"
      },
-     "prev_hash": "7680f3fb345c166646c790a09733a2bb099e5844509877ace1d09a98f7a5b582",
-     "hash": "ca8d4a9f198583cf23b182fdcf2e9ce11568e41b9ae649767eb7e79ab6b808de"
+     "prev_hash": "7de8c3ef0cbe5f380800d298de06b44dff9864adc6ddb1ba06f964a02bbb5b7f",
+     "hash": "2360e3f1cca6158f36da4ce9484e7ddfdcfc8759245fa8825a0ef878aeacfaff"
     },
     {
      "seq": 44,
-     "ts": "2026-11-07T13:29:54.276+00:00",
+     "ts": "2026-11-07T18:46:44.098+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D1",
       "findings": 1
      },
-     "prev_hash": "ca8d4a9f198583cf23b182fdcf2e9ce11568e41b9ae649767eb7e79ab6b808de",
-     "hash": "042ed47973f3576de522dbec8fa87372057c622eca27e85447e6d1d1e79461fe"
+     "prev_hash": "2360e3f1cca6158f36da4ce9484e7ddfdcfc8759245fa8825a0ef878aeacfaff",
+     "hash": "9d7162072c55bbaa3dd443b7a4a0017c019db332664a8c454fbae58915e07ae2"
     },
     {
      "seq": 45,
-     "ts": "2026-11-07T13:29:54.283+00:00",
+     "ts": "2026-11-07T18:46:44.106+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5628,85 +5628,85 @@
       "fclass": "inconsistency",
       "title": "The closing balance does not follow from the transactions"
      },
-     "prev_hash": "042ed47973f3576de522dbec8fa87372057c622eca27e85447e6d1d1e79461fe",
-     "hash": "a234ba4e1a6d0869cad6d749a00b991659ca7af708315e9cd1bc3873ea512f94"
+     "prev_hash": "9d7162072c55bbaa3dd443b7a4a0017c019db332664a8c454fbae58915e07ae2",
+     "hash": "46d151d9bd3a85e875aa720a7f946c2c70d007ff589ec10860d8037625540e58"
     },
     {
      "seq": 46,
-     "ts": "2026-11-07T13:29:54.290+00:00",
+     "ts": "2026-11-07T18:46:44.116+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D2",
       "findings": 0
      },
-     "prev_hash": "a234ba4e1a6d0869cad6d749a00b991659ca7af708315e9cd1bc3873ea512f94",
-     "hash": "77b3f09a38780c8a348316d45a44c2387b75d0fededd21ed24d466c15a95bbfa"
+     "prev_hash": "46d151d9bd3a85e875aa720a7f946c2c70d007ff589ec10860d8037625540e58",
+     "hash": "acfa18a334c6e8fe2b263d4fb511ca93d8132cab03acc7904451a142084c6e64"
     },
     {
      "seq": 47,
-     "ts": "2026-11-07T13:29:54.299+00:00",
+     "ts": "2026-11-07T18:46:44.125+00:00",
      "actor": "system",
      "event": "doc_checked",
      "data": {
       "doc": "D3",
       "findings": 0
      },
-     "prev_hash": "77b3f09a38780c8a348316d45a44c2387b75d0fededd21ed24d466c15a95bbfa",
-     "hash": "0f1ed77e6f7c25bc5f2c7b7978f856021e10ea1579da2890aa5095f876bf145e"
+     "prev_hash": "acfa18a334c6e8fe2b263d4fb511ca93d8132cab03acc7904451a142084c6e64",
+     "hash": "e6ae60420b5efadd939426d1e31af464857bbddfd0e1edebca7b9ba1323d9ff7"
     },
     {
      "seq": 48,
-     "ts": "2026-11-07T13:29:54.314+00:00",
+     "ts": "2026-11-07T18:46:44.140+00:00",
      "actor": "system",
      "event": "cross_checked",
      "data": {
       "documents": 3,
       "findings": 0
      },
-     "prev_hash": "0f1ed77e6f7c25bc5f2c7b7978f856021e10ea1579da2890aa5095f876bf145e",
-     "hash": "14126a3d4c9557320f0be979c7a8680affad297da25716aca8295200f4406d9a"
+     "prev_hash": "e6ae60420b5efadd939426d1e31af464857bbddfd0e1edebca7b9ba1323d9ff7",
+     "hash": "34a3855038b37f542e43b23c4b0628b79d9c95c8d3437c8c086a0f7320be0381"
     },
     {
      "seq": 49,
-     "ts": "2026-11-07T13:29:54.325+00:00",
+     "ts": "2026-11-07T18:46:44.149+00:00",
      "actor": "system",
      "event": "context_checked",
      "data": {
       "findings": 0
      },
-     "prev_hash": "14126a3d4c9557320f0be979c7a8680affad297da25716aca8295200f4406d9a",
-     "hash": "7f1864ba687758243091b3528bd3731abe8e03ad921a40b9b9e2ba6dad324e9b"
+     "prev_hash": "34a3855038b37f542e43b23c4b0628b79d9c95c8d3437c8c086a0f7320be0381",
+     "hash": "c0873e86cd9c722fa156bda9a24767674079b1519d3f41841d25bddddf13f13d"
     },
     {
      "seq": 50,
-     "ts": "2026-11-07T13:29:54.332+00:00",
+     "ts": "2026-11-07T18:46:44.158+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "checks",
       "ok": true,
-      "seconds": 0.079,
+      "seconds": 0.062,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "7f1864ba687758243091b3528bd3731abe8e03ad921a40b9b9e2ba6dad324e9b",
-     "hash": "df6070ac1d5624417e09d4a39450eef0bcfb657df483a6738752ae1e730430dc"
+     "prev_hash": "c0873e86cd9c722fa156bda9a24767674079b1519d3f41841d25bddddf13f13d",
+     "hash": "628cb2bfa220611da1685398404fa9b6b6592fc3bf7ad3fd682b6e585d522898"
     },
     {
      "seq": 51,
-     "ts": "2026-11-07T13:29:54.345+00:00",
+     "ts": "2026-11-07T18:46:44.168+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "link"
      },
-     "prev_hash": "df6070ac1d5624417e09d4a39450eef0bcfb657df483a6738752ae1e730430dc",
-     "hash": "37056dece388a8a95d76baed139318fb9fd3b5329f3ab9fd1a97b4e2601bc69e"
+     "prev_hash": "628cb2bfa220611da1685398404fa9b6b6592fc3bf7ad3fd682b6e585d522898",
+     "hash": "42e0ba9cd858ad1e853d6846f23098a330d511d07af3147466bda90065c6661a"
     },
     {
      "seq": 52,
-     "ts": "2026-11-07T13:29:54.355+00:00",
+     "ts": "2026-11-07T18:46:44.176+00:00",
      "actor": "system",
      "event": "finding_created",
      "data": {
@@ -5715,12 +5715,12 @@
       "fclass": "potential_manipulation",
       "title": "Closing balance on 01_statement.pdf: 2 findings from 2 kinds of check"
      },
-     "prev_hash": "37056dece388a8a95d76baed139318fb9fd3b5329f3ab9fd1a97b4e2601bc69e",
-     "hash": "49e4788a37eb3f1d2ecd2b1fead819af0bec6e7330a1392b8785b82e348413eb"
+     "prev_hash": "42e0ba9cd858ad1e853d6846f23098a330d511d07af3147466bda90065c6661a",
+     "hash": "86692688374aa166787e5193273a89586da51ac1071053307eeb5243196b5395"
     },
     {
      "seq": 53,
-     "ts": "2026-11-07T13:29:54.366+00:00",
+     "ts": "2026-11-07T18:46:44.185+00:00",
      "actor": "system",
      "event": "findings_linked",
      "data": {
@@ -5728,129 +5728,129 @@
       "linked": 2,
       "clusters": 1
      },
-     "prev_hash": "49e4788a37eb3f1d2ecd2b1fead819af0bec6e7330a1392b8785b82e348413eb",
-     "hash": "bb737a5ecca4e874ccd42a27fa27ebca8b7cbe65fb398d2adfcbe88ede20c3e7"
+     "prev_hash": "86692688374aa166787e5193273a89586da51ac1071053307eeb5243196b5395",
+     "hash": "c0d6c7777b2dde3d08c169cabbcb1266d296f34bdd5d9854a29b11826f4af6ce"
     },
     {
      "seq": 54,
-     "ts": "2026-11-07T13:29:54.373+00:00",
+     "ts": "2026-11-07T18:46:44.193+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "link",
       "ok": true,
-      "seconds": 0.016,
+      "seconds": 0.031,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "bb737a5ecca4e874ccd42a27fa27ebca8b7cbe65fb398d2adfcbe88ede20c3e7",
-     "hash": "53f37d825c236d6c0a5d70f343e20ac1c93de618e21765aa60cdf6bd64fab9c8"
+     "prev_hash": "c0d6c7777b2dde3d08c169cabbcb1266d296f34bdd5d9854a29b11826f4af6ce",
+     "hash": "e15c8ab45907ec424c54a7e5c4bab06de60e0323df67189185d914accdd499bc"
     },
     {
      "seq": 55,
-     "ts": "2026-11-07T13:29:54.381+00:00",
+     "ts": "2026-11-07T18:46:44.207+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "explain"
      },
-     "prev_hash": "53f37d825c236d6c0a5d70f343e20ac1c93de618e21765aa60cdf6bd64fab9c8",
-     "hash": "37a8df0fe796677f5be8b9aa578f83ec276105757019d506d8c6f16223d0f994"
+     "prev_hash": "e15c8ab45907ec424c54a7e5c4bab06de60e0323df67189185d914accdd499bc",
+     "hash": "1f07649ef9cf5063d21cf936cfff95714bcbd3c34c92188934333af37182f49e"
     },
     {
      "seq": 56,
-     "ts": "2026-11-07T13:29:54.395+00:00",
+     "ts": "2026-11-07T18:46:44.231+00:00",
      "actor": "system",
      "event": "findings_explained",
      "data": {
       "findings": 3,
       "source": "template"
      },
-     "prev_hash": "37a8df0fe796677f5be8b9aa578f83ec276105757019d506d8c6f16223d0f994",
-     "hash": "fee8c12f2d7bf2d656b49feec7d5ce9d0248abc5b25436e8906e5946947eecbe"
+     "prev_hash": "1f07649ef9cf5063d21cf936cfff95714bcbd3c34c92188934333af37182f49e",
+     "hash": "ddd52e0233b007a3b23b760abee214ec72237cd2138b6d5d5c6e9eb8e6b09b2a"
     },
     {
      "seq": 57,
-     "ts": "2026-11-07T13:29:54.401+00:00",
+     "ts": "2026-11-07T18:46:44.241+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "explain",
       "ok": true,
-      "seconds": 0.016,
+      "seconds": 0.031,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "fee8c12f2d7bf2d656b49feec7d5ce9d0248abc5b25436e8906e5946947eecbe",
-     "hash": "313f6b7fe7d204390d198d80ad0a00ebb211394854360e2725105b2dc9d12c57"
+     "prev_hash": "ddd52e0233b007a3b23b760abee214ec72237cd2138b6d5d5c6e9eb8e6b09b2a",
+     "hash": "4210a1893e5b6554915b7111aa0613a80053859e8ea30b13176394bc4e627125"
     },
     {
      "seq": 58,
-     "ts": "2026-11-07T13:29:54.408+00:00",
+     "ts": "2026-11-07T18:46:44.255+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "crops"
      },
-     "prev_hash": "313f6b7fe7d204390d198d80ad0a00ebb211394854360e2725105b2dc9d12c57",
-     "hash": "0716a0813f2758d2e30467ed2244082fc57b9d97d3fcf74061ca49a6fd3e6898"
+     "prev_hash": "4210a1893e5b6554915b7111aa0613a80053859e8ea30b13176394bc4e627125",
+     "hash": "0215d576c9993b879d0644f2b0bb184c65353c87e3653e712f4f345e778a534f"
     },
     {
      "seq": 59,
-     "ts": "2026-11-07T13:29:54.450+00:00",
+     "ts": "2026-11-07T18:46:44.301+00:00",
      "actor": "system",
      "event": "crops_made",
      "data": {
       "crops": 5
      },
-     "prev_hash": "0716a0813f2758d2e30467ed2244082fc57b9d97d3fcf74061ca49a6fd3e6898",
-     "hash": "a96e428e9d773991e0d253ed23ed326d20cc56449faa802473e94fdda33a1908"
+     "prev_hash": "0215d576c9993b879d0644f2b0bb184c65353c87e3653e712f4f345e778a534f",
+     "hash": "30c0a9ea02b926b15457b77ff30b97e71f4a767d47e0d036ea1f5262411c8562"
     },
     {
      "seq": 60,
-     "ts": "2026-11-07T13:29:54.457+00:00",
+     "ts": "2026-11-07T18:46:44.308+00:00",
      "actor": "system",
      "event": "stage_end",
      "data": {
       "stage": "crops",
       "ok": true,
-      "seconds": 0.031,
+      "seconds": 0.047,
       "tool": "docforensics",
       "version": "0.1.0"
      },
-     "prev_hash": "a96e428e9d773991e0d253ed23ed326d20cc56449faa802473e94fdda33a1908",
-     "hash": "08f5d758164b700334578b91486f2c7e3227f5c4cf3f85daeac9e22eabc06151"
+     "prev_hash": "30c0a9ea02b926b15457b77ff30b97e71f4a767d47e0d036ea1f5262411c8562",
+     "hash": "fbb8366f18560b1390485aeaa6ac5b5cb36785a9def784508996e61199f4ebd0"
     },
     {
      "seq": 61,
-     "ts": "2026-11-07T13:29:54.464+00:00",
+     "ts": "2026-11-07T18:46:44.318+00:00",
      "actor": "system",
      "event": "stage_start",
      "data": {
       "stage": "dossier"
      },
-     "prev_hash": "08f5d758164b700334578b91486f2c7e3227f5c4cf3f85daeac9e22eabc06151",
-     "hash": "a2fb9014e80764a2047adc30adbbd02699326032f55ddd73bc5c9fef97050150"
+     "prev_hash": "fbb8366f18560b1390485aeaa6ac5b5cb36785a9def784508996e61199f4ebd0",
+     "hash": "510c50287f7d66a52da99808b17df3a574563f4b5ba09027efe09cd748c3050a"
     }
    ],
    "anchor": {
     "events": 61,
-    "head": "a2fb9014e80764a2047adc30adbbd02699326032f55ddd73bc5c9fef97050150"
+    "head": "510c50287f7d66a52da99808b17df3a574563f4b5ba09027efe09cd748c3050a"
    },
    "chain_ok": true,
    "problem": null,
    "signing": {
     "status": "signed",
     "algorithm": "Ed25519",
-    "key_id": "bf2d4107a483f812cb49b4b721f70a49cfac617a161d49904aa58297cc93e371",
+    "key_id": "e44d587d5830dedb2ff047864acb4bb35ff482713062287e7cb78e0f07d3175a",
     "checkpoints": 1,
     "last": {
-     "case": "C-20261107-132952-4ad2",
+     "case": "C-20261107-184642-0075",
      "events": 61,
-     "head": "a2fb9014e80764a2047adc30adbbd02699326032f55ddd73bc5c9fef97050150",
-     "key": "bb9af08e1684ac09621b32747fa106b7d44a9d9ab60ed23713011d422c327d9a",
-     "sig": "12f7e54756c9aa7d22706896f8d05f1c081988d435c9cc769327a3ded547969b2323a20a66bf7dcc65152555317d4aa48cacbe4fa2bfe2dbb37905feb102e70d",
-     "ts": "2026-11-07T13:29:54.480+00:00",
+     "head": "510c50287f7d66a52da99808b17df3a574563f4b5ba09027efe09cd748c3050a",
+     "key": "fe5abafc2000004c40899db956f3560ddc40fe6435f54146198a3a51d65773ff",
+     "sig": "55000c5248b50de30dcad36bffad55d3ee5dbb32ac917adbee0062b83ebc273aa487434ac6340dcd73b28b56fe9df3ffc6732ab0a44a41580932357d4fbd5b0f",
+     "ts": "2026-11-07T18:46:44.330+00:00",
      "v": 1
     },
     "uncovered": 0,
@@ -5875,9 +5875,12 @@
      "tests/test_statement_extraction.py::test_classify_statement_payslip_unknown",
      "tests/test_statement_extraction.py::test_tie_between_types_is_unknown",
      "tests/test_payslip_application.py::test_three_types_are_told_apart",
-     "tests/test_model_read.py::test_the_model_changes_no_finding_and_no_type"
+     "tests/test_model_read.py::test_the_model_changes_no_finding_and_no_type",
+     "tests/test_classify_wordings.py::test_a_payslip_that_says_total_earnings_and_employee_code_is_a_payslip",
+     "tests/test_classify_wordings.py::test_an_application_that_calls_the_income_monthly_salary_is_an_application",
+     "tests/test_classify_wordings.py::test_a_letter_that_mentions_a_salary_and_a_date_stays_unknown"
     ],
-    "note": "Rules over words and layout. Three types have a spec at this build (bank statement, payslip, loan application), written for one drawn layout each; anything else is 'unknown' and says so. Wording that differs from the specs' may also read as 'unknown'. Held-out (eval/test.md): the type was recognised for all 440 documents, on both drawn layouts, digital and scanned; all of them are of the three supported types, so a fourth kind of document is not tested. A model never decides the type: with --llm a local model reads facts on pages whose type came out 'unknown' (the template-free row) and leaves the type as it is."
+    "note": "Rules over words and layout. Three types have a spec at this build (bank statement, payslip, loan application), written for one drawn layout each; anything else is 'unknown' and says so. Wording that differs from the specs' may also read as 'unknown'. A probe of 15 page-1 wordings of the three supported types, written by the author as other producers might write them (not held-out), gave the right type for 12 before the keywords of the payslip and application specs were widened and for 14 after, so the second figure is on the set the change was made on; the one that stays 'unknown' is headed 'Credit Application', and an invoice, an electricity bill and an employment letter also come out 'unknown'. Held-out (eval/test.md): the type was recognised for all 440 documents, on both drawn layouts, digital and scanned; all of them are of the three supported types, so a fourth kind of document is not tested. A model never decides the type: with --llm a local model reads facts on pages whose type came out 'unknown' (the template-free row) and leaves the type as it is."
    },
    {
     "name": "Text-layer reading and OCR (offline)",
@@ -5888,9 +5891,11 @@
      "tests/test_ocr.py::test_scanned_pdf_pages_get_ocr_and_class",
      "tests/test_quality.py::test_sharpness_falls_with_blur_and_classes_follow",
      "tests/test_sideways.py::test_a_pdf_page_stored_turned_is_read_as_poor_and_says_why",
-     "tests/test_sideways.py::test_a_scan_turned_a_quarter_is_read_as_poor_and_a_genuine_case_gives_no_conflict"
+     "tests/test_sideways.py::test_a_scan_turned_a_quarter_is_read_as_poor_and_a_genuine_case_gives_no_conflict",
+     "tests/test_upside_down.py::test_a_pdf_page_stored_upside_down_is_read_as_poor_and_says_why",
+     "tests/test_upside_down.py::test_a_scan_turned_half_a_turn_is_read_as_poor_and_a_genuine_case_gives_no_conflict"
     ],
-    "note": "Every word has a box in page pixels. Scanned pages get a quality class from sharpness, not from the recogniser's score; numbers read from a degraded or poor page are flagged, not trusted. OCR output is a reading, not ground truth. A page that stands on its side (a scan or a PDF page turned a quarter turn) is read as poor and the dossier says why; a page turned half a turn is not recognised (limitation 36). Held-out (eval/test.md), on documents nobody changed: no amount, date or id was both wrong and trusted; 16 text values were."
+    "note": "Every word has a box in page pixels. Scanned pages get a quality class from sharpness, not from the recogniser's score; numbers read from a degraded or poor page are flagged, not trusted. OCR output is a reading, not ground truth. A page that stands on its side (a scan or a PDF page turned a quarter turn) or upside down (turned half a turn) is read as poor and the dossier says why; the page is not turned back, and a scan turned half a turn at 120 dpi is not recognised (limitation 36). Held-out (eval/test.md), on documents nobody changed: no amount, date or id was both wrong and trusted; 16 text values were. That sentence is about the documents of the project's own generator. A development probe of 24 unedited cases in other page designs (docs/probe.md, second probe) found, on pictures of them, values wrong at a confidence of 0.90 or more: an account number with a colon in front, a masked number with its star lost, a period start 30 days off, an employer split by a space, an address cut short and narrations read in part; no check compares a narration (limitation 66)."
    },
    {
     "name": "Structured extraction: fields and tables, each with a confidence and a location",
@@ -5905,7 +5910,7 @@
      "tests/test_marked_amounts.py::test_the_balance_chain_of_such_a_statement_is_checked_and_holds",
      "tests/test_marked_amounts.py::test_a_mark_that_cannot_be_read_is_a_gap_the_dossier_names_and_not_a_pass"
     ],
-    "note": "Bank statements, payslips and loan applications, digital and scanned (scans are simulated at three levels), on the drawn layouts the specs were written for. A column or label that is not found is reported as missing, never filled in, and nothing repairs a misread digit or separator. How many values come out right, wrong or missing, by kind of value and scan level, is measured by the evaluation, not by the tests (eval/test.md). Held-out, on documents nobody changed: layout A, which the specs were written for, is read right in every amount, date, id and text value on digital pages, and on mild scans in every amount, date and id and in 99.4 % of text values (4 of 625 wrong, and trusted); at 150 dpi 89.6 % of amounts are read and the rest are missing, and at 120 dpi 20.3 % are read (12 wrong, none trusted). Layout B was drawn after the specs were final, and about half of its labels, column headings and captions are wordings the specs do not list, so it is read much less: on digital pages 91 % of amounts, 97 % of dates and 34 % of text values, and no id. None of the values not read on those pages was wrong; each is reported missing. No amount, date or id was wrong and also trusted, in either layout; 16 text values were. A deduction beside an empty earnings cell is not read as a row. A statement that prints one Amount column with a Dr or Cr mark beside each amount is read too, by a reader written after a probe of six such synthetic statements found their credits unread; no held-out split holds one, so none of the figures above covers it (limitation 58). Other document types and layouts are not built by these specs; with --llm a local model reads some facts on pages of an unsupported type (next row)."
+    "note": "Bank statements, payslips and loan applications, digital and scanned (scans are simulated at three levels), on the drawn layouts the specs were written for. A column or label that is not found is reported as missing, never filled in, and nothing repairs a misread digit or separator. How many values come out right, wrong or missing, by kind of value and scan level, is measured by the evaluation, not by the tests (eval/test.md). Held-out, on documents nobody changed: layout A, which the specs were written for, is read right in every amount, date, id and text value on digital pages, and on mild scans in every amount, date and id and in 99.4 % of text values (4 of 625 wrong, and trusted); at 150 dpi 89.6 % of amounts are read and the rest are missing, and at 120 dpi 20.3 % are read (12 wrong, none trusted). Layout B was drawn after the specs were final, and about half of its labels, column headings and captions are wordings the specs do not list, so it is read much less: on digital pages 91 % of amounts, 97 % of dates and 34 % of text values, and no id. None of the values not read on those pages was wrong; each is reported missing. No amount, date or id was wrong and also trusted, in either layout; 16 text values were. A deduction beside an empty earnings cell is not read as a row. A statement that prints one Amount column with a Dr or Cr mark beside each amount is read too, by a reader written after a probe of six such synthetic statements found their credits unread; no held-out split holds one, so none of the figures above covers it (limitation 58). A development probe of 24 unedited cases in other page designs (docs/probe.md, second probe) found 4 of the 7 statement designs and all 5 payslip designs read in part or not at all (limitation 65); the dossier names the values it could not read, and no inconsistency came from those gaps. That probe also showed false findings on genuine documents (on the digital pass 9 inconsistency findings: 6 account conflicts, 2 balance breaks and 1 employer conflict; on pictures a balance break from a date cut short, balance breaks from two amounts read as one cell, two employer conflicts from a row of the form read as the employer and one from a space inside a word); they were fixed with those documents in view, so the figures after the fixes are not independent. Other document types and layouts are not built by these specs; with --llm a local model reads some facts on pages of an unsupported type (next row)."
    },
    {
     "name": "Template-free extraction: facts on pages of an unsupported type, read by the local model",
@@ -5951,7 +5956,7 @@
      "tests/test_digital_detectors.py::test_genuine_documents_trigger_no_digital_detector",
      "tests/test_digital_detectors.py::test_more_objects_than_the_limit_is_a_limitation_not_a_pass"
     ],
-    "note": "Reported as observations with the measured values: text still in the file but drawn under a filled rectangle or a picture that comes after it (the text written over a covering rectangle is cited too); a figure or date set in a different font, size or colour from the others in its column or on its line; text that is invisible, under 2 pt or off the page; a producer or creator that names PDF-editing software; a modification date later than the creation date. Held-out, 8 cases each, all found and (for D2, D3 and D5) located at the changed place: a cover with the text retyped in the same font (D2), the same in a near font (D3, a change the development set never showed), a metadata edit (D4) and a picture over text (D5); none of these checks raised a finding on a genuine document. Every case comes from one generator, and real editing software varies. A development probe of 24 cases printed by another program (docs/probe.md) found all 154 covered numbers, flagged a figure in the built-in font only where it stood in a column of four or a line of three, and found a page changed at its source and printed again only where a number disagreed with another (limitations 10, 11, 63 and 64). Not built: text hidden by its colour, covers that are not rectangles, bold against regular."
+    "note": "Reported as observations with the measured values: text still in the file but drawn under a filled rectangle or a picture that comes after it (the text written over a covering rectangle is cited too); a figure or date set in a different font, size or colour from the others in its column or on its line; text that is invisible, under 2 pt or off the page; a producer or creator that names PDF-editing software; a modification date later than the creation date. Held-out, 8 cases each, all found and (for D2, D3 and D5) located at the changed place: a cover with the text retyped in the same font (D2), the same in a near font (D3, a change the development set never showed), a metadata edit (D4) and a picture over text (D5); none of these checks raised a finding on a genuine document. Every case comes from one generator, and real editing software varies. In the second probe (docs/probe.md) the font check raised 8 observations on the 4 genuine payslips of a design that prints its two total rows in white on a dark bar (limitation 68). A development probe of 24 cases printed by another program (docs/probe.md) found all 154 covered numbers, flagged a figure in the built-in font only where it stood in a column of four or a line of three, and found a page changed at its source and printed again only where a number disagreed with another (limitations 10, 11, 63 and 64). Not built: text hidden by its colour, covers that are not rectangles, bold against regular."
    },
    {
     "name": "Scan and image forensics",
@@ -6306,9 +6311,12 @@
     "evidence": [
      "tests/test_pipeline.py::test_failing_stage_is_isolated",
      "tests/test_pipeline.py::test_stage_timeout",
-     "tests/test_dossier.py::test_case_with_no_accepted_documents_still_has_dossier"
+     "tests/test_dossier.py::test_case_with_no_accepted_documents_still_has_dossier",
+     "tests/test_ingest.py::test_rejections_have_reason_and_audit_event",
+     "tests/test_ingest.py::test_a_cut_off_pdf_is_read_without_the_library_printing_each_broken_object",
+     "tests/test_odd_inputs.py::test_an_odd_input_beside_a_good_statement_stops_nothing"
     ],
-    "note": "A step that fails or times out is listed as a limitation and the case goes on. A step stuck in native code is abandoned, not killed."
+    "note": "A step that fails or times out is listed as a limitation and the case goes on. A step stuck in native code is abandoned, not killed. A file that is empty, too large, of another type than PDF, PNG or JPEG, encrypted, corrupt, over the page limit or past the limit of files per case is refused: the reason is a limitation of the case and an event of the audit trail, and the other files go on. Ten odd inputs that can be opened (a blank page, pages 20 and 14000 points on a side, a cut-off PDF, and pictures in grey as PNG and as JPEG, 16-bit grey, palette, RGBA and CMYK) were each sent beside a good statement: no step failed and the statement was read as it is read alone. That is a check on inputs the author thought of, not a claim about files in general."
    },
    {
     "name": "Offline operation",
@@ -6380,14 +6388,14 @@
     "The font check compares figures and dates that stand in a text run of their own with the others in their column (four or more) or on their line (three or more). A figure inside a longer run of text is not compared, and bold against regular of one family is not. A logo, stamp or signature placed as a picture on a text page is reported like any other picture. A figure that stands in no column of four and no line of three such values is not compared at all. In a development probe of 24 synthetic cases printed by another program (docs/probe.md), of 77 numbers re-set in the built-in Helvetica 42 stood in such a group and all 42 were flagged; the 35 that did not (the net pay of 24 payslips, the declared income of 6 applications, a statement credit in 3 cases and a debit in 2) were not flagged, and another check found 34 of them. The check flagged none of the 96 numbers re-set in the page's own font.",
     "The metadata check reads what the file says about itself: producer and creator names, creation and modification dates. Anyone who can write the file can write them, and a file saved again for an ordinary reason shows a later modification date. It names an editor only from its list of program names. In a development probe of 24 payslips (docs/probe.md), a file that named Acrobat as producer and creator and a file with a modification date 25 minutes after its creation were each reported in 24 of 24, with no place in the document to point to; a producer name that is not on the list (PyMuPDF) and an incremental update that adds a catalog entry and changes nothing a reader sees were reported in 0 of 24 each.",
     "The grain check compares each scanned word with the median of its page, on the paper inside the word's box and away from the ink, and leaves out paper brighter than 250 (the scanner cuts it at white). Scanners and JPEG saves change grain for ordinary reasons. On a mildly degraded scan a changed word can keep a grain close to the page's, because the second JPEG save puts back grain of about the same size, so the check finds a patch more easily on coarser scans. Pages of poor quality are not analysed and the dossier says so.",
-    "The placement check straightens a scanned page by the turn that makes its text rows sharpest, then compares each word's position with its row, and a figure's right edge and height with the page's other figures and its column. The height of a text word is not compared (its box depends on its letters and on the slant of its line). A difference counts when it is more than 6 px (position in the row) or 10 px (figure height, right edge): four times a spread that is never taken below 1.5, 2.5 and 2.5 px. Those floors come from the largest differences on 42 genuine simulated statements (3.3, 7.0 and 6.1 px on pages not degraded), and the largest right-edge difference rose from 5.6 to 6.1 px between the first six and the next eight, so a genuine statement can still give an observation, and a shift under the limits, or a row pasted from a scan turned the same way, is not seen. On a degraded page the floors are raised by half and figure columns are rarely found (one to five figures read), so the right-edge comparison is in practice not made there. A word on a line of fewer than four words (a label and its value in a header) has no row to be measured against, so a paste there is seen only when a grain, arithmetic or cross-document check disagrees. A creased or curled page moves words and can give an observation. A page of poor quality, one with fewer than 12 words or no row of four words, or one turned by more than 2.9 degrees is not compared and the dossier says so. The turn is looked for up to 10 degrees either way; a page turned further than that is not recognised as turned and may be compared as if it were turned less, except a page that stands on its side (limitation 36).",
+    "The placement check straightens a scanned page by the turn that makes its text rows sharpest, then compares each word's position with its row, and a figure's right edge and height with the page's other figures and its column. The height of a text word is not compared (its box depends on its letters and on the slant of its line). A difference counts when it is more than 6 px (position in the row) or 10 px (figure height, right edge): four times a spread that is never taken below 1.5, 2.5 and 2.5 px. Those floors come from the largest differences on 42 genuine simulated statements (3.3, 7.0 and 6.1 px on pages not degraded), and the largest right-edge difference rose from 5.6 to 6.1 px between the first six and the next eight, so a genuine statement can still give an observation, and a shift under the limits, or a row pasted from a scan turned the same way, is not seen. On a degraded page the floors are raised by half and figure columns are rarely found (one to five figures read), so the right-edge comparison is in practice not made there. A word on a line of fewer than four words (a label and its value in a header) has no row to be measured against, so a paste there is seen only when a grain, arithmetic or cross-document check disagrees. A creased or curled page moves words and can give an observation. A page of poor quality, one with fewer than 12 words or no row of four words, or one turned by more than 2.9 degrees is not compared and the dossier says so. The turn is looked for up to 10 degrees either way; a page turned further than that is not recognised as turned and may be compared as if it were turned less, except a page that stands on its side or upside down (limitation 36).",
     "A revision boundary is recognised from a startxref pointer followed by %%EOF. A file crafted to carry a convincing pointer inside a content stream can mislead it, which gives a false observation or a visible limitation, not a silent pass.",
     "A document the tool does not recognise as one of the three supported types is left out of the comparisons across documents, and the dossier says which comparisons were not made. Wording unlike the specs' can read as unrecognised.",
-    "Names, addresses and employers are graded, not only passed or flagged: the same value apart from case, spacing and punctuation passes; the same words in another order, with other titles or with initials (names), the same comma-separated parts of an address in another order, or an employer with another legal form, are an observation 'written differently'; text at or above the similarity limit (0.85 for names, 0.8 for addresses and employers) that is still not identical is a 'Minor mismatch'; anything further apart is a 'Mismatch'. A name with a word left out (a middle name) is a Minor mismatch. The limits are starting values and were not tuned. In the held-out run 6 of the 7 planted changes of a name, address or employer were found; the miss is a major address change on a 120 dpi scan (eval/test.md).",
-    "An initial stands for any name it starts, so 'M. Varghese' and 'Mohan Varghese' are reported only as written differently. An address with the same words in another order but without commas is a Minor mismatch or a Mismatch by how far apart the text is, never a difference in form; any change in the numbers of an address, or in their order, is a Mismatch. An employer with a word more or fewer apart from Pvt, Ltd and the like is a Minor mismatch at a text similarity of 0.8 or more and a Mismatch below it.",
+    "Names, addresses and employers are graded, not only passed or flagged: the same value apart from case, spacing and punctuation passes; the same words in another order, with other titles or with initials (names), the same comma-separated parts of an address in another order, an employer with another legal form, and the same letters with a space more or less inside a word (a scan can split 'IRONWOOD' into 'IRONW OOD'), are an observation 'written differently'; text at or above the similarity limit (0.85 for names, 0.8 for addresses and employers) that is still not identical is a 'Minor mismatch'; anything further apart is a 'Mismatch'. A name with a whole word left out (such as a middle name) is a Minor mismatch whatever its similarity, as long as two words or more are left; a lone first name against a full name is a Mismatch. The limits are starting values and were not tuned. In the held-out run 6 of the 7 planted changes of a name, address or employer were found; the miss is a major address change on a 120 dpi scan (eval/test.md).",
+    "An initial stands for any name it starts, so 'M. Varghese' and 'Mohan Varghese' are reported only as written differently. An address with the same words in another order but without commas is a Minor mismatch or a Mismatch by how far apart the text is, never a difference in form; any change in the numbers of an address, or in their order, is a Mismatch. An employer with a word more or fewer apart from Pvt, Ltd and the like ('(P)' counts as Pvt, a bare P as a word) is a Minor mismatch at a text similarity of 0.8 or more and a Mismatch below it.",
     "Amounts are not graded: a net pay that differs from the credit by no more than the larger of INR 1 and 0.5% of the larger amount, a declared income within 5% of the gross earnings, and a sum within a document that is off by INR 1 or less pass without a finding.",
     "On a scan a Minor mismatch of a name or an address can be one letter misread by the OCR. On a page of good quality it is shown as a conflict with a note saying so; on a degraded or poor page it is shown as a possible extraction error to verify. Account numbers have no minor grade: they match, or they are a Mismatch.",
-    "That the employer pays the salary is judged by one word of the employer's name against the descriptions of salary credits on the statement. It is a heuristic and can be wrong in either direction.",
+    "That the employer pays the salary is judged by the first word of the employer's name (and the first two words joined, in case a scan split the first word) against the words of the descriptions of salary credits on the statement (and neighbouring words joined). It is a heuristic and can be wrong in either direction.",
     "An account number that is masked, or short, matches another by its visible end, which must be at least three characters.",
     "A payslip dated outside every statement period submitted is reported as not compared, not as a conflict. A set of several months' statements looks the same.",
     "The same software producing different kinds of document within ten minutes is noted, and it also happens for ordinary reasons (one office system issuing both).",
@@ -6403,7 +6411,7 @@
     "The OCR can misread a letter or a digit with no sign of doubt. The tool does not repair what it reads, and a value read from a page classed good carries the confidence of that class (up to 0.95), so a wrong one is not marked as doubtful. The evaluation counts these in its 'wrong, trusted' column: in the held-out run 16 text values (4 and 4 on layout A, mild and 150 dpi; 3 and 5 on layout B) and no amount, date or id.",
     "Extraction depends on the wordings of labels, column headings and captions that the spec of each document type lists. A wording that is not listed leaves its value missing, and whatever depends on that value is left unchecked; the tool says so as a limitation and does not guess. On the held-out layout B, about half of whose wordings the specs do not list, digital pages gave 91 % of amounts, 97 % of dates, 34 % of text values and no id, and the checks within a document could not be made in full on any of its 24 genuine statements and 24 genuine payslips (eval/test.md). A document that words its labels differently from the specs will meet the same limit, and a value under a label that is not listed cannot be compared with another document's. A development probe of 24 synthetic cases printed by another program (docs/probe.md) showed the same: the pay date, labelled Paid On in 12 of the 24 payslips, and the net pay in words, printed on all 24, were not read, so for those 12 payslips the net pay was not compared with the statement's credit, and the dossier of every payslip said that it could not fully verify it.",
     "The grain and placement checks found few changed scans. In the held-out split they found 3 of the 16 scans that were changed by pasting from another scan or by erasing and retyping (the placement check 1 of the 8 pasted scans, the grain check 2 of the 8 retyped ones), arithmetic and cross-document checks found 3 more, and 10 were not found at all; at 120 dpi 2 of 9 changes of any kind were found. A scan on which the tool raised nothing therefore says little about whether it was changed. These checks also gave the one flag on a genuine document, a 120 dpi scan (eval/test.md).",
-    "The reader does not turn a page back upright. It recognises one case, a page that stands on its side (a scan turned a quarter turn, or a PDF page stored turned 90 or 270 degrees), because most of its words are taller than wide. Such a page is read as poor quality and the dossier says why. Its values carry low confidence, and the checks that compare them, the placement of its words and its marks are not run on it. The rule was added after cases with one such page gave false conflicts: the page's rows are the document's columns, so a value pairs with the wrong label. In 4 genuine development cases of three documents (2 scans, 2 PDFs), a statement turned a quarter gave a false address conflict with the other documents and a payslip turned a quarter gave false employer and payer conflicts, in every case; with the rule, the turned page gave no flag in any of them. A page that is upside down is not recognised (the tool has no test for it). It is read, few of its fields are found (8 to 38 of the 78 to 188 of a statement in those cases), and a check can give a false result: a statement scanned upside down gave a false placement observation in 1 of the 2 scans, and a statement stored as a PDF turned half a turn gave a false account-number conflict with the other documents in both PDFs. No page in the development or the held-out split is turned, so none of this is in the reported figures. A page should be turned upright before it is submitted.",
+    "The reader does not turn a page back upright. It recognises two cases, and reads such a page as poor quality with the dossier saying why. A page on its side (a scan turned a quarter turn, or a PDF page stored turned 90 or 270 degrees) is found because most of its words are taller than wide. A page upside down is found because the angle test of the OCR engine turns most of the lines it looks at (a scan), or because most of the words of the text layer run right to left (a PDF page stored or drawn turned half a turn); at least 12 lines or words are needed to decide. Its values carry low confidence, and the checks that compare them, the placement of its words and its marks are not run on it. The rules were added after cases with one such page gave false conflicts: the page's rows are the document's columns (on its side) or come in the wrong order (upside down), so a value pairs with the wrong label. In 4 genuine development cases of three documents (2 scans, 2 PDFs), a statement turned a quarter gave a false address conflict with the other documents and a payslip turned a quarter gave false employer and payer conflicts, in every case; with the rule, the turned page gave no flag in any of them. Before the half-turn rule, a statement scanned upside down gave a false placement observation in 1 of the 2 scans, and a statement stored as a PDF turned half a turn gave a false account-number conflict with the other documents in both PDFs; with it, a genuine statement, payslip and application each stored turned half a turn, and a statement scanned turned half a turn at the mild level, gave no flag. Measured on development data (probe documents and simulated scans, never a held-out split): the half-turn rule fired on none of 182 upright pages (57 scanned pages, 77 PDF pages, 48 simulated scans; the angle test turned at most 5 % of the lines of an upright page). It found 76 of 77 PDF pages stored turned half a turn (the miss has 10 words of three characters or more, under the minimum) and 32 of 48 simulated scans turned half a turn: 16 of 16 at the mild level, 16 of 16 at 150 dpi and none of 16 at 120 dpi, where the angle test turns 4 to 35 % of the lines and is unsure of the rest. The engine's own bar for a line (0.9) is used; a lower one finds more of the 120 dpi pages (15 of 16 at 0.5) and was not adopted, because its limit would be set on the 16 pages it is then judged on. A quarter turn was found in 96 of 96 simulated scans. A scan turned half a turn that is not found is read as it stands: in 4 genuine statements scanned at 120 dpi and turned, 8 of 68 fields were found, the dossier said that no table was found, there was no false conflict, and 1 of the 4 gave a false visual observation (the learned word check). Not found: any other angle, a page with fewer than 12 words or lines, and a page of which only part is turned; a page in a script written right to left would be taken for upside down (the tool reads printed English only). No page in the development or the held-out split is turned, so none of this is in the reported figures. A page should be turned upright before it is submitted.",
     "The entity view puts two writings together by the pairwise grading of the cross-document checks, which is not transitive. A writing joins the first entity, in the order the documents mention them, in which every writing is graded as the same as it or as the same apart from form, and is an entity of its own if there is none, so two writings graded as a mismatch are never in one entity. A writing that fits more than one entity sits in the first, so which entities there are, and where such a writing is put, depend on the order the documents are read in. An initial stands for any name it starts, so 'M. Varghese' fits both 'Mohan Varghese' and 'Manoj Varghese' (a Minor mismatch with each other) and sits with the one read first, and a masked account number fits any number that ends the same way. Only names, addresses, employers and account numbers are entities. Dates, amounts and ids are not, and neither are aliases, nicknames, a person named by role ('the borrower') or a name inside running text. A value the extraction missed is absent from the view, and one it misread is an entity of its own, so a letter misread in a name appears as two names. A finding touches an entity only through a field it cites or a box it lies over, so one that concerns an entity in some other way is not drawn on it, and every finding that does touch one is drawn whatever its review status. The view has no accuracy measured, because the evaluation scores findings and not entities, and it does not say that two entities are, or are not, one person or one thing.",
     "The signed checkpoints show that the audit trail still reads as it did when a checkpoint was signed. They do not show who held the key or when: the private key is a plain file without a password in the signing folder of the data folder, the time in a checkpoint is the clock of the machine that signed it, and no outside party stamps it. Whoever can read that folder can change the trail, work the hashes out again and sign it with a key of their own; a reader tells that apart only by knowing the public key from somewhere else (verify-audit --pubkey).",
     "A case folder whose checkpoints.jsonl was removed reads as unsigned, which verify-audit reports and passes unless a public key is given. A reviewer action does not sign such a case afresh, but the next run of it signs the trail as it stands, with the key of the data folder. The last checkpoints can also be deleted together with the events they cover; what is left still holds, and the next action signs it. Likewise the events after the last checkpoint, which are counted as not covered and not as changed, can be replaced before the next action signs them. A copy of a checkpoint or of the head that verify-audit printed, kept outside the case folder, shows the cut; only a copy of the head, taken while those events were there, shows the replacement. A checkpoint carries the public key that signed it, so without a key known beforehand it shows only that one key signed this trail.",
@@ -6424,14 +6432,18 @@
     "The learned word check was fitted to edits made by this project's own generator (parts of other scans pasted in, pasted fields and blocks, the same place of another scan pasted in, retyped amounts) on scans from the project's scan simulator (JPEG, three levels of quality), and measured on held-out pages from the same generator: 16 of 36 and 59 of 72 changed pages found, none of the 195 unedited pages flagged. The generator, the edits and the check have one author, so the figures show that these edits are found, not that edits made by anyone else, on other scanners, at other resolutions or in other file formats, would be. No real scan was used. None of 195 unedited pages flagged does not exclude a rate of about 1.5 % of unedited pages flagged. Of the generator's two page layouts, the changed pages measured are those of layout A and the payslips of the compression-history pack (in both layouts); edits on statements and applications of layout B were not measured, and 72 genuine scan pages of layout B tried afterwards were not flagged, which says nothing about edited ones.",
     "The learned word check finds some kinds of edit less often than others: on the held-out pack pages, pasted blocks 18 of 18 and pasted fields 17 of 18, but the same place of another scan pasted in (kind aligned) 12 of 18 and retyped amounts 12 of 18, which the grain and placement checks find 18 of 18. For parts of another scan pasted into a page, most of its gain over those two checks comes from two hand-written measures of how far a word sits off the line of its neighbours (alone they find 13 of 72 development pages; the other twelve measures alone find none). A change that leaves a word's grain, edges, strokes, JPEG grid and place as the page's own is not seen.",
     "The learned word check looks only at pages read by OCR that are not of poor quality, and only at words with enough paper in their box to measure; a page with fewer than 12 measurable words is not compared, and a limitation says so for each such document. It does not look at digital PDFs. It lists at most eight words a page.",
-    "A table row is a line whose first cell has the shape the column asks for (a date, or an amount). A cell with that shape that cannot be read as one, such as the amount 57.500.00, the date O3/05/2026 or a date with a month over 12, stays a row with that cell unreadable: the statement is reported as not fully verifiable and the value is named, an amount that cannot be read leaves the stretch of the balance chain that holds it untested, and a date that cannot be read leaves that row out of the date checks. A row whose first cell has no such shape at all (letters in the date, a date split into words, a missing separator) is left out of the table, and the balance chain can then show a break that is really a row that was not read; the explanation of that finding lists this among the possible causes.",
+    "A table row is a line whose first cell has the shape the column asks for (a date, or an amount). A cell with that shape that cannot be read as one, such as the amount 57.500.00, the date O3/05/2026 or a date with a month over 12, stays a row with that cell unreadable: the statement is reported as not fully verifiable and the value is named, an amount that cannot be read leaves the stretch of the balance chain that holds it untested, and a date that cannot be read leaves that row out of the date checks. A row whose first cell has no such shape at all (a letter among the digits of a date written with a month's name, such as 03-Mar-2O26, a date split into words, a missing separator, two different separators, a year of one digit) is left out of the table, and the balance chain can then show a break that is really a row that was not read; the explanation of that finding lists this among the possible causes.",
     "A balance printed with Dr (for example 5,000.00 Dr) is read as money owed, that is minus, and one printed with Cr as money held; the marker on a debit or credit amount only names the column and gives no sign. A statement with one Amount column and, beside it, a column that marks each line Dr or Cr is read only when its heading names neither a debit nor a credit column and the wordings are among those the bank statement spec lists (Amount, Txn Amount, Transaction Amount or Amt for the amounts; Dr/Cr, Cr/Dr, Dr / Cr, Cr / Dr, Dr Cr or Debit/Credit for the marks; and, as the mark itself, Dr, DR., (Dr) or Debit, and Cr, CR., (Cr) or Credit): the amount goes to the side its mark names and the other side is found empty. A mark of any other wording, an amount with no mark and a mark with no amount leave that row's debit and credit unread (reported missing), the balance steps across the row are not tested and the checks say they cannot fully verify the statement; so does an amount cell that holds two numbers, as when a new amount is laid over the old one. The reader was written after a probe of six synthetic statements of this layout, so those six say how it behaves where it was aimed and nothing about statements in general; no held-out split holds a statement of this layout, and it has been run on drawn pages only. Amounts with a minus sign and no marker are the signed layout that the statement checks do not assume, stated above.",
     "The declared-EMI check reads a debit as an instalment only when its narration holds the whole word EMI, instalment (also spelt installment, or instl) or loan, and none of the words fee, charge, penalty, GST, tax, bounce, return, refund, reversal, waiver, insurance, premium, closure, foreclosure or prepayment. An instalment paid under a lender's name alone, or written in a way these words do not cover, is not seen (none of the 4 such cases of the pack was found), and a transfer whose narration says loan, or a payment made for someone else, can be counted as an instalment. On one statement the check takes the calendar month with the most instalments, and it takes one statement at a time, so instalments split over two statements are not added together. A declared figure above the instalments is never reported, since an instalment paid from another account or in cash has an ordinary cause.",
     "The declared-EMI check cannot read a narration when the statement reader does not list the heading of that column. The generator's layout B heads it 'Narration', which the reader leaves out on purpose (layout B is the test of wording the reader has not seen), so there every narration is empty: 6 of the 6 planted gaps in layout B were missed, and for all 22 layout-B cases of the pack the dossier said that the narration could not be read and that any instalment among the debits was not compared. A statement that heads the column with a wording the reader does not list would be treated the same way: a limitation, and no comparison.",
     "The figures for the declared-EMI check are by construction: 44 cases from one generator, built by the author of the check with the check in view, the instalments narrated in the wordings the check reads (EMI, instalment, loan). They show what the check does with those wordings and say nothing about how often a real instalment is narrated like that, or about other layouts, other producers or another language. The statement that an unread narration was not compared was added after the first run, which had missed six cases without a word; both reports are kept, so the second run does not measure the check's reading independently of that fix. The held-out ext-test split was not run on it. A development probe of 24 synthetic cases printed by another program (docs/probe.md) held no statement with an instalment, EMI or loan narration and so did not exercise the check.",
     "Pictures that carry no scanner grain (a page printed or rendered to an image) are not given to the grain, placement and learned-word checks, and the dossier says so for each such document. An edit on such a page is found only by the arithmetic and cross-document checks: 88 of 108 edits in a probe of 6 cases printed to 150 dpi png, 200 dpi png and 200 dpi jpg, and none of the three scan checks ever put a finding on an edit there. The line comes from simulated scans, not from a real scanner. The gate was added after that probe had shown the three checks putting an observation on 15 of 18 clean printed pages (0 of 18 after), and its line was set on the same development pages, so those figures show what the gate does with them and not how it behaves on other scanners or other pictures; no held-out split was used. A real scan that is very clean, cut at white or denoised may be taken for such a page and then goes unchecked by those three checks, with the dossier saying so.",
     "A number whose glyphs overlap those beside it (a longer amount laid over the currency sign next to it, or over the text under it) is read as no value: the cell is reported missing, the dossier says the statement cannot be fully verified, and no check uses the cell. In a development probe (docs/probe.md), 4 of the 48 edits that re-set a statement credit did this (on 2 of 24 statements), and 3 of the 4 were found by no check.",
-    "A page changed at its source and printed again by the program that printed the original is a new file with no covered text and no second revision, so the checks of the file have nothing to find; it is found only when a number disagrees with another number in the case. In a development probe of 24 cases (docs/probe.md), a changed declared income, a changed net pay and a changed credit, each alone, were found in 24 of 24; a net pay raised by cutting the tax deduction so that the payslip still adds up, and a credit raised with every later balance carried through, in 12 of 24 each (the 12 whose pay date the tool reads); a debit changed with the balances carried through (8 cases) and a loan amount (8 cases) in none."
+    "A page changed at its source and printed again by the program that printed the original is a new file with no covered text and no second revision, so the checks of the file have nothing to find; it is found only when a number disagrees with another number in the case. In a development probe of 24 cases (docs/probe.md), a changed declared income, a changed net pay and a changed credit, each alone, were found in 24 of 24; a net pay raised by cutting the tax deduction so that the payslip still adds up, and a credit raised with every later balance carried through, in 12 of 24 each (the 12 whose pay date the tool reads); a debit changed with the balances carried through (8 cases) and a loan amount (8 cases) in none.",
+    "A table in a page design the readers were not built for is read in part or not at all. In a development probe of 24 unedited cases printed by other programs (docs/probe.md, second probe), 4 of the 7 statement designs and all 5 payslip designs came out that way: one statement design gave 28 of its 328 table cells, and three payslip designs gave none of theirs. The dossier names the values it could not read and says that the statement or payslip cannot be fully verified, and no inconsistency came from those gaps in that set; but a statement whose debits and credits are not read has no balance chain tested, and the other checks that depend on the missing cells are not made. The readers were changed several times to fit this pack, so its figures are not a measure of other documents.",
+    "Some values are read wrongly at a high confidence and compared by no check. In the second probe (docs/probe.md; 24 unedited cases, digital and as pictures at 150 and 200 dpi): the bank name of a statement read together with the rest of its title line (7 of 24 statements in each pass, confidence 0.90); a payslip deduction name with an amount in front of it (8 digital, 5 at 150 dpi, 7 at 200 dpi); the narration of a transaction that runs over two lines, read in part or merged with the next row (36 digital, 43 at 150 dpi, 55 at 200 dpi, at a confidence up to 1.00); an account number or id with a colon in front, kept as printed (11 in each picture pass, confidence 0.95); a masked account number with its star lost (3 at 200 dpi, confidence 0.67 to 0.81); and a statement period printed as one range whose hyphen a scan glues to the first date, read as the second date alone (2 cases, confidence 0.90), which leaves the end unread so the check of the dates is not made. No check compares a narration, a bank name or a deduction name, and none of these gave a finding.",
+    "The employer of a payslip and the bank of a statement are read from the tallest line of page 1; when that line holds a label or a column heading of the document type, the title is the tallest line above the first line that holds one. When the first line holds both the bank name and a label (one statement at 150 dpi in the second probe, docs/probe.md), nothing stands above it, and a tall row of the form can be taken as the bank. The bank is compared with nothing, so no finding follows; for a payslip the same shape could give a false employer conflict, which was not seen.",
+    "The font check reports a design colour as an observation. In the second probe (docs/probe.md) it raised 8 observations in the digital pass, 2 on each of the 4 genuine payslips of a design that prints its two total rows in white on a dark bar ('Value set in a different colour from the values beside it'). They are observations, not inconsistencies, and a reviewer can dismiss them, but the check compares the values in a column and cannot tell a design colour from a changed value."
    ],
    "assumptions": [
     "Dates are read day first (DD/MM/YYYY); a date that could be read another way is marked ambiguous and given a low confidence.",
@@ -6443,7 +6455,7 @@
   }
  },
  "integrity": {
-  "json_sha256": "a12393762a4e0517f37a59c9ca8b38c1ac9c79ad78da8fc3673f01e3808e7bfb",
+  "json_sha256": "701bde819250ab5d082f79baba0317d3e66d7f4e408cf13e50d9964408dc3f67",
   "method": "sha256 of this document without this block, as JSON with sorted keys, compact separators and ASCII escapes"
  }
 }
