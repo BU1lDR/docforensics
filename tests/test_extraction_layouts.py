@@ -9,7 +9,7 @@ from docforensics.config import Thresholds
 from docforensics.ingest import create_case
 from docforensics.pipeline import run_case
 from docforensics.understand.classify import classify
-from docforensics.understand.extract import extract_document
+from docforensics.understand.extract import _UNIT, extract_document
 from docforensics.understand.specs import FieldSpec, TypeSpec, load_specs
 from tests.helpers import lines_pdf
 
@@ -232,6 +232,50 @@ def test_a_unit_after_a_heading_is_not_part_of_its_name(tmp_path):
     got = read(tmp_path, lines)[1]
     assert (got[("txn.credit", 1)].value, got[("txn.balance", 1)].value) == ("52000.00", "172500.00")
     assert (got[("txn.debit", 2)].value, got[("txn.description", 2)].value) == ("18000.00", "Rent")
+
+
+def test_a_currency_sign_the_ocr_misread_is_not_part_of_a_heading(tmp_path):
+    """A scan of 'Debit (₹) Credit (₹) Balance (₹)' came back as 'Credit (ぼ)' and 'Balance ()' on a page of three: the heading then
+    named no credit column, and every credit on the page was 'column not found'. A short bracket at the end of a heading is a unit."""
+    lines = [(40, 100, "Date", 9), (110, 100, "Description", 9), (260, 100, "Debit (R)", 9), (350, 100, "Credit (?)", 9),
+             (470, 100, "Balance ()", 9),
+             (40, 114, "01/05/2026", 10), (110, 114, "Salary", 10), (350, 114, "52,000.00", 10), (470, 114, "1,72,500.00", 10),
+             (40, 128, "02/05/2026", 10), (110, 128, "Rent", 10), (260, 128, "18,000.00", 10), (470, 128, "1,54,500.00", 10)]
+    got = read(tmp_path, lines)[1]
+    assert (got[("txn.credit", 1)].value, got[("txn.balance", 1)].value) == ("52000.00", "172500.00")
+    assert (got[("txn.debit", 2)].value, got[("txn.balance", 2)].value) == ("18000.00", "154500.00")
+
+
+@pytest.mark.parametrize("heading, name", [("Credit (ぼ)", "Credit"), ("Balance ()", "Balance"), ("Debit (R)", "Debit"),
+                                           ("Credit (INR)", "Credit"), ("Amount (Rs.)", "Amount"), ("Amount (Dr)", "Amount")])
+def test_the_unit_of_a_heading_comes_off(heading, name):
+    assert _UNIT.sub("", heading) == name
+
+
+@pytest.mark.parametrize("heading", ["Credit (Cash)", "Balance (Closing)", "Amount (Dr/Cr)", "Credit", "Closing Balance", "Value Date", "Narration"])
+def test_a_heading_without_a_unit_is_read_as_it_was(heading):
+    """A bracket of more than three characters is a part of the name, as is a heading with none."""
+    assert _UNIT.sub("", heading) == heading
+
+
+def test_a_credit_heading_with_a_longer_bracket_still_names_no_column(tmp_path):
+    lines = [(40, 100, "Date", 9), (110, 100, "Description", 9), (260, 100, "Debit", 9), (350, 100, "Credit (Cash)", 9),
+             (470, 100, "Balance", 9),
+             (40, 114, "01/05/2026", 10), (110, 114, "Salary", 10), (350, 114, "52,000.00", 10), (470, 114, "1,72,500.00", 10),
+             (40, 128, "02/05/2026", 10), (110, 128, "Rent", 10), (260, 128, "18,000.00", 10), (470, 128, "1,54,500.00", 10)]
+    got = read(tmp_path, lines)[1]
+    assert got[("txn.credit", 1)].value is None and "not found in the table header" in got[("txn.credit", 1)].note
+    assert (got[("txn.debit", 2)].value, got[("txn.balance", 1)].value) == ("18000.00", "172500.00")
+
+
+def test_no_heading_wording_of_a_spec_ends_in_a_short_bracket():
+    """The unit comes off the heading as printed, never off a wording the specs list: none of them ends in one."""
+    for spec in SPECS.values():
+        tb = spec.table
+        if tb is None:
+            continue
+        words = [w for c in tb.columns for w in (*c.headers, *c.shared)] + (tb.marked.amount + tb.marked.marker if tb.marked else [])
+        assert [w for w in words if _UNIT.sub("", w) != w] == [], spec.type
 
 
 def test_a_row_of_labels_above_the_table_is_not_its_heading(tmp_path):

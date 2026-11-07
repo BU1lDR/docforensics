@@ -37,7 +37,9 @@ _CENTS = re.compile(r"\d\.\d\d(?!\d)", re.A)
 _MISREAD = re.compile(r"(?=(?:\D*\d){4})\d[\d.,]*[.,][\d.,]*\d", re.A)  # four digits or more with separators, and no amount: '57.500.00'
 _DATEISH = re.compile(r"[\dOoIl|SB]{1,4}(?P<sep>[/.-])[\dOoIl|SB]{1,2}(?P=sep)[\dOoIl|SB]{2,4}", re.A)  # the shape of a numeric date, digits or what they are misread as
 _CURRENCY = re.compile(rf"{chr(0x20B9)}|\brs\b|\binr\b|/-", re.I)
-_UNIT = re.compile(rf"\s*\((?:in\s+)?(?:inr|rs\.?|rupees|{chr(0x20B9)})\)\s*$", re.I)  # '(INR)' after a heading: the currency, not the name
+# '(INR)' after a heading: the currency, not the name. So is a bracket of up to three characters: a scan reads the rupee sign as 'ぼ'
+# or drops it ('Credit (ぼ)', 'Balance ()'), and a heading that then names no column loses every amount under it.
+_UNIT = re.compile(rf"\s*\((?:(?:in\s+)?(?:inr|rs\.?|rupees|{chr(0x20B9)})|[^()]{{0,3}})\)\s*$", re.I)
 _AMOUNT = ColumnSpec(name="amount", kind="amount", headers=[])  # the two columns of a table that marks its amounts Dr or Cr (TableSpec.marked)
 _MARK = ColumnSpec(name="marker", kind="text", headers=[])
 
