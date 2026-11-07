@@ -48,3 +48,217 @@ measures new seeds and layout B of the same edit kinds, not unseen kinds. No pro
     python -m evaluation.train_patches design --root D:/tmp/patches           # cross-validation on the design slices, t*
     python -m evaluation.train_patches confirm --root D:/tmp/patches --once   # the confirm slices, once; writes eval/patches/ and the weights
 Heavy runs go under the window protocol (D:/tmp/eval-window.txt)."""
+import argparse
+import hashlib
+import math
+import pickle
+import tempfile
+from pathlib import Path
+
+import numpy as np
+from PIL import Image
+
+from docforensics.audit import AuditLog
+from docforensics.config import Thresholds
+from docforensics.forensics.ela import jpeg_history
+from docforensics.forensics.learned_patches import FEATURES, page_features
+from docforensics.forensics.scan_layout import layout_consistency
+from docforensics.forensics.scan_noise import noise_residual
+from docforensics.pipeline import Ctx
+from evaluation import patches_data as pdta
+from evaluation.score import NEAR, iou
+
+LISTED = 8       # regions named by one flag
+FOLDS = 5
+CLIP = 8.0       # standardised measurements are cut at this many standard deviations
+DESIGN, CONFIRM = ("dev-design", "xdev-design"), ("dev-confirm", "xdev-confirm")
+CHECKS = {"grain": noise_residual, "placement": layout_consistency, "jpeg_history": jpeg_history}
+BASELINE = ("grain", "placement")
+
+
+# ---- measurements of a slice, cached -------------------------------------------------------------------------------------------
+def _regions(findings) -> dict[int, list[list[float]]]:
+    """The regions of the flags (every finding but a processing limitation), by page."""
+    out: dict[int, list[list[float]]] = {}
+    for f in findings:
+        if f.fclass != "processing_limitation":
+            for e in f.evidence:
+                if e.box is not None and e.page is not None:
+                    out.setdefault(e.page, []).append([float(v) for v in e.box])
+    return out
+
+
+def features(name: str, root: Path, th: Thresholds | None = None) -> Path:
+    """For every page of a built slice: who it is, its edit box, the measurements of its words, and the flags of the existing checks."""
+    th = th or Thresholds()
+    audit = AuditLog(Path(tempfile.gettempdir()) / "patches-unused-audit.jsonl")  # the checks run below never write to it
+    checks: dict[tuple, dict[str, dict]] = {}
+    rows = []
+    for rec in pdta.pages(name, root):
+        key = (rec.cd.root.as_posix(), rec.doc.id)
+        if key not in checks:
+            ctx = Ctx(rec.cd, audit, th)
+            checks[key] = {c: _regions(fn(rec.loaded, rec.doc, ctx)) for c, fn in CHECKS.items()}
+        idx, X = [], np.empty((0, len(FEATURES)))
+        if rec.page.quality_class != "poor":
+            with Image.open(rec.cd.root / rec.page.image_path) as im:
+                gray = np.asarray(im.convert("L"), dtype=np.float32)
+            idx, X = page_features(gray, rec.page)
+        words = [rec.page.words[i] for i in idx]
+        rows.append({"slice": name, "case": rec.case, "kind": rec.kind, "level": rec.level, "layout": rec.layout, "file": rec.file,
+                     "page": rec.page.n, "quality": rec.page.quality_class, "edit": rec.edit, "n_words": len(rec.page.words),
+                     "text": [w.text for w in words], "boxes": np.array([w.box for w in words]).reshape(-1, 4),
+                     "share": np.array([pdta.share_inside(w.box, rec.edit) if rec.edit else 0.0 for w in words]), "X": X,
+                     "flags": {c: checks[key][c].get(rec.page.n, []) for c in CHECKS}})
+    path = root / "features" / f"{name}.pkl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("wb") as f:
+        pickle.dump(rows, f)
+    return path
+
+
+def load(names, root: Path) -> list[dict]:
+    rows: list[dict] = []
+    for n in names:
+        with (root / "features" / f"{n}.pkl").open("rb") as f:
+            rows += pickle.load(f)  # our own file, written by features() above
+    return rows
+
+
+# ---- the model: class-weighted L2 logistic regression, numpy only ---------------------------------------------------------------
+def fold_of(case: str) -> int:
+    return int(hashlib.sha256(case.encode()).hexdigest(), 16) % FOLDS
+
+
+def labels(page: dict) -> np.ndarray:
+    """1 where at least half of the word is inside the edit box, 0 where it does not touch it, -1 (left out of training) between."""
+    s = page["share"]
+    return np.where(s >= 0.5, 1, np.where(s == 0, 0, -1))
+
+
+def standardiser(X: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    with np.errstate(all="ignore"):
+        mu, sd = np.nanmean(X, 0), np.nanstd(X, 0)
+    return np.where(np.isnan(mu), 0.0, mu), np.where(np.isnan(sd) | (sd < 1e-6), 1.0, sd)
+
+
+def prep(X: np.ndarray, mu: np.ndarray, sd: np.ndarray) -> np.ndarray:
+    return np.clip(np.nan_to_num((X - mu) / sd), -CLIP, CLIP)  # a measure that does not exist counts as the average one
+
+
+def fit(X: np.ndarray, y: np.ndarray, lam: float, pos_weight: float, iters: int = 50) -> np.ndarray:
+    """Newton steps (IRLS) on the weighted log loss with an L2 penalty on all but the bias. No random numbers: same data, same weights."""
+    A = np.hstack([X, np.ones((len(X), 1))])
+    sw = np.where(y == 1, pos_weight, 1.0)
+    reg = lam * np.eye(A.shape[1])
+    reg[-1, -1] = 0.0
+    beta = np.zeros(A.shape[1])
+    for _ in range(iters):
+        p = 1.0 / (1.0 + np.exp(-np.clip(A @ beta, -30, 30)))
+        grad = A.T @ (sw * (p - y)) + reg @ beta
+        hess = (A * (sw * p * (1 - p))[:, None]).T @ A + reg + 1e-9 * np.eye(A.shape[1])
+        step = np.linalg.solve(hess, grad)
+        beta -= step
+        if np.abs(step).max() < 1e-7:
+            break
+    return beta
+
+
+def decision(X: np.ndarray, beta: np.ndarray) -> np.ndarray:
+    return np.hstack([X, np.ones((len(X), 1))]) @ beta
+
+
+def training_words(pages: list[dict]) -> tuple[np.ndarray, np.ndarray]:
+    parts = [(p["X"][labels(p) >= 0], labels(p)[labels(p) >= 0]) for p in pages if len(p["X"])]
+    return np.vstack([x for x, _ in parts]), np.concatenate([y for _, y in parts])
+
+
+def train(pages: list[dict], lam: float, pos_weight: float) -> dict:
+    X, y = training_words(pages)
+    mu, sd = standardiser(X)
+    return {"mu": mu, "sd": sd, "beta": fit(prep(X, mu, sd), y, lam, pos_weight), "words": len(y), "positives": int((y == 1).sum())}
+
+
+def scores_of(model: dict, page: dict) -> np.ndarray:
+    return decision(prep(page["X"], model["mu"], model["sd"]), model["beta"]) if len(page["X"]) else np.zeros(0)
+
+
+def out_of_fold(pages: list[dict], lam: float, pos_weight: float) -> list[np.ndarray]:
+    """The scores of every candidate word of every page, each from a model trained on the pages of the other folds (folds by case)."""
+    fold = np.array([fold_of(p["case"]) for p in pages])
+    out = [np.zeros(len(p["X"])) for p in pages]
+    for k in range(FOLDS):
+        model = train([p for p, f in zip(pages, fold) if f != k], lam, pos_weight)
+        for i in np.flatnonzero(fold == k):
+            out[i] = scores_of(model, pages[i])
+    return out
+
+
+# ---- judging --------------------------------------------------------------------------------------------------------------------
+def threshold(page_best: list[float], allowed: int) -> float:
+    """The smallest t at which at most `allowed` of these (unedited) pages have a best word score at or above t."""
+    s = sorted(page_best, reverse=True)
+    return float("-inf") if len(s) <= allowed else float(np.nextafter(s[allowed], np.inf))
+
+
+def learned_flags(page: dict, s: np.ndarray, t: float) -> list[list[float]]:
+    return [page["boxes"][j].tolist() for j in np.argsort(-s)[:LISTED] if s[j] >= t] if len(s) else []
+
+
+def baseline_flags(page: dict, checks=BASELINE) -> list[list[float]]:
+    return [b for c in checks for b in page["flags"][c]]
+
+
+def tally(pages: list[dict], flags: list[list[list[float]]]) -> dict:
+    changed = [i for i, p in enumerate(pages) if p["edit"]]
+    unedited = [i for i, p in enumerate(pages) if not p["edit"]]
+    return {"changed": len(changed), "found": [i for i in changed if any(iou(b, pages[i]["edit"]) >= NEAR for b in flags[i])],
+            "unedited": len(unedited), "false": [i for i in unedited if flags[i]], "false_regions": sum(len(flags[i]) for i in unedited)}
+
+
+def margin(changed: int) -> int:
+    return max(2, math.ceil(0.10 * changed))
+
+
+def describe(base: dict, new: dict, label: str) -> str:
+    return (f"{label:<26} changed {base['changed']:>3}  found: baseline {len(base['found']):>3}, learned {len(new['found']):>3} "
+            f"(margin {margin(base['changed'])})  | unedited {base['unedited']:>3}  false pages: baseline {len(base['false'])}, learned "
+            f"{len(new['false'])}; false regions: baseline {base['false_regions']}, learned {new['false_regions']}")
+
+
+def judge(pages: list[dict], scores: list[np.ndarray], t: float, only=lambda p: True) -> tuple[dict, dict]:
+    keep = [i for i, p in enumerate(pages) if only(p)]
+    sub = [pages[i] for i in keep]
+    return (tally(sub, [baseline_flags(p) for p in sub]), tally(sub, [learned_flags(pages[i], scores[i], t) for i in keep]))
+
+
+def design(root: Path, grid=((0.1, 1.0), (1.0, 1.0), (10.0, 1.0), (1.0, 10.0), (1.0, 100.0))) -> None:
+    pages = load(DESIGN, root)
+    dev = [i for i, p in enumerate(pages) if p["slice"] == "dev-design"]
+    base_false = len(tally([pages[i] for i in dev], [baseline_flags(pages[i]) for i in dev])["false"])
+    for lam, pos_weight in grid:
+        scores = out_of_fold(pages, lam, pos_weight)
+        t = threshold([scores[i].max() if len(scores[i]) else -math.inf for i in dev if not pages[i]["edit"]], base_false)
+        print(f"\n=== lambda {lam:g}, positive weight {pos_weight:g}, t* = {t:.3f} (baseline false pages on unedited dev-design: {base_false})")
+        for name in DESIGN:
+            b, n = judge(pages, scores, t, lambda p, name=name: p["slice"] == name)
+            print(describe(b, n, name))
+        for kind in sorted({p["kind"] for p in pages if p["slice"] == "xdev-design"}):
+            b, n = judge(pages, scores, t, lambda p, kind=kind: p["slice"] == "xdev-design" and p["kind"] == kind)
+            print("   " + describe(b, n, f"xdev-design {kind}"))
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(prog="python -m evaluation.train_patches")
+    ap.add_argument("what", choices=("features", "design"))
+    ap.add_argument("slice", nargs="?", choices=sorted(pdta.SLICES))
+    ap.add_argument("--root", required=True, type=Path)
+    a = ap.parse_args()
+    if a.what == "features":
+        print(features(a.slice, a.root))
+    else:
+        design(a.root)
+
+
+if __name__ == "__main__":
+    main()

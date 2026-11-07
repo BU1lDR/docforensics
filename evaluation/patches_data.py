@@ -111,6 +111,7 @@ class PageRec:
     cd: CaseDir
     doc: Document
     page: Page
+    loaded: Case       # the case as stored, for the checks that take one
 
     @property
     def edited(self) -> bool:
@@ -132,7 +133,7 @@ def pages(name: str, root: Path) -> Iterator[PageRec]:
                 if pg.read_mode != "ocr" or info is None:
                     continue
                 yield PageRec(name, meta["case"], meta["source"], meta["kind"], meta["level"], meta["layout"], doc.filename,
-                              info["edit"] if pg.n == 1 else None, cd, doc, pg)
+                              info["edit"] if pg.n == 1 else None, cd, doc, pg, case)
 
 
 def share_inside(word_box, edit) -> float:
