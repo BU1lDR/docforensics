@@ -110,7 +110,7 @@ def test_the_weights_file_names_what_they_were_trained_on_and_is_the_same_twice(
     w = json.loads(a.read_text(encoding="utf-8"))
     assert a.read_text() == b.read_text()
     assert w["features"] == list(tp.FEATURES) and len(w["beta"]) == len(tp.FEATURES) + 1 and len(w["mean"]) == len(w["scale"]) == len(tp.FEATURES)
-    assert w["training"]["pages"] == 80 and w["training"]["cases"] == 80 and len(w["training"]["manifest_sha256"]) == 64
+    assert w["training"]["pages"] == 80 and w["training"]["cases"] == 80 and len(w["training"]["edit_labels_sha256"]) == 64
 
 
 def test_a_detector_with_nothing_to_see_is_not_given_a_weights_file(tmp_path):

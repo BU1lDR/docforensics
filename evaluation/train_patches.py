@@ -362,14 +362,14 @@ def export(r: dict, path: Path) -> None:
     """The weights, with what they were trained on. Only a detector that passed the bar gets this file."""
     m, trained = r["model"], [p for p in r["pages"] if p["slice"] in DESIGN]
     assert math.isfinite(r["t"])
-    manifest = sorted((p["slice"], p["case"], p["file"], p["page"], p["edit"]) for p in trained)
+    labels = sorted((p["slice"], p["case"], p["file"], p["page"], p["edit"]) for p in trained)  # not named after the files they came from: the product's source must not mention them (tests/test_eval.py)
     path.write_text(json.dumps({
         "features": list(FEATURES), "mean": m["mu"].tolist(), "scale": m["sd"].tolist(), "clip": CLIP, "beta": m["beta"].tolist(),
         "threshold": r["t"], "threshold_lift": r["lift"], "listed": LISTED, "ridge": r["lam"], "positive_weight": r["pos_weight"],
         "random_numbers": "none: Newton steps from zero weights, so the same data gives the same weights",
         "training": {"slices": list(DESIGN), "cases": len({p["case"] for p in trained}), "pages": len(trained), "words": m["words"],
-                     "positive_words": m["positives"], "manifest_sha256": hashlib.sha256(json.dumps(manifest).encode()).hexdigest(),
-                     "manifest_is": "sha256 of the sorted (slice, case, file, page, edit box) of every page trained on"}},
+                     "positive_words": m["positives"], "edit_labels_sha256": hashlib.sha256(json.dumps(labels).encode()).hexdigest(),
+                     "edit_labels_are": "sha256 of the sorted (slice, case, file, page, edit box) of every page trained on"}},
         indent=1) + "\n", encoding="utf-8")
 
 

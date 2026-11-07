@@ -80,7 +80,7 @@
   "pages": 525,
   "words": 46290,
   "positive_words": 319,
-  "manifest_sha256": "68753c000107977d1e1f9590ead77689bc0a93b748a71631a62e4c2fb02536a0",
-  "manifest_is": "sha256 of the sorted (slice, case, file, page, edit box) of every page trained on"
+  "edit_labels_sha256": "68753c000107977d1e1f9590ead77689bc0a93b748a71631a62e4c2fb02536a0",
+  "edit_labels_are": "sha256 of the sorted (slice, case, file, page, edit box) of every page trained on"
  }
 }

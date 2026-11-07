@@ -173,7 +173,7 @@ def test_the_shipped_weights_are_for_this_feature_list_and_were_trained_on_devel
     w = json.loads(lp.WEIGHTS.read_text(encoding="utf-8"))
     assert w["features"] == list(lp.FEATURES) and len(w["beta"]) == len(lp.FEATURES) + 1
     assert len(w["mean"]) == len(w["scale"]) == len(lp.FEATURES) and np.isfinite(w["threshold"]) and w["listed"] >= 1
-    assert w["training"]["slices"] == ["dev-design", "xdev-design"] and len(w["training"]["manifest_sha256"]) == 64
+    assert w["training"]["slices"] == ["dev-design", "xdev-design"] and len(w["training"]["edit_labels_sha256"]) == 64
 
 
 def a_splice_from_a_scan_turned_otherwise(tmp_path):
