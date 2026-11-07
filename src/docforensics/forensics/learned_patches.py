@@ -20,6 +20,7 @@ from ..findings import doc_evidence, limitation, quote
 from ..model import Case, Document, Evidence, Finding, Page
 from ..pipeline import Ctx
 from ..understand.layout import MIN_WORDS, page_turn, upright
+from .grain import lacks_grain
 
 DETECTOR = "learned_patches"
 WEIGHTS = Path(__file__).with_name("learned_patches.json")  # made by evaluation/train_patches.py, only if the detector met its bar
@@ -259,6 +260,8 @@ def learned_patches(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
             continue
         if pg.quality_class == "poor":
             issues.append(f"page {pg.n} is of poor quality (class poor), so its words were not measured")
+            continue
+        if lacks_grain(ctx, pg):  # grain_gate says so, once per document
             continue
         with Image.open(ctx.cd.root / pg.image_path) as im:
             gray = np.asarray(im.convert("L"), dtype=np.float32)
