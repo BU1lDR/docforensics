@@ -52,6 +52,16 @@ def test_word_boxes_match_render(tmp_path):
     assert ink_outside_boxes(page) <= 0.02
 
 
+def test_the_text_layer_of_a_page_is_extracted_once(tmp_path, monkeypatch):
+    """The words and the direction of the page come from one extraction: a second one costs as much as the first (9 ms on a page of a
+    statement, 3.8 s on a page of 30000 words)."""
+    asked = []
+    get_text = pymupdf.Page.get_text
+    monkeypatch.setattr(pymupdf.Page, "get_text", lambda self, *a, **kw: asked.append(a) or get_text(self, *a, **kw))
+    read_pdf_page(make_pdf(tmp_path / "a.pdf"), 0, "D1", tmp_path / "p.png")
+    assert asked.count(("rawdict",)) == 1
+
+
 @pytest.mark.parametrize("rotate, crop", [(90, None), (180, None), (270, None), (90, (50, 50, 500, 500)), (0, (50, 50, 500, 500))])
 def test_rotated_page_boxes_land_on_ink(tmp_path, rotate, crop):
     page = read_pdf_page(make_pdf(tmp_path / "a.pdf", rotate, crop), 0, "D1", tmp_path / "p.png")

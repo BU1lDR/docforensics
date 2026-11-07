@@ -52,13 +52,14 @@ def _runs(page: pymupdf.Page) -> Iterator[list[tuple[dict, dict]]]:
                 yield run
 
 
-def _leftward(page: pymupdf.Page) -> tuple[int, int]:
-    """(words that run right to left, words counted) among the words of three characters or more of an open page, as the page is shown:
-    a page stored or drawn half a turn has most of them run leftwards. Characters of a word come in the order they were written."""
+def _leftward(runs: list[list[tuple[dict, dict]]], rot: pymupdf.Matrix) -> tuple[int, int]:
+    """(words that run right to left, words counted) among the words of three characters or more in the runs of a page, as the page is
+    shown (rot is its rotation_matrix): a page stored or drawn half a turn has most of them run leftwards. Characters of a word come
+    in the order they were written."""
     left = total = 0
-    for run in _runs(page):
+    for run in runs:
         if len(run) >= 3:
-            a, b = (pymupdf.Point(*run[i][0]["origin"]) * page.rotation_matrix for i in (0, -1))
+            a, b = (pymupdf.Point(*run[i][0]["origin"]) * rot for i in (0, -1))
             total += 1
             left += b.x - a.x < -abs(b.y - a.y)
     return left, total
@@ -73,9 +74,10 @@ def _word(run: list[tuple[dict, dict]], wid: str, rot: pymupdf.Matrix, scale: fl
                 font=span["font"], size=span["size"], color=f"#{span['color']:06x}")
 
 
-def page_words(page: pymupdf.Page, prefix: str, scale: float) -> list[Word]:
-    """The words of an open page's text layer, with boxes in the pixels of the page rendered at 72 * scale dpi."""
-    return [_word(run, f"{prefix}-w{k}", page.rotation_matrix, scale) for k, run in enumerate(_runs(page), 1)]
+def page_words(page: pymupdf.Page, prefix: str, scale: float, runs=None) -> list[Word]:
+    """The words of an open page's text layer, with boxes in the pixels of the page rendered at 72 * scale dpi. `runs` are the page's
+    runs when the caller has them already."""
+    return [_word(run, f"{prefix}-w{k}", page.rotation_matrix, scale) for k, run in enumerate(_runs(page) if runs is None else runs, 1)]
 
 
 def read_pdf_page(pdf: Path, index: int, doc_id: str, out_png: Path, dpi: int = 200) -> Page:
@@ -88,11 +90,13 @@ def read_pdf_page(pdf: Path, index: int, doc_id: str, out_png: Path, dpi: int = 
         pix = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), alpha=False)
         pix.save(str(out_png))
         n = index + 1
-        words = page_words(page, f"{doc_id}-p{n}", scale)
+        runs = list(_runs(page))  # the text layer is extracted once: the words and the direction of the page both come from it
+        words = page_words(page, f"{doc_id}-p{n}", scale, runs)
         usable = layer_is_usable(words) and not _mostly_invisible(page)
         return Page(n=n, width=pix.width, height=pix.height, dpi=dpi, image_path=Path(out_png).as_posix(),
                     read_mode="text-layer" if usable else "ocr", quality_class="text-layer" if usable else "poor",
-                    words=words if usable else [], upside_down=upside_down(*_leftward(page)) if usable else None)
+                    words=words if usable else [],
+                    upside_down=upside_down(*_leftward(runs, page.rotation_matrix)) if usable else None)
 
 
 def pdf_meta(pdf: Path) -> dict[str, str]:
