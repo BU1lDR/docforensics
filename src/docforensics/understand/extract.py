@@ -152,6 +152,19 @@ def _segments(line: Line) -> list[list[Word]]:
     return out
 
 
+def _as_on_end(rest: list[Word]) -> int:
+    """How many of the words after a label are an 'as on <date>' that dates it ('Opening Balance as on 1 Jun 2026 : 2,63,148.51'), 0 if
+    they do not start with one. It says when a balance stands, not what it is. The date may lack its year, which has wrapped onto the
+    next line of the cell: '1 May'."""
+    if len(rest) < 3 or rest[0].text.casefold() != "as" or rest[1].text.casefold().strip(".") not in ("on", "at", "of"):
+        return 0
+    for n in (4, 3, 2, 1):  # the longest run of words that reads as a date, with a colon after it or not
+        run = text_of(rest[2:2 + n]).rstrip(":")
+        if len(rest) >= 2 + n and any(parse_date(t)[0] is not None for t in (run, f"{run} 2000")):
+            return 2 + n
+    return 0
+
+
 def _label_value(words: list[Word]) -> tuple[str, list[Word]] | None:
     """('quote date', value words) for 'Quote Date: 31/03/2026' and for 'Quoted Total 45,000.00' (a date or an amount at the
     end of the words); None for any other words. A label has no digits, so table rows never read as pairs."""
@@ -282,6 +295,8 @@ class _Extractor:
             return None
         line, (i, n, score) = best
         label_words, rest = line.words[i:i + n], line.words[i + n:]
+        dated = _as_on_end(rest)
+        rest = rest[dated:]  # 'as on 1 Jun 2026' after the label dates the value; it is not the value
         cell_of = {w.id: k for k, cell in enumerate(line.cells) for w in cell}
         own = cell_of[label_words[-1].id]
         while rest and (rest[0].text in _SEPARATORS or (cell_of[rest[0].id] == own and _finishes_label(rest[0]))):
@@ -292,6 +307,8 @@ class _Extractor:
         value, how = right, ""
         if not (right and self.plausible(fs.kind, right)):  # nothing readable beside the label: the value may stand under it
             under = self.below(line, label_words)
+            if dated and re.fullmatch(r"(?:19|20)\d\d", text_of(under)):
+                under = []  # the year of that date, wrapped onto the next line: not a value
             if (under and not self.label_like(under) and not self.finishes_label(label_words, under)
                     and (not right or self.plausible(fs.kind, under))):
                 value = under
