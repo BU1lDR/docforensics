@@ -65,6 +65,18 @@ TEMPLATES: dict[tuple[str, str], tuple[str, list[str]]] = {
         "can write the file can write this record, so it neither proves nor rules out a change to the content.",
         ["Ask the issuer how and when the document was made and whether it was saved again.",
          "Compare the dates in the file record with the dates printed on the document."]),
+    ("file_structure", "observation"): (
+        "The stored bytes of the file show a structural fact: extra bytes after the end of the file, records inside it that disagree with "
+        "each other, a signed range that stops before the end, an embedded file or an action key, an index that had to be rebuilt, or an "
+        "editing program named in a picture's own metadata. Files from ordinary programs can show each of these, and anyone who can write "
+        "the file can write them, so the observation neither proves nor rules out a change to the content. The tool reads positions and "
+        "names only: it does not check a signature, open an embedded file, run an action or look for malware.",
+        ["Ask the issuer how the file was made and for a copy sent directly by them.",
+         "Compare what the file states, such as the dates and the program named, with what you know of the document."]),
+    ("file_structure", "processing_limitation"): (
+        f"{_LIMIT} The raw structure of this file could not be examined in full, or a part of it (a signature, an XMP packet, the end of "
+        "an image) was not checked, so a fact about the file's bytes may exist and would not have been shown.",
+        _UNCHECKED),
     ("scan_noise", "observation"): (
         "Some words on a scanned page have a different image grain from the rest of the page: less where paper was filled in or "
         "smoothed, more where a piece came from a scan made differently. Uneven lighting, a second JPEG save, a stamp or a fold can "

@@ -24,9 +24,12 @@ SALARY = lines_pdf(STATEMENT_LINES)  # "03/04/2026 Salary credit 52,000.00   1,7
 
 
 def run(tmp_path, *pdfs, th=TH):
-    """Read the documents and run the forensic detectors, nothing else."""
+    """Read the documents and run the forensic detectors, nothing else. The raw file-structure detector (tests/test_structure.py)
+    also reports on the bytes these tests append after the last marker or break on purpose; its findings are left out here."""
     _, cd, _ = create_case(tmp_path / "data", [(f"d{i}.pdf", p) for i, p in enumerate(pdfs, 1)], th)
-    return run_case(cd, th, stages={"read": read_stage, "forensics": run_forensics})
+    case = run_case(cd, th, stages={"read": read_stage, "forensics": run_forensics})
+    case.findings = [f for f in case.findings if f.detector != "file_structure"]
+    return case
 
 
 def add_line(pdf, text, y=400):
@@ -198,6 +201,7 @@ def test_detectors_run_by_page_kind(monkeypatch, tmp_path):
 
     monkeypatch.setattr(forensics, "DIGITAL_DETECTORS", [digital])
     monkeypatch.setattr(forensics, "SCAN_DETECTORS", [scan])
+    monkeypatch.setattr(forensics, "FILE_DETECTORS", [])  # its own run on every document is tested in tests/test_structure.py
     for modes, want in ((("text-layer",), ["digital"]), (("ocr",), ["scan"]), (("text-layer", "ocr"), ["digital", "scan"]), ((), [])):
         calls.clear()
         run_forensics(case_with(*modes), ctx_for(tmp_path))
@@ -212,6 +216,7 @@ def test_failing_detector_is_a_limitation_and_the_rest_still_run(monkeypatch, tm
         return [Finding(fclass="observation", detector="fine", family="visual", title="Seen")]
 
     monkeypatch.setattr(forensics, "DIGITAL_DETECTORS", [boom, fine])
+    monkeypatch.setattr(forensics, "FILE_DETECTORS", [])  # the document's file does not exist here: that detector would fail as well
     case, ctx = case_with("text-layer"), ctx_for(tmp_path)
     run_forensics(case, ctx)
     lim, seen = case.findings

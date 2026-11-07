@@ -16,16 +16,18 @@ from .reuse import compare_reuse
 from .scan_layout import layout_consistency
 from .scan_noise import noise_residual
 from .signature import compare_signatures
+from .structure import file_structure
 
 Detector = Callable[[Case, Document, Ctx], list[Finding]]
 DIGITAL_DETECTORS: list[Detector] = [revision_diff, covered_or_hidden_text, font_outliers, metadata_observations]
 SCAN_DETECTORS: list[Detector] = [noise_residual, layout_consistency, jpeg_history]
+FILE_DETECTORS: list[Detector] = [file_structure]  # read the stored bytes, so they run on every document that was read, whatever its read mode
 
 
 def run_forensics(case: Case, ctx: Ctx) -> None:
     for doc in case.documents:
         modes = {p.read_mode for p in doc.pages}
-        detectors = [*(DIGITAL_DETECTORS if "text-layer" in modes else ()), *(SCAN_DETECTORS if "ocr" in modes else ())]
+        detectors = [*(DIGITAL_DETECTORS if "text-layer" in modes else ()), *(SCAN_DETECTORS if "ocr" in modes else ()), *(FILE_DETECTORS if doc.pages else ())]
         for det in detectors:
             drafts: list[Finding] = []
             if guarded(ctx, case, f"forensics.{det.__name__}", lambda doc=doc, det=det, drafts=drafts: drafts.extend(det(case, doc, ctx)),
