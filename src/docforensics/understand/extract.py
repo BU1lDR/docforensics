@@ -247,9 +247,20 @@ class _Extractor:
 
     # --- header fields
 
+    def holds_label(self, line: Line) -> bool:
+        """Whether a label or a heading of the type stands on the line: a row of the form or of the table, not a title."""
+        return any(find_phrase(line.words, label, self.th.label_sim) for label in self.labels)
+
     def title(self) -> tuple[Line, list[Word], list[Word], float, str] | None:
         lines = self.lines.get(self.doc.pages[0].n, []) if self.doc.pages else []
         line = issuer_line(lines)  # the topmost of the lines about as tall as the tallest that reads as a name
+        if line is not None and self.holds_label(line):
+            # A row of the form is no title. A scan's boxes make the rows about as tall as the title, or taller ('Employee Name Kurian,
+            # Nikhil B. Employee Code EMP-9384' was read as the employer): the title is then the line above the first row that holds a
+            # label, and the line stays when nothing stands above that row. A tallest line that holds no label stays the title wherever
+            # it stands: a page turned half a turn has its title at the foot.
+            first = next(i for i, ln in enumerate(lines) if self.holds_label(ln))
+            line = issuer_line(lines[:first]) or line
         return None if line is None else (line, [], line.words, TITLE_SCORE, "")
 
     def headings(self) -> set[int]:

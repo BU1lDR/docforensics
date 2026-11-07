@@ -17,7 +17,7 @@ class FieldSpec(_Spec):
     kind: Literal["amount", "date", "text", "id"]
     labels: list[str] = []
     colon_labels: list[str] = []  # labels too common to stand alone ('Date'): they count only with a colon after them
-    position: Literal["right", "below", "title"] = "right"  # where the value sits; "title" has no label: the page's tallest line
+    position: Literal["right", "below", "title"] = "right"  # where the value sits; "title" has no label: the tallest line of page 1 that is not a row of the form
     role: str = ""  # "name" | "address" | "employer" | "account": what cross-document checks compare
     index: int = 0  # for dates: which date in the value (a period holds two)
     lines: int = 1  # lines the value may wrap over (an address: 4); the lines under the first that start where it starts are part of it
