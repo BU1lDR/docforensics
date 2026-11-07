@@ -86,6 +86,7 @@ from docforensics.forensics.learned_patches import FEATURES, page_features
 from docforensics.forensics.scan_layout import layout_consistency
 from docforensics.forensics.scan_noise import noise_residual
 from docforensics.pipeline import Ctx
+from docforensics.understand.layout import MIN_WORDS
 from evaluation import patches_data as pdta
 from evaluation.score import NEAR, iou
 
@@ -208,7 +209,8 @@ def train(pages: list[dict], lam: float, pos_weight: float) -> dict:
 
 
 def scores_of(model: dict, page: dict) -> np.ndarray:
-    return decision(prep(page["X"], model["mu"], model["sd"]), model["beta"]) if len(page["X"]) else np.zeros(0)
+    """The score of each measured word of a page; none for a page with fewer than MIN_WORDS of them, as the detector does not compare those."""
+    return decision(prep(page["X"], model["mu"], model["sd"]), model["beta"]) if len(page["X"]) >= MIN_WORDS else np.zeros(0)
 
 
 def out_of_fold(pages: list[dict], lam: float, pos_weight: float) -> list[np.ndarray]:

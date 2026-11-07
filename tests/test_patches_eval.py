@@ -169,3 +169,10 @@ def test_the_confirm_run_lifts_the_threshold_as_told_and_says_so_in_the_report_a
     assert "lift 0.5" in (tmp_path / "lift0.5" / "eval" / "acceptance.md").read_text(encoding="utf-8")
     if (tmp_path / "lift0.5" / "w.json").exists():
         assert json.loads((tmp_path / "lift0.5" / "w.json").read_text(encoding="utf-8"))["threshold_lift"] == 0.5
+
+
+def test_a_page_with_fewer_measurable_words_than_the_detector_needs_is_not_scored_either():
+    from docforensics.understand.layout import MIN_WORDS
+    model = {"mu": np.zeros(len(tp.FEATURES)), "sd": np.ones(len(tp.FEATURES)), "beta": np.ones(len(tp.FEATURES) + 1)}
+    assert len(tp.scores_of(model, {"X": np.ones((MIN_WORDS - 1, len(tp.FEATURES)))})) == 0
+    assert len(tp.scores_of(model, {"X": np.ones((MIN_WORDS, len(tp.FEATURES)))})) == MIN_WORDS
