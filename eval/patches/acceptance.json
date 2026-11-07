@@ -1,0 +1,217 @@
+{
+ "run": {
+  "when": "2026-11-07 13:37 India Standard Time",
+  "commit": "fc18fff",
+  "dirty": false,
+  "machine": "Windows 10, Python 3.11.9, 6 cores, CPU only",
+  "lam": 10.0,
+  "pos_weight": 1.0,
+  "lift": 0.5,
+  "t": 3.3554845950100165
+ },
+ "verdict": {
+  "a": true,
+  "b": true,
+  "c": true,
+  "b_with_one_page_allowed": true
+ },
+ "go": true,
+ "counts": {
+  "grain | dev-design": {
+   "changed": 72,
+   "found": 0,
+   "unedited": 273,
+   "false": 0,
+   "false_regions": 0
+  },
+  "grain | xdev-design": {
+   "changed": 120,
+   "found": 25,
+   "unedited": 60,
+   "false": 0,
+   "false_regions": 0
+  },
+  "grain | dev-confirm": {
+   "changed": 36,
+   "found": 0,
+   "unedited": 159,
+   "false": 0,
+   "false_regions": 0
+  },
+  "grain | xdev-confirm": {
+   "changed": 72,
+   "found": 18,
+   "unedited": 36,
+   "false": 0,
+   "false_regions": 0
+  },
+  "placement | dev-design": {
+   "changed": 72,
+   "found": 5,
+   "unedited": 273,
+   "false": 0,
+   "false_regions": 0
+  },
+  "placement | xdev-design": {
+   "changed": 120,
+   "found": 4,
+   "unedited": 60,
+   "false": 0,
+   "false_regions": 0
+  },
+  "placement | dev-confirm": {
+   "changed": 36,
+   "found": 3,
+   "unedited": 159,
+   "false": 0,
+   "false_regions": 0
+  },
+  "placement | xdev-confirm": {
+   "changed": 72,
+   "found": 5,
+   "unedited": 36,
+   "false": 0,
+   "false_regions": 0
+  },
+  "jpeg_history | dev-design": {
+   "changed": 72,
+   "found": 11,
+   "unedited": 273,
+   "false": 0,
+   "false_regions": 0
+  },
+  "jpeg_history | xdev-design": {
+   "changed": 120,
+   "found": 81,
+   "unedited": 60,
+   "false": 0,
+   "false_regions": 0
+  },
+  "jpeg_history | dev-confirm": {
+   "changed": 36,
+   "found": 6,
+   "unedited": 159,
+   "false": 0,
+   "false_regions": 0
+  },
+  "jpeg_history | xdev-confirm": {
+   "changed": 72,
+   "found": 49,
+   "unedited": 36,
+   "false": 0,
+   "false_regions": 0
+  },
+  "baseline (grain, placement) | dev-design": {
+   "changed": 72,
+   "found": 5,
+   "unedited": 273,
+   "false": 0,
+   "false_regions": 0
+  },
+  "baseline (grain, placement) | xdev-design": {
+   "changed": 120,
+   "found": 28,
+   "unedited": 60,
+   "false": 0,
+   "false_regions": 0
+  },
+  "baseline (grain, placement) | dev-confirm": {
+   "changed": 36,
+   "found": 3,
+   "unedited": 159,
+   "false": 0,
+   "false_regions": 0
+  },
+  "baseline (grain, placement) | xdev-confirm": {
+   "changed": 72,
+   "found": 19,
+   "unedited": 36,
+   "false": 0,
+   "false_regions": 0
+  },
+  "learned | dev-design": {
+   "changed": 72,
+   "found": 27,
+   "unedited": 273,
+   "false": 0,
+   "false_regions": 0
+  },
+  "learned | xdev-design": {
+   "changed": 120,
+   "found": 89,
+   "unedited": 60,
+   "false": 0,
+   "false_regions": 0
+  },
+  "learned | dev-confirm": {
+   "changed": 36,
+   "found": 16,
+   "unedited": 159,
+   "false": 0,
+   "false_regions": 0
+  },
+  "learned | xdev-confirm": {
+   "changed": 72,
+   "found": 59,
+   "unedited": 36,
+   "false": 0,
+   "false_regions": 0
+  },
+  "the three existing | dev-design": {
+   "changed": 72,
+   "found": 16,
+   "unedited": 273,
+   "false": 0,
+   "false_regions": 0
+  },
+  "the three existing | xdev-design": {
+   "changed": 120,
+   "found": 89,
+   "unedited": 60,
+   "false": 0,
+   "false_regions": 0
+  },
+  "the three existing | dev-confirm": {
+   "changed": 36,
+   "found": 9,
+   "unedited": 159,
+   "false": 0,
+   "false_regions": 0
+  },
+  "the three existing | xdev-confirm": {
+   "changed": 72,
+   "found": 55,
+   "unedited": 36,
+   "false": 0,
+   "false_regions": 0
+  },
+  "the three existing and learned | dev-design": {
+   "changed": 72,
+   "found": 29,
+   "unedited": 273,
+   "false": 0,
+   "false_regions": 0
+  },
+  "the three existing and learned | xdev-design": {
+   "changed": 120,
+   "found": 107,
+   "unedited": 60,
+   "false": 0,
+   "false_regions": 0
+  },
+  "the three existing and learned | dev-confirm": {
+   "changed": 36,
+   "found": 17,
+   "unedited": 159,
+   "false": 0,
+   "false_regions": 0
+  },
+  "the three existing and learned | xdev-confirm": {
+   "changed": 72,
+   "found": 66,
+   "unedited": 36,
+   "false": 0,
+   "false_regions": 0
+  }
+ }
+}
