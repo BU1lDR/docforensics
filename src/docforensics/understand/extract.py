@@ -34,6 +34,7 @@ _LABEL_TAIL = {"name", "number", "no", "id", "code", "date", "amount", "amt", "d
                "inr", "rs", chr(0x20B9)}  # words that go on a label ('Account Holder Name', 'Amount (INR)'), and never start a value
 _NUM_DATE = re.compile(r"(\d{1,2})([/.-])(\d{1,2})\2(\d{2}|\d{4})", re.A)
 _CENTS = re.compile(r"\d\.\d\d(?!\d)", re.A)
+_MISREAD = re.compile(r"(?=(?:\D*\d){4})\d[\d.,]*[.,][\d.,]*\d", re.A)  # four digits or more with separators, and no amount: '57.500.00'
 _CURRENCY = re.compile(rf"{chr(0x20B9)}|\brs\b|\binr\b|/-", re.I)
 _UNIT = re.compile(rf"\s*\((?:in\s+)?(?:inr|rs\.?|rupees|{chr(0x20B9)})\)\s*$", re.I)  # '(INR)' after a heading: the currency, not the name
 
@@ -87,6 +88,13 @@ def _reads(kind: str, text: str) -> bool:
     if kind == "amount":
         return parse_amount(text) is not None
     return bool(text.strip())
+
+
+def _holds(kind: str, text: str) -> bool:
+    """Whether the cell of an anchor column holds what a row has there: a value that reads, or in an amount column a number that does not
+    ('57.500.00', where a scan at low resolution turned the comma of '57,500.00' into a point). That line is a row whose amount is
+    unreadable, and not a line left out as if it were not there: a sum over the rows that were read would then be short of it."""
+    return _reads(kind, text) or (kind == "amount" and _MISREAD.fullmatch(text) is not None)
 
 
 def _amount_like(text: str) -> bool:
@@ -531,7 +539,7 @@ class _Extractor:
             for stretched in (False, True):  # the second time with each column as wide as its cells (see stretch)
                 body = [(line, self.assign(line, heads)) for line in lines[start:end]]
                 rows = [i for i, (_, cells) in enumerate(body)
-                        if any(_reads(kind, text_of(self.first_date(kind, cells.get(k, []))[0])) for k, kind in anchors)]
+                        if any(_holds(kind, text_of(self.first_date(kind, cells.get(k, []))[0])) for k, kind in anchors)]
                 if not stretched:
                     self.stretch([body[i][0] for i in rows], heads)
             taken, doubt = self.continuations(body, rows, heads, {c.name for c in tb.columns if c.kind == "text"})

@@ -72,7 +72,7 @@ Three cases of each of the two packs. Run one the same way, for instance `python
 |---|---|---|---|
 | ext-dev-h-0000 | digital PDFs | none: a genuine case, each document signed afresh | no finding; the two signatures were compared and are not the same image |
 | ext-dev-h-0001 | digital PDFs | the same signature image on the payslip and on the loan application | found, located |
-| ext-dev-h-0046 | 120 dpi scans | the same signature image on the payslip and on the loan application | **missed**; five limitations from reading the 120 dpi pages |
+| ext-dev-h-0046 | 120 dpi scans | the same signature image on the payslip and on the loan application | **missed**; four limitations from reading the 120 dpi pages |
 | ext-dev-e-0000 | one mild scan | none: a genuine case, the picture saved once, at quality 85 | no finding from the check |
 | ext-dev-e-0002 | one mild scan | a field of another payslip's scan pasted in off the page's JPEG grid, then saved again at quality 95 | found, located; also found through the payslip's own sums and words |
 | ext-dev-e-0012 | one 120 dpi scan | none: a genuine case, the picture saved once, at quality 35 | **the check cannot examine this picture** and reports nothing |
@@ -91,7 +91,7 @@ The finding's explanation is a fixed text (marked `template`). It names ordinary
 
 The same planted change as in ext-dev-h-0001, on three 120 dpi scans: one signature image on the payslip and on the loan application, each page scanned on its own. The tool compared the pair and measured an ink gap of 6.7 % against the limit of 5 % (3 bits apart in the hash, which does not decide). That is over the limit, so the pair is not called the same image and the tool raises no finding about the signatures. That is a miss, and the check's report on ext-dev lists it as the one signature case it misses ([eval/h/reuse-ext-dev.md](../eval/h/reuse-ext-dev.md)). The dossier's findings say nothing about the signatures; the comparison appears only as a line in the audit trail.
 
-The dossier is not empty. OCR reads 120 dpi pages less reliably, and the checks that depend on the figures say when they could not run in full. The tool raises five limitations and no inconsistency: "Cannot fully verify this statement", "Possible extraction error, verify: Gross earnings do not equal the earnings listed", "Cannot fully verify this payslip", "Some cross-document comparisons could not be made" and "Context rule not applied: an input could not be used". None of the five is about the signatures.
+The dossier is not empty. OCR reads 120 dpi pages less reliably, and the checks that depend on the figures say when they could not run in full. The tool raises four limitations and no inconsistency: "Cannot fully verify this statement", "Cannot fully verify this payslip" (among the cells it names are amounts that OCR gave as something that is not an amount, such as 57.500.00 for 57,500.00: the comma read as a point), "Some cross-document comparisons could not be made" and "Context rule not applied: an input could not be used". None of the four is about the signatures.
 
 ### ext-dev-e-0000: a genuine scan, saved once
 
@@ -112,7 +112,7 @@ Found and located. The pasted field is the net pay, so the payslip's own sums an
 
 A genuine payslip scan at 120 dpi, saved once as a JPEG at quality 35. The compression-history check cannot examine a picture whose last save is under quality 40, and this one is under it. It says nothing: no finding, and no limitation about the picture. This is a limit of the tool, stated in the compression-history row of the capability matrix in the [main README](../README.md); it is not something to rely on. Nothing in the dossier about the compression-history check tells this case from ext-dev-e-0000: in both the check made no finding and the audit trail holds the same line (`jpeg_history`, `findings` 0). A dossier without a compression-history finding therefore does not mean that the picture was examined and found clean.
 
-The case raises three limitations: "Possible extraction error, verify: Gross earnings do not equal the earnings listed" and "Cannot fully verify this payslip", from reading a 120 dpi page by OCR, and "Cannot check across documents: one document submitted". Nothing is flagged on a genuine case.
+The case raises two limitations: "Cannot fully verify this payslip", from reading a 120 dpi page by OCR (the cells it names are amounts that OCR gave as something that is not an amount, such as 23.500.00 for 23,500.00: the comma read as a point), and "Cannot check across documents: one document submitted". Nothing is flagged on a genuine case.
 
 ## Why these cases
 

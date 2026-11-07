@@ -158,6 +158,26 @@ def desk(tmp_path_factory):
     thread.join(10)
 
 
+def close_browser(port: int | None, proc: subprocess.Popen) -> None:
+    """Edge starts its browser as a process of its own and the one started here exits at once, so killing that one closes nothing:
+    the browser is asked to close through its DevTools port, and the process started here is killed if it is still there."""
+    if port is not None:
+        try:
+            conn = http.client.HTTPConnection(HOST, port, timeout=10)
+            conn.request("GET", "/json/version")
+            path = urlsplit(json.loads(conn.getresponse().read())["webSocketDebuggerUrl"]).path
+            conn.close()
+            Page(port, path).call("Browser.close")
+        except (OSError, ConnectionError):  # it goes away before it answers, or it is gone already
+            pass
+    if proc.poll() is None:
+        if os.name == "nt":
+            subprocess.run(["taskkill", "/PID", str(proc.pid), "/T", "/F"], capture_output=True)  # the browser starts helper processes
+        else:
+            proc.terminate()
+    proc.wait(15)
+
+
 @pytest.fixture(scope="module")
 def page():
     exe = find_browser()
@@ -167,12 +187,12 @@ def page():
         proc = subprocess.Popen([exe, "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check", "--disable-extensions",
                                  "--remote-debugging-port=0", f"--user-data-dir={profile}", "about:blank"],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        sock = None
+        sock = port = None
         try:
             end = time.monotonic() + 30
             port_file = Path(profile) / "DevToolsActivePort"
             while len(port_file.read_text().split() if port_file.is_file() else []) < 2:
-                if proc.poll() is not None or time.monotonic() > end:
+                if proc.poll() not in (None, 0) or time.monotonic() > end:  # Edge's own process exits with 0 once it has started the browser
                     pytest.skip("the browser did not open its DevTools port")
                 time.sleep(0.1)
             port = int(port_file.read_text().split()[0])
@@ -195,11 +215,7 @@ def page():
         finally:
             if sock is not None:
                 sock.sock.close()
-            if os.name == "nt":
-                subprocess.run(["taskkill", "/PID", str(proc.pid), "/T", "/F"], capture_output=True)  # the browser starts helper processes
-            else:
-                proc.terminate()
-            proc.wait(15)
+            close_browser(port, proc)
 
 
 def test_every_tab_draws_its_content_and_the_page_raises_no_error(desk, page):

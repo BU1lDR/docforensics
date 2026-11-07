@@ -541,3 +541,29 @@ def test_a_deduction_listed_on_a_row_with_no_earning_is_still_counted(tmp_path):
     assert not [f for f in case.findings if f.fclass == "inconsistency"], [f.title for f in case.findings]
     got = {(f.name, f.row): f for f in case.documents[0].fields}
     assert got[("line.deduction_amount", 4)].value == "1000.00" and got[("line.earning_amount", 4)].value is None
+
+
+# low-resolution OCR reads the comma of '35,000.00' as a point: '35.000.00' is no amount and is not guessed at
+MISREAD = [(45, 240, "Basic Salary", 10), right(316, 240, "35.000.00", 10), (330, 240, "Provident Fund", 10), right(550, 240, "4.200.00", 10)]     + SLIP_ROWS[4:8] + [(45, 280, "Special Allowance", 10), right(316, 280, "21.000.00", 10)]
+
+
+def test_a_row_whose_amounts_have_a_misread_separator_is_still_a_row_with_no_readable_amount(tmp_path):
+    """A row of which every amount is unreadable is not dropped as if it were not there: its names are read, its amounts are
+    missing (confidence 0), and a cell found empty next to them stays empty."""
+    got = read(tmp_path, SLIP_TOP + SLIP_HEAD + MISREAD, "payslip")[1]
+    assert sorted({row for _, row in got if row is not None}) == [1, 2, 3]
+    assert [got[("line.earning_name", r)].value for r in (1, 2, 3)] == ["Basic Salary", "House Rent Allowance", "Special Allowance"]
+    assert [got[("line.deduction_name", r)].value for r in (1, 2)] == ["Provident Fund", "Professional Tax"]
+    for key in (("line.earning_amount", 1), ("line.deduction_amount", 1), ("line.earning_amount", 3)):
+        assert got[key].value is None and got[key].conf == 0, key
+    assert [got[("line.earning_amount", 2)].value, got[("line.deduction_amount", 2)].value] == ["14000.00", "200.00"]
+    assert got[("line.deduction_amount", 3)].value is None and got[("line.deduction_amount", 3)].conf >= TH.low_conf  # found empty, not lost
+
+
+def test_a_payslip_with_rows_it_could_not_read_is_not_summed_without_them(tmp_path):
+    """Without the two unreadable rows the earnings listed come to 14,000.00 against a gross of 70,000.00, on a page read at full
+    confidence: an inconsistency that is not there. They are rows, so the sum cannot be made, and the dossier says which amounts."""
+    case = slip_case(tmp_path, SLIP_TOP + SLIP_HEAD + MISREAD + SLIP_TOTALS)
+    assert not [f for f in case.findings if f.fclass == "inconsistency"], [f.title for f in case.findings]
+    gaps = [f for f in case.findings if f.title == "Cannot fully verify this payslip"]
+    assert gaps and "earning amount in lines 1, 3" in gaps[0].detail and "deduction amount in line 1" in gaps[0].detail, [f.detail for f in gaps]

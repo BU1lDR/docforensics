@@ -31,11 +31,11 @@ SCANNED = {"ext-dev-h-0046", "ext-dev-e-0000", "ext-dev-e-0002", "ext-dev-e-0012
 RAISES = {
     "ext-dev-h-0000": Counter(),
     "ext-dev-h-0001": Counter({("reuse", "observation"): 1}),
-    "ext-dev-h-0046": Counter({(d, "processing_limitation"): 1 for d in ("statement_checks", "payslip_sums", "payslip_checks", "cross_checks", "context_emi")}),
+    "ext-dev-h-0046": Counter({(d, "processing_limitation"): 1 for d in ("statement_checks", "payslip_checks", "cross_checks", "context_emi")}),
     "ext-dev-e-0000": Counter({("cross_checks", "processing_limitation"): 1}),
     "ext-dev-e-0002": Counter({("ela", "observation"): 1, ("payslip_sums", "inconsistency"): 1, ("payslip_words", "inconsistency"): 1,
                                ("cross_checks", "processing_limitation"): 1, ("link", "potential_manipulation"): 1}),
-    "ext-dev-e-0012": Counter({(d, "processing_limitation"): 1 for d in ("payslip_sums", "payslip_checks", "cross_checks")}),
+    "ext-dev-e-0012": Counter({(d, "processing_limitation"): 1 for d in ("payslip_checks", "cross_checks")}),
 }
 # reused-signature check, case: (the ink gap in % that the audit trail logs for the pair of signatures, whether the pair is called the same image,
 # the bits that differ between the pair's 64-bit hashes, which are logged and do not decide)
