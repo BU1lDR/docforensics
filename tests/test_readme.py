@@ -14,6 +14,7 @@ from docforensics.pipeline import STAGE_ORDER
 
 ROOT = Path(__file__).resolve().parents[1]
 README, ARCHITECTURE, LIMITATIONS = ROOT / "README.md", ROOT / "docs" / "architecture.md", ROOT / "docs" / "limitations.md"
+PROBE = ROOT / "docs" / "probe.md"  # a development measurement, kept outside the matrix; it too gives no verdict and links only to files
 STALE = "capabilities.json changed: rebuild the block with  python -m docforensics.capabilities --update"
 VERDICT = re.compile(r"fraud|forg|fake|counterfeit", re.I)  # as in test_capabilities: static text gives no verdict either
 
@@ -90,7 +91,7 @@ def test_refresh_refuses_a_file_without_its_block(tmp_path):
 
 
 def test_documents_make_no_verdicts():
-    for doc in (README, ARCHITECTURE, LIMITATIONS):
+    for doc in (README, ARCHITECTURE, LIMITATIONS, PROBE):
         assert not VERDICT.search(text(doc)), (doc.name, VERDICT.search(text(doc)))
 
 
@@ -117,7 +118,7 @@ def test_readme_commands_parse_and_cover_the_cli():
         cli._parser().parse_args(shlex.split(line))  # an unknown flag or a missing argument exits
 
 
-@pytest.mark.parametrize("doc", [README, ARCHITECTURE, LIMITATIONS], ids=lambda p: p.name)
+@pytest.mark.parametrize("doc", [README, ARCHITECTURE, LIMITATIONS, PROBE], ids=lambda p: p.name)
 def test_links_point_at_files_that_exist(doc):
     targets = re.findall(r"\]\(([^)\s]+)\)", text(doc))
     if doc is README:

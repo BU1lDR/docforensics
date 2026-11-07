@@ -1,0 +1,589 @@
+id,kind,variant,case,expected_miss,found_first,located_first,found_now,located_now,false_now,detectors_now
+M1-ap_emi-redact-same-full-P5000000,M1,ap_emi-redact-same-full,P5000000,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000001,M1,ap_emi-redact-same-full,P5000001,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000002,M1,ap_emi-redact-same-full,P5000002,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000003,M1,ap_emi-redact-same-full,P5000003,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000004,M1,ap_emi-redact-same-full,P5000004,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000005,M1,ap_emi-redact-same-full,P5000005,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000006,M1,ap_emi-redact-same-full,P5000006,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000007,M1,ap_emi-redact-same-full,P5000007,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000008,M1,ap_emi-redact-same-full,P5000008,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000009,M1,ap_emi-redact-same-full,P5000009,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000010,M1,ap_emi-redact-same-full,P5000010,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000011,M1,ap_emi-redact-same-full,P5000011,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000012,M1,ap_emi-redact-same-full,P5000012,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000013,M1,ap_emi-redact-same-full,P5000013,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000014,M1,ap_emi-redact-same-full,P5000014,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000015,M1,ap_emi-redact-same-full,P5000015,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000016,M1,ap_emi-redact-same-full,P5000016,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000017,M1,ap_emi-redact-same-full,P5000017,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000018,M1,ap_emi-redact-same-full,P5000018,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000019,M1,ap_emi-redact-same-full,P5000019,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000020,M1,ap_emi-redact-same-full,P5000020,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000021,M1,ap_emi-redact-same-full,P5000021,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000022,M1,ap_emi-redact-same-full,P5000022,1,0,0,0,0,0,
+M1-ap_emi-redact-same-full-P5000023,M1,ap_emi-redact-same-full,P5000023,1,0,0,0,0,0,
+M1-ap_income-redact-naive-full-P5000000,M1,ap_income-redact-naive-full,P5000000,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000001,M1,ap_income-redact-naive-full,P5000001,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000002,M1,ap_income-redact-naive-full,P5000002,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000003,M1,ap_income-redact-naive-full,P5000003,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000004,M1,ap_income-redact-naive-full,P5000004,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000005,M1,ap_income-redact-naive-full,P5000005,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000006,M1,ap_income-redact-naive-full,P5000006,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-naive-full-P5000007,M1,ap_income-redact-naive-full,P5000007,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-naive-full-P5000008,M1,ap_income-redact-naive-full,P5000008,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-naive-full-P5000009,M1,ap_income-redact-naive-full,P5000009,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000010,M1,ap_income-redact-naive-full,P5000010,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000011,M1,ap_income-redact-naive-full,P5000011,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000012,M1,ap_income-redact-naive-full,P5000012,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000013,M1,ap_income-redact-naive-full,P5000013,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000014,M1,ap_income-redact-naive-full,P5000014,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000015,M1,ap_income-redact-naive-full,P5000015,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-naive-full-P5000016,M1,ap_income-redact-naive-full,P5000016,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-naive-full-P5000017,M1,ap_income-redact-naive-full,P5000017,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-naive-full-P5000018,M1,ap_income-redact-naive-full,P5000018,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000019,M1,ap_income-redact-naive-full,P5000019,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000020,M1,ap_income-redact-naive-full,P5000020,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000021,M1,ap_income-redact-naive-full,P5000021,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000022,M1,ap_income-redact-naive-full,P5000022,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-naive-full-P5000023,M1,ap_income-redact-naive-full,P5000023,0,1,1,1,1,0,cross_income pdf_fonts
+M1-ap_income-redact-same-full-P5000000,M1,ap_income-redact-same-full,P5000000,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000001,M1,ap_income-redact-same-full,P5000001,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000002,M1,ap_income-redact-same-full,P5000002,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000003,M1,ap_income-redact-same-full,P5000003,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000004,M1,ap_income-redact-same-full,P5000004,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000005,M1,ap_income-redact-same-full,P5000005,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000006,M1,ap_income-redact-same-full,P5000006,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000007,M1,ap_income-redact-same-full,P5000007,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000008,M1,ap_income-redact-same-full,P5000008,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000009,M1,ap_income-redact-same-full,P5000009,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000010,M1,ap_income-redact-same-full,P5000010,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000011,M1,ap_income-redact-same-full,P5000011,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000012,M1,ap_income-redact-same-full,P5000012,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000013,M1,ap_income-redact-same-full,P5000013,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000014,M1,ap_income-redact-same-full,P5000014,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000015,M1,ap_income-redact-same-full,P5000015,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000016,M1,ap_income-redact-same-full,P5000016,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000017,M1,ap_income-redact-same-full,P5000017,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000018,M1,ap_income-redact-same-full,P5000018,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000019,M1,ap_income-redact-same-full,P5000019,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000020,M1,ap_income-redact-same-full,P5000020,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000021,M1,ap_income-redact-same-full,P5000021,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000022,M1,ap_income-redact-same-full,P5000022,0,1,1,1,1,0,cross_income
+M1-ap_income-redact-same-full-P5000023,M1,ap_income-redact-same-full,P5000023,0,1,1,1,1,0,cross_income
+M1-ps_net-redact-naive-full-P5000000,M1,ps_net-redact-naive-full,P5000000,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000001,M1,ps_net-redact-naive-full,P5000001,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000002,M1,ps_net-redact-naive-full,P5000002,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000003,M1,ps_net-redact-naive-full,P5000003,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000004,M1,ps_net-redact-naive-full,P5000004,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000005,M1,ps_net-redact-naive-full,P5000005,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000006,M1,ps_net-redact-naive-full,P5000006,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000007,M1,ps_net-redact-naive-full,P5000007,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000008,M1,ps_net-redact-naive-full,P5000008,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000009,M1,ps_net-redact-naive-full,P5000009,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000010,M1,ps_net-redact-naive-full,P5000010,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000011,M1,ps_net-redact-naive-full,P5000011,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000012,M1,ps_net-redact-naive-full,P5000012,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000013,M1,ps_net-redact-naive-full,P5000013,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000014,M1,ps_net-redact-naive-full,P5000014,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000015,M1,ps_net-redact-naive-full,P5000015,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000016,M1,ps_net-redact-naive-full,P5000016,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000017,M1,ps_net-redact-naive-full,P5000017,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000018,M1,ps_net-redact-naive-full,P5000018,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000019,M1,ps_net-redact-naive-full,P5000019,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000020,M1,ps_net-redact-naive-full,P5000020,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000021,M1,ps_net-redact-naive-full,P5000021,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-naive-full-P5000022,M1,ps_net-redact-naive-full,P5000022,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-naive-full-P5000023,M1,ps_net-redact-naive-full,P5000023,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000000,M1,ps_net-redact-same-full,P5000000,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000001,M1,ps_net-redact-same-full,P5000001,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000002,M1,ps_net-redact-same-full,P5000002,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000003,M1,ps_net-redact-same-full,P5000003,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000004,M1,ps_net-redact-same-full,P5000004,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000005,M1,ps_net-redact-same-full,P5000005,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000006,M1,ps_net-redact-same-full,P5000006,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000007,M1,ps_net-redact-same-full,P5000007,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000008,M1,ps_net-redact-same-full,P5000008,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000009,M1,ps_net-redact-same-full,P5000009,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000010,M1,ps_net-redact-same-full,P5000010,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000011,M1,ps_net-redact-same-full,P5000011,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000012,M1,ps_net-redact-same-full,P5000012,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000013,M1,ps_net-redact-same-full,P5000013,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000014,M1,ps_net-redact-same-full,P5000014,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000015,M1,ps_net-redact-same-full,P5000015,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000016,M1,ps_net-redact-same-full,P5000016,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000017,M1,ps_net-redact-same-full,P5000017,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000018,M1,ps_net-redact-same-full,P5000018,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000019,M1,ps_net-redact-same-full,P5000019,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000020,M1,ps_net-redact-same-full,P5000020,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000021,M1,ps_net-redact-same-full,P5000021,0,1,1,1,1,0,payslip_sums
+M1-ps_net-redact-same-full-P5000022,M1,ps_net-redact-same-full,P5000022,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-ps_net-redact-same-full-P5000023,M1,ps_net-redact-same-full,P5000023,0,1,1,1,1,0,cross_net_pay payslip_sums
+M1-st_credit-redact-naive-full-P5000000,M1,st_credit-redact-naive-full,P5000000,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000001,M1,st_credit-redact-naive-full,P5000001,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000002,M1,st_credit-redact-naive-full,P5000002,0,1,1,1,1,0,cross_net_pay pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000003,M1,st_credit-redact-naive-full,P5000003,0,1,1,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-naive-full-P5000004,M1,st_credit-redact-naive-full,P5000004,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000005,M1,st_credit-redact-naive-full,P5000005,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000006,M1,st_credit-redact-naive-full,P5000006,0,1,1,1,1,0,cross_net_pay pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000007,M1,st_credit-redact-naive-full,P5000007,0,1,1,1,1,0,pdf_fonts
+M1-st_credit-redact-naive-full-P5000008,M1,st_credit-redact-naive-full,P5000008,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000009,M1,st_credit-redact-naive-full,P5000009,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000010,M1,st_credit-redact-naive-full,P5000010,0,1,1,1,1,0,cross_net_pay pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000011,M1,st_credit-redact-naive-full,P5000011,0,1,1,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-naive-full-P5000012,M1,st_credit-redact-naive-full,P5000012,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000013,M1,st_credit-redact-naive-full,P5000013,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000014,M1,st_credit-redact-naive-full,P5000014,0,1,1,1,1,0,cross_net_pay pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000015,M1,st_credit-redact-naive-full,P5000015,0,1,1,1,1,0,cross_net_pay pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000016,M1,st_credit-redact-naive-full,P5000016,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000017,M1,st_credit-redact-naive-full,P5000017,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000018,M1,st_credit-redact-naive-full,P5000018,0,1,1,1,1,0,cross_net_pay pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000019,M1,st_credit-redact-naive-full,P5000019,0,0,0,0,0,0,
+M1-st_credit-redact-naive-full-P5000020,M1,st_credit-redact-naive-full,P5000020,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000021,M1,st_credit-redact-naive-full,P5000021,0,1,1,1,1,0,pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000022,M1,st_credit-redact-naive-full,P5000022,0,1,1,1,1,0,cross_net_pay pdf_fonts statement_balance
+M1-st_credit-redact-naive-full-P5000023,M1,st_credit-redact-naive-full,P5000023,0,1,1,1,1,0,cross_net_pay pdf_fonts statement_balance
+M1-st_credit-redact-same-full-P5000000,M1,st_credit-redact-same-full,P5000000,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000001,M1,st_credit-redact-same-full,P5000001,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000002,M1,st_credit-redact-same-full,P5000002,0,0,0,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-same-full-P5000003,M1,st_credit-redact-same-full,P5000003,0,1,1,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-same-full-P5000004,M1,st_credit-redact-same-full,P5000004,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000005,M1,st_credit-redact-same-full,P5000005,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000006,M1,st_credit-redact-same-full,P5000006,0,0,0,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-same-full-P5000007,M1,st_credit-redact-same-full,P5000007,0,0,0,0,0,0,
+M1-st_credit-redact-same-full-P5000008,M1,st_credit-redact-same-full,P5000008,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000009,M1,st_credit-redact-same-full,P5000009,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000010,M1,st_credit-redact-same-full,P5000010,0,0,0,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-same-full-P5000011,M1,st_credit-redact-same-full,P5000011,0,1,1,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-same-full-P5000012,M1,st_credit-redact-same-full,P5000012,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000013,M1,st_credit-redact-same-full,P5000013,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000014,M1,st_credit-redact-same-full,P5000014,0,0,0,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-same-full-P5000015,M1,st_credit-redact-same-full,P5000015,0,1,1,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-same-full-P5000016,M1,st_credit-redact-same-full,P5000016,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000017,M1,st_credit-redact-same-full,P5000017,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000018,M1,st_credit-redact-same-full,P5000018,0,0,0,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-same-full-P5000019,M1,st_credit-redact-same-full,P5000019,0,0,0,0,0,0,
+M1-st_credit-redact-same-full-P5000020,M1,st_credit-redact-same-full,P5000020,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000021,M1,st_credit-redact-same-full,P5000021,0,1,1,1,1,0,statement_balance
+M1-st_credit-redact-same-full-P5000022,M1,st_credit-redact-same-full,P5000022,0,0,0,1,1,0,cross_net_pay statement_balance
+M1-st_credit-redact-same-full-P5000023,M1,st_credit-redact-same-full,P5000023,0,1,1,1,1,0,cross_net_pay statement_balance
+M2-ap_income-cover-same-full-P5000000,M2,ap_income-cover-same-full,P5000000,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000001,M2,ap_income-cover-same-full,P5000001,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000002,M2,ap_income-cover-same-full,P5000002,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000003,M2,ap_income-cover-same-full,P5000003,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000004,M2,ap_income-cover-same-full,P5000004,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000005,M2,ap_income-cover-same-full,P5000005,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000006,M2,ap_income-cover-same-full,P5000006,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000007,M2,ap_income-cover-same-full,P5000007,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000008,M2,ap_income-cover-same-full,P5000008,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000009,M2,ap_income-cover-same-full,P5000009,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000010,M2,ap_income-cover-same-full,P5000010,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000011,M2,ap_income-cover-same-full,P5000011,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000012,M2,ap_income-cover-same-full,P5000012,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000013,M2,ap_income-cover-same-full,P5000013,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000014,M2,ap_income-cover-same-full,P5000014,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000015,M2,ap_income-cover-same-full,P5000015,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000016,M2,ap_income-cover-same-full,P5000016,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000017,M2,ap_income-cover-same-full,P5000017,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000018,M2,ap_income-cover-same-full,P5000018,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000019,M2,ap_income-cover-same-full,P5000019,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000020,M2,ap_income-cover-same-full,P5000020,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000021,M2,ap_income-cover-same-full,P5000021,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000022,M2,ap_income-cover-same-full,P5000022,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-full-P5000023,M2,ap_income-cover-same-full,P5000023,0,1,1,1,1,0,pdf_overlay
+M2-ap_income-cover-same-incr-P5000000,M2,ap_income-cover-same-incr,P5000000,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000001,M2,ap_income-cover-same-incr,P5000001,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000002,M2,ap_income-cover-same-incr,P5000002,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000003,M2,ap_income-cover-same-incr,P5000003,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000004,M2,ap_income-cover-same-incr,P5000004,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000005,M2,ap_income-cover-same-incr,P5000005,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000006,M2,ap_income-cover-same-incr,P5000006,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000007,M2,ap_income-cover-same-incr,P5000007,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000008,M2,ap_income-cover-same-incr,P5000008,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000009,M2,ap_income-cover-same-incr,P5000009,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000010,M2,ap_income-cover-same-incr,P5000010,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000011,M2,ap_income-cover-same-incr,P5000011,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000012,M2,ap_income-cover-same-incr,P5000012,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000013,M2,ap_income-cover-same-incr,P5000013,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000014,M2,ap_income-cover-same-incr,P5000014,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000015,M2,ap_income-cover-same-incr,P5000015,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000016,M2,ap_income-cover-same-incr,P5000016,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000017,M2,ap_income-cover-same-incr,P5000017,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000018,M2,ap_income-cover-same-incr,P5000018,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000019,M2,ap_income-cover-same-incr,P5000019,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000020,M2,ap_income-cover-same-incr,P5000020,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000021,M2,ap_income-cover-same-incr,P5000021,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000022,M2,ap_income-cover-same-incr,P5000022,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ap_income-cover-same-incr-P5000023,M2,ap_income-cover-same-incr,P5000023,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-full-P5000000,M2,ps_net-cover-same-full,P5000000,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000001,M2,ps_net-cover-same-full,P5000001,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000002,M2,ps_net-cover-same-full,P5000002,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000003,M2,ps_net-cover-same-full,P5000003,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000004,M2,ps_net-cover-same-full,P5000004,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000005,M2,ps_net-cover-same-full,P5000005,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000006,M2,ps_net-cover-same-full,P5000006,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000007,M2,ps_net-cover-same-full,P5000007,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000008,M2,ps_net-cover-same-full,P5000008,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000009,M2,ps_net-cover-same-full,P5000009,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000010,M2,ps_net-cover-same-full,P5000010,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000011,M2,ps_net-cover-same-full,P5000011,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000012,M2,ps_net-cover-same-full,P5000012,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000013,M2,ps_net-cover-same-full,P5000013,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000014,M2,ps_net-cover-same-full,P5000014,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000015,M2,ps_net-cover-same-full,P5000015,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000016,M2,ps_net-cover-same-full,P5000016,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000017,M2,ps_net-cover-same-full,P5000017,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000018,M2,ps_net-cover-same-full,P5000018,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000019,M2,ps_net-cover-same-full,P5000019,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000020,M2,ps_net-cover-same-full,P5000020,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000021,M2,ps_net-cover-same-full,P5000021,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000022,M2,ps_net-cover-same-full,P5000022,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-full-P5000023,M2,ps_net-cover-same-full,P5000023,0,1,1,1,1,0,pdf_overlay
+M2-ps_net-cover-same-incr-P5000000,M2,ps_net-cover-same-incr,P5000000,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000001,M2,ps_net-cover-same-incr,P5000001,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000002,M2,ps_net-cover-same-incr,P5000002,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000003,M2,ps_net-cover-same-incr,P5000003,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000004,M2,ps_net-cover-same-incr,P5000004,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000005,M2,ps_net-cover-same-incr,P5000005,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000006,M2,ps_net-cover-same-incr,P5000006,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000007,M2,ps_net-cover-same-incr,P5000007,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000008,M2,ps_net-cover-same-incr,P5000008,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000009,M2,ps_net-cover-same-incr,P5000009,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000010,M2,ps_net-cover-same-incr,P5000010,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000011,M2,ps_net-cover-same-incr,P5000011,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000012,M2,ps_net-cover-same-incr,P5000012,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000013,M2,ps_net-cover-same-incr,P5000013,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000014,M2,ps_net-cover-same-incr,P5000014,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000015,M2,ps_net-cover-same-incr,P5000015,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000016,M2,ps_net-cover-same-incr,P5000016,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000017,M2,ps_net-cover-same-incr,P5000017,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000018,M2,ps_net-cover-same-incr,P5000018,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000019,M2,ps_net-cover-same-incr,P5000019,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000020,M2,ps_net-cover-same-incr,P5000020,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000021,M2,ps_net-cover-same-incr,P5000021,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000022,M2,ps_net-cover-same-incr,P5000022,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-ps_net-cover-same-incr-P5000023,M2,ps_net-cover-same-incr,P5000023,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-full-P5000000,M2,st_credit-cover-same-full,P5000000,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000001,M2,st_credit-cover-same-full,P5000001,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000002,M2,st_credit-cover-same-full,P5000002,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000003,M2,st_credit-cover-same-full,P5000003,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000004,M2,st_credit-cover-same-full,P5000004,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000005,M2,st_credit-cover-same-full,P5000005,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000006,M2,st_credit-cover-same-full,P5000006,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000007,M2,st_credit-cover-same-full,P5000007,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000008,M2,st_credit-cover-same-full,P5000008,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000009,M2,st_credit-cover-same-full,P5000009,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000010,M2,st_credit-cover-same-full,P5000010,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000011,M2,st_credit-cover-same-full,P5000011,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000012,M2,st_credit-cover-same-full,P5000012,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000013,M2,st_credit-cover-same-full,P5000013,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000014,M2,st_credit-cover-same-full,P5000014,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000015,M2,st_credit-cover-same-full,P5000015,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000016,M2,st_credit-cover-same-full,P5000016,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000017,M2,st_credit-cover-same-full,P5000017,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000018,M2,st_credit-cover-same-full,P5000018,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000019,M2,st_credit-cover-same-full,P5000019,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000020,M2,st_credit-cover-same-full,P5000020,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000021,M2,st_credit-cover-same-full,P5000021,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000022,M2,st_credit-cover-same-full,P5000022,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-full-P5000023,M2,st_credit-cover-same-full,P5000023,0,1,1,1,1,0,pdf_overlay
+M2-st_credit-cover-same-incr-P5000000,M2,st_credit-cover-same-incr,P5000000,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000001,M2,st_credit-cover-same-incr,P5000001,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000002,M2,st_credit-cover-same-incr,P5000002,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000003,M2,st_credit-cover-same-incr,P5000003,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000004,M2,st_credit-cover-same-incr,P5000004,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000005,M2,st_credit-cover-same-incr,P5000005,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000006,M2,st_credit-cover-same-incr,P5000006,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000007,M2,st_credit-cover-same-incr,P5000007,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000008,M2,st_credit-cover-same-incr,P5000008,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000009,M2,st_credit-cover-same-incr,P5000009,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000010,M2,st_credit-cover-same-incr,P5000010,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000011,M2,st_credit-cover-same-incr,P5000011,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000012,M2,st_credit-cover-same-incr,P5000012,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000013,M2,st_credit-cover-same-incr,P5000013,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000014,M2,st_credit-cover-same-incr,P5000014,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000015,M2,st_credit-cover-same-incr,P5000015,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000016,M2,st_credit-cover-same-incr,P5000016,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000017,M2,st_credit-cover-same-incr,P5000017,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000018,M2,st_credit-cover-same-incr,P5000018,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000019,M2,st_credit-cover-same-incr,P5000019,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000020,M2,st_credit-cover-same-incr,P5000020,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000021,M2,st_credit-cover-same-incr,P5000021,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000022,M2,st_credit-cover-same-incr,P5000022,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M2-st_credit-cover-same-incr-P5000023,M2,st_credit-cover-same-incr,P5000023,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M3-editor-P5000000,M3,editor,P5000000,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000001,M3,editor,P5000001,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000002,M3,editor,P5000002,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000003,M3,editor,P5000003,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000004,M3,editor,P5000004,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000005,M3,editor,P5000005,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000006,M3,editor,P5000006,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000007,M3,editor,P5000007,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000008,M3,editor,P5000008,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000009,M3,editor,P5000009,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000010,M3,editor,P5000010,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000011,M3,editor,P5000011,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000012,M3,editor,P5000012,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000013,M3,editor,P5000013,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000014,M3,editor,P5000014,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000015,M3,editor,P5000015,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000016,M3,editor,P5000016,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000017,M3,editor,P5000017,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000018,M3,editor,P5000018,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000019,M3,editor,P5000019,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000020,M3,editor,P5000020,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000021,M3,editor,P5000021,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000022,M3,editor,P5000022,0,1,0,1,0,0,pdf_meta
+M3-editor-P5000023,M3,editor,P5000023,0,1,0,1,0,0,pdf_meta
+M3-incr_nochange-P5000000,M3,incr_nochange,P5000000,1,0,0,0,0,0,
+M3-incr_nochange-P5000001,M3,incr_nochange,P5000001,1,0,0,0,0,0,
+M3-incr_nochange-P5000002,M3,incr_nochange,P5000002,1,0,0,0,0,0,
+M3-incr_nochange-P5000003,M3,incr_nochange,P5000003,1,0,0,0,0,0,
+M3-incr_nochange-P5000004,M3,incr_nochange,P5000004,1,0,0,0,0,0,
+M3-incr_nochange-P5000005,M3,incr_nochange,P5000005,1,0,0,0,0,0,
+M3-incr_nochange-P5000006,M3,incr_nochange,P5000006,1,0,0,0,0,0,
+M3-incr_nochange-P5000007,M3,incr_nochange,P5000007,1,0,0,0,0,0,
+M3-incr_nochange-P5000008,M3,incr_nochange,P5000008,1,0,0,0,0,0,
+M3-incr_nochange-P5000009,M3,incr_nochange,P5000009,1,0,0,0,0,0,
+M3-incr_nochange-P5000010,M3,incr_nochange,P5000010,1,0,0,0,0,0,
+M3-incr_nochange-P5000011,M3,incr_nochange,P5000011,1,0,0,0,0,0,
+M3-incr_nochange-P5000012,M3,incr_nochange,P5000012,1,0,0,0,0,0,
+M3-incr_nochange-P5000013,M3,incr_nochange,P5000013,1,0,0,0,0,0,
+M3-incr_nochange-P5000014,M3,incr_nochange,P5000014,1,0,0,0,0,0,
+M3-incr_nochange-P5000015,M3,incr_nochange,P5000015,1,0,0,0,0,0,
+M3-incr_nochange-P5000016,M3,incr_nochange,P5000016,1,0,0,0,0,0,
+M3-incr_nochange-P5000017,M3,incr_nochange,P5000017,1,0,0,0,0,0,
+M3-incr_nochange-P5000018,M3,incr_nochange,P5000018,1,0,0,0,0,0,
+M3-incr_nochange-P5000019,M3,incr_nochange,P5000019,1,0,0,0,0,0,
+M3-incr_nochange-P5000020,M3,incr_nochange,P5000020,1,0,0,0,0,0,
+M3-incr_nochange-P5000021,M3,incr_nochange,P5000021,1,0,0,0,0,0,
+M3-incr_nochange-P5000022,M3,incr_nochange,P5000022,1,0,0,0,0,0,
+M3-incr_nochange-P5000023,M3,incr_nochange,P5000023,1,0,0,0,0,0,
+M3-moddate-P5000000,M3,moddate,P5000000,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000001,M3,moddate,P5000001,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000002,M3,moddate,P5000002,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000003,M3,moddate,P5000003,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000004,M3,moddate,P5000004,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000005,M3,moddate,P5000005,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000006,M3,moddate,P5000006,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000007,M3,moddate,P5000007,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000008,M3,moddate,P5000008,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000009,M3,moddate,P5000009,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000010,M3,moddate,P5000010,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000011,M3,moddate,P5000011,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000012,M3,moddate,P5000012,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000013,M3,moddate,P5000013,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000014,M3,moddate,P5000014,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000015,M3,moddate,P5000015,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000016,M3,moddate,P5000016,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000017,M3,moddate,P5000017,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000018,M3,moddate,P5000018,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000019,M3,moddate,P5000019,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000020,M3,moddate,P5000020,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000021,M3,moddate,P5000021,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000022,M3,moddate,P5000022,0,1,0,1,0,0,pdf_meta
+M3-moddate-P5000023,M3,moddate,P5000023,0,1,0,1,0,0,pdf_meta
+M3-unlisted-P5000000,M3,unlisted,P5000000,1,0,0,0,0,0,
+M3-unlisted-P5000001,M3,unlisted,P5000001,1,0,0,0,0,0,
+M3-unlisted-P5000002,M3,unlisted,P5000002,1,0,0,0,0,0,
+M3-unlisted-P5000003,M3,unlisted,P5000003,1,0,0,0,0,0,
+M3-unlisted-P5000004,M3,unlisted,P5000004,1,0,0,0,0,0,
+M3-unlisted-P5000005,M3,unlisted,P5000005,1,0,0,0,0,0,
+M3-unlisted-P5000006,M3,unlisted,P5000006,1,0,0,0,0,0,
+M3-unlisted-P5000007,M3,unlisted,P5000007,1,0,0,0,0,0,
+M3-unlisted-P5000008,M3,unlisted,P5000008,1,0,0,0,0,0,
+M3-unlisted-P5000009,M3,unlisted,P5000009,1,0,0,0,0,0,
+M3-unlisted-P5000010,M3,unlisted,P5000010,1,0,0,0,0,0,
+M3-unlisted-P5000011,M3,unlisted,P5000011,1,0,0,0,0,0,
+M3-unlisted-P5000012,M3,unlisted,P5000012,1,0,0,0,0,0,
+M3-unlisted-P5000013,M3,unlisted,P5000013,1,0,0,0,0,0,
+M3-unlisted-P5000014,M3,unlisted,P5000014,1,0,0,0,0,0,
+M3-unlisted-P5000015,M3,unlisted,P5000015,1,0,0,0,0,0,
+M3-unlisted-P5000016,M3,unlisted,P5000016,1,0,0,0,0,0,
+M3-unlisted-P5000017,M3,unlisted,P5000017,1,0,0,0,0,0,
+M3-unlisted-P5000018,M3,unlisted,P5000018,1,0,0,0,0,0,
+M3-unlisted-P5000019,M3,unlisted,P5000019,1,0,0,0,0,0,
+M3-unlisted-P5000020,M3,unlisted,P5000020,1,0,0,0,0,0,
+M3-unlisted-P5000021,M3,unlisted,P5000021,1,0,0,0,0,0,
+M3-unlisted-P5000022,M3,unlisted,P5000022,1,0,0,0,0,0,
+M3-unlisted-P5000023,M3,unlisted,P5000023,1,0,0,0,0,0,
+M4-ap_income-reprint-P5000000,M4,ap_income-reprint,P5000000,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000001,M4,ap_income-reprint,P5000001,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000002,M4,ap_income-reprint,P5000002,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000003,M4,ap_income-reprint,P5000003,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000004,M4,ap_income-reprint,P5000004,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000005,M4,ap_income-reprint,P5000005,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000006,M4,ap_income-reprint,P5000006,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000007,M4,ap_income-reprint,P5000007,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000008,M4,ap_income-reprint,P5000008,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000009,M4,ap_income-reprint,P5000009,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000010,M4,ap_income-reprint,P5000010,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000011,M4,ap_income-reprint,P5000011,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000012,M4,ap_income-reprint,P5000012,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000013,M4,ap_income-reprint,P5000013,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000014,M4,ap_income-reprint,P5000014,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000015,M4,ap_income-reprint,P5000015,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000016,M4,ap_income-reprint,P5000016,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000017,M4,ap_income-reprint,P5000017,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000018,M4,ap_income-reprint,P5000018,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000019,M4,ap_income-reprint,P5000019,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000020,M4,ap_income-reprint,P5000020,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000021,M4,ap_income-reprint,P5000021,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000022,M4,ap_income-reprint,P5000022,0,1,1,1,1,0,cross_income
+M4-ap_income-reprint-P5000023,M4,ap_income-reprint,P5000023,0,1,1,1,1,0,cross_income
+M4-ap_loan-reprint-P5000001,M4,ap_loan-reprint,P5000001,1,0,0,0,0,0,
+M4-ap_loan-reprint-P5000004,M4,ap_loan-reprint,P5000004,1,0,0,0,0,0,
+M4-ap_loan-reprint-P5000007,M4,ap_loan-reprint,P5000007,1,0,0,0,0,0,
+M4-ap_loan-reprint-P5000010,M4,ap_loan-reprint,P5000010,1,0,0,0,0,0,
+M4-ap_loan-reprint-P5000013,M4,ap_loan-reprint,P5000013,1,0,0,0,0,0,
+M4-ap_loan-reprint-P5000016,M4,ap_loan-reprint,P5000016,1,0,0,0,0,0,
+M4-ap_loan-reprint-P5000019,M4,ap_loan-reprint,P5000019,1,0,0,0,0,0,
+M4-ap_loan-reprint-P5000022,M4,ap_loan-reprint,P5000022,1,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000000,M4,ps_net-consistent-ded,P5000000,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000001,M4,ps_net-consistent-ded,P5000001,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000002,M4,ps_net-consistent-ded,P5000002,0,0,0,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000003,M4,ps_net-consistent-ded,P5000003,0,1,1,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000004,M4,ps_net-consistent-ded,P5000004,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000005,M4,ps_net-consistent-ded,P5000005,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000006,M4,ps_net-consistent-ded,P5000006,0,0,0,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000007,M4,ps_net-consistent-ded,P5000007,0,1,1,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000008,M4,ps_net-consistent-ded,P5000008,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000009,M4,ps_net-consistent-ded,P5000009,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000010,M4,ps_net-consistent-ded,P5000010,0,0,0,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000011,M4,ps_net-consistent-ded,P5000011,0,1,1,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000012,M4,ps_net-consistent-ded,P5000012,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000013,M4,ps_net-consistent-ded,P5000013,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000014,M4,ps_net-consistent-ded,P5000014,0,0,0,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000015,M4,ps_net-consistent-ded,P5000015,0,1,1,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000016,M4,ps_net-consistent-ded,P5000016,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000017,M4,ps_net-consistent-ded,P5000017,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000018,M4,ps_net-consistent-ded,P5000018,0,0,0,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000019,M4,ps_net-consistent-ded,P5000019,0,1,1,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000020,M4,ps_net-consistent-ded,P5000020,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000021,M4,ps_net-consistent-ded,P5000021,0,0,0,0,0,0,
+M4-ps_net-consistent-ded-P5000022,M4,ps_net-consistent-ded,P5000022,0,0,0,1,1,0,cross_net_pay
+M4-ps_net-consistent-ded-P5000023,M4,ps_net-consistent-ded,P5000023,0,1,1,1,1,0,cross_net_pay
+M4-ps_net-consistent-gross-P5000000,M4,ps_net-consistent-gross,P5000000,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000001,M4,ps_net-consistent-gross,P5000001,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000002,M4,ps_net-consistent-gross,P5000002,0,1,0,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000003,M4,ps_net-consistent-gross,P5000003,0,1,1,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000004,M4,ps_net-consistent-gross,P5000004,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000005,M4,ps_net-consistent-gross,P5000005,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000006,M4,ps_net-consistent-gross,P5000006,0,1,0,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000007,M4,ps_net-consistent-gross,P5000007,0,1,1,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000008,M4,ps_net-consistent-gross,P5000008,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000009,M4,ps_net-consistent-gross,P5000009,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000010,M4,ps_net-consistent-gross,P5000010,0,1,0,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000011,M4,ps_net-consistent-gross,P5000011,0,1,1,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000012,M4,ps_net-consistent-gross,P5000012,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000013,M4,ps_net-consistent-gross,P5000013,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000014,M4,ps_net-consistent-gross,P5000014,0,1,0,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000015,M4,ps_net-consistent-gross,P5000015,0,1,1,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000016,M4,ps_net-consistent-gross,P5000016,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000017,M4,ps_net-consistent-gross,P5000017,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000018,M4,ps_net-consistent-gross,P5000018,0,1,0,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000019,M4,ps_net-consistent-gross,P5000019,0,1,1,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000020,M4,ps_net-consistent-gross,P5000020,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000021,M4,ps_net-consistent-gross,P5000021,0,1,0,1,0,0,cross_income
+M4-ps_net-consistent-gross-P5000022,M4,ps_net-consistent-gross,P5000022,0,1,0,1,1,0,cross_income cross_net_pay
+M4-ps_net-consistent-gross-P5000023,M4,ps_net-consistent-gross,P5000023,0,1,1,1,1,0,cross_income cross_net_pay
+M4-ps_net-inconsistent-P5000000,M4,ps_net-inconsistent,P5000000,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000001,M4,ps_net-inconsistent,P5000001,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000002,M4,ps_net-inconsistent,P5000002,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000003,M4,ps_net-inconsistent,P5000003,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000004,M4,ps_net-inconsistent,P5000004,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000005,M4,ps_net-inconsistent,P5000005,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000006,M4,ps_net-inconsistent,P5000006,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000007,M4,ps_net-inconsistent,P5000007,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000008,M4,ps_net-inconsistent,P5000008,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000009,M4,ps_net-inconsistent,P5000009,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000010,M4,ps_net-inconsistent,P5000010,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000011,M4,ps_net-inconsistent,P5000011,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000012,M4,ps_net-inconsistent,P5000012,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000013,M4,ps_net-inconsistent,P5000013,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000014,M4,ps_net-inconsistent,P5000014,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000015,M4,ps_net-inconsistent,P5000015,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000016,M4,ps_net-inconsistent,P5000016,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000017,M4,ps_net-inconsistent,P5000017,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000018,M4,ps_net-inconsistent,P5000018,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000019,M4,ps_net-inconsistent,P5000019,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000020,M4,ps_net-inconsistent,P5000020,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000021,M4,ps_net-inconsistent,P5000021,0,1,1,1,1,0,payslip_sums
+M4-ps_net-inconsistent-P5000022,M4,ps_net-inconsistent,P5000022,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-ps_net-inconsistent-P5000023,M4,ps_net-inconsistent,P5000023,0,1,1,1,1,0,cross_net_pay payslip_sums
+M4-st_credit-consistent-P5000000,M4,st_credit-consistent,P5000000,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000001,M4,st_credit-consistent,P5000001,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000002,M4,st_credit-consistent,P5000002,0,0,0,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000003,M4,st_credit-consistent,P5000003,0,1,1,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000004,M4,st_credit-consistent,P5000004,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000005,M4,st_credit-consistent,P5000005,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000006,M4,st_credit-consistent,P5000006,0,0,0,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000007,M4,st_credit-consistent,P5000007,0,1,1,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000008,M4,st_credit-consistent,P5000008,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000009,M4,st_credit-consistent,P5000009,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000010,M4,st_credit-consistent,P5000010,0,0,0,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000011,M4,st_credit-consistent,P5000011,0,1,1,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000012,M4,st_credit-consistent,P5000012,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000013,M4,st_credit-consistent,P5000013,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000014,M4,st_credit-consistent,P5000014,0,0,0,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000015,M4,st_credit-consistent,P5000015,0,1,1,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000016,M4,st_credit-consistent,P5000016,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000017,M4,st_credit-consistent,P5000017,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000018,M4,st_credit-consistent,P5000018,0,0,0,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000019,M4,st_credit-consistent,P5000019,0,1,1,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000020,M4,st_credit-consistent,P5000020,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000021,M4,st_credit-consistent,P5000021,0,0,0,0,0,0,
+M4-st_credit-consistent-P5000022,M4,st_credit-consistent,P5000022,0,0,0,1,1,0,cross_net_pay
+M4-st_credit-consistent-P5000023,M4,st_credit-consistent,P5000023,0,1,1,1,1,0,cross_net_pay
+M4-st_credit-inconsistent-P5000000,M4,st_credit-inconsistent,P5000000,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000001,M4,st_credit-inconsistent,P5000001,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000002,M4,st_credit-inconsistent,P5000002,0,0,0,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000003,M4,st_credit-inconsistent,P5000003,0,1,1,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000004,M4,st_credit-inconsistent,P5000004,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000005,M4,st_credit-inconsistent,P5000005,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000006,M4,st_credit-inconsistent,P5000006,0,0,0,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000007,M4,st_credit-inconsistent,P5000007,0,1,1,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000008,M4,st_credit-inconsistent,P5000008,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000009,M4,st_credit-inconsistent,P5000009,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000010,M4,st_credit-inconsistent,P5000010,0,0,0,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000011,M4,st_credit-inconsistent,P5000011,0,1,1,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000012,M4,st_credit-inconsistent,P5000012,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000013,M4,st_credit-inconsistent,P5000013,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000014,M4,st_credit-inconsistent,P5000014,0,0,0,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000015,M4,st_credit-inconsistent,P5000015,0,1,1,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000016,M4,st_credit-inconsistent,P5000016,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000017,M4,st_credit-inconsistent,P5000017,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000018,M4,st_credit-inconsistent,P5000018,0,0,0,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000019,M4,st_credit-inconsistent,P5000019,0,1,1,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000020,M4,st_credit-inconsistent,P5000020,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000021,M4,st_credit-inconsistent,P5000021,0,1,1,1,1,0,statement_balance
+M4-st_credit-inconsistent-P5000022,M4,st_credit-inconsistent,P5000022,0,0,0,1,1,0,cross_net_pay statement_balance
+M4-st_credit-inconsistent-P5000023,M4,st_credit-inconsistent,P5000023,0,1,1,1,1,0,cross_net_pay statement_balance
+M4-st_debit-consistent-P5000001,M4,st_debit-consistent,P5000001,1,0,0,0,0,0,
+M4-st_debit-consistent-P5000004,M4,st_debit-consistent,P5000004,1,0,0,0,0,0,
+M4-st_debit-consistent-P5000007,M4,st_debit-consistent,P5000007,1,0,0,0,0,0,
+M4-st_debit-consistent-P5000010,M4,st_debit-consistent,P5000010,1,0,0,0,0,0,
+M4-st_debit-consistent-P5000013,M4,st_debit-consistent,P5000013,1,0,0,0,0,0,
+M4-st_debit-consistent-P5000016,M4,st_debit-consistent,P5000016,1,0,0,0,0,0,
+M4-st_debit-consistent-P5000019,M4,st_debit-consistent,P5000019,1,0,0,0,0,0,
+M4-st_debit-consistent-P5000022,M4,st_debit-consistent,P5000022,1,0,0,0,0,0,
+M6-stmt-p2-debit-cover-same-full-P5000000,M6,stmt-p2-debit-cover-same-full,P5000000,0,1,1,1,1,0,pdf_overlay
+M6-stmt-p2-debit-cover-same-full-P5000005,M6,stmt-p2-debit-cover-same-full,P5000005,0,1,1,1,1,0,pdf_overlay
+M6-stmt-p2-debit-cover-same-full-P5000010,M6,stmt-p2-debit-cover-same-full,P5000010,0,1,1,1,1,0,pdf_overlay
+M6-stmt-p2-debit-cover-same-full-P5000015,M6,stmt-p2-debit-cover-same-full,P5000015,0,1,1,1,1,0,pdf_overlay
+M6-stmt-p2-debit-cover-same-full-P5000020,M6,stmt-p2-debit-cover-same-full,P5000020,0,1,1,1,1,0,pdf_overlay
+M6-stmt-p2-debit-cover-same-incr-P5000000,M6,stmt-p2-debit-cover-same-incr,P5000000,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M6-stmt-p2-debit-cover-same-incr-P5000005,M6,stmt-p2-debit-cover-same-incr,P5000005,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M6-stmt-p2-debit-cover-same-incr-P5000010,M6,stmt-p2-debit-cover-same-incr,P5000010,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M6-stmt-p2-debit-cover-same-incr-P5000015,M6,stmt-p2-debit-cover-same-incr,P5000015,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M6-stmt-p2-debit-cover-same-incr-P5000020,M6,stmt-p2-debit-cover-same-incr,P5000020,0,1,1,1,1,0,pdf_overlay pdf_revisions
+M6-stmt-p2-debit-redact-naive-full-P5000000,M6,stmt-p2-debit-redact-naive-full,P5000000,0,1,1,1,1,0,pdf_fonts statement_balance
+M6-stmt-p2-debit-redact-naive-full-P5000005,M6,stmt-p2-debit-redact-naive-full,P5000005,0,1,1,1,1,0,pdf_fonts statement_balance
+M6-stmt-p2-debit-redact-naive-full-P5000010,M6,stmt-p2-debit-redact-naive-full,P5000010,0,0,0,1,1,0,statement_balance
+M6-stmt-p2-debit-redact-naive-full-P5000015,M6,stmt-p2-debit-redact-naive-full,P5000015,0,1,1,1,1,0,statement_balance
+M6-stmt-p2-debit-redact-naive-full-P5000020,M6,stmt-p2-debit-redact-naive-full,P5000020,0,1,1,1,1,0,pdf_fonts statement_balance
+M6-stmt-p2-debit-redact-same-full-P5000000,M6,stmt-p2-debit-redact-same-full,P5000000,0,1,1,1,1,0,statement_balance
+M6-stmt-p2-debit-redact-same-full-P5000005,M6,stmt-p2-debit-redact-same-full,P5000005,0,1,1,1,1,0,statement_balance
+M6-stmt-p2-debit-redact-same-full-P5000010,M6,stmt-p2-debit-redact-same-full,P5000010,0,0,0,1,1,0,statement_balance
+M6-stmt-p2-debit-redact-same-full-P5000015,M6,stmt-p2-debit-redact-same-full,P5000015,0,1,1,1,1,0,statement_balance
+M6-stmt-p2-debit-redact-same-full-P5000020,M6,stmt-p2-debit-redact-same-full,P5000020,0,1,1,1,1,0,statement_balance
