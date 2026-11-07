@@ -1,6 +1,6 @@
 # Evaluation of the dev split
 
-Cases 0 to 79 of the dev split (seeds 1000000 to 1000079), run on 2026-11-07 18:55 India Standard Time with the pipeline at commit 06b39ed. Windows 10, Python 3.11.9, 6 cores, CPU only. The numbers are what the run printed: nothing was selected or tuned to make them look better.
+Cases 0 to 79 of the dev split (seeds 1000000 to 1000079), run on 2026-11-07 19:36 India Standard Time with the pipeline at commit e74c052. Windows 10, Python 3.11.9, 6 cores, CPU only. The numbers are what the run printed: nothing was selected or tuned to make them look better.
 
 ## How a result is counted
 
@@ -20,7 +20,7 @@ A limitation is never a find. A case that produced no result is a miss. On a gen
 - Type recognised, mild: 51 of 51 documents (100 %).
 - Type recognised, 150dpi: 22 of 22 documents (100 %).
 - Type recognised, 120dpi: 22 of 22 documents (100 %).
-- Seconds per page, whole pipeline: digital 0.39, scan 3.41.
+- Seconds per page, whole pipeline: digital 0.39, scan 3.42.
 - Peak memory of the process: 820 MB.
 
 ## Detection by kind of change

@@ -27,7 +27,7 @@ One document of a case is changed; the other two stay byte for byte as they were
 
 ## Results on the current build
 
-There are 588 edits of digital files. The first run was on 7 Nov from 14:45 to 15:03, on the build after the extraction fix described below. The second run, whose results are the current ones, was from 17:48 to 17:53 on commit `5411406`.
+There are 588 edits of digital files. The first run was on 7 Nov from 14:45 to 15:03, on the build after the extraction fix described below. The second run was from 17:48 to 17:53 on commit `5411406`. A third run, whose results are the current ones, repeated all 588 digital and all 126 scanned documents (the scanned ones are further down) from 19:38 to 19:54 on commit `e74c052`, which holds the last fix in the list below. Compared document by document with the earlier runs, it differs in one scanned control and in no digital edit.
 
 | Kind | Edits | Found, first run | Found, now | Located, first run | Located, now | False, now |
 |---|---|---|---|---|---|---|
@@ -102,11 +102,12 @@ No new finding cited an unedited document in either run. Of the 588 edits, 88 we
 
 ## Fixes made after looking
 
-Three changes to the tool came out of this probe, each made with these same documents in front of it. The figures after a fix therefore say whether it did what it was written to do, not how the tool behaves on documents it was not written for.
+Four changes to the tool came out of this probe, each made with these same documents in front of it. The figures after a fix therefore say whether it did what it was written to do, not how the tool behaves on documents it was not written for.
 
 - **Unedited cases, first look (13:58, commit `2093034`).** 20 of the 24 genuine cases carried at least one inconsistency (names 17 cases, accounts 15, addresses 9), because values were read from the wrong place. The credit was read right in 6 of 24 cases, the net pay in 12, the declared income in 9, the declared EMI in 9; the payslip was classified right in 12. Extraction was changed (`fed87d7`, 14:37): after it no case carried an inconsistency and the credit was read right in 18. The first edit run was on `2093034` with that change.
 - **A Dr/Cr column (`2af2ad6`, 17:39).** The six statements of the drcr design were not read: their credits were missing. A reader for one Amount column with a Dr or Cr mark beside it was written for them. After it the credit was read right in 24 of 24 cases, and of the 146 edits made in those six cases 124 were found instead of 98 (located 112 instead of 80). Found and located did not change for the other 442 edits, and none of the 588 got worse. It has not been run on any other statement of that design, and no held-out split holds one.
 - **Printed pages that carry no scanner grain (`0a8c40a`).** The scanned edits below showed that 15 of 18 clean printed pages carried an observation from a scan check, because the checks assume scanner grain. A page without grain is now not given to those checks, and its document says so. After it, 0 of 18.
+- **A table row left out (`e74c052`).** One of the 18 scanned controls, the 150 dpi PNG of the two-page statement `P5000000`, carried a false `statement_balance` inconsistency. It was traced to a transaction row the reader had left out: the recogniser had drawn the box of a date wider than its text, so date and narration became one cell, the cell stood under the narration heading, the row had no date in its first column and went missing with its amounts, and the balance chain broke by exactly that row. A date at the start of a cell that stands under the date heading now goes to that heading, and the rest of the cell to the heading it would have gone to (`tests/test_wide_date_box.py`, four tests, written first and failing before the change). The third run above repeated every document: only that control changed, and it now carries no finding. No number in the tables of this document moved.
 
 Every difference between the two runs in the digital figures is in those six cases. Three commits between the runs changed how a table is read: `9c67ea7` and `cab741c` (amounts and dates that a scan misreads, found with other cases) and `2af2ad6` (above); the runs do not separate their effects. The check of the declared EMI (`97ed34c`) took no part: none of the 24 statements has an instalment, EMI or loan narration (the 38 places where the letters "emi" occur are the word "Premium"), so this probe did not exercise it.
 
@@ -123,7 +124,7 @@ Six cases (`P5000000`, `P5000001`, `P5000003`, `P5000004`, `P5000007`, `P5000008
 
 All 88 were found by the arithmetic and cross-document checks (`cross_income` 31, `payslip_sums` 31, `statement_balance` 26, `cross_net_pay` on 3 of the payslips as well), none by a scan check, which skips these pages and says so. A change that leaves the arithmetic and the other documents consistent would not be found here either (see the reprints above). Of the 20 misses, 13 are shown in the dossier as "Possible extraction error, verify" limitation lines, where the number read had too little confidence to be compared, and the scorer counts them as not found; 7 numbers were not read at all. None of the six cases has a Dr/Cr statement.
 
-One of the 18 controls (150 dpi PNG, the two-page statement `P5000000`) carries a false `statement_balance` inconsistency: the recogniser misread a balance. It is the only finding on any unedited case of either probe that is more than the same-producer observation, and it is not explained away: a misread number can look like an edited one.
+None of the 18 controls carries a finding that is not a limitation line. The earlier runs had one: the 150 dpi PNG of the two-page statement `P5000000` carried a false `statement_balance` inconsistency, the only finding on any unedited case of either probe that was more than the same-producer observation. This document first put it down to a misread balance; it was a transaction row the reader had left out (the fix `e74c052`, above). It shows that a number the reader loses can look like an edited one, and the fix was made on this one case.
 
 ## Unedited cases
 

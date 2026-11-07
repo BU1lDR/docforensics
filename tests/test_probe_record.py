@@ -118,7 +118,10 @@ def test_the_scanned_tables_are_counted_from_the_record():
         "cross_income": 31, "payslip_sums": 31, "statement_balance": 26, "cross_net_pay": 3}
 
 
-def test_the_controls_carry_one_false_inconsistency_and_no_scan_observation():
-    flagged = [(r["id"], r["detectors"]) for r in CONTROLS if r["detectors"]]
-    assert flagged == [("M5-control-150-png-P5000000", "statement_balance:inconsistency")]
-    assert "carries a false `statement_balance` inconsistency" in DOC
+def test_the_controls_carry_no_finding_and_the_one_the_older_runs_had_is_recorded_with_its_cause():
+    """No unedited page carries a finding that is not a limitation line (a scan check's observation or a false inconsistency). The older
+    runs had one false statement_balance inconsistency; the document says it was a dropped table row and which commit fixed it."""
+    assert [(r["id"], r["detectors"]) for r in CONTROLS if r["detectors"]] == []
+    assert "None of the 18 controls carries a finding that is not a limitation line" in DOC
+    assert "a transaction row the reader had left out" in DOC and DOC.count("`e74c052`") >= 3
+    assert "the recogniser misread a balance" not in DOC
