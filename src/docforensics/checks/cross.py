@@ -124,8 +124,8 @@ ROLES = {  # role: (label, detector, grade(a, b, th) -> (SAME | FORM | MINOR | M
     "name": ("Name", "cross_name", _same_name,
              lambda th: "Case, spacing and punctuation are ignored; the same words in another order, with other titles or with "
                         f"initials are reported as written differently. Names with a similarity of {th.name_sim:g} or more that are "
-                        "still not identical are a minor mismatch, and so is a name that is the other with a whole word left out (a "
-                        "middle name) when two words or more are left; names further apart are a mismatch."),
+                        "still not identical are a minor mismatch, and so is a name that is the other with a whole word left out (such "
+                        "as a middle name) when two words or more are left; names further apart are a mismatch."),
     "address": ("Address", "cross_address", _same_address,
                 lambda th: "Case, spacing and punctuation are ignored; the same comma-separated parts in another order are reported "
                            f"as written differently. A text similarity of {th.text_sim:g} or more with the same numbers is a minor "
