@@ -7,11 +7,11 @@ signature = ["employee signature", "signature of employee"]  # the captions unde
 [keywords]
 "payslip|pay slip|salary slip" = 3
 "net pay|net salary" = 3
-"gross earnings|gross salary" = 2
+"gross earnings|gross salary|gross pay|total earnings" = 2
 "total deductions" = 2
-"employee id|employee no" = 2
-"pay date" = 2
-"pay month|pay period" = 1
+"employee id|employee no|employee code|emp id|emp no|employee number" = 2
+"pay date|date of payment|payment date" = 2
+"pay month|pay period|salary month|for the month of" = 1
 "deductions" = 1
 
 [[fields]]

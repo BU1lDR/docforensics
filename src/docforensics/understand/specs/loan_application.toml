@@ -10,9 +10,9 @@ stamp = ["for bank use"]  # the caption under the drawn stamp
 "applicant" = 2
 "loan amount" = 2
 "tenure" = 2
-"monthly income" = 2
+"monthly income|monthly gross income|monthly salary" = 2
 "existing emi" = 2
-"application date" = 2
+"application date|date of application" = 2
 "employer" = 1
 
 [[fields]]
