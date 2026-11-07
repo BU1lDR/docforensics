@@ -54,11 +54,23 @@ def read_stage(case: Case, ctx: Ctx) -> None:
         guarded(ctx, case, "read", lambda doc=doc, read=read: read(doc, ctx, before_ocr), doc_id=doc.id)
         for pg in doc.pages:
             if seen := sideways(pg.words):  # a quarter turn is not undone: the page is unreliable, whatever its sharpness
-                pg.quality_class = "poor"
-                add_findings(case, ctx, [limitation(
-                    "read", f"Page {pg.n} stands on its side",
-                    f"{seen[0]} of the {seen[1]} words of three characters or more on this page are taller than wide, so it was scanned "
-                    "or stored a quarter turn. The reader does not turn pages back: its rows are the document's columns and a value "
-                    "would pair with the wrong label. The page is read as poor, so its values carry low confidence and the checks that "
-                    "compare them, the placement of its words and its marks were not run on it. A copy that stands upright would allow them.",
-                    [Evidence(doc=doc.id, page=pg.n, box=(0.0, 0.0, float(pg.width), float(pg.height)), note="page stands on its side")])])
+                title, note = f"Page {pg.n} stands on its side", "page stands on its side"
+                why = (f"{seen[0]} of the {seen[1]} words of three characters or more on this page are taller than wide, so it was scanned "
+                       "or stored a quarter turn. The reader does not turn pages back: its rows are the document's columns and a value "
+                       "would pair with the wrong label.")
+            elif pg.upside_down:  # nor is a half turn: the words of each row come in the wrong order
+                turned, of = pg.upside_down
+                title, note = f"Page {pg.n} stands upside down", "page stands upside down"
+                how = (f"{turned} of the {of} words of three characters or more in this page's text run right to left, so it was stored "
+                       "half a turn." if pg.read_mode == "text-layer" else
+                       f"The reader's angle test turned {turned} of the {of} lines it found on this page before reading them, so it was "
+                       "scanned or stored half a turn.")
+                why = how + " The reader does not turn pages back: the words of each row come in the wrong order and a value would pair with the wrong label or none."
+            else:
+                continue
+            pg.quality_class = "poor"
+            add_findings(case, ctx, [limitation(
+                "read", title,
+                why + " The page is read as poor, so its values carry low confidence and the checks that compare them, the placement of "
+                "its words and its marks were not run on it. A copy that stands upright would allow them.",
+                [Evidence(doc=doc.id, page=pg.n, box=(0.0, 0.0, float(pg.width), float(pg.height)), note=note)])])

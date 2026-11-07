@@ -115,6 +115,13 @@ def sideways(words: list[Word]) -> tuple[int, int] | None:
     return (tall, len(long)) if len(long) >= MIN_WORDS and 2 * tall > len(long) else None
 
 
+def upside_down(turned: int, counted: int) -> tuple[int, int] | None:
+    """(items upside down, items counted) if most of the page is, else None: it was scanned or stored half a turn. An item is a line the
+    OCR engine's angle test turned before reading it, or a word of a text layer that runs right to left. As for sideways, there must be
+    MIN_WORDS of them. The turn is not undone: the words of such a page come in the wrong order along each row."""
+    return (turned, counted) if counted >= MIN_WORDS and 2 * turned > counted else None
+
+
 def _sharp(v: np.ndarray) -> float:
     """How sharply the values pile up: the sum of the squared counts of 3 px bins, over three offsets of the bins."""
     return sum(float((np.bincount(((v - v.min() + o) // 3).astype(int)) ** 2).sum()) for o in (0, 1, 2))

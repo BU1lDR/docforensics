@@ -5,6 +5,7 @@ from pathlib import Path
 import pymupdf
 
 from ..model import Page, Word
+from ..understand.layout import upside_down
 
 MAX_SIDE_PX = 6000     # longest rendered side; larger pages are rendered at a lower dpi and the dpi is recorded
 BAD_SHARE = 0.3        # more than this share of unmapped characters and the layer is not trusted
@@ -51,6 +52,18 @@ def _runs(page: pymupdf.Page) -> Iterator[list[tuple[dict, dict]]]:
                 yield run
 
 
+def _leftward(page: pymupdf.Page) -> tuple[int, int]:
+    """(words that run right to left, words counted) among the words of three characters or more of an open page, as the page is shown:
+    a page stored or drawn half a turn has most of them run leftwards. Characters of a word come in the order they were written."""
+    left = total = 0
+    for run in _runs(page):
+        if len(run) >= 3:
+            a, b = (pymupdf.Point(*run[i][0]["origin"]) * page.rotation_matrix for i in (0, -1))
+            total += 1
+            left += b.x - a.x < -abs(b.y - a.y)
+    return left, total
+
+
 def _word(run: list[tuple[dict, dict]], wid: str, rot: pymupdf.Matrix, scale: float) -> Word:
     # extraction coordinates are those of the unrotated page; rotation_matrix maps them onto the rendered one
     r = pymupdf.Rect(min(c["bbox"][0] for c, _ in run), min(c["bbox"][1] for c, _ in run),
@@ -79,7 +92,7 @@ def read_pdf_page(pdf: Path, index: int, doc_id: str, out_png: Path, dpi: int = 
         usable = layer_is_usable(words) and not _mostly_invisible(page)
         return Page(n=n, width=pix.width, height=pix.height, dpi=dpi, image_path=Path(out_png).as_posix(),
                     read_mode="text-layer" if usable else "ocr", quality_class="text-layer" if usable else "poor",
-                    words=words if usable else [])
+                    words=words if usable else [], upside_down=upside_down(*_leftward(page)) if usable else None)
 
 
 def pdf_meta(pdf: Path) -> dict[str, str]:

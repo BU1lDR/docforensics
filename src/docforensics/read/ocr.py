@@ -10,6 +10,7 @@ from PIL import Image, ImageOps
 
 from ..config import Thresholds
 from ..model import Box, Page, Word
+from ..understand.layout import sideways, upside_down
 from .quality import quality_class, sharpness
 
 MAX_SIDE_PX = 2400       # photographs are scaled down to this longest side
@@ -40,6 +41,18 @@ class Ocr:
     def __init__(self) -> None:
         from rapidocr import RapidOCR  # lazy: onnxruntime is slow to load and digital-only cases never need it
         self._engine = RapidOCR(params={"Global.log_level": "error"})
+        self.turned = (0, 0)  # of the last read: (lines the engine's angle test turned half a turn, lines it tested)
+        classify = self._engine.cls_and_rotate
+
+        def count_turned(crops):
+            """The engine turns an upside-down line before it reads it and does not say so: count the lines it turned."""
+            out = classify(crops)
+            tested = out[1].cls_res or ()
+            sure = self._engine.text_cls.cls_thresh  # the engine's own bar for turning a line
+            self.turned = (sum(1 for label, score in tested if "180" in label and score > sure), len(tested))
+            return out
+
+        self._engine.cls_and_rotate = count_turned
 
     @classmethod
     def shared(cls) -> "Ocr":
@@ -51,6 +64,7 @@ class Ocr:
 
     def read(self, rgb: np.ndarray, doc_id: str, page_n: int) -> list[Word]:
         # the engine keeps the flags of its previous call (a recogniser-only re-read would stick), so every call sets all
+        self.turned = (0, 0)
         r = self._engine(np.ascontiguousarray(rgb[:, :, ::-1]),  # the engine takes BGR arrays
                          use_det=True, use_cls=True, use_rec=True, return_word_box=True)
         if not r.txts:  # nothing found: boxes, txts and scores are None
@@ -79,7 +93,9 @@ def ocr_page(page: Page, doc_id: str, th: Thresholds) -> None:
         gray = np.asarray(im.convert("L"), dtype=np.float32)
     page.sharpness = round(sharpness(gray), 4)
     page.quality_class = quality_class(page.sharpness, th)
-    page.words = Ocr.shared().read(rgb, doc_id, page.n)
+    engine = Ocr.shared()
+    page.words = engine.read(rgb, doc_id, page.n)
+    page.upside_down = None if sideways(page.words) else upside_down(*engine.turned)  # a page on its side is turned too, but not upside down
 
 
 def _to_rgb(im: Image.Image) -> Image.Image:

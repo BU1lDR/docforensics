@@ -36,6 +36,7 @@ class Page(_Base):
     sharpness: float | None = None
     words: list[Word] = []
     blobs: list[Box] = []  # non-text ink: stamp and signature candidates
+    upside_down: tuple[int, int] | None = None  # (items upside down, items counted) when most are: the page was scanned or stored half a turn
 
 
 MODEL_READ_LABEL = "model-read (inference)"  # how a field the local model chose is marked in the note, the dossier and the page
