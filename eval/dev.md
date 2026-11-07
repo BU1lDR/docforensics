@@ -1,6 +1,6 @@
 # Evaluation of the dev split
 
-Cases 0 to 79 of the dev split (seeds 1000000 to 1000079), run on 2026-11-05 09:56 India Standard Time with the pipeline at commit 8e276c3. Windows 10, Python 3.11.9, 6 cores, CPU only. The numbers are what the run printed: nothing was selected or tuned to make them look better.
+Cases 0 to 79 of the dev split (seeds 1000000 to 1000079), run on 2026-11-07 18:55 India Standard Time with the pipeline at commit 06b39ed. Windows 10, Python 3.11.9, 6 cores, CPU only. The numbers are what the run printed: nothing was selected or tuned to make them look better.
 
 ## How a result is counted
 
@@ -14,14 +14,14 @@ A limitation is never a find. A case that produced no result is a miss. On a gen
 ## Summary
 
 - Cases: 80 (26 genuine, 54 with one change each); no result for 0.
-- Changes found: 50 of 54 (93 %); of those with a place on a page, 19 of 23 located (IoU of 0.5 or more).
-- Genuine documents: 0 flags on 78 documents (0.000 per document); 0 of 26 genuine cases carry at least one; 20 limitations raised apart from those.
+- Changes found: 52 of 54 (96 %); of those with a place on a page, 20 of 23 located (IoU of 0.5 or more).
+- Genuine documents: 0 flags on 78 documents (0.000 per document); 0 of 26 genuine cases carry at least one; 18 limitations raised apart from those.
 - Type recognised, digital: 150 of 150 documents (100 %).
 - Type recognised, mild: 51 of 51 documents (100 %).
 - Type recognised, 150dpi: 22 of 22 documents (100 %).
 - Type recognised, 120dpi: 22 of 22 documents (100 %).
-- Seconds per page, whole pipeline: digital 0.58, scan 4.16.
-- Peak memory of the process: 813 MB.
+- Seconds per page, whole pipeline: digital 0.39, scan 3.41.
+- Peak memory of the process: 820 MB.
 
 ## Detection by kind of change
 
@@ -31,7 +31,7 @@ A limitation is never a find. A case that produced no result is a miss. On a gen
 | D2 | white cover, retyped (same font) | 6 | 6 (100 %) | 6 | 0.98 | 0 | pdf_overlay 6 |
 | D4 | metadata edit | 6 | 6 (100 %) | n/a | n/a | 0 | pdf_meta 6 |
 | D5 | picture pasted over | 6 | 6 (100 %) | 6 | 1.00 | 0 | pdf_overlay 6 |
-| S1 | scan spliced from another scan | 5 | 2 (40 %) | 1 | 0.23 | 0 | cross_income 1, payslip_sums 1, scan_layout 1 |
+| S1 | scan spliced from another scan | 5 | 4 (80 %) | 2 | 0.42 | 0 | learned_patches 3, cross_income 1, ela 1, payslip_sums 1, scan_layout 1 |
 | C1 | pay changed so the payslip still adds up | 5 | 5 (100 %) | n/a | n/a | 0 | cross_net_pay 5, cross_income 3 |
 | C2 | name, address, employer or month changed in one document | 5 | 5 (100 %) | n/a | n/a | 0 | cross_name 2, cross_address 1, cross_dates 1, cross_employer 1 |
 | C3 | statement submitted twice | 5 | 5 (100 %) | n/a | n/a | 0 | cross_duplicate 5 |
@@ -64,14 +64,12 @@ The IoU counts a miss as 0. "Flagged elsewhere only" counts the changes for whic
 | medium | changes | found |
 |---|---|---|
 | digital | 39 | 38 (97 %) |
-| mild | 8 | 7 (88 %) |
-| 150dpi | 3 | 2 (67 %) |
+| mild | 8 | 8 (100 %) |
+| 150dpi | 3 | 3 (100 %) |
 | 120dpi | 4 | 3 (75 %) |
 
-## Misses (4, all listed)
+## Misses (2, all listed)
 
-- dev-0021, S1, statement closing_balance (150dpi): only a limitation cites the changed document: statement_checks: Cannot fully verify this statement
-- dev-0036, S1, application loan_amount (mild): only a limitation cites the changed document: context_emi: Context rule not applied: an input could not be used
 - dev-0043, C5, logo, small (digital): no finding cites the changed document
 - dev-0051, S1, application declared_monthly_income (120dpi): only a limitation cites the changed document: cross_income: Possible extraction error, verify: Declared income differs from the payslip gross earnings; context_emi: Context rule not applied: an input could not be used
 
@@ -79,7 +77,7 @@ The IoU counts a miss as 0. "Flagged elsewhere only" counts the changes for whic
 
 - none
 
-Limitations raised on genuine cases: statement_checks: Cannot fully verify this statement x7; context_emi: Context rule not applied: an input could not be used x3; cross_checks: Some cross-document comparisons could not be made x3; payslip_checks: Cannot fully verify this payslip x2; payslip_sums: Possible extraction error, verify: Gross earnings do not equal the earnings listed x2; cross_address: Possible extraction error, verify: Minor mismatch: address differs between documents x1; payslip_sums: Possible extraction error, verify: Total deductions do not equal the deductions listed x1; signature: Signatures only partly compared x1.
+Limitations raised on genuine cases: statement_checks: Cannot fully verify this statement x7; context_emi: Context rule not applied: an input could not be used x3; cross_checks: Some cross-document comparisons could not be made x3; payslip_checks: Cannot fully verify this payslip x3; cross_address: Possible extraction error, verify: Minor mismatch: address differs between documents x1; signature: Signatures only partly compared x1.
 
 ## Flags in changed cases that cite no changed document (0, all listed)
 
@@ -111,10 +109,10 @@ The class is set by the sharpness of the page alone, before any OCR, and it deci
 | A | 150dpi | date | 172 | 172 | 0 | 0 | 0 | 100.0 % |
 | A | 150dpi | id | 28 | 28 | 0 | 0 | 0 | 100.0 % |
 | A | 150dpi | text | 270 | 263 | 7 | 7 | 0 | 97.4 % |
-| A | 120dpi | amount | 382 | 77 | 14 | 0 | 291 | 20.2 % |
+| A | 120dpi | amount | 382 | 98 | 0 | 0 | 284 | 25.7 % |
 | A | 120dpi | date | 165 | 165 | 0 | 0 | 0 | 100.0 % |
 | A | 120dpi | id | 28 | 28 | 0 | 0 | 0 | 100.0 % |
-| A | 120dpi | text | 262 | 166 | 72 | 0 | 24 | 63.4 % |
+| A | 120dpi | text | 262 | 205 | 56 | 0 | 1 | 78.2 % |
 
 ## Limits of this measurement
 
