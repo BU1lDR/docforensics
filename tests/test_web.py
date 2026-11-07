@@ -166,7 +166,7 @@ def test_ui_labels_match_the_dossier_and_say_no_verdict():
     js = (STATIC / "app.js").read_text(encoding="utf-8")
     for label in [*CLASS_LABEL.values(), *SOURCE_LABEL.values(), READING_LABEL, MODEL_READ_LABEL]:
         assert label in js, label
-    # the capability column is "Evidence" as in the dossier: the entries are tests and, for three rows, evaluation reports
+    # the capability column is "Evidence" as in the dossier: the entries are tests and, for four rows, evaluation reports
     assert '"Note", "Evidence"' in js and "test(s)" not in js
     for p in STATIC.iterdir():
         assert not VERDICT.search(p.read_text(encoding="utf-8")), p.name
