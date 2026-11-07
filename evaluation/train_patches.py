@@ -301,10 +301,9 @@ def design(root: Path, names=DESIGN, grid=((0.1, 1.0), (1.0, 1.0), (10.0, 1.0), 
             for name in names:
                 b, n = judge(pages, scores, t, lambda p, name=name: p["slice"] == name)
                 print(describe(b, n, name))
-            if m == lifts[-1]:
-                for kind in sorted({p["kind"] for p in pages if p["slice"] == "xdev-design"}):
-                    b, n = judge(pages, scores, t, lambda p, kind=kind: p["slice"] == "xdev-design" and p["kind"] == kind)
-                    print("   " + describe(b, n, f"xdev-design {kind}"))
+            for kind in sorted({p["kind"] for p in pages if p["slice"] == "xdev-design"}):
+                b, n = judge(pages, scores, t, lambda p, kind=kind: p["slice"] == "xdev-design" and p["kind"] == kind)
+                print("   " + describe(b, n, f"xdev-design {kind}"))
 
 
 # ---- the one scoring of the confirm slices ---------------------------------------------------------------------------------------
