@@ -1,6 +1,7 @@
 """Measurements for the learned patch detector (Task 29). Each word of a scanned page that is large enough to measure gets one row of
-numbers: how its grain, edges, strokes, ink, JPEG blocks, baseline and placement compare with the other words of the same page. A
-weighting learned from synthetic edits (the file learned_patches.json, made by evaluation/train_patches.py) turns a row into a score.
+numbers: how its grain, edges, strokes, ink, JPEG blocks, baseline and placement compare with the other words of the same page, and
+how far it sits off the line of the words beside it. A weighting learned from synthetic edits (the file learned_patches.json, made by
+evaluation/train_patches.py) turns a row into a score.
 Every number is a difference from the page itself, so the page's scanner, resolution and lighting drop out; no number says where on
 the page the word is, or what it reads, beyond whether it has a digit in it (digits and words are compared among their own kind).
 The definitions are copied here, not imported from the grain and placement checks, so that the learned weights keep meaning what they
@@ -14,7 +15,8 @@ import numpy as np
 from ..model import Page
 from ..understand.layout import MIN_WORDS, page_turn, upright
 
-FEATURES = ("grain", "ring_grain", "ring_step", "edge", "stroke", "ink", "grid_on", "grid_other", "drift", "z_centre", "z_height", "z_right")
+FEATURES = ("grain", "ring_grain", "ring_step", "edge", "stroke", "ink", "grid_on", "grid_other", "drift", "z_centre", "z_height", "z_right",
+            "line_pair", "line_mates")
 _MIN_PIXELS = 100   # paper pixels a word needs before it is measured (as in the grain check)
 _MIN_SIZE = (24, 12)  # px: narrower or lower boxes are fragments of a line, not words
 _MIN_CLASS = 6      # words of its own kind (with a digit, or without) a word needs to be compared with; below it, with all words
@@ -30,6 +32,8 @@ _AMOUNT = re.compile(r"^[\d,]*\d\.\d\d$")
 _MAX_TURN = 2.9     # degrees; a page turned more than this has no placement measure
 _FLOOR = {"centre": 1.5, "height": 2.5, "right edge": 2.5}
 _ROW_TOL, _ROW_REACH, _COLUMN_TOL, _COLUMN_REACH, _MIN_GROUP = 0.25, 0.6, 5.0, 40.0, 4
+_SAME_LINE = 0.6    # median word heights: words whose centres are closer than this across the line are on one line
+_OVERLAP = 0.2      # median word heights: a word may reach this far over its neighbour's edge and still count as beside it
 
 
 def _grid_excess(gray: np.ndarray, paper: np.ndarray, box, pad: int = _GRID_PAD) -> tuple[float, float]:
@@ -117,6 +121,37 @@ def _placement(page: Page) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     return centre, height, right
 
 
+def _line_offsets(page: Page) -> tuple[np.ndarray, np.ndarray]:
+    """How far each word sits off the line of the words beside it, in px on the straightened page, as the smallest of its centre, top
+    and bottom (a letter that hangs below the line moves the bottom and the centre, not the top). `pair`: against the nearest word to its
+    left and to its right on the same line. `mates`: against the median of all the words on the line, with two at least. NaN where
+    there is no such word, and for a page that has too few words or is turned too far to be straightened. Unlike the placement check,
+    this needs no row of four, and works on any word."""
+    n = len(page.words)
+    pair, mates = np.full(n, np.nan), np.full(n, np.nan)
+    if n < MIN_WORDS:
+        return pair, mates
+    deg = page_turn(page.words, page.width, page.height)
+    if abs(deg) > _MAX_TURN:
+        return pair, mates
+    u, v, wd, ht = upright(page.words, page.width, page.height, deg)
+    med = float(np.median(ht))
+    lo, hi = u - wd / 2, u + wd / 2
+    edge = np.stack([v, v - ht / 2, v + ht / 2])  # centre, top, bottom
+    same = (np.abs(v[:, None] - v[None, :]) < _SAME_LINE * med) & ~np.eye(n, dtype=bool)
+    for i in range(n):
+        on = np.flatnonzero(same[i])
+        if not on.size:
+            continue
+        left, right = on[hi[on] <= lo[i] + _OVERLAP * med], on[lo[on] >= hi[i] - _OVERLAP * med]
+        near = ([left[np.argmax(hi[left])]] if left.size else []) + ([right[np.argmin(lo[right])]] if right.size else [])
+        if near:
+            pair[i] = np.abs(edge[:, near] - edge[:, [i]]).min()
+        if on.size >= 2:
+            mates[i] = np.abs(edge[:, i] - np.median(edge[:, on], axis=1)).min()
+    return pair, mates
+
+
 def _log_vs_kind(values: np.ndarray, digit: np.ndarray) -> np.ndarray:
     """log of each value over the median of the words of its kind on the page (with a digit, or without; all words if the kind is small)."""
     out = np.empty(len(values))
@@ -169,10 +204,12 @@ def page_features(gray: np.ndarray, page: Page) -> tuple[list[int], np.ndarray]:
     r = np.array(raw)
     digit = np.array([any(c.isdigit() for c in page.words[i].text) for i in idx])
     centre, height, right = _placement(page)
+    pair, mates = _line_offsets(page)
+    tall = float(np.median([w.box[3] - w.box[1] for w in page.words]))  # offsets in median word heights: the page's resolution drops out
     slope_ref = np.nanmedian(r[:, 8]) if not np.isnan(r[:, 8]).all() else 0.0
     x = np.column_stack([
         np.log((r[:, 0] + 1e-3) / (float(np.median(r[:, 0])) + 1e-3)), r[:, 1], r[:, 2],
         _log_vs_kind(r[:, 3], digit), _log_vs_kind(r[:, 4], digit), _log_vs_kind(r[:, 5], digit),
         r[:, 6] - np.median(r[:, 6]), r[:, 7] - np.median(r[:, 7]),
-        np.abs(r[:, 8] - slope_ref) * r[:, 9], centre[idx], height[idx], right[idx]])
+        np.abs(r[:, 8] - slope_ref) * r[:, 9], centre[idx], height[idx], right[idx], pair[idx] / tall, mates[idx] / tall])
     return idx, x

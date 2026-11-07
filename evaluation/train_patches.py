@@ -101,7 +101,8 @@ def features(name: str, root: Path, th: Thresholds | None = None) -> Path:
     audit = AuditLog(Path(tempfile.gettempdir()) / "patches-unused-audit.jsonl")  # the checks run below never write to it
     checks: dict[tuple, dict[str, dict]] = {}
     path = root / "features" / f"{name}.pkl"
-    rows = pickle.load(path.open("rb")) if path.exists() else []  # our own file; the cases in it are not measured again
+    rows = pickle.load(path.open("rb")) if path.exists() else []  # our own file; the cases in it are not measured again,
+    rows = [r for r in rows if r["X"].shape[1] == len(FEATURES)]  # unless they were measured with another feature list
     have = {r["case"] for r in rows}
     for rec in pdta.pages(name, root):
         if rec.case in have:
@@ -132,6 +133,8 @@ def load(names, root: Path) -> list[dict]:
     for n in names:
         with (root / "features" / f"{n}.pkl").open("rb") as f:
             rows += pickle.load(f)  # our own file, written by features() above
+    if any(r["X"].shape[1] != len(FEATURES) for r in rows):
+        raise SystemExit("some pages were measured with another feature list: delete their features file and run features again")
     return rows
 
 

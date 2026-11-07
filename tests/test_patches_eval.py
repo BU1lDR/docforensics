@@ -117,3 +117,16 @@ def test_a_detector_with_nothing_to_see_is_not_given_a_weights_file(tmp_path):
     weights = tmp_path / "w.json"
     summary = tp.confirm(tmp_path, 1.0, 10.0, tmp_path / "eval", weights)
     assert not summary["go"] and not weights.exists()
+
+
+def test_measurements_made_with_another_feature_list_are_refused_not_mixed_in(tmp_path):
+    import pickle
+    import pytest
+    fake_slice("old", tmp_path, 4, np.random.default_rng(0))
+    path = tmp_path / "features" / "old.pkl"
+    rows = pickle.load(path.open("rb"))
+    for r in rows:
+        r["X"] = r["X"][:, :-1]  # a list that was one measure shorter
+    pickle.dump(rows, path.open("wb"))
+    with pytest.raises(SystemExit, match="another feature list"):
+        tp.load(["old"], tmp_path)
