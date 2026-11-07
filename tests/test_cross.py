@@ -271,6 +271,27 @@ def test_names_further_apart_than_the_limit_are_a_plain_mismatch(tmp_path, other
         ("inconsistency", "Mismatch: name differs between documents")]
 
 
+@pytest.mark.parametrize("a, b", [("Meera K. Varghese", "Meera K. Varg hese"), ("Anil Kumar Rao", "Anilkumar Rao"), ("Mohd Ali Khan", "Mohdali Khan")])
+def test_a_name_with_a_space_more_or_less_inside_a_word_is_only_written_differently(tmp_path, a, b):
+    """A scan puts a space into a word, and two writers join or split a name: the same letters in the same order, an observation."""
+    assert graded(check(tmp_path, pair(a, b)), "cross_name") == [("observation", "Name is written differently in the documents")]
+
+
+def test_a_letter_changed_in_a_name_is_still_not_a_space(tmp_path):
+    assert graded(check(tmp_path, pair("Meera K. Varghese", "Meera K. Varg hese e")), "cross_name") != [
+        ("observation", "Name is written differently in the documents")]
+
+
+@pytest.mark.parametrize("employer, payer, flagged", [("IRONW OOD TEST PVT LTD", "NEFT SALARY IRONWOOD TEST PVT LTD", False),
+                                                      ("IRONWOOD TEST PVT LTD", "NEFT SALARY IRONWOOD TEST PVT LTD", False),
+                                                      ("IRONW OOD TEST PVT LTD", "NEFT SALARY HARBORVIEW TEST PVT LTD", True)])
+def test_an_employer_the_scan_split_in_two_is_still_the_payer_of_the_salary(tmp_path, employer, payer, flagged):
+    credit = fld("D1", "txn.description", payer).model_copy(update={"row": 2})
+    case = built(document("D1", "bank_statement", credit), document("D2", "payslip", fld("D2", "employer", employer, "employer")))
+    check(tmp_path, case)
+    assert [f.title for f in by(case, "cross_payer")] == (["Employer is not the payer of the salary credits"] if flagged else [])
+
+
 def test_each_grade_is_its_own_finding_and_the_one_that_differs_most_comes_first(tmp_path):
     case = built(document("D1", "bank_statement", fld("D1", "account_holder", "Meera K. Varghese", "name")),
                  document("D2", "payslip", fld("D2", "employee_name", "Rohan T. Kulkarni", "name")),
@@ -287,6 +308,8 @@ def test_each_grade_is_its_own_finding_and_the_one_that_differs_most_comes_first
     ("Bhopal 462001, Flat 12, Rose Court, Mill Road", [("observation", "Address is written differently in the documents")]),
     ("Flat 12, Rose Court, Mill Rd, Bhopal 462001", [("inconsistency", "Minor mismatch: address differs between documents")]),
     ("Flat 12, Rose Cort, Mill Road, Bhopal 462001", [("inconsistency", "Minor mismatch: address differs between documents")]),
+    ("Flat 12, Rose Cou rt, Mill Road, Bhopal 462001", [("observation", "Address is written differently in the documents")]),  # a space in a word
+    ("Flat 12, RoseCourt, Mill Road, Bhopal 462001", [("observation", "Address is written differently in the documents")]),
     ("Flat 21, Rose Court, Mill Road, Bhopal 462001", [("inconsistency", "Mismatch: address differs between documents")]),  # a number changed
     ("Flat 12, Lotus Heights, Hill Street, Pune 411001", [("inconsistency", "Mismatch: address differs between documents")])])
 def test_addresses_are_graded(tmp_path, other, expected):
@@ -301,6 +324,8 @@ def test_addresses_are_graded(tmp_path, other, expected):
     ("Harborview Test (P) Ltd.", [("observation", "Employer is written differently in the documents")]),  # (P) is Private
     ("Harborview P Test Pvt Ltd", [("inconsistency", "Minor mismatch: employer differs between documents")]),  # a bare P is a word
     ("Harborview Tst Pvt Ltd", [("inconsistency", "Minor mismatch: employer differs between documents")]),
+    ("Harborview T est Pvt Ltd", [("observation", "Employer is written differently in the documents")]),  # a scan put a space in a word
+    ("HarborviewTest Pvt Ltd", [("observation", "Employer is written differently in the documents")]),  # and a writer left one out
     ("Ironwood Test Pvt Ltd", [("inconsistency", "Mismatch: employer differs between documents")])])
 def test_employers_are_graded_and_the_legal_form_is_only_a_form(tmp_path, other, expected):
     case = check(tmp_path, pair("Harborview Test Pvt Ltd", other, "employer", ("employer", "employer")))

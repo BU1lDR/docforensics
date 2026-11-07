@@ -201,19 +201,22 @@ def _across(detector: str, differs: str, steps: list[str], unknown: str) -> dict
 TEMPLATES.update({
     ("cross_name", "observation"): (
         "The name in two or more documents has the same words written differently: in another order, with a title added or left "
-        "out, or with an initial standing for a name. People write their own name in different ways on different documents, so "
+        "out, or with an initial standing for a name, or the same letters with a space more or less (a scan can split a word). "
+        "People write their own name in different ways on different documents, so "
         "this has ordinary causes. The tool records it because the documents do not carry the name in one form.",
         ["Compare the marked names with each page.",
          "Check that an initial stands for the same name in both documents."]),
     ("cross_address", "observation"): (
-        "The address in two or more documents has the same parts in another order. Addresses are often laid out in a different "
+        "The address in two or more documents has the same parts in another order, or the same letters with a space more or less "
+        "inside a part (a scan can split a word). Addresses are often laid out in a different "
         "order on different documents, so this has ordinary causes. The tool records it because the documents do not carry the "
         "address in one form.",
         ["Compare the marked addresses with each page, part by part.",
          "Check that the numbers belong to the same parts in both."]),
     ("cross_employer", "observation"): (
         "The employer named in two or more documents is the same apart from its legal form (words such as Pvt, Ltd, Private or "
-        "Limited, present in one and left out or spelt another way in another). Companies are often written with or without it, "
+        "Limited, present in one and left out or spelt another way in another) or apart from a space more or less inside the name "
+        "(a scan can split a word). Companies are often written with or without it, "
         "so this has ordinary causes.",
         ["Compare the marked employer names with each page.",
          "Check that the document is not naming a different company with the same core name."]),

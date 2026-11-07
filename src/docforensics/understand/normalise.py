@@ -213,6 +213,13 @@ def plain(s: str) -> str:
     return " ".join(re.findall(r"[^\W_]+", unicodedata.normalize("NFKC", s).casefold()))
 
 
+def same_letters(a: str, b: str) -> bool:
+    """True when two writings have the same letters and digits in the same order and differ only in where the spaces fall: 'Anil
+    Kumar' and 'Anilkumar', or a scan's 'IRONW OOD' for 'IRONWOOD'. Case and punctuation are put aside as in `plain`."""
+    x, y = (plain(s).replace(" ", "") for s in (a, b))
+    return x == y != ""
+
+
 def _name_tokens(s: str) -> list[str]:
     return [t for t in plain(s).split() if t not in _TITLES]
 

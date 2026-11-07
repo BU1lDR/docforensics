@@ -13,7 +13,7 @@ from ..config import Thresholds
 from ..findings import add_findings, doc_evidence, field_evidence, limitation
 from ..model import Case, Document, Field, Finding
 from ..pipeline import Ctx
-from ..understand.normalise import _month, name_lacks_a_part, name_similarity, plain, text_similarity
+from ..understand.normalise import _month, name_lacks_a_part, name_similarity, plain, same_letters, text_similarity
 from . import collect, inconsistency, maybe_demote, observation, poor_page, usable
 from .within import SHOWN, _amount, _cap, _cells, _day, _flow, _inr, _rows_text
 
@@ -90,13 +90,14 @@ def _grade(identical: bool, form_only: bool, near: bool) -> str:
 def _same_name(a: str, b: str, th: Thresholds) -> tuple[str, str]:
     s = name_similarity(a, b)  # 1.0 only when the words are the same once order, titles and initials are put aside
     part = name_lacks_a_part(a, b)  # a middle name left out is a small difference, whatever the similarity says
-    return (_grade(plain(a) == plain(b) != "", s == 1.0, s >= th.name_sim or part),
+    return (_grade(plain(a) == plain(b) != "", s == 1.0 or same_letters(a, b), s >= th.name_sim or part),
             f"similarity {s:.2f}" + (", one of them has a part the other lacks" if part else ""))
 
 
 def _parts(address: str) -> list[str]:
-    """The comma-separated parts of an address, each in plain form, in a fixed order."""
-    return sorted(p for p in map(plain, re.split(r"[,;\n|]", address)) if p)
+    """The comma-separated parts of an address, each in plain form and without its spaces (a scan may put one inside a word),
+    in a fixed order."""
+    return sorted(p for p in (plain(p).replace(" ", "") for p in re.split(r"[,;\n|]", address)) if p)
 
 
 def _same_address(a: str, b: str, th: Thresholds) -> tuple[str, str]:
@@ -107,7 +108,7 @@ def _same_address(a: str, b: str, th: Thresholds) -> tuple[str, str]:
 
 def _same_employer(a: str, b: str, th: Thresholds) -> tuple[str, str]:
     s = text_similarity(_core(a), _core(b))
-    return _grade(plain(a) == plain(b) != "", _core(a) == _core(b) != "", s >= th.text_sim), f"text similarity {s:.2f}"
+    return _grade(plain(a) == plain(b) != "", same_letters(_core(a), _core(b)), s >= th.text_sim), f"text similarity {s:.2f}"
 
 
 def _tail(short: str, full: str) -> bool:
@@ -123,16 +124,19 @@ def _same_account(a: str, b: str, th: Thresholds) -> tuple[str, str]:  # a numbe
 ROLES = {  # role: (label, detector, grade(a, b, th) -> (SAME | FORM | MINOR | MAJOR, how alike), the limit as it is printed in the finding)
     "name": ("Name", "cross_name", _same_name,
              lambda th: "Case, spacing and punctuation are ignored; the same words in another order, with other titles or with "
-                        f"initials are reported as written differently. Names with a similarity of {th.name_sim:g} or more that are "
+                        "initials, and the same letters with a space more or less ('Anil Kumar', 'Anilkumar'), are reported as "
+                        f"written differently. Names with a similarity of {th.name_sim:g} or more that are "
                         "still not identical are a minor mismatch, and so is a name that is the other with a whole word left out (such "
                         "as a middle name) when two words or more are left; names further apart are a mismatch."),
     "address": ("Address", "cross_address", _same_address,
-                lambda th: "Case, spacing and punctuation are ignored; the same comma-separated parts in another order are reported "
+                lambda th: "Case, spacing and punctuation are ignored; the same comma-separated parts in another order, or with a "
+                           "space more or less inside a part, are reported "
                            f"as written differently. A text similarity of {th.text_sim:g} or more with the same numbers is a minor "
                            "mismatch; a lower similarity, or other numbers, is a mismatch."),
     "employer": ("Employer", "cross_employer", _same_employer,
                  lambda th: "Case, spacing and punctuation are ignored, and words such as Pvt and Ltd ('(P)' is read as Pvt) are put aside and reported as "
-                            f"written differently. A text similarity of {th.text_sim:g} or more between the rest is a minor "
+                            "written differently, and so is a space more or less inside the name. "
+                            f"A text similarity of {th.text_sim:g} or more between the rest is a minor "
                             "mismatch; a lower one is a mismatch."),
     "account": ("Account number", "cross_account", _same_account,
                 lambda th: "Account numbers count as the same when they are equal, or when the visible end (at least 3 characters) of "
@@ -175,7 +179,8 @@ def check_roles(case: Case, th: Thresholds) -> list[Finding]:
             cited = [(ok[k][1], f"{noun} in {_who(ok[k][0])}") for k in order]
             if g == FORM:
                 out.append(observation(detector, "cross_document", f"{label} is written differently in the documents",
-                                       f"The {noun} has the same words, written differently, in {listed}. {limit(th)}",
+                                       f"The {noun} is written differently in {listed}, with the same words or the same letters spaced "
+                                       f"another way. {limit(th)}",
                                        [field_evidence(f, note) for f, note in cited], conf=min(f.conf for f, _ in cited)))
                 continue
             detail = f"The {noun} differs{' slightly' if g == MINOR else ''} between {listed}. {limit(th)}"
@@ -200,15 +205,16 @@ def _payer_words(description: str) -> list[str]:
 
 def check_payer(case: Case, th: Thresholds) -> list[Finding]:
     """The first word of an employer, against the payer words of the statement's salary or payroll credits. Heuristic: a trading
-    name or an abbreviation that shares no word with the payer is flagged, which the limitations say."""
+    name or an abbreviation that shares no word with the payer is flagged, which the limitations say. A scan may split a word in
+    two ('IRONW OOD'), so the first two words of the employer are also tried joined, and so are neighbouring words of a payer."""
     stmts = _of(case, "bank_statement")
     out: list[Finding] = []
     for d in case.documents if stmts else ():
         emp = next((f for f in d.fields if f.role == "employer" and f.row is None), None)
         if emp is None:
             continue
-        first = next((w for w in re.findall(r"[a-z]+", _core(emp.value)) if w not in _NOT_A_NAME), None) if usable(case, emp) else None
-        if first is None:
+        named = [w for w in re.findall(r"[a-z]+", _core(emp.value)) if w not in _NOT_A_NAME] if usable(case, emp) else []
+        if not named:
             out.append(gap(f"the employer in {_who(d)} could not be read", d.id))
             continue
         for st in stmts:
@@ -220,7 +226,8 @@ def check_payer(case: Case, th: Thresholds) -> list[Finding]:
             if not rows:
                 out.append(gap(f"no salary credit in {_who(st)} names a payer, so the employer in {_who(d)} was not compared with one", d.id, st.id))
                 continue
-            best = max(text_similarity(first, w) for _, words in rows for w in words)
+            heads = {named[0], "".join(named[:2])}
+            best = max(text_similarity(h, w) for h in heads for _, ws in rows for w in {*ws, *map("".join, zip(ws, ws[1:]))})
             if best >= th.text_sim:
                 continue
             detail = (f"The employer in {_who(d)} shares no word with the payer in the {len(rows)} salary or payroll credit "
