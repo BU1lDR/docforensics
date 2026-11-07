@@ -36,6 +36,7 @@ _NUM_DATE = re.compile(r"(\d{1,2})([/.-])(\d{1,2})\2(\d{2}|\d{4})", re.A)
 _CENTS = re.compile(r"\d\.\d\d(?!\d)", re.A)
 _MISREAD = re.compile(r"(?=(?:\D*\d){4})\d[\d.,]*[.,][\d.,]*\d", re.A)  # four digits or more with separators, and no amount: '57.500.00'
 _DATEISH = re.compile(r"[\dOoIl|SB]{1,4}(?P<sep>[/.-])[\dOoIl|SB]{1,2}(?P=sep)[\dOoIl|SB]{2,4}", re.A)  # the shape of a numeric date, digits or what they are misread as
+_CUTDATE = re.compile(r"\d{1,2}(?P<sep>[/.-])[A-Za-z]{1,9}(?P=sep)\d{2,4}", re.A)  # a date whose month a scan cut short: '09-M-26' for '09-Mar-26'
 _CURRENCY = re.compile(rf"{chr(0x20B9)}|\brs\b|\binr\b|/-", re.I)
 # '(INR)' after a heading: the currency, not the name. So is a bracket of up to three characters: a scan reads the rupee sign as 'ぼ'
 # or drops it ('Credit (ぼ)', 'Balance ()'), and a heading that then names no column loses every amount under it.
@@ -107,6 +108,14 @@ def _holds(kind: str, text: str) -> bool:
     not a line left out as if it were not there: a sum or a balance chain over the rows that were read would then be short of it."""
     return (_reads(kind, text) or (kind == "amount" and _MISREAD.fullmatch(text) is not None)
             or (kind == "date" and _DATEISH.fullmatch(text) is not None))
+
+
+def _row_cell(kind: str, text: str) -> bool:
+    """Whether the cell of an anchor column makes its line a row: it holds (see _holds), or it is a date whose month a scan cut short
+    ('09-M-26' for '09-Mar-26'). That line is a row with a date that does not read, as 'O3/05/2026' is, and not a line left out: its
+    debit or credit would be missing from the chain, and the balance after it would not follow from the rows before. The cell is the
+    whole of the date column's cell: such a text in another column, or among other words, makes no row."""
+    return _holds(kind, text) or (kind == "date" and _CUTDATE.fullmatch(text) is not None)
 
 
 def _under(words: list[Word], heads: list["_Head"]) -> int:
@@ -688,7 +697,7 @@ class _Extractor:
             for stretched in (False, True):  # the second time with each column as wide as its cells (see stretch)
                 body = [(line, self.assign(line, heads, dates)) for line in lines[start:end]]
                 rows = [i for i, (_, cells) in enumerate(body)
-                        if any(_holds(kind, text_of(self.first_date(kind, cells.get(k, []))[0])) for k, kind in anchors)]
+                        if any(_row_cell(kind, text_of(self.first_date(kind, cells.get(k, []))[0])) for k, kind in anchors)]
                 if not stretched:
                     self.stretch([body[i][0] for i in rows], heads, dates)
             taken, doubt = self.continuations(body, rows, heads, {c.name for c in tb.columns if c.kind == "text"})
