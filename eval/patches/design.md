@@ -19,6 +19,17 @@ At the setting fixed for the confirm run (ridge 10, positive weight 1, lift 0.5,
 - Ridge 10, positive weight 1: of the grid below. The highest out-of-fold score of the unedited dev-design pages falls as the ridge grows (1.31, 1.26, 0.86, 0.36, -0.19, -0.52 at 0.1, 1, 10, 30, 100, 300); the recall on xdev-design at lift 0.5 falls too (91, 90, 89, 87, 80, 69). 10 is where the tail is clearly thinner than at 0.1 or 1 and recall is still within two pages of them. A positive weight of 10 or 100 raises the unedited scores and gains nothing.
 - Lift 0.5: see amendment 1 in the docstring. 0.25 would have held out clean on these 273 pages; 0.5 is twice that, because 0 of 273 does not exclude a rate of about 1 % per page, and the confirm slices hold about 195 unedited pages.
 
+## Commit ids
+
+The branch was rebased onto main after the confirm run (13:41 IST), which gave every commit a new id. The ids written into the text of this folder, in the docstring of `evaluation/train_patches.py` and in `acceptance.md` are those before the rebase; the author times of the commits were kept, so the order and the hours still read as they happened.
+
+| Cited as | Is now | What it is |
+|---|---|---|
+| 76c1f42 | 9f3bcc9 | the bar, written into the docstring before the first training run |
+| 2fb6484 | c800e39 | amendment 1 (the lift), fixed on the design slices before any confirm slice was built |
+| 91aedb8 | bb8f3a8 | the commit that added this record (it changed no code: the grid ran on the code of cd579e5, formerly 99a2093) |
+| fc18fff | 554e0b1 | the code of the confirm run (the run header of `acceptance.md`) |
+
 ## Commands
 
     python -m evaluation.train_patches design --root D:/tmp/patches                      # the grid, lifts 0, 0.25, 0.5, 1
