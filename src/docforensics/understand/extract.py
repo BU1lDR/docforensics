@@ -134,12 +134,30 @@ def _leading_date(cell: list[Word], heads: list["_Head"], dates: tuple[int, ...]
     return n if own in dates and _under(cell, heads) != own else 0
 
 
+def _by_heading(cell: list[Word], heads: list["_Head"]) -> list[list[Word]]:
+    """A cell of amounts and nothing else, cut where the heading they stand under changes. OCR boxes run wider than their text, and
+    a credit set 20 px from the balance after it reads as one cell with it; that cell was unreadable in the credit column, and its
+    width then took in the balance column as well (see stretch), so that the balances of other rows went to the credit column at
+    full confidence. Each amount has a box of its own: the words of any other cell are not cut."""
+    if len(cell) < 2 or not all(_amount_like(w.text) for w in cell):
+        return [cell]
+    runs = [[cell[0]]]
+    for w in cell[1:]:
+        if _under([w], heads) == _under(runs[-1][-1:], heads):
+            runs[-1].append(w)
+        else:
+            runs.append([w])
+    return runs
+
+
 def _parts(line: Line, heads: list["_Head"], dates: tuple[int, ...]) -> list[list[Word]]:
-    """The cells of a line, with a date at the start of a cell split off where it stands under a date heading (see _leading_date)."""
+    """The cells of a line, with a date at the start of a cell split off where it stands under a date heading (see _leading_date), and
+    a cell of amounts cut where its amounts stand under different headings (see _by_heading)."""
     out: list[list[Word]] = []
     for cell in line.cells:
         n = _leading_date(cell, heads, dates)
-        out += [cell[:n], cell[n:]] if n else [cell]
+        for part in [cell[:n], cell[n:]] if n else [cell]:
+            out += _by_heading(part, heads)
     return out
 
 
