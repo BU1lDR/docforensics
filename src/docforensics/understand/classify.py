@@ -15,7 +15,7 @@ def classify(pages: list[Page], specs: dict[str, TypeSpec], th: Thresholds | Non
     words = [w for line in lines_of(pages[0]) for w in line.words]
     scored = []  # (weight found, share, spec)
     for spec in specs.values():
-        got = sum(wt for kw, wt in spec.keywords.items() if find_phrase(words, kw, floor))
+        got = sum(wt for kw, wt in spec.keywords.items() if any(find_phrase(words, alt, floor) for alt in kw.split("|")))
         total = sum(spec.keywords.values())
         scored.append((got, got / total if total else 0.0, spec))
     share = max((s for _, s, _ in scored), default=0.0)

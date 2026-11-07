@@ -1,16 +1,17 @@
-# Payslip, as drawn by layout A. The weights add to 16 and min_score is 6, so a few lines that merely mention pay stay unknown.
+# Payslip. The weights add to 16 and min_score is 6, so a few lines that merely mention pay stay unknown. A key with a bar in it
+# names several wordings of one thing (layout A's, then the ones other payroll systems print); the weight counts once.
 type = "payslip"
 min_score = 6
 signature = ["employee signature", "signature of employee"]  # the captions under the drawn signature
 
 [keywords]
-"payslip" = 3
-"net pay" = 3
-"gross earnings" = 2
+"payslip|pay slip|salary slip" = 3
+"net pay|net salary" = 3
+"gross earnings|gross salary" = 2
 "total deductions" = 2
-"employee id" = 2
+"employee id|employee no" = 2
 "pay date" = 2
-"pay month" = 1
+"pay month|pay period" = 1
 "deductions" = 1
 
 [[fields]]
@@ -28,7 +29,7 @@ role = "name"
 [[fields]]
 name = "employee_id"
 kind = "id"
-labels = ["employee id", "employee code", "emp id", "emp no"]
+labels = ["employee id", "employee code", "emp id", "emp no", "employee no", "employee number"]
 
 [[fields]]
 name = "designation"
@@ -71,14 +72,19 @@ name = "net_pay_words"
 kind = "text"
 labels = ["amount in words", "net pay in words"]
 
-# Earnings and deductions sit side by side, so one row holds one of each. The amount paid anchors the rows.
+# Earnings and deductions sit side by side, so one row holds one of each, or one of them. The amount paid anchors the rows, and so
+# does the amount deducted (a row can hold a deduction and no earning). Both amounts may be headed just 'Amount': the heading after
+# Earnings is the earnings', the heading after Deductions the deductions'. A row with the label of a total is not a line of the table.
 [table]
 prefix = "line"
+ends_at = ["gross_earnings", "total_deductions", "net_pay"]
 
 [[table.columns]]
 name = "earning_amount"
 kind = "amount"
 headers = ["amount paid"]
+shared = ["amount", "amt"]
+after = "earning_name"
 
 [[table.columns]]
 name = "earning_name"
@@ -94,3 +100,6 @@ headers = ["deductions"]
 name = "deduction_amount"
 kind = "amount"
 headers = ["amount deducted"]
+shared = ["amount", "amt"]
+after = "deduction_name"
+anchor = true

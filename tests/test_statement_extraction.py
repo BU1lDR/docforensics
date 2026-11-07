@@ -22,8 +22,8 @@ COLS = ("date", "description", "debit", "credit", "balance")
 GARDEN = [(72, 100, "Minutes of the garden committee", 12), (72, 130, "Roses and tulips were discussed.", 11)]
 QUOTE = [(72, 100, "Vendor Quotation", 14), (72, 130, "Quote Date: 31/03/2026", 11), (72, 150, "Quoted Total 45,000.00", 11),
          (72, 170, "Customer: Meera K. Varghese", 11)]
-RENAMED_ALL = {"head.description": "Narration", "head.debit": "Withdrawal Amt", "head.credit": "Deposit Amt", "head.balance": "Bal"}
-RENAMED_MONEY = {"head.debit": "Withdrawal Amt", "head.credit": "Deposit Amt"}
+RENAMED_ALL = {"head.description": "Memo", "head.debit": "Outflow", "head.credit": "Inflow", "head.balance": "Bal"}  # wordings the type does not know
+RENAMED_MONEY = {"head.debit": "Outflow", "head.credit": "Inflow"}
 
 
 def period_pdf(period: str) -> bytes:

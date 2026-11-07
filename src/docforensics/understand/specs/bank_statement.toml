@@ -30,6 +30,7 @@ name = "address"
 kind = "text"
 labels = ["address", "customer address"]
 role = "address"
+lines = 4  # a postal address wraps
 
 [[fields]]
 name = "account_no"
@@ -40,13 +41,13 @@ role = "account"
 [[fields]]
 name = "period_start"
 kind = "date"
-labels = ["statement period", "period"]
+labels = ["statement period", "statement from", "period"]
 index = 0
 
 [[fields]]
 name = "period_end"
 kind = "date"
-labels = ["statement period", "period"]
+labels = ["statement period", "statement from", "period"]
 index = 1
 
 [[fields]]
@@ -57,30 +58,30 @@ labels = ["opening balance"]
 [[fields]]
 name = "closing_balance"
 kind = "amount"
-labels = ["closing balance"]
+labels = ["closing balance", "closing bal"]
 
 # The date column anchors the rows.
 [[table.columns]]
 name = "date"
 kind = "date"
-headers = ["date", "txn date", "transaction date", "value date"]
+headers = ["date", "txn date", "tran date", "transaction date", "posting date", "value date"]
 
 [[table.columns]]
 name = "description"
 kind = "text"
-headers = ["description", "particulars", "details", "transaction details"]
+headers = ["description", "particulars", "details", "transaction details", "narrative", "remarks", "transaction remarks"]
 
 [[table.columns]]
 name = "debit"
 kind = "amount"
-headers = ["debit", "withdrawal", "withdrawals"]
+headers = ["debit", "debits", "debit amount", "withdrawal", "withdrawals", "withdrawal amt", "withdrawal amount"]
 
 [[table.columns]]
 name = "credit"
 kind = "amount"
-headers = ["credit", "deposit", "deposits"]
+headers = ["credit", "credits", "credit amount", "deposit", "deposits", "deposit amt", "deposit amount"]
 
 [[table.columns]]
 name = "balance"
 kind = "amount"
-headers = ["balance", "running balance"]
+headers = ["balance", "running balance", "running bal", "closing balance", "closing bal"]

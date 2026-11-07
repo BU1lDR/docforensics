@@ -3,7 +3,7 @@ import tomllib
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_validator
 
 _BUILTIN = Path(__file__).parent / "specs"
 
@@ -16,26 +16,38 @@ class FieldSpec(_Spec):
     name: str
     kind: Literal["amount", "date", "text", "id"]
     labels: list[str] = []
+    colon_labels: list[str] = []  # labels too common to stand alone ('Date'): they count only with a colon after them
     position: Literal["right", "below", "title"] = "right"  # where the value sits; "title" has no label: the page's tallest line
     role: str = ""  # "name" | "address" | "employer" | "account": what cross-document checks compare
     index: int = 0  # for dates: which date in the value (a period holds two)
+    lines: int = 1  # lines the value may wrap over (an address: 4); the lines under the first that start where it starts are part of it
 
 
 class ColumnSpec(_Spec):
     name: str
     kind: Literal["amount", "date", "text", "id"]
     headers: list[str]  # the heading as printed, in the wordings this type is known to use
+    shared: list[str] = []  # wordings that another column prints too ('Amount' over the earnings and over the deductions): they name
+    after: str = ""  # this column only as the heading right after the heading of the column `after` names
+    anchor: bool = False  # a line that reads in this column is a row too, not only one that reads in the first column
+
+    @model_validator(mode="after")
+    def _shared_goes_with_after(self) -> "ColumnSpec":
+        if bool(self.shared) != bool(self.after):
+            raise ValueError(f"column {self.name}: `shared` and `after` go together")
+        return self
 
 
 class TableSpec(_Spec):
     prefix: str = "txn"  # cells are fields named "<prefix>.<column>"
     columns: list[ColumnSpec]  # the first column anchors the rows: a line is a row if it reads there
+    ends_at: list[str] = []  # names of fields whose labels (gross_earnings) end the table: the first line that holds one is below its rows
 
 
 class TypeSpec(_Spec):
     type: str
     min_score: float  # keyword weight page 1 needs for the type to be chosen
-    keywords: dict[str, float]
+    keywords: dict[str, float]  # a key may name several wordings of one thing, 'payslip|pay slip': the weight counts once
     fields: list[FieldSpec]
     table: TableSpec | None = None
     signature: list[str] = []  # captions printed under the signature, in the wordings this type is known to use; none: not looked for

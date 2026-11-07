@@ -10,7 +10,7 @@ from ..findings import add_findings, doc_evidence, limitation
 from ..model import Box, Case, Document, Field, Word
 from ..pipeline import Ctx, guarded
 from .confidence import field_conf
-from .layout import Line, find_phrase, issuer_line, lines_of, similar, straightened, text_of, unturned, union
+from .layout import LINE_TOL, Line, find_phrase, issuer_line, lines_of, similar, straightened, text_of, unturned, union
 from .normalise import fmt_amount, parse_amount, parse_date
 from .specs import ColumnSpec, FieldSpec, TableSpec, TypeSpec, load_specs
 
@@ -19,12 +19,23 @@ GENERIC_SCORE = 0.8   # a "label: value" pair on a page of an unsupported type: 
 DATE_AMBIGUOUS = 0.5  # validator for 04/05/2026: 4 May or 5 April
 DATE_INFERRED = 0.9   # ... in a document whose other dates are day-first
 BELOW_REACH = 2.5     # line heights: how far under its label a value may sit
+BELOW_SCORE = 0.9     # a value read from under its label is trusted a little less than one beside it
+WRAP_REACH = 1.8      # line heights, centre to centre: how close under the line before a wrapped line sits
+WRAP_ALIGN = 0.5      # line heights: how far a wrapped line's left edge may be from the first line's
+PITCH_TOL = 0.3       # share of the line pitch: how far the spacing of lines above a centred label may differ from that below it
+BAND = 3              # lines a table heading may be set over: 'Withdrawal' over 'Amount' over '(INR)' in a narrow column
+BAND_TALL = 0.3       # share of a heading line's height: how much taller or shorter the line under it may be and still be part of it
+ROW_MARGIN = 1.3      # a line between two table rows goes to the nearer one only if the other is this many times farther away
+ROW_DOUBT = 0.5       # confidence of a text cell next to a line that could be the rest of it or of the row after (below the review line)
 GENERIC_NOTE = "unsupported type: generic extraction"
 UNSUPPORTED = "Unsupported document type: generic extraction only, no document-specific checks"
 _SEPARATORS = {":", "-", chr(0x2013), "="}
+_LABEL_TAIL = {"name", "number", "no", "id", "code", "date", "amount", "amt", "details", "required", "optional", "in", "months",
+               "inr", "rs", chr(0x20B9)}  # words that go on a label ('Account Holder Name', 'Amount (INR)'), and never start a value
 _NUM_DATE = re.compile(r"(\d{1,2})([/.-])(\d{1,2})\2(\d{2}|\d{4})", re.A)
 _CENTS = re.compile(r"\d\.\d\d(?!\d)", re.A)
 _CURRENCY = re.compile(rf"{chr(0x20B9)}|\brs\b|\binr\b|/-", re.I)
+_UNIT = re.compile(rf"\s*\((?:in\s+)?(?:inr|rs\.?|rupees|{chr(0x20B9)})\)\s*$", re.I)  # '(INR)' after a heading: the currency, not the name
 
 
 @dataclass
@@ -33,6 +44,7 @@ class _Head:
     x1: float
     col: str | None  # the column this heading names, None if no known wording matched
     score: float
+    text: str = ""  # the heading as printed, without its unit
 
 
 def _day_first_proven(doc: Document) -> bool:
@@ -59,6 +71,16 @@ def _date_runs(words: list[Word]) -> list[list[Word]]:
     return out
 
 
+def _joined(words: list[Word]) -> str:
+    """The words as one text, but a line that goes on from a word ending in a hyphen or a slash is joined to it without a space:
+    a browser breaks a long reference there ('...-4471-' over 'ONLINE'), and the reference has none."""
+    out = words[0].text if words else ""
+    for prev, w in zip(words, words[1:]):
+        new_line = (w.box[1] + w.box[3] - prev.box[1] - prev.box[3]) / 2 > LINE_TOL * (prev.box[3] - prev.box[1])
+        out += ("" if new_line and len(prev.text) > 1 and prev.text[-1] in "-/" else " ") + w.text
+    return out
+
+
 def _reads(kind: str, text: str) -> bool:
     if kind == "date":
         return parse_date(text)[0] is not None
@@ -70,6 +92,10 @@ def _reads(kind: str, text: str) -> bool:
 def _amount_like(text: str) -> bool:
     """An amount with cents or a currency mark: a bare 5 or 411001 is not one."""
     return parse_amount(text) is not None and bool(_CENTS.search(text) or _CURRENCY.search(text))
+
+
+def _finishes_label(word: Word) -> bool:
+    return word.text.casefold().strip("().,") in _LABEL_TAIL
 
 
 def _label_value(line: Line) -> tuple[str, list[Word]] | None:
@@ -95,8 +121,13 @@ def _label_value(line: Line) -> tuple[str, list[Word]] | None:
 
 
 class _Extractor:
-    def __init__(self, doc: Document, th: Thresholds):
+    def __init__(self, doc: Document, th: Thresholds, spec: TypeSpec | None = None):
         self.doc, self.th = doc, th
+        self.tspec = spec.table if spec else None
+        self.stops = [label for f in spec.fields for label in f.labels if f.name in spec.table.ends_at] if spec and spec.table else []
+        self._headings: set[int] | None = None
+        self.labels = [] if spec is None else [*(label for f in spec.fields for label in (*f.labels, *f.colon_labels)),
+                                               *(h for c in (spec.table.columns if spec.table else []) for h in c.headers)]
         straight = {p.n: straightened(p) for p in doc.pages}  # a scan is read as the page would stand upright
         self.lines = {n: lines_of(page) for n, (page, _) in straight.items()}
         self.turn = {n: deg for n, (_, deg) in straight.items()}
@@ -136,31 +167,70 @@ class _Extractor:
 
     # --- header fields
 
-    def title(self) -> tuple[Line, list[Word], list[Word], float] | None:
+    def title(self) -> tuple[Line, list[Word], list[Word], float, str] | None:
         lines = self.lines.get(self.doc.pages[0].n, []) if self.doc.pages else []
         line = issuer_line(lines)  # the topmost of the lines about as tall as the tallest that reads as a name
-        return None if line is None else (line, [], line.words, TITLE_SCORE)
+        return None if line is None else (line, [], line.words, TITLE_SCORE, "")
 
-    def labelled(self, fs: FieldSpec) -> tuple[Line, list[Word], list[Word], float] | None:
+    def headings(self) -> set[int]:
+        """The lines that are the table's heading, one a page (see find_header): the words on them name columns, not fields."""
+        if self._headings is None:
+            found = [(self.find_header(self.lines[p.n], self.tspec), self.lines[p.n]) for p in self.doc.pages] if self.tspec else []
+            self._headings = {id(ln) for hit, lines in found if hit for ln in lines[hit[0]:hit[1] + 1]}
+        return self._headings
+
+    @staticmethod
+    def plausible(kind: str, words: list[Word]) -> bool:
+        """Whether the words could be a value of the kind: an amount or a date has to read as one; text and ids may be anything."""
+        return not ((kind == "amount" and parse_amount(text_of(words)) is None) or (kind == "date" and not _date_runs(words)))
+
+    def label_like(self, words: list[Word]) -> bool:
+        """A cell that ends in a colon or reads as one of the type's labels or headings: the next label, not a value."""
+        text = text_of(words)
+        return text.endswith(":") or any(similar(text.replace(":", " "), label, self.th.label_sim) for label in self.labels)
+
+    @staticmethod
+    def colon_after(words: list[Word], hit: tuple[int, int, float]) -> bool:
+        i, n, _ = hit
+        return words[i + n - 1].text.endswith(":") or (i + n < len(words) and words[i + n].text.startswith(":"))
+
+    def labelled(self, fs: FieldSpec) -> tuple[Line, list[Word], list[Word], float, str] | None:
         best = None  # (line, (start, count, similarity)); the closest wins, then the one that spans more words ('Employer Name' is
-        for p in self.doc.pages:  # 'employer' with 'Name' left over for a value), then the earliest page and topmost line
+        skip = self.headings()  # 'employer' with 'Name' left over for a value), then the earliest page and topmost line
+        for p in self.doc.pages:
             for line in self.lines[p.n]:
-                for label in fs.labels:
+                if id(line) in skip:  # 'Closing Balance' over a column of balances is a heading, not the field of that name
+                    continue
+                for label in (*fs.labels, *fs.colon_labels):
                     hit = find_phrase(line.words, label, self.th.label_sim)
+                    if hit and label in fs.colon_labels and not self.colon_after(line.words, hit):
+                        continue
                     if hit and (best is None or (hit[2], hit[1]) > (best[1][2], best[1][1])):
                         best = (line, hit)
         if best is None:
             return None
         line, (i, n, score) = best
         label_words, rest = line.words[i:i + n], line.words[i + n:]
-        while rest and rest[0].text in _SEPARATORS:
-            rest = rest[1:]
-        if fs.position == "below":
-            return line, label_words, self.below(line, label_words), score
         cell_of = {w.id: k for k, cell in enumerate(line.cells) for w in cell}
-        first = cell_of[rest[0].id] if rest else None
+        own = cell_of[label_words[-1].id]
+        while rest and (rest[0].text in _SEPARATORS or (cell_of[rest[0].id] == own and _finishes_label(rest[0]))):
+            rest = rest[1:]  # the colon, and the rest of a label that the type knows only in part ('Name', 'No.', '(INR)')
         # the value is the cell it starts in: what follows a label inside one cell, or else the next cell
-        return line, label_words, [w for w in rest if cell_of[w.id] == first], score
+        right = [] if fs.position == "below" or not rest else [w for w in rest if cell_of[w.id] == cell_of[rest[0].id]]
+        right = [] if self.label_like(right) else right  # the next label is not a value
+        value, how = right, ""
+        if not (right and self.plausible(fs.kind, right)):  # nothing readable beside the label: the value may stand under it
+            under = self.below(line, label_words)
+            if under and not self.label_like(under) and (not right or self.plausible(fs.kind, under)):
+                value = under
+                if fs.position != "below":
+                    how, score = "value read from under the label", score * BELOW_SCORE
+            elif not right and fs.lines > 1 and fs.position != "below":  # no cell on its row: perhaps centred against a value of several lines
+                block = self.centred(line, label_words, fs.lines)
+                return line, label_words, block, score * BELOW_SCORE, "value read from beside the label" if block else ""
+        if value and fs.lines > 1:
+            value = self.wrapped(line.page, value, fs.lines - 1, centred=value is right)  # a new list: `value` may be a cell of the page's lines
+        return line, label_words, value, score, how
 
     def below(self, line: Line, label_words: list[Word]) -> list[Word]:
         """The first cell under the label that overlaps it sideways, within BELOW_REACH line heights."""
@@ -177,11 +247,65 @@ class _Extractor:
                     return cell
         return []
 
+    @staticmethod
+    def gap(a: Line, b: Line) -> float:
+        """Centre to centre, in pixels."""
+        return abs((a.box[1] + a.box[3]) - (b.box[1] + b.box[3])) / 2
+
+    def run(self, page: int, k: int, x0: float, step: int, most: int, pitch: float | None = None) -> list[Line]:
+        """The lines after line k, going down (step 1) or up (-1) for at most `most`, that carry on a value whose left edge is x0:
+        each sits close to the one before it (about `pitch` from it, if that is given), starts where the value does, and is not
+        another label. Anything else ends the run."""
+        lines, out, prev, j = self.lines[page], [], self.lines[page][k], k + step
+        while 0 <= j < len(lines) and len(out) < most:
+            ln, gap = lines[j], self.gap(lines[j], prev)
+            first = ln.cells[0]
+            if (gap > WRAP_REACH * prev.height or abs(min(w.box[0] for w in first) - x0) > WRAP_ALIGN * prev.height
+                    or self.label_like(first) or (pitch is not None and abs(gap - pitch) > PITCH_TOL * pitch)):
+                break
+            out.append(ln)
+            prev, j = ln, j + step
+        return out
+
+    def wrapped(self, page: int, value: list[Word], more: int, centred: bool = False) -> list[Word]:
+        """`value` with the lines it goes on over: on each next line the first cell, if it starts where the value does, sits close
+        under the line before it and is not another label. Anything else, a label to its left included, ends the value. For a value
+        on its label's row (`centred`) that has as many such lines above it as below, the label stands on the middle one of them
+        (a table cell is centred against its row unless it says otherwise): the lines above belong to it as well."""
+        lines = self.lines[page]
+        k = next(k for k, ln in enumerate(lines) if any(w.id == value[0].id for w in ln.words))
+        x0 = min(w.box[0] for w in value)
+        down = self.run(page, k, x0, 1, more)
+        up = self.run(page, k, x0, -1, len(down), self.gap(lines[k], down[0])) if centred and down else []
+        if len(up) != len(down):
+            up = []
+        return [*(w for ln in reversed(up) for w in ln.cells[0]), *value, *(w for ln in down for w in ln.cells[0])]
+
+    def centred(self, line: Line, label_words: list[Word], lines: int) -> list[Word]:
+        """The value of a label with no cell on its row, standing between the two middle lines of a value of 2 or 4 lines: the line
+        above and the line below it start in one column right of the label, and as many lines carry on each way, at the same pitch.
+        Empty if that is not what the page shows."""
+        page, all_lines = line.page, self.lines[line.page]
+        k = next(k for k, ln in enumerate(all_lines) if ln is line)
+        if k == 0 or k + 1 >= len(all_lines):
+            return []
+        above, below = all_lines[k - 1], all_lines[k + 1]
+        x0, lx1 = min(w.box[0] for w in below.cells[0]), max(w.box[2] for w in label_words)
+        pitch = self.gap(above, below)
+        if (pitch > WRAP_REACH * below.height or x0 < lx1 or abs(min(w.box[0] for w in above.cells[0]) - x0) > WRAP_ALIGN * below.height
+                or self.label_like(above.cells[0]) or self.label_like(below.cells[0])):
+            return []
+        up, down = self.run(page, k - 1, x0, -1, lines, pitch), self.run(page, k + 1, x0, 1, lines, pitch)
+        if len(up) != len(down) or 2 * (1 + len(down)) > lines:
+            return []
+        block = [*reversed(up), above, below, *down]
+        return [w for ln in block for w in ln.cells[0]]
+
     def header(self, fs: FieldSpec) -> Field:
         found = self.title() if fs.position == "title" else self.labelled(fs)
         if found is None:
             return self.missing(fs.name, fs.kind, "label not found", role=fs.role)
-        line, label_words, value_words, score = found
+        line, label_words, value_words, score, how = found
         if not value_words:  # the label is there, its value is not: keep the label as the place to look
             where = "under" if fs.position == "below" else "next to"
             return self.missing(fs.name, fs.kind, f"value not found {where} the label", page=line.page,
@@ -192,33 +316,94 @@ class _Extractor:
             words = runs[fs.index] if fs.index < len(runs) else value_words  # a period holds two dates
         value, validator, note = self.read(fs.kind, text_of(words))
         return self.make(fs.name, fs.kind, words, line.page, union(w.box for w in words), value, validator, score,
-                         role=fs.role, note=note)
+                         role=fs.role, note="; ".join(filter(None, [note, how])))
 
     # --- table
 
     def head(self, cell: list[Word], tb: TableSpec) -> _Head:
-        text = text_of(cell)
+        text = _UNIT.sub("", text_of(cell))
         score, col = max(((similar(text, h, self.th.label_sim), c.name) for c in tb.columns for h in c.headers),
                          default=(0.0, None))
         box = union(w.box for w in cell)
-        return _Head(box[0], box[2], col if score else None, score)
+        return _Head(box[0], box[2], col if score else None, score, text)
 
-    def find_header(self, lines: list[Line], tb: TableSpec) -> tuple[int, list[_Head]] | None:
-        """The first line of three or more digit-free cells, at least one of which is a known column heading."""
+    def band(self, lines: list[Line], idx: int) -> list[tuple[int, list[list[Word]]]]:
+        """The heading that starts on line idx, read over one line, then over two, then three (BAND at most): (last line, cells). A
+        further line belongs to it if it holds no digit, stands close under the one before it and is as tall. Each of its words joins
+        the cell of the heading it stands under, so that 'Value' over 'Date' reads 'Value Date' and two columns whose last line ran
+        together ('Amount (INR) Amount (INR)') are told apart; words over no cell (a heading of one line, centred between those
+        of two) make a cell of their own."""
+        cells = [list(c) for c in lines[idx].cells]
+        out = [(idx, cells)]
+        for j in range(idx + 1, min(idx + BAND, len(lines))):
+            prev, line = lines[j - 1], lines[j]
+            if (any(c.isdigit() for w in line.words for c in w.text) or self.gap(prev, line) > WRAP_REACH * prev.height
+                    or abs(line.height - prev.height) > BAND_TALL * prev.height):
+                break
+            spans = [(min(w.box[0] for w in c), max(w.box[2] for w in c)) for c in cells]
+            cells = [list(c) for c in cells]
+            for cell in line.cells:
+                fresh = []
+                for w in cell:
+                    over = [min(w.box[2], b) - max(w.box[0], a) for a, b in spans]
+                    if max(over) > 0:
+                        cells[over.index(max(over))].append(w)
+                    else:
+                        fresh.append(w)
+                if fresh:
+                    cells.append(fresh)
+            out.append((j, cells))
+        return out
+
+    def heads_of(self, cells: list[list[Word]], tb: TableSpec) -> list[_Head]:
+        """What the cells of a heading name. A column that two of them claim goes to the closer wording (the leftmost, on a tie). A
+        heading that no column claims but a column's shared wording reads ('Amount') names that column if it is the heading right
+        after the one the column follows (Earnings, Amount, Deductions, Amount)."""
+        heads = [self.head(cell, tb) for cell in cells]
+        order = sorted(range(len(heads)), key=lambda k: heads[k].x0 + heads[k].x1)  # left to right
+        best: dict[str, int] = {}
+        for k in order:
+            if heads[k].col and (heads[k].col not in best or heads[k].score > heads[best[heads[k].col]].score):
+                best[heads[k].col] = k
+        beside = set()
+        for k, h in enumerate(heads):
+            if h.col and best[h.col] != k:
+                w = best[h.col]
+                if abs(order.index(k) - order.index(w)) == 1:  # the heading next to it, with none between (value date, transaction date)
+                    heads[w].x0, heads[w].x1 = min(heads[w].x0, h.x0), max(heads[w].x1, h.x1)  # is the same column, set wider
+                    beside.add(k)
+                h.col = None
+        heads = [h for k, h in enumerate(heads) if k not in beside]
+        left_to_right = sorted(heads, key=lambda h: h.x0 + h.x1)
+        for c in tb.columns:
+            at = next((k for k, h in enumerate(left_to_right) if c.after and h.col == c.after), None)
+            if at is None or at + 1 == len(left_to_right) or any(h.col == c.name for h in heads):
+                continue
+            nxt = left_to_right[at + 1]
+            if score := max((similar(nxt.text, w, self.th.label_sim) for w in c.shared), default=0.0):
+                nxt.col, nxt.score = c.name, score
+        return heads
+
+    def find_header(self, lines: list[Line], tb: TableSpec) -> tuple[int, int, list[_Head]] | None:
+        """(first line, last line, headings) of the first line of three or more digit-free cells whose heading, read alone or with the
+        lines under it (see band), holds the heading of the first column (the one that anchors the rows). Of those readings the one
+        that names most columns, the longest on a tie (the whole of the heading); failing any, the first line read alone with any known column heading. A
+        row of labels (Opening Balance, Closing Balance, ...) above the table is therefore not taken for its heading."""
+        fallback = None
         for idx, line in enumerate(lines):
             if sum(not any(c.isdigit() for c in text_of(cell)) for cell in line.cells) < 3:
                 continue
-            heads = [self.head(cell, tb) for cell in line.cells]
-            best: dict[str, int] = {}  # a column that two headings claim goes to the closer wording
-            for k, h in enumerate(heads):
-                if h.col and (h.col not in best or h.score > heads[best[h.col]].score):
-                    best[h.col] = k
-            for k, h in enumerate(heads):
-                if h.col and best[h.col] != k:
-                    h.col = None
-            if any(h.col for h in heads):
-                return idx, heads
-        return None
+            best = None
+            for last, cells in self.band(lines, idx):
+                heads = self.heads_of(cells, tb)
+                named = len({h.col for h in heads if h.col})
+                if any(h.col == tb.columns[0].name for h in heads) and (best is None or named >= best[0]):
+                    best = named, last, heads
+                if fallback is None and last == idx and any(h.col for h in heads):
+                    fallback = idx, last, heads
+            if best:
+                return idx, best[1], best[2]
+        return fallback
 
     @staticmethod
     def assign(line: Line, heads: list[_Head]) -> dict[int, list[Word]]:
@@ -233,40 +418,131 @@ class _Extractor:
             words.sort(key=lambda w: w.box[0])
         return out
 
+    @staticmethod
+    def stretch(rows: list[Line], heads: list[_Head]) -> None:
+        """A column is where its cells stand. A heading set centred over text that starts at the left edge of its column says only
+        where its own words are, so each heading takes in the cells of the rows that overlap it: a short line of a narration then
+        goes with the narration, not with the heading of the column beside it."""
+        grow: dict[int, tuple[float, float]] = {}
+        for line in rows:
+            for cell in line.cells:
+                x0, x1 = min(w.box[0] for w in cell), max(w.box[2] for w in cell)
+                gaps = [max(h.x0 - x1, x0 - h.x1) for h in heads]
+                if min(gaps) < 0:
+                    k = gaps.index(min(gaps))
+                    a, b = grow.get(k, (x0, x1))
+                    grow[k] = min(a, x0), max(b, x1)
+        for k, (x0, x1) in grow.items():
+            heads[k].x0, heads[k].x1 = min(heads[k].x0, x0), max(heads[k].x1, x1)
+
+    @staticmethod
+    def first_date(kind: str, words: list[Word]) -> tuple[list[Word], int]:
+        """(the words, how many dates they hold): a cell of a date column that holds several is read as its first."""
+        runs = _date_runs(words) if kind == "date" else []
+        return (runs[0], len(runs)) if len(runs) > 1 else (words, len(runs))
+
     def cell(self, tb: TableSpec, col: ColumnSpec, page: int, line: Line, row: int, heads: list[_Head],
-             cells: dict[int, list[Word]]) -> Field:
+             cells: dict[int, list[Word]], over: dict[int, int], doubt: set[int]) -> Field:
+        """The cell of a column in a row. `over`: for a cell read over several lines, how many; `doubt`: the columns in which a
+        line stands as near to this row as to its neighbour, so the cell may be only part of what it holds."""
         name = f"{tb.prefix}.{col.name}"
         k = next((k for k, h in enumerate(heads) if h.col == col.name), None)
         if k is None:
             return self.missing(name, col.kind, "column not found in the table header", page=page, box=line.box, row=row)
         words = cells.get(k, [])
+        unsure = "a line between this row and a neighbour could belong to either"
         if not words:  # found empty, at the place the cell would be
             box = (heads[k].x0, line.box[1], heads[k].x1, line.box[3])
+            if k in doubt:  # what it holds may be on that line
+                return self.missing(name, col.kind, unsure, page=page, box=box, row=row)
             return self.make(name, col.kind, [], page, box, None, 1.0, heads[k].score, row=row)
-        value, validator, note = self.read(col.kind, text_of(words))
-        return self.make(name, col.kind, words, page, union(w.box for w in words), value, validator, heads[k].score,
-                         row=row, note=note)
+        words, dates = self.first_date(col.kind, words)
+        value, validator, note = self.read(col.kind, _joined(words))
+        notes = [note, f"the cell holds {dates} dates; the first is read" if dates > 1 else "",
+                 f"read over {over[k]} lines" if k in over else "", unsure if k in doubt else ""]
+        return self.make(name, col.kind, words, page, union(w.box for w in words), value, validator,
+                         min(heads[k].score, ROW_DOUBT) if k in doubt else heads[k].score, row=row, note="; ".join(filter(None, notes)))
+
+    @staticmethod
+    def aligned(cells: dict[int, list[Word]], mine: dict[int, list[Word]], height: float) -> bool:
+        """In each column the two lines share, the words of `cells` start where those of `mine` do, or stand centred on them."""
+        for k, words in cells.items():
+            if k in mine:
+                (a0, a1), (b0, b1) = (min(w.box[0] for w in words), max(w.box[2] for w in words)), \
+                    (min(w.box[0] for w in mine[k]), max(w.box[2] for w in mine[k]))
+                if abs(a0 - b0) > WRAP_ALIGN * height and abs(a0 + a1 - b0 - b1) / 2 > WRAP_ALIGN * height:
+                    return False
+        return True
+
+    def continuations(self, body: list[tuple[Line, dict[int, list[Word]]]], rows: list[int], heads: list[_Head],
+                      text: set[str]) -> tuple[dict[int, list[int]], dict[int, set[int]]]:
+        """The lines of a table body that are not rows and hold words in columns of text only (a narration that wraps). Going down
+        and up from a row, the lines that follow one another within WRAP_REACH line heights and start where the row's own text does
+        are its. A line that two rows reach goes to the nearer, unless the other is less than ROW_MARGIN times farther: then it goes
+        to neither. Returns {row line: [its continuation lines]} and {row line: columns it may have lost a line from}. Every other
+        line (a total, a footer, a line with a number in it) is left out, as it always was."""
+        isrow = set(rows)
+        near: dict[int, dict[int, float]] = {}  # line -> {the rows that reach it: how far}
+        for i in rows:
+            for step in (1, -1):
+                prev, j = i, i + step
+                while (0 <= j < len(body) and j not in isrow and body[j][1] and all(heads[k].col in text for k in body[j][1])
+                       and self.gap(body[j][0], body[prev][0]) <= WRAP_REACH * body[prev][0].height):
+                    near.setdefault(j, {})[i] = self.gap(body[j][0], body[i][0])
+                    prev, j = j, j + step
+        taken: dict[int, list[int]] = {}
+        doubt: dict[int, set[int]] = {}
+        for j, owners in sorted(near.items()):
+            fit = {i: d for i, d in owners.items() if self.aligned(body[j][1], body[i][1], body[j][0].height)}
+            if not fit:
+                continue
+            best = min(fit, key=fit.__getitem__)
+            if len(fit) > 1 and max(fit.values()) < ROW_MARGIN * fit[best]:
+                for i in fit:
+                    doubt.setdefault(i, set()).update(body[j][1])
+            else:
+                taken.setdefault(best, []).append(j)
+        return taken, doubt
+
+    def ends(self, line: Line) -> bool:
+        """Whether the line holds the label of a total (TableSpec.ends_at), with or without its amount after it."""
+        for cell in line.cells:
+            text = text_of([w for w in cell if parse_amount(w.text) is None]).replace(":", " ")
+            if any(similar(text, label, self.th.label_sim) for label in self.stops):
+                return True
+        return False
 
     def table(self, tb: TableSpec) -> list[Field]:
-        """Rows are the lines that read as a value in the first column, under the last heading seen (a page without
-        its own heading continues the previous page's columns). Row numbers count from 1 through the document."""
+        """Rows are the lines that read as a value in the first column (or in a column marked as an anchor), under the last
+        heading seen (a page without its own heading continues the previous page's columns), down to the line that holds the label
+        of a total. Row numbers count from 1 through the document."""
         out: list[Field] = []
         heads, row, first = None, 0, tb.columns[0]
         for p in self.doc.pages:
             lines, start = self.lines[p.n], 0
             if found := self.find_header(lines, tb):
-                start, heads = found[0] + 1, found[1]
+                start, heads = found[1] + 1, found[2]
             if heads is None:
                 continue
-            anchor = next((k for k, h in enumerate(heads) if h.col == first.name), None)
-            if anchor is None:  # no way to tell a row from any other line
+            if not any(h.col == first.name for h in heads):  # no way to tell a row from any other line
                 continue
-            for line in lines[start:]:
-                cells = self.assign(line, heads)
-                if not _reads(first.kind, text_of(cells.get(anchor, []))):
-                    continue
+            anchors = [(k, c.kind) for k, h in enumerate(heads) for c in tb.columns if h.col == c.name and (c is first or c.anchor)]
+            end = next((i for i in range(start, len(lines)) if self.ends(lines[i])), len(lines))
+            for stretched in (False, True):  # the second time with each column as wide as its cells (see stretch)
+                body = [(line, self.assign(line, heads)) for line in lines[start:end]]
+                rows = [i for i, (_, cells) in enumerate(body)
+                        if any(_reads(kind, text_of(self.first_date(kind, cells.get(k, []))[0])) for k, kind in anchors)]
+                if not stretched:
+                    self.stretch([body[i][0] for i in rows], heads)
+            taken, doubt = self.continuations(body, rows, heads, {c.name for c in tb.columns if c.kind == "text"})
+            for i in rows:
                 row += 1
-                out += [self.cell(tb, col, p.n, line, row, heads, cells) for col in tb.columns]
+                line, cells, over = body[i][0], dict(body[i][1]), {}
+                for k in {k for j in taken.get(i, []) for k in body[j][1]}:  # a cell over several lines, read top to bottom
+                    pieces = sorted([(body[j][0].box[1], body[j][1][k]) for j in taken[i] if k in body[j][1]]
+                                    + ([(line.box[1], cells[k])] if cells.get(k) else []), key=lambda piece: piece[0])
+                    cells[k], over[k] = [w for _, words in pieces for w in words], len(pieces)
+                out += [self.cell(tb, col, p.n, line, row, heads, cells, over, doubt.get(i, set())) for col in tb.columns]
         return out
 
     def restore(self, fields: list[Field]) -> list[Field]:
@@ -305,7 +581,7 @@ class _Extractor:
 
 
 def extract_document(doc: Document, spec: TypeSpec | None, th: Thresholds) -> list[Field]:
-    ex = _Extractor(doc, th)
+    ex = _Extractor(doc, th, spec)
     if spec is None:
         return ex.restore(ex.generic())
     out = [ex.header(fs) for fs in spec.fields]

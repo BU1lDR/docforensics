@@ -37,7 +37,8 @@ def union(boxes: Iterable[Box]) -> Box:
 
 def similar(a: str, b: str, floor: float) -> float:
     """text_similarity(a, b) if it reaches `floor`, else 0.0. Strings whose lengths alone rule that out are not compared,
-    so a hostile page cannot make matching slow."""
+    so a hostile page cannot make matching slow. Spaces at the ends do not count: 'A/c No.:' read with its colon as a space is 'A/c No.'."""
+    a, b = a.strip(), b.strip()
     la, lb = len(a), len(b)
     if not la or not lb or 2 * min(la, lb) / (la + lb) < floor:
         return 0.0

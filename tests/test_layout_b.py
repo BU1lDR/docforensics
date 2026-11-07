@@ -13,7 +13,8 @@ from datagen.layouts.payslip import draw_payslip
 from datagen.layouts.statement import draw_statement
 from datagen.manipulate import METHODS
 from docforensics.config import Thresholds
-from docforensics.understand.layout import similar
+from docforensics.model import Word
+from docforensics.understand.layout import find_phrase, similar
 from docforensics.understand.specs import load_specs
 
 TH = Thresholds()
@@ -36,6 +37,9 @@ UNLISTED = {
     "loan_application": {"Full Name", "Present Address", "Salary A/c No", "Amount of Loan"},
 }
 CAPTIONS = {"bank_statement": ("Bank Seal",), "payslip": (), "loan_application": ("For Bank Use",)}
+# Printed wordings that no spec lists as such but that a listed label finds at their end. It was so at the spec-freeze tag, when the run
+# that is on record was made, and is left as it was: 'address' is a label of the type, and 'Present Address' ends in it.
+READ_THROUGH_A_SHORTER_LABEL = {"loan_application": {"Present Address"}}
 
 
 def printed(kind: str) -> list[str]:
@@ -68,6 +72,20 @@ def test_the_wordings_meant_to_be_unlisted_are_not_in_the_specs(kind):
     seen = {text: any(similar(text.casefold(), k, TH.label_sim) for k in known) for text in printed(kind)}
     assert {t for t, hit in seen.items() if hit} == LISTED[kind] & set(seen), kind
     assert {t for t, hit in seen.items() if not hit} == UNLISTED[kind], kind
+
+
+@pytest.mark.parametrize("kind", DRAWERS)
+def test_no_label_meant_to_be_unlisted_is_read_through_a_shorter_label_inside_it(kind):
+    """The reader looks for a label inside a line (find_phrase), so a shorter label can read a longer wording that is not listed:
+    'a/c no' is found in 'Bank A/c No.' and its value is read as if the wording were listed. The test above compares whole strings
+    and misses that; this one looks the way the reader does."""
+    spec = load_specs()[kind]
+    known = [x.casefold() for f in spec.fields for x in (*f.labels, *f.colon_labels)]
+    labels = STYLE[kind]["labels"]
+    got = {text for text in labels
+           if any(find_phrase([Word(id=str(k), text=w.casefold(), box=(0, 0, 1, 1)) for k, w in enumerate(text.split())], x, TH.label_sim)
+                  for x in known)}
+    assert got == (LISTED[kind] & set(labels)) | READ_THROUGH_A_SHORTER_LABEL.get(kind, set()), kind
 
 
 def test_the_test_split_builds_both_layouts_and_every_method_the_same_way_twice(tmp_path):

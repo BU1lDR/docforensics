@@ -19,6 +19,7 @@ stamp = ["for bank use"]  # the caption under the drawn stamp
 name = "application_date"
 kind = "date"
 labels = ["application date", "date of application"]
+colon_labels = ["date"]  # a bare 'Date:' near the top of a form; 'Date' alone is a column, 'Date of Birth' is another field
 
 [[fields]]
 name = "applicant_name"
@@ -31,6 +32,7 @@ name = "address"
 kind = "text"
 labels = ["residential address", "address"]
 role = "address"
+lines = 4  # a postal address wraps
 
 [[fields]]
 name = "employer"
@@ -47,7 +49,7 @@ role = "account"
 [[fields]]
 name = "declared_monthly_income"
 kind = "amount"
-labels = ["declared monthly income", "monthly income", "gross monthly income"]
+labels = ["declared monthly income", "monthly income", "gross monthly income", "monthly gross income", "monthly salary"]
 
 [[fields]]
 name = "existing_emi"
