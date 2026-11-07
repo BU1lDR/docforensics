@@ -107,6 +107,31 @@ def _holds(kind: str, text: str) -> bool:
             or (kind == "date" and _DATEISH.fullmatch(text) is not None))
 
 
+def _under(words: list[Word], heads: list["_Head"]) -> int:
+    """The heading a run of words goes under: the one it overlaps most, or else the one nearest sideways."""
+    x0, x1 = min(w.box[0] for w in words), max(w.box[2] for w in words)
+    gaps = [max(h.x0 - x1, x0 - h.x1) for h in heads]  # negative: the overlap
+    return gaps.index(min(gaps))
+
+
+def _leading_date(cell: list[Word], heads: list["_Head"], dates: tuple[int, ...]) -> int:
+    """How many words at the start of a cell are a date that stands under a date heading when the cell as a whole goes under another
+    (0 if none). OCR boxes run wider than their text, so a date whose box is within the cell gap of the narration beside it reads as one
+    cell with it; the row then has no date in its first column and was left out, amounts and all."""
+    n = next((n for n in (4, 3, 2, 1) if n < len(cell) and _holds("date", text_of(cell[:n]))), 0)
+    own = _under(cell[:n], heads) if n else -1
+    return n if own in dates and _under(cell, heads) != own else 0
+
+
+def _parts(line: Line, heads: list["_Head"], dates: tuple[int, ...]) -> list[list[Word]]:
+    """The cells of a line, with a date at the start of a cell split off where it stands under a date heading (see _leading_date)."""
+    out: list[list[Word]] = []
+    for cell in line.cells:
+        n = _leading_date(cell, heads, dates)
+        out += [cell[:n], cell[n:]] if n else [cell]
+    return out
+
+
 def _amount_like(text: str) -> bool:
     """An amount with cents or a currency mark: a bare 5 or 411001 is not one."""
     return parse_amount(text) is not None and bool(_CENTS.search(text) or _CURRENCY.search(text))
@@ -451,26 +476,25 @@ class _Extractor:
         return fallback
 
     @staticmethod
-    def assign(line: Line, heads: list[_Head]) -> dict[int, list[Word]]:
+    def assign(line: Line, heads: list[_Head], dates: tuple[int, ...] = ()) -> dict[int, list[Word]]:
         """Each cell of a row goes to the heading it overlaps most, or else the one nearest sideways. Under a heading that
-        is not a known column the words are kept out of every column: missing, not misplaced."""
+        is not a known column the words are kept out of every column: missing, not misplaced. A date at the start of a cell that
+        stands under one of the date headings `dates` goes to it, and the rest of the cell where it would have gone."""
         out: dict[int, list[Word]] = {}
-        for cell in line.cells:
-            x0, x1 = min(w.box[0] for w in cell), max(w.box[2] for w in cell)
-            gaps = [max(h.x0 - x1, x0 - h.x1) for h in heads]  # negative: the overlap
-            out.setdefault(gaps.index(min(gaps)), []).extend(cell)
+        for part in _parts(line, heads, dates):
+            out.setdefault(_under(part, heads), []).extend(part)
         for words in out.values():
             words.sort(key=lambda w: w.box[0])
         return out
 
     @staticmethod
-    def stretch(rows: list[Line], heads: list[_Head]) -> None:
+    def stretch(rows: list[Line], heads: list[_Head], dates: tuple[int, ...] = ()) -> None:
         """A column is where its cells stand. A heading set centred over text that starts at the left edge of its column says only
         where its own words are, so each heading takes in the cells of the rows that overlap it: a short line of a narration then
         goes with the narration, not with the heading of the column beside it."""
         grow: dict[int, tuple[float, float]] = {}
         for line in rows:
-            for cell in line.cells:
+            for cell in _parts(line, heads, dates):
                 x0, x1 = min(w.box[0] for w in cell), max(w.box[2] for w in cell)
                 gaps = [max(h.x0 - x1, x0 - h.x1) for h in heads]
                 if min(gaps) < 0:
@@ -608,14 +632,15 @@ class _Extractor:
             if not any(h.col == first.name for h in heads):  # no way to tell a row from any other line
                 continue
             anchors = [(k, c.kind) for k, h in enumerate(heads) for c in tb.columns if h.col == c.name and (c is first or c.anchor)]
+            dates = tuple(k for k, kind in anchors if kind == "date")
             marked = bool(tb.marked) and any(h.col == "amount" for h in heads)
             end = next((i for i in range(start, len(lines)) if self.ends(lines[i])), len(lines))
             for stretched in (False, True):  # the second time with each column as wide as its cells (see stretch)
-                body = [(line, self.assign(line, heads)) for line in lines[start:end]]
+                body = [(line, self.assign(line, heads, dates)) for line in lines[start:end]]
                 rows = [i for i, (_, cells) in enumerate(body)
                         if any(_holds(kind, text_of(self.first_date(kind, cells.get(k, []))[0])) for k, kind in anchors)]
                 if not stretched:
-                    self.stretch([body[i][0] for i in rows], heads)
+                    self.stretch([body[i][0] for i in rows], heads, dates)
             taken, doubt = self.continuations(body, rows, heads, {c.name for c in tb.columns if c.kind == "text"})
             for i in rows:
                 row += 1
