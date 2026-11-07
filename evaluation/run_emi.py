@@ -55,9 +55,13 @@ def format_report(split: str, rows: list[dict], run: dict) -> str:
     reads = [r for r in rows if r["kind"] in emi_pack.PLANTED and r["kind"] not in emi_pack.BLIND]
     blind = [r for r in rows if r["kind"] in emi_pack.BLIND]
     names = lambda sel: ", ".join(r["case"] for r in sel) or "none"  # noqa: E731
+    said = lambda r: bool(r["gap"] or r["limitations"])  # noqa: E731  the dossier owns up: a comparison it could not make, or a doubtful reading
     flagged = [r for r in nothing if r["shown"]]
     found = [r for r in reads if not r["missed"]]
+    missed = [r for r in reads if r["missed"]]
+    told, silent = [r for r in missed if said(r)], [r for r in missed if not said(r)]
     unseen = [r for r in blind if r["shown"]]
+    told_blind = [r for r in blind if r["gap"]]
     gaps = [r for r in rows if r["gap"]]
     doubtful = [r for r in rows if r["limitations"]]
     others = defaultdict(list)
@@ -76,30 +80,38 @@ def format_report(split: str, rows: list[dict], run: dict) -> str:
            "## In short", "",
            f"- Cases with nothing to find ({len(nothing)}): a finding on {len(flagged)}, which is a false flag"
            + (f" ({names(flagged)})." if flagged else "."),
-           f"- Cases with a gap the check reads ({len(reads)}): found on {len(found)}; missed: {names([r for r in reads if r['missed']])}.",
-           f"- In the cases found, the finding named the instalments' total correctly on {sum(bool(r['total_ok']) for r in found)} of {len(found)}"
-           + (f" (not on {names([r for r in found if not r['total_ok']])})." if any(not r["total_ok"] for r in found) else "."),
-           f"- Cases with a gap the check cannot read ({len(blind)}, kind lender-only): found on {len(unseen)}"
-           + (f" ({names(unseen)})." if unseen else "."),
-           f"- Cases where the dossier says the check could not compare: {len(gaps)}" + (f" ({names(gaps)})." if gaps else "."),
-           f"- Possible extraction errors raised by the check (a difference read from a doubtful figure or page, shown as a limitation): {len(doubtful)}"
-           + (f" ({names(doubtful)})." if doubtful else "."),
-           f"- Findings of other checks on these cases: {sum(map(len, others.values()))}"
-           + (" (" + "; ".join(f"{t} on {', '.join(c)}" for t, c in sorted(others.items())) + ")." if others else "."),
-           "", "## By kind", "", "| kind | gap | cases | found | missed | false flags |", "|---|---|---|---|---|---|"]
+           f"- Cases with a gap the check reads ({len(reads)}): found on {len(found)}; missed: {names(missed)}."]
+    if missed:
+        out.append(f"- Of the {len(missed)} misses, the dossier says it could not compare (or shows a possible extraction error) on {len(told)}"
+                   + (f" ({names(told)})" if told else "") + f" and says nothing on {len(silent)}" + (f" ({names(silent)})." if silent else "."))
+    out += [f"- In the cases found, the finding named the instalments' total correctly on {sum(bool(r['total_ok']) for r in found)} of {len(found)}"
+            + (f" (not on {names([r for r in found if not r['total_ok']])})." if any(not r["total_ok"] for r in found) else "."),
+            f"- Cases with a gap the check cannot read ({len(blind)}, kind lender-only): found on {len(unseen)}"
+            + (f" ({names(unseen)})." if unseen else ".")
+            + (f" The dossier said it could not compare on {len(told_blind)} of them ({names(told_blind)})." if told_blind else ""),
+            f"- Cases where the dossier says the check could not compare: {len(gaps)}" + (f" ({names(gaps)})." if gaps else "."),
+            f"- Possible extraction errors raised by the check (a difference read from a doubtful figure or page, shown as a limitation): {len(doubtful)}"
+            + (f" ({names(doubtful)})." if doubtful else "."),
+            f"- Findings of other checks on these cases: {sum(map(len, others.values()))}"
+            + (" (" + "; ".join(f"{t} on {', '.join(c)}" for t, c in sorted(others.items())) + ")." if others else "."),
+            "", "## By kind", "", "| kind | gap | cases | found | missed | missed, said so | missed, silent | false flags |", "|---|---|---|---|---|---|---|---|"]
     for kind in emi_pack.KINDS:
         sel = [r for r in rows if r["kind"] == kind]
         if sel:
             planted = kind in emi_pack.PLANTED
             out.append(f"| {kind} | {('yes, not readable' if kind in emi_pack.BLIND else 'yes') if planted else 'no'} | {len(sel)} | "
-                       f"{sum(bool(r['shown']) for r in sel)} | {sum(bool(r['missed']) for r in sel)} | {sum(bool(r['stray']) for r in sel)} |")
-    out += ["", "## By medium and layout", "", "| medium | layout | cases | gaps read: found of planted | false flags |", "|---|---|---|---|---|"]
+                       f"{sum(bool(r['shown']) for r in sel)} | {sum(bool(r['missed']) for r in sel)} | "
+                       f"{sum(bool(r['missed']) and said(r) for r in sel)} | {sum(bool(r['missed']) and not said(r) for r in sel)} | "
+                       f"{sum(bool(r['stray']) for r in sel)} |")
+    out += ["", "## By medium and layout", "", "| medium | layout | cases | gaps read: found of planted | missed, said so | missed, silent | false flags |",
+            "|---|---|---|---|---|---|---|"]
     for medium in ("digital", "scan"):
         for layout in ("A", "B"):
             sel = [r for r in rows if r["medium"] == medium and r["layout"] == layout]
             if sel:
                 planted = [r for r in sel if r["kind"] in emi_pack.PLANTED and r["kind"] not in emi_pack.BLIND]
                 out.append(f"| {medium} | {layout} | {len(sel)} | {sum(not r['missed'] for r in planted)} of {len(planted)} | "
+                           f"{sum(bool(r['missed']) and said(r) for r in planted)} | {sum(bool(r['missed']) and not said(r) for r in planted)} | "
                            f"{sum(bool(r['stray']) for r in sel if r['kind'] not in emi_pack.PLANTED)} |")
     out += ["", "## Every case", "", "| case | kind | layout | medium | declared | instalments | expected | shown | total named | limitations | not compared | other findings | s |",
             "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]

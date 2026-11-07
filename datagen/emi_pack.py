@@ -24,7 +24,12 @@ A gap the check cannot see, in the pack so that the report counts it rather than
 
 The instalment narrations are the wordings the check was written to read, so a result here says what the check does with those wordings, on
 statements and applications made by this project's generator: it does not say how often a real instalment is narrated like that, and it says
-nothing about other layouts or other producers. Seeds: the split's base plus PACK, apart from every other pack."""
+nothing about other layouts or other producers. Seeds: the split's base plus PACK, apart from every other pack.
+
+Layout B heads the narration column "Narration", a wording the statement reader does not list on purpose (it is the held-out splits' test of
+wording it has not seen, pinned by tests/test_layout_b.py). There the narrations are not read, so the three planted kinds that the check
+reads in layout A are expected to be missed in layout B, and the dossier is expected to say that it could not compare. `expect` stays the one
+title: the report counts those misses as misses, and counts apart those the dossier owned up to."""
 import hashlib
 import json
 import random

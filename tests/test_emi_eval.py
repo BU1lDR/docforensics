@@ -40,6 +40,25 @@ def test_the_report_names_false_flags_misses_the_blind_spot_and_uses_no_verdict_
     assert "| under-zero | yes | 2 |" in text and "| lender-only | yes, not readable | 2 |" in text  # one line a kind
 
 
+def test_the_report_tells_a_miss_the_dossier_owns_up_to_from_one_it_does_not():
+    rows = [row("c0", "under-zero", shown=[T], total_ok=True), row("c1", "under-zero", gap=True, layout="B"),
+            row("c2", "under-part", limitations=["Possible extraction error, verify: x"], layout="B", medium="scan"),
+            row("c3", "under-some", layout="B", medium="scan"), row("c4", "lender-only", gap=True, layout="B"), row("c5", "lender-only")]
+    text = run_emi.format_report("ext-dev", rows, RUN)
+    assert "Of the 3 misses, the dossier says it could not compare (or shows a possible extraction error) on 2 (c1, c2) and says nothing on 1 (c3)." in text
+    assert "found on 0. The dossier said it could not compare on 1 of them (c4)." in text  # the blind spot: said, where the narration was unread
+    assert "| under-zero | yes | 2 | 1 | 1 | 1 | 0 | 0 |" in text  # cases, found, missed, missed and said so, missed and silent, false flags
+    assert "| lender-only | yes, not readable | 2 | 0 | 2 | 1 | 1 | 0 |" in text
+    assert "| scan | B | 2 | 0 of 2 | 1 | 1 | 0 |" in text  # found of planted, missed and said so, missed and silent, false flags
+    assert "| digital | A | 2 | 1 of 1 | 0 | 0 | 0 |" in text
+    assert "| digital | B | 2 | 0 of 1 | 1 | 0 | 0 |" in text  # c1 missed, and the dossier said it could not compare
+
+
+def test_a_report_without_a_miss_has_no_line_about_misses():
+    text = run_emi.format_report("ext-dev", [row("c0", "under-zero", shown=[T], total_ok=True), row("c1", "match")], RUN)
+    assert "Of the" not in text and "could not compare on" not in text
+
+
 def test_ext_test_is_not_read_without_the_once_flag(monkeypatch, tmp_path):
     monkeypatch.setattr(run_emi, "run_pack", lambda *a, **k: pytest.fail("this must not be reached"))
     with pytest.raises(SystemExit) as stop:

@@ -1,7 +1,7 @@
 """The existing EMI declared on an application against the instalments a bank statement shows being paid (cross_emi). The documents
 are built by hand: rows, cells and confidences are chosen here, so each rule of the check has a case that would break it. The
-last tests pin what the check must never do to the scored splits: the base generator writes no instalment word, so a run over
-those splits cannot change."""
+last tests pin what the check must never do to the scored splits: the base generator writes no instalment word, so the check
+raises no flag over those splits (it may say that a narration could not be read, which is a limitation and not a flag)."""
 from decimal import Decimal
 
 import pytest
@@ -146,7 +146,7 @@ def test_a_fee_a_reversal_or_a_word_that_only_contains_emi_is_not_an_instalment(
 
 
 def test_the_base_generator_never_writes_an_instalment_word():
-    """The scored splits are drawn from this vocabulary. While it holds, the check finds nothing in them and cannot change a score."""
+    """The scored splits are drawn from this vocabulary. While it holds, the check finds nothing in them and cannot add a flag."""
     assert not [t for t in DEBITS + CREDITS if is_instalment(t)]
     for seed in range(40):
         assert not is_instalment(f"NEFT/Salary {identity(seed).employer.split()[0]}")
@@ -251,3 +251,45 @@ def test_an_application_with_no_statement_is_told_the_emi_was_not_compared(tmp_p
     slip = document("D1", "payslip", fld("D1", "employee_name", "Meera K. Varghese", "name"))
     case = check(tmp_path, built(slip, application("0.00")))
     assert "instalment" in gaps(case)
+
+
+# --- a narration that could not be read: the debit cannot be told from an instalment, and the dossier says so
+
+DARK = [("2026-03-03", UNREAD, "850.00", None), ("2026-03-05", UNREAD, None, "52000.00"), ("2026-03-07", UNREAD, "12000.00", None)]
+
+
+def test_debits_whose_narration_could_not_be_read_are_a_gap_not_a_pass(tmp_path):
+    case = run(tmp_path, "0.00", *DARK)  # an instalment may be among them and nobody can tell
+    assert not by(case, "cross_emi")
+    assert "narration could not be read for rows 1, 3 in D1" in gaps(case) and "instalment" in gaps(case)  # the credit is not named
+
+
+def test_a_statement_with_no_narration_column_at_all_is_the_same_gap(tmp_path):
+    st = statement(*OTHER, EMI_ROW)
+    st.fields = [f for f in st.fields if f.name != "table.description"]
+    case = check(tmp_path, built(st, application("0.00")))
+    assert not by(case, "cross_emi") and "narration could not be read for rows 1, 3, 4 in D1" in gaps(case)
+
+
+def test_an_unread_narration_beside_a_found_instalment_is_said_as_well_as_the_finding(tmp_path):
+    case = run(tmp_path, "0.00", *OTHER, EMI_ROW, ("2026-03-09", UNREAD, "3000.00", None))
+    (f,) = by(case, "cross_emi")
+    assert "INR 12000.00" in f.detail  # what was read is compared as before
+    assert "narration could not be read for row 5 in D1" in gaps(case)  # and what was not read is said
+
+
+def test_a_credit_a_blank_narration_and_a_debit_that_was_not_read_are_not_unread_narrations(tmp_path):
+    credit = ("2026-03-09", UNREAD, None, "500000.00")  # nothing was paid out
+    blank = ("2026-03-10", None, "700.00", None)  # a narration found empty: there is nothing to read
+    no_debit = ("2026-03-11", UNREAD, UNREAD, None)  # no debit was read: the statement checks say so, not this one
+    assert "narration" not in gaps(run(tmp_path, "0.00", *OTHER, credit, blank, no_debit))
+
+
+def test_unread_narrations_on_a_poor_page_are_left_to_the_poor_page_gap(tmp_path):
+    case = run(tmp_path, "0.00", *DARK, quality="poor", read_mode="ocr")
+    assert "poor" in gaps(case) and "narration could not be read" not in gaps(case)
+
+
+def test_a_statement_whose_narrations_were_all_read_has_no_such_gap(tmp_path):
+    assert "narration" not in gaps(run(tmp_path, "0.00", *OTHER, EMI_ROW))
+    assert "narration" not in gaps(run(tmp_path / "b", "12000.00", *OTHER, EMI_ROW))

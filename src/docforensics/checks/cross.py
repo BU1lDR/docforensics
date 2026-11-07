@@ -324,14 +324,22 @@ def is_instalment(narration: str) -> bool:
 
 def _instalments(case: Case, st: Document):
     """What one bank statement shows being paid as instalments: {(year, month): [(amount, debit cell, narration cell, row)]}; the
-    rows that name an instalment whose amount or date could not be read, as (row, month or None); and whether a page of poor
-    quality held narrations that were not used. A credit is not a payment, and a narration on a poor page is not trusted."""
+    rows that name an instalment whose amount or date could not be read, as (row, month or None); the rows of a debit whose
+    narration could not be read at all, which nobody can tell from an instalment; and whether a page of poor quality held rows
+    that were not used. A credit is not a payment, a narration found empty names nothing, and a poor page is not trusted."""
     paid: dict[tuple[int, int], list[tuple[Decimal, Field, Field, int]]] = {}
     unread: list[tuple[int, tuple[int, int] | None]] = []
+    blind: list[int] = []
     poor = False
     for n, cell in _cells(st).items():
-        text = cell.get("description")
+        text, debit = cell.get("description"), cell.get("debit")
         if text is None or text.value is None:
+            moved = None if debit is None else _flow(debit)
+            if moved is not None and moved > 0 and not (text is not None and not text.word_ids and text.conf > 0):  # not found empty
+                if poor_page(case, debit):
+                    poor = True
+                else:
+                    blind.append(n)
             continue
         if poor_page(case, text):
             poor = True
@@ -348,7 +356,7 @@ def _instalments(case: Case, st: Document):
             unread.append((n, month))
         else:
             paid.setdefault(month, []).append((x, debit, text, n))
-    return paid, unread, poor
+    return paid, unread, blind, poor
 
 
 def check_emi(case: Case, th: Thresholds) -> list[Finding]:
@@ -367,10 +375,13 @@ def check_emi(case: Case, th: Thresholds) -> list[Finding]:
         field = _header(app, "existing_emi")
         declared = _amount(field) if field is not None and usable(case, field) else None
         for st in stmts:
-            paid, unread, poor = seen[st.id]
+            paid, unread, blind, poor = seen[st.id]
             if poor:
                 out.append(gap(f"{_who(st)} has rows on a page of poor quality, so any instalment among them was not compared with "
                                f"the existing EMI in {_who(app)}", st.id, app.id))
+            if blind:
+                out.append(gap(f"the narration could not be read for {_rows_text(blind)} in {_who(st)}, so any instalment among those "
+                               f"debits was not compared with the existing EMI in {_who(app)}", st.id, app.id))
             if not paid and not unread:
                 continue
             if declared is None:
