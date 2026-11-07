@@ -68,7 +68,6 @@ import datetime
 import hashlib
 import json
 import math
-import os
 import pickle
 import platform
 import subprocess
@@ -77,6 +76,7 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+import psutil
 from PIL import Image
 
 from docforensics.audit import AuditLog
@@ -350,7 +350,7 @@ def confirm(root: Path, lam: float, pos_weight: float, lift: float, out: Path = 
     result = {"lam": lam, "pos_weight": pos_weight, "lift": lift, "t": t, "model": model, "pages": design_pages + confirm_pages,
               "scores": oof + [scores_of(model, p) for p in confirm_pages], "commit": git("rev-parse", "--short", "HEAD"),
               "dirty": bool(git("status", "--porcelain", "--untracked-files=no")), "when": datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z"),
-              "machine": f"{platform.system()} {platform.release()}, Python {platform.python_version()}, {os.cpu_count()} cores, CPU only"}
+              "machine": f"{platform.system()} {platform.release()}, Python {platform.python_version()}, {psutil.cpu_count(logical=False)} cores, CPU only"}
     with guard.open("xb") as f:  # exclusive: a second run cannot get past here, whatever happens to the report below
         pickle.dump(result, f)
     return report(root, out, weights)
