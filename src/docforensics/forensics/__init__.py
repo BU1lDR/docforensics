@@ -7,6 +7,7 @@ from ..findings import add_findings
 from ..model import Case, Document, Finding
 from ..pipeline import Ctx, guarded
 from .ela import jpeg_history
+from . import learned_patches as _learned  # the module is named like its detector: importing the function by name would hide the module
 from .marks import compare_marks
 from .pdf_fonts import font_outliers
 from .pdf_meta import metadata_observations
@@ -20,7 +21,7 @@ from .structure import file_structure
 
 Detector = Callable[[Case, Document, Ctx], list[Finding]]
 DIGITAL_DETECTORS: list[Detector] = [revision_diff, covered_or_hidden_text, font_outliers, metadata_observations]
-SCAN_DETECTORS: list[Detector] = [noise_residual, layout_consistency, jpeg_history]
+SCAN_DETECTORS: list[Detector] = [noise_residual, layout_consistency, jpeg_history, _learned.learned_patches]
 FILE_DETECTORS: list[Detector] = [file_structure]  # read the stored bytes, so they run on every document that was read, whatever its read mode
 
 

@@ -111,6 +111,19 @@ TEMPLATES: dict[tuple[str, str], tuple[str, list[str]]] = {
         "scaled or turned when it was read, or could not be read. A piece added after an earlier save may exist there and would not "
         "have been shown.",
         _UNCHECKED),
+    ("learned_patches", "observation"): (
+        "Some words on a scanned page differ from the other words of the same page in the way edited words differed in the data this check "
+        "was fitted to: a weighted sum of fourteen measures (grain, edges, strokes, ink, JPEG blocks, baseline, placement, and how far a "
+        "word sits off the line of its neighbours) reached the limit set on that data. The weights were fitted to synthetic edits made by "
+        "this project's own generator, so the score says how much a word looks like those, not that anything was changed. Uneven lighting, "
+        "a stamp, a fold, a second JPEG save, a different typeface or a field filled in by another program move the same measures, so this "
+        "has ordinary causes and does not show what was done.",
+        ["Look at the marked words in the original picture, at full size, beside their neighbours.",
+         "Ask the issuer for the original document or another scan of the same page."]),
+    ("learned_patches", "processing_limitation"): (
+        f"{_LIMIT} The learned measures could not be applied to some scanned pages (the page is of poor quality, or too few of its words "
+        "could be measured), so a changed word may exist there and would not have been shown.",
+        _UNCHECKED),
     ("statement_balance", "inconsistency"): (
         "The running balance printed on the statement does not follow from the amounts printed on its rows, by more than the "
         "stated tolerance. An edited figure would cause this, and so would a misread digit, a row that was not read, or a layout "

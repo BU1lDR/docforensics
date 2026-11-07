@@ -157,3 +157,49 @@ def test_weights_made_for_another_feature_list_are_refused(tmp_path, monkeypatch
     monkeypatch.setattr(lp, "_weights", lambda: w)
     with pytest.raises(ValueError, match="feature"):
         lp.learned_patches(*scanned(tmp_path, three_a_line(off=8.0)))
+
+
+# --- registered, with the weights that the evaluation made (eval/patches/acceptance.md); the rate of finding is measured there, not here
+
+def test_the_detector_is_one_of_the_scan_checks_and_has_wording_for_what_it_reports():
+    from docforensics.explain.templates import TEMPLATES
+    from docforensics.forensics import SCAN_DETECTORS
+    assert lp.learned_patches in SCAN_DETECTORS
+    assert ("learned_patches", "observation") in TEMPLATES and ("learned_patches", "processing_limitation") in TEMPLATES
+
+
+def test_the_shipped_weights_are_for_this_feature_list_and_were_trained_on_development_data_only():
+    import json
+    w = json.loads(lp.WEIGHTS.read_text(encoding="utf-8"))
+    assert w["features"] == list(lp.FEATURES) and len(w["beta"]) == len(lp.FEATURES) + 1
+    assert len(w["mean"]) == len(w["scale"]) == len(lp.FEATURES) and np.isfinite(w["threshold"]) and w["listed"] >= 1
+    assert w["training"]["slices"] == ["dev-design", "xdev-design"] and len(w["training"]["manifest_sha256"]) == 64
+
+
+def a_splice_from_a_scan_turned_otherwise(tmp_path):
+    """The statement of seed 1 with three rows of its table taken from the scan of seed 2, which was turned the other way."""
+    from datagen.manipulate import s1_splice
+    from tests.test_scan_detectors import amount_boxes, scan_of
+    host, donor = scan_of(1), scan_of(2, angle_seed=2)
+    (tmp_path / "a").mkdir()
+    boxes, (w, _) = amount_boxes(tmp_path / "a", host)
+    box = [60, int(boxes[3][1]) - 4, w - 60, int(boxes[5][3]) + 4]
+    return s1_splice(host, donor, box)[0], box
+
+
+@pytest.mark.ocr
+def test_a_splice_from_a_scan_turned_otherwise_is_named_through_the_stage(tmp_path):
+    from tests.test_scan_detectors import run
+    edited, box = a_splice_from_a_scan_turned_otherwise(tmp_path)
+    found = [f for f in run(tmp_path / "b", edited).findings if f.detector == "learned_patches" and f.fclass == "observation"]
+    print([(e.value, e.note) for f in found for e in f.evidence])
+    assert found and all(f.id and f.family == "visual" for f in found)
+    assert any(box[1] <= e.box[1] and e.box[3] <= box[3] for f in found for e in f.evidence if e.page == 1)
+
+
+@pytest.mark.ocr
+@pytest.mark.parametrize("seed", [1, 2, 3])
+def test_genuine_scans_get_no_observation_from_it(tmp_path, seed):
+    from tests.test_scan_detectors import run, scan_of
+    case = run(tmp_path, scan_of(seed, angle_seed=seed))
+    assert [(f.detector, f.title) for f in case.findings if f.detector == "learned_patches" and f.fclass == "observation"] == []
