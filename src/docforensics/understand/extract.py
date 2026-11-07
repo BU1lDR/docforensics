@@ -141,10 +141,20 @@ def _finishes_label(word: Word) -> bool:
     return word.text.casefold().strip("().,") in _LABEL_TAIL
 
 
-def _label_value(line: Line) -> tuple[str, list[Word]] | None:
+def _segments(line: Line) -> list[list[Word]]:
+    """The words of a line cut before every cell but the first that holds a word ending in a colon: 'Invoice No: 417' beside a
+    name, or 'Date: 12 Oct' beside another pair, is a pair of its own, and its label does not take in the text beside it."""
+    out: list[list[Word]] = [[]]
+    for i, cell in enumerate(line.cells):
+        if i and any(w.text.endswith(":") for w in cell):
+            out.append([])
+        out[-1] += cell
+    return out
+
+
+def _label_value(words: list[Word]) -> tuple[str, list[Word]] | None:
     """('quote date', value words) for 'Quote Date: 31/03/2026' and for 'Quoted Total 45,000.00' (a date or an amount at the
-    end of the line); None for any other line. A label has no digits, so table rows never read as pairs."""
-    words = line.words
+    end of the words); None for any other words. A label has no digits, so table rows never read as pairs."""
     colon = next((i for i, w in enumerate(words) if w.text.endswith(":")), None)
     if colon is not None:
         split = colon + 1
@@ -679,8 +689,8 @@ class _Extractor:
     def generic(self) -> list[Field]:
         out = []
         for p in self.doc.pages:
-            for line in self.lines[p.n]:
-                if not (hit := _label_value(line)):
+            for seg in (s for line in self.lines[p.n] for s in _segments(line)):
+                if not (hit := _label_value(seg)):
                     continue
                 label, words = hit
                 text = text_of(words)
