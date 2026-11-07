@@ -166,6 +166,13 @@ def _amount_like(text: str) -> bool:
     return parse_amount(text) is not None and bool(_CENTS.search(text) or _CURRENCY.search(text))
 
 
+def _unglued(text: str) -> str:
+    """':2,53,102.32' as a scan reads 'Opening Balance as on 1 Jan 2026 :2,53,102.32' (the colon set against the amount is one word
+    with it): the amount. Only that shape, a colon directly in front of an amount with cents; '12:30', ':2,53,102' and '2,53,102.32:'
+    stay as they are."""
+    return text[1:] if text.startswith(":") and _CENTS.search(text) and parse_amount(text[1:]) is not None else text
+
+
 def _finishes_label(word: Word) -> bool:
     return word.text.casefold().strip("().,") in _LABEL_TAIL
 
@@ -291,7 +298,7 @@ class _Extractor:
     @staticmethod
     def plausible(kind: str, words: list[Word]) -> bool:
         """Whether the words could be a value of the kind: an amount or a date has to read as one; text and ids may be anything."""
-        return not ((kind == "amount" and parse_amount(text_of(words)) is None) or (kind == "date" and not _date_runs(words)))
+        return not ((kind == "amount" and parse_amount(_unglued(text_of(words))) is None) or (kind == "date" and not _date_runs(words)))
 
     @staticmethod
     def lettered(fs: FieldSpec, words: list[Word]) -> bool:
@@ -448,7 +455,7 @@ class _Extractor:
         if fs.kind == "date":
             runs = _date_runs(value_words)
             words = runs[fs.index] if fs.index < len(runs) else value_words  # a period holds two dates
-        value, validator, note = self.read(fs.kind, text_of(words), fs.signed)
+        value, validator, note = self.read(fs.kind, _unglued(text_of(words)) if fs.kind == "amount" else text_of(words), fs.signed)
         return self.make(fs.name, fs.kind, words, line.page, union(w.box for w in words), value, validator, score,
                          role=fs.role, note="; ".join(filter(None, [note, how])))
 
