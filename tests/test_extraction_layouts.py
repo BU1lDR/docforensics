@@ -567,3 +567,63 @@ def test_a_payslip_with_rows_it_could_not_read_is_not_summed_without_them(tmp_pa
     assert not [f for f in case.findings if f.fclass == "inconsistency"], [f.title for f in case.findings]
     gaps = [f for f in case.findings if f.title == "Cannot fully verify this payslip"]
     assert gaps and "earning amount in lines 1, 3" in gaps[0].detail and "deduction amount in line 1" in gaps[0].detail, [f.detail for f in gaps]
+
+
+# a statement of four rows: the third row's date is read 'O3/05/2026' (the letter O for the digit 0), as a scan at low resolution may
+STATEMENT = [(40, 60, "Opening Balance", 9), (40, 74, "1,20,500.00", 11), (260, 60, "Closing Balance", 9), (260, 74, "1,48,000.00", 11),
+             (40, 100, "Date", 9), (110, 100, "Details", 9), (300, 100, "Debit", 9), (380, 100, "Credit", 9), (460, 100, "Balance", 9),
+             (40, 114, "01/05/2026", 10), (110, 114, "Salary", 10), (380, 114, "52,000.00", 10), (460, 114, "1,72,500.00", 10),
+             (40, 128, "02/05/2026", 10), (110, 128, "Rent", 10), (300, 128, "18,000.00", 10), (460, 128, "1,54,500.00", 10),
+             (40, 142, "O3/05/2026", 10), (110, 142, "Groceries", 10), (300, 142, "4,500.00", 10), (460, 142, "1,50,000.00", 10),
+             (40, 156, "04/05/2026", 10), (110, 156, "Fuel", 10), (300, 156, "2,000.00", 10), (460, 156, "1,48,000.00", 10)]
+
+
+def test_a_row_whose_date_is_misread_is_still_a_row_with_no_readable_date(tmp_path):
+    """The row is not dropped as if it were not there: its date is missing (confidence 0) and its other cells are read."""
+    got = read(tmp_path, STATEMENT)[1]
+    assert sorted({row for _, row in got if row is not None}) == [1, 2, 3, 4]
+    assert got[("txn.date", 3)].value is None and got[("txn.date", 3)].conf == 0 and got[("txn.date", 3)].note == "not a readable date"
+    assert [got[("txn.description", 3)].value, got[("txn.debit", 3)].value, got[("txn.balance", 3)].value] == ["Groceries", "4500.00", "150000.00"]
+    assert got[("txn.date", 4)].value == "2026-05-04"
+
+
+def test_a_statement_with_a_misread_date_keeps_its_balance_chain_and_says_which_date(tmp_path):
+    """Without that row the balance after row 2 (1,54,500.00) and after the row after it (1,48,000.00) differ by 6,500.00 where one row
+    moves 2,000.00: an inconsistency that is not there. The chain holds, and the dossier says which date could not be read."""
+    _, cd, _ = create_case(tmp_path / "data", [("d1.pdf", lines_pdf(STATEMENT))], TH)
+    case = run_case(cd, TH)
+    assert case.documents[0].doc_type == "bank_statement"
+    assert not [f for f in case.findings if f.fclass == "inconsistency"], [f.title for f in case.findings]
+    gaps = [f for f in case.findings if f.title == "Cannot fully verify this statement"]
+    assert gaps and "date in row 3" in gaps[0].detail, [f.detail for f in gaps]
+
+
+def test_a_cell_of_the_date_column_that_is_no_date_in_shape_is_not_a_row(tmp_path):
+    """Only a cell shaped like a date (digits or what they are misread as, two separators alike) stands for a row."""
+    note = [(40, 170, "Page 1 of 2", 10), (110, 170, "Continued overleaf", 10), (300, 170, "9,999.00", 10)]
+    got = read(tmp_path, STATEMENT + note)[1]
+    assert sorted({row for _, row in got if row is not None}) == [1, 2, 3, 4]
+
+
+# an account that goes into overdraft: the balance after row 1 is printed '5,000.00 Dr' (5,000.00 owed), the others 'Cr'
+OVERDRAWN = [(40, 60, "Opening Balance", 9), (40, 74, "10,000.00 Cr", 11), (260, 60, "Closing Balance", 9), (260, 74, "3,000.00 Cr", 11),
+             (40, 100, "Date", 9), (110, 100, "Details", 9), (300, 100, "Debit", 9), (380, 100, "Credit", 9), (460, 100, "Balance", 9),
+             (40, 114, "01/05/2026", 10), (110, 114, "Cheque", 10), (300, 114, "15,000.00", 10), (460, 114, "5,000.00 Dr", 10),
+             (40, 128, "02/05/2026", 10), (110, 128, "Deposit", 10), (380, 128, "8,000.00", 10), (460, 128, "3,000.00 Cr", 10)]
+
+
+def test_a_balance_marked_dr_is_read_as_money_owed_and_one_marked_cr_as_money_held(tmp_path):
+    """'5,000.00 Dr' is minus 5,000.00. The marker on the amount of a debit column says which column it is, not a sign."""
+    got = read(tmp_path, OVERDRAWN)[1]
+    assert [got[("txn.balance", r)].value for r in (1, 2)] == ["-5000.00", "3000.00"]
+    assert [got[("opening_balance", None)].value, got[("closing_balance", None)].value] == ["10000.00", "3000.00"]
+    marked = [(x, y, "15,000.00 Dr" if t == "15,000.00" else t, z) for x, y, t, z in OVERDRAWN]
+    assert read(tmp_path / "again", marked)[1][("txn.debit", 1)].value == "15000.00"
+
+
+def test_a_statement_that_goes_into_overdraft_keeps_its_balance_chain(tmp_path):
+    """Read as +5,000.00 the balance after a debit of 15,000.00 from 10,000.00 is a break in the chain of 10,000.00 that is not there."""
+    _, cd, _ = create_case(tmp_path / "data", [("d1.pdf", lines_pdf(OVERDRAWN))], TH)
+    case = run_case(cd, TH)
+    assert case.documents[0].doc_type == "bank_statement"
+    assert not [f for f in case.findings if f.fclass == "inconsistency"], [f.title for f in case.findings]

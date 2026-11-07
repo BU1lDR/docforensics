@@ -21,6 +21,7 @@ class FieldSpec(_Spec):
     role: str = ""  # "name" | "address" | "employer" | "account": what cross-document checks compare
     index: int = 0  # for dates: which date in the value (a period holds two)
     lines: int = 1  # lines the value may wrap over (an address: 4); the lines under the first that start where it starts are part of it
+    signed: bool = False  # an amount marked Dr is minus (a balance in overdraft); where the marker only names the column it is no sign
 
 
 class ColumnSpec(_Spec):
@@ -30,6 +31,7 @@ class ColumnSpec(_Spec):
     shared: list[str] = []  # wordings that another column prints too ('Amount' over the earnings and over the deductions): they name
     after: str = ""  # this column only as the heading right after the heading of the column `after` names
     anchor: bool = False  # a line that reads in this column is a row too, not only one that reads in the first column
+    signed: bool = False  # an amount marked Dr is minus (a balance in overdraft); where the marker only names the column it is no sign
 
     @model_validator(mode="after")
     def _shared_goes_with_after(self) -> "ColumnSpec":

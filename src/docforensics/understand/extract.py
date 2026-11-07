@@ -11,7 +11,7 @@ from ..model import Box, Case, Document, Field, Word
 from ..pipeline import Ctx, guarded
 from .confidence import field_conf
 from .layout import LINE_TOL, Line, find_phrase, issuer_line, lines_of, similar, straightened, text_of, unturned, union
-from .normalise import fmt_amount, parse_amount, parse_date
+from .normalise import amount_side, fmt_amount, parse_amount, parse_date
 from .specs import ColumnSpec, FieldSpec, TableSpec, TypeSpec, load_specs
 
 TITLE_SCORE = 0.9     # the biggest line on page 1 is the institution, until a label says otherwise
@@ -35,6 +35,7 @@ _LABEL_TAIL = {"name", "number", "no", "id", "code", "date", "amount", "amt", "d
 _NUM_DATE = re.compile(r"(\d{1,2})([/.-])(\d{1,2})\2(\d{2}|\d{4})", re.A)
 _CENTS = re.compile(r"\d\.\d\d(?!\d)", re.A)
 _MISREAD = re.compile(r"(?=(?:\D*\d){4})\d[\d.,]*[.,][\d.,]*\d", re.A)  # four digits or more with separators, and no amount: '57.500.00'
+_DATEISH = re.compile(r"[\dOoIl|SB]{1,4}(?P<sep>[/.-])[\dOoIl|SB]{1,2}(?P=sep)[\dOoIl|SB]{2,4}", re.A)  # the shape of a numeric date, digits or what they are misread as
 _CURRENCY = re.compile(rf"{chr(0x20B9)}|\brs\b|\binr\b|/-", re.I)
 _UNIT = re.compile(rf"\s*\((?:in\s+)?(?:inr|rs\.?|rupees|{chr(0x20B9)})\)\s*$", re.I)  # '(INR)' after a heading: the currency, not the name
 
@@ -91,10 +92,12 @@ def _reads(kind: str, text: str) -> bool:
 
 
 def _holds(kind: str, text: str) -> bool:
-    """Whether the cell of an anchor column holds what a row has there: a value that reads, or in an amount column a number that does not
-    ('57.500.00', where a scan at low resolution turned the comma of '57,500.00' into a point). That line is a row whose amount is
-    unreadable, and not a line left out as if it were not there: a sum over the rows that were read would then be short of it."""
-    return _reads(kind, text) or (kind == "amount" and _MISREAD.fullmatch(text) is not None)
+    """Whether the cell of an anchor column holds what a row has there: a value that reads, or one that does not but has the shape of
+    it: in an amount column a number ('57.500.00', where a scan at low resolution turned the comma of '57,500.00' into a point), in a
+    date column a date ('O3/05/2026', the letter for the digit, or a month over 12). That line is a row whose cell is unreadable, and
+    not a line left out as if it were not there: a sum or a balance chain over the rows that were read would then be short of it."""
+    return (_reads(kind, text) or (kind == "amount" and _MISREAD.fullmatch(text) is not None)
+            or (kind == "date" and _DATEISH.fullmatch(text) is not None))
 
 
 def _amount_like(text: str) -> bool:
@@ -155,10 +158,13 @@ class _Extractor:
                 row: int | None = None, role: str = "") -> Field:
         return self.make(name, kind, [], page, box, None, 1.0, 0.0, row=row, role=role, note=note)
 
-    def read(self, kind: str, text: str) -> tuple[str | None, float, str]:
-        """(stored value, validator, note). A value that does not read as its kind is None, at validator 0, and says so."""
+    def read(self, kind: str, text: str, signed: bool = False) -> tuple[str | None, float, str]:
+        """(stored value, validator, note). A value that does not read as its kind is None, at validator 0, and says so. `signed`:
+        an amount marked Dr is minus (a balance in overdraft); the Cr of a balance and the marker of a debit are no sign."""
         if kind == "amount":
             v = parse_amount(text)
+            if v is not None and signed and amount_side(text) == "dr":
+                v = -v
             v = None if v is None else fmt_amount(v)
             return (v, 1.0, "") if v is not None else (None, 0.0, "not a readable amount")
         if kind == "date":
@@ -322,7 +328,7 @@ class _Extractor:
         if fs.kind == "date":
             runs = _date_runs(value_words)
             words = runs[fs.index] if fs.index < len(runs) else value_words  # a period holds two dates
-        value, validator, note = self.read(fs.kind, text_of(words))
+        value, validator, note = self.read(fs.kind, text_of(words), fs.signed)
         return self.make(fs.name, fs.kind, words, line.page, union(w.box for w in words), value, validator, score,
                          role=fs.role, note="; ".join(filter(None, [note, how])))
 
@@ -465,7 +471,7 @@ class _Extractor:
                 return self.missing(name, col.kind, unsure, page=page, box=box, row=row)
             return self.make(name, col.kind, [], page, box, None, 1.0, heads[k].score, row=row)
         words, dates = self.first_date(col.kind, words)
-        value, validator, note = self.read(col.kind, _joined(words))
+        value, validator, note = self.read(col.kind, _joined(words), col.signed)
         notes = [note, f"the cell holds {dates} dates; the first is read" if dates > 1 else "",
                  f"read over {over[k]} lines" if k in over else "", unsure if k in doubt else ""]
         return self.make(name, col.kind, words, page, union(w.box for w in words), value, validator,

@@ -53,11 +53,13 @@ index = 1
 [[fields]]
 name = "opening_balance"
 kind = "amount"
+signed = true
 labels = ["opening balance"]
 
 [[fields]]
 name = "closing_balance"
 kind = "amount"
+signed = true
 labels = ["closing balance", "closing bal"]
 
 # The date column anchors the rows.
@@ -84,4 +86,5 @@ headers = ["credit", "credits", "credit amount", "deposit", "deposits", "deposit
 [[table.columns]]
 name = "balance"
 kind = "amount"
+signed = true
 headers = ["balance", "running balance", "running bal", "closing balance", "closing bal"]
