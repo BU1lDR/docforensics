@@ -60,6 +60,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+import cv2
 import numpy as np
 from PIL import Image
 
@@ -96,10 +97,15 @@ def _regions(findings) -> dict[int, list[list[float]]]:
 def features(name: str, root: Path, th: Thresholds | None = None) -> Path:
     """For every page of a built slice: who it is, its edit box, the measurements of its words, and the flags of the existing checks."""
     th = th or Thresholds()
+    cv2.setNumThreads(1)  # this runs next to the OCR builds, on one core
     audit = AuditLog(Path(tempfile.gettempdir()) / "patches-unused-audit.jsonl")  # the checks run below never write to it
     checks: dict[tuple, dict[str, dict]] = {}
-    rows = []
+    path = root / "features" / f"{name}.pkl"
+    rows = pickle.load(path.open("rb")) if path.exists() else []  # our own file; the cases in it are not measured again
+    have = {r["case"] for r in rows}
     for rec in pdta.pages(name, root):
+        if rec.case in have:
+            continue
         key = (rec.cd.root.as_posix(), rec.doc.id)
         if key not in checks:
             ctx = Ctx(rec.cd, audit, th)
@@ -115,7 +121,6 @@ def features(name: str, root: Path, th: Thresholds | None = None) -> Path:
                      "text": [w.text for w in words], "boxes": np.array([w.box for w in words]).reshape(-1, 4),
                      "share": np.array([pdta.share_inside(w.box, rec.edit) if rec.edit else 0.0 for w in words]), "X": X,
                      "flags": {c: checks[key][c].get(rec.page.n, []) for c in CHECKS}})
-    path = root / "features" / f"{name}.pkl"
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("wb") as f:
         pickle.dump(rows, f)
