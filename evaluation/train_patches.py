@@ -208,10 +208,22 @@ def out_of_fold(pages: list[dict], lam: float, pos_weight: float) -> list[np.nda
 
 
 # ---- judging --------------------------------------------------------------------------------------------------------------------
-def threshold(page_best: list[float], allowed: int) -> float:
-    """The smallest t at which at most `allowed` of these (unedited) pages have a best word score at or above t."""
+def threshold(page_best: list[float], allowed: int, margin: float = 0.0) -> float:
+    """The smallest t at which at most `allowed` of these (unedited) pages have a best word score at or above t, raised by `margin`
+    times its distance above the median page: a page not seen yet can beat the best of those that were."""
     s = sorted(page_best, reverse=True)
-    return float("-inf") if len(s) <= allowed else float(np.nextafter(s[allowed], np.inf))
+    if len(s) <= allowed:
+        return float("-inf")
+    t = float(np.nextafter(s[allowed], np.inf))
+    return t + margin * (t - float(np.median(page_best)))
+
+
+def held_out_false(pages: list[dict], scores: list[np.ndarray], dev, margin: float = 0.0) -> int:
+    """How many unedited pages of `dev` (indices) a threshold set on the unedited pages of the other folds would have flagged, each fold in turn."""
+    un = [i for i in dev if not pages[i]["edit"]]
+    best = {i: (float(scores[i].max()) if len(scores[i]) else -math.inf) for i in un}
+    fold = {i: fold_of(pages[i]["case"]) for i in un}
+    return sum(best[i] >= threshold([best[j] for j in un if fold[j] != k], 0, margin) for k in range(FOLDS) for i in un if fold[i] == k)
 
 
 def listed(s: np.ndarray, t: float) -> list[int]:
@@ -250,22 +262,34 @@ def judge(pages: list[dict], scores: list[np.ndarray], t: float, only=lambda p: 
     return (tally(sub, [baseline_flags(p) for p in sub]), tally(sub, [learned_flags(pages[i], scores[i], t) for i in keep]))
 
 
-def design(root: Path, names=DESIGN, grid=((0.1, 1.0), (1.0, 1.0), (10.0, 1.0), (1.0, 10.0), (1.0, 100.0))) -> None:
+def design(root: Path, names=DESIGN, grid=((0.1, 1.0), (1.0, 1.0), (10.0, 1.0), (1.0, 10.0), (1.0, 100.0)), margins=(0.0, 0.25, 0.5, 1.0),
+           only=None) -> None:
     if set(names) & set(CONFIRM):
         raise SystemExit("the confirm slices are scored once, by `confirm`, not looked at while designing")
     pages = load(names, root)
+    if only:  # an ablation: the model sees these measures only
+        cols = [FEATURES.index(f) for f in only]
+        for p in pages:
+            p["X"] = p["X"][:, cols]
     dev = [i for i, p in enumerate(pages) if p["slice"] == "dev-design"] or list(range(len(pages)))  # (no dev-design yet: exploring)
     base_false = len(tally([pages[i] for i in dev], [baseline_flags(pages[i]) for i in dev])["false"])
     for lam, pos_weight in grid:
         scores = out_of_fold(pages, lam, pos_weight)
-        t = threshold([scores[i].max() if len(scores[i]) else -math.inf for i in dev if not pages[i]["edit"]], base_false)
-        print(f"\n=== lambda {lam:g}, positive weight {pos_weight:g}, t* = {t:.3f} (baseline false pages on unedited dev-design: {base_false})")
-        for name in names:
-            b, n = judge(pages, scores, t, lambda p, name=name: p["slice"] == name)
-            print(describe(b, n, name))
-        for kind in sorted({p["kind"] for p in pages if p["slice"] == "xdev-design"}):
-            b, n = judge(pages, scores, t, lambda p, kind=kind: p["slice"] == "xdev-design" and p["kind"] == kind)
-            print("   " + describe(b, n, f"xdev-design {kind}"))
+        best = [scores[i].max() if len(scores[i]) else -math.inf for i in dev if not pages[i]["edit"]]
+        print(f"\n=== lambda {lam:g}, positive weight {pos_weight:g}{', measures: ' + ' '.join(only) if only else ''}")
+        print(f"unedited dev-design pages, best word score out of fold: median {np.median(best):.2f}, p90 {np.percentile(best, 90):.2f}, "
+              f"max {max(best):.2f}; falsely flagged by a threshold set on the other folds, by margin: "
+              + ", ".join(f"{m:g}: {held_out_false(pages, scores, dev, m)} of {len(best)}" for m in margins))
+        for m in margins:
+            t = threshold(best, base_false, m)
+            print(f"--- margin {m:g}: t* = {t:.3f} (baseline false pages on unedited dev-design: {base_false})")
+            for name in names:
+                b, n = judge(pages, scores, t, lambda p, name=name: p["slice"] == name)
+                print(describe(b, n, name))
+            if m == margins[-1]:
+                for kind in sorted({p["kind"] for p in pages if p["slice"] == "xdev-design"}):
+                    b, n = judge(pages, scores, t, lambda p, kind=kind: p["slice"] == "xdev-design" and p["kind"] == kind)
+                    print("   " + describe(b, n, f"xdev-design {kind}"))
 
 
 # ---- the one scoring of the confirm slices ---------------------------------------------------------------------------------------
@@ -417,13 +441,14 @@ def main() -> None:
     ap.add_argument("--root", required=True, type=Path)
     ap.add_argument("--slices", nargs="+", default=list(DESIGN), choices=sorted(pdta.SLICES))
     ap.add_argument("--once", action="store_true", help="confirm: yes, this is the one scoring of the confirm slices")
+    ap.add_argument("--features", nargs="+", choices=FEATURES, help="design: an ablation, the model sees these measures only")
     ap.add_argument("--lam", type=float)
     ap.add_argument("--pos-weight", type=float)
     a = ap.parse_args()
     if a.what == "features":
         print(features(a.slice, a.root))
     elif a.what == "design":
-        design(a.root, tuple(a.slices))
+        design(a.root, tuple(a.slices), only=a.features)
     elif a.what == "report":
         print(json.dumps(report(a.root)["verdict"]))
     else:

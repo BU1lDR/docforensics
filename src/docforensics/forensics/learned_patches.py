@@ -6,15 +6,23 @@ Every number is a difference from the page itself, so the page's scanner, resolu
 the page the word is, or what it reads, beyond whether it has a digit in it (digits and words are compared among their own kind).
 The definitions are copied here, not imported from the grain and placement checks, so that the learned weights keep meaning what they
 were trained on if those checks are tuned."""
+import functools
+import json
 import math
 import re
+from pathlib import Path
 
 import cv2
 import numpy as np
+from PIL import Image
 
-from ..model import Page
+from ..findings import doc_evidence, limitation, quote
+from ..model import Case, Document, Evidence, Finding, Page
+from ..pipeline import Ctx
 from ..understand.layout import MIN_WORDS, page_turn, upright
 
+DETECTOR = "learned_patches"
+WEIGHTS = Path(__file__).with_name("learned_patches.json")  # made by evaluation/train_patches.py, only if the detector met its bar
 FEATURES = ("grain", "ring_grain", "ring_step", "edge", "stroke", "ink", "grid_on", "grid_other", "drift", "z_centre", "z_height", "z_right",
             "line_pair", "line_mates")
 _MIN_PIXELS = 100   # paper pixels a word needs before it is measured (as in the grain check)
@@ -213,3 +221,72 @@ def page_features(gray: np.ndarray, page: Page) -> tuple[list[int], np.ndarray]:
         r[:, 6] - np.median(r[:, 6]), r[:, 7] - np.median(r[:, 7]),
         np.abs(r[:, 8] - slope_ref) * r[:, 9], centre[idx], height[idx], right[idx], pair[idx] / tall, mates[idx] / tall])
     return idx, x
+
+
+# ---- the detector ---------------------------------------------------------------------------------------------------------------
+_LABEL = {
+    "grain": "grain against the page median", "ring_grain": "grain against the paper around the word", "ring_step": "brightness step to the paper around it",
+    "edge": "edge sharpness against words of its kind", "stroke": "stroke width against words of its kind", "ink": "share of ink against words of its kind",
+    "grid_on": "JPEG block edges on the page's grid", "grid_other": "JPEG block edges on another grid", "drift": "baseline slope against the page",
+    "z_centre": "centre off its row", "z_height": "height off the page's figures", "z_right": "right edge off its column",
+    "line_pair": "height off the word beside it, in word heights", "line_mates": "height off the median of its line, in word heights"}
+
+
+@functools.lru_cache(maxsize=1)
+def _weights() -> dict:
+    return json.loads(WEIGHTS.read_text(encoding="utf-8"))
+
+
+def _standardised(x: np.ndarray, w: dict) -> np.ndarray:
+    """The measures as the weighting was trained on them: a measure that does not exist counts as the average one."""
+    return np.clip(np.nan_to_num((x - np.array(w["mean"])) / np.array(w["scale"])), -w["clip"], w["clip"])
+
+
+def score(x: np.ndarray, w: dict) -> np.ndarray:
+    """The score of each row of FEATURES: the weighted sum of its standardised measures, and the bias."""
+    return _standardised(x, w) @ np.array(w["beta"][:-1]) + w["beta"][-1]
+
+
+def learned_patches(case: Case, doc: Document, ctx: Ctx) -> list[Finding]:
+    w = _weights()
+    if w["features"] != list(FEATURES):
+        raise ValueError("learned_patches.json was learned for another feature list than the one in use: train it again")
+    limit, beta = float(w["threshold"]), np.array(w["beta"][:-1])
+    out: list[Finding] = []
+    issues: list[str] = []
+    for pg in doc.pages:
+        if pg.read_mode != "ocr":
+            continue
+        if pg.quality_class == "poor":
+            issues.append(f"page {pg.n} is of poor quality (class poor), so its words were not measured")
+            continue
+        with Image.open(ctx.cd.root / pg.image_path) as im:
+            gray = np.asarray(im.convert("L"), dtype=np.float32)
+        idx, x = page_features(gray, pg)
+        if len(idx) < MIN_WORDS:
+            issues.append(f"page {pg.n} has {len(idx)} words that could be measured, fewer than the {MIN_WORDS} needed to compare a word with its page")
+            continue
+        s, z = score(x, w), _standardised(x, w)
+        over = int((s >= limit).sum())
+        hit = [int(j) for j in np.argsort(-s)[:w["listed"]] if s[j] >= limit]
+        if not hit:
+            continue
+        ev = []
+        for j in hit:
+            top = [k for c, k in sorted(zip(z[j] * beta, range(len(FEATURES))), reverse=True)[:3] if c > 0]  # the measures that raised the score most
+            why = "; ".join(f"{_LABEL[FEATURES[k]]} {x[j][k]:.2f}" for k in top)
+            ev.append(Evidence(doc=doc.id, page=pg.n, box=tuple(float(v) for v in pg.words[idx[j]].box), value=quote(pg.words[idx[j]].text),
+                               note=f"score {s[j]:.2f}, limit {limit:.2f}; raised most by: {why}"))
+        words = '"; "'.join(quote(pg.words[idx[j]].text) for j in hit)
+        more = f" and {over - len(hit)} more" if over > len(hit) else ""
+        out.append(Finding(
+            fclass="observation", detector=DETECTOR, family="visual", title=f"Words that learned measures set apart from the page (page {pg.n})",
+            detail=f'On page {pg.n}, {over} of {len(idx)} measured words reach the limit ({limit:.2f}) of a weighting of {len(FEATURES)} measures that was fitted '
+                   f'to synthetic edits: "{words}"{more}. Each measure compares a word with the other words of the same page (grain, edges, strokes, ink, JPEG '
+                   f"block grid, baseline, placement, and how far the word sits off the line of its neighbours). The score is not a probability and does not "
+                   f"say that anything was changed: it says that these words differ from the rest of the page the way edited words did in the training data.",
+            evidence=ev))
+    if issues:
+        out.append(limitation(DETECTOR, "Learned measures only partly applied", "Words were not compared everywhere: " + "; ".join(issues[:10]) + ".",
+                              [doc_evidence(doc.id, "scanned pages")]))
+    return out

@@ -1,9 +1,10 @@
-"""The measurements of the learned patch detector (Task 29). These tests are about mechanisms: that each measurement sees what it is
+"""The measurements and the detector of the learned patch detector (Task 29). These tests are about mechanisms: that each measurement sees what it is
 named for on a picture built to show it, and that the features of a page are the same twice. How often the trained detector finds an
 edit is measured by evaluation/train_patches.py and written to eval/patches/, not here."""
 import io
 
 import numpy as np
+import pytest
 from PIL import Image
 
 from docforensics.forensics import learned_patches as lp
@@ -87,3 +88,72 @@ def test_a_page_turned_by_a_degree_is_straightened_before_the_lines_are_compared
             rows.append(("w", x, y, x + 150, y + 30))
     pair, _ = lp._line_offsets(page_of(rows))
     assert np.nanmax(pair) < 1.0
+
+
+# --- the detector, with weights made up for the test (the learned ones are tested by the evaluation, not here)
+
+def made_up_weights(threshold=4.0, **beta):
+    """Weights that look at the named measures only: standardisation does nothing, each named measure counts `beta` times."""
+    n = len(lp.FEATURES)
+    return {"features": list(lp.FEATURES), "mean": [0.0] * n, "scale": [1.0] * n, "clip": 8.0, "threshold": threshold, "listed": 8,
+            "beta": [beta.get(f, 0.0) for f in lp.FEATURES] + [0.0]}
+
+
+def scanned(tmp_path, rows, quality="good", mode="ocr"):
+    """(case, doc, ctx) for a document of one page: a grey picture with a little grain, and the words of `rows` (text, box)."""
+    from types import SimpleNamespace
+    from PIL import Image
+    from docforensics.config import Thresholds
+    from docforensics.model import Case, Document, Page, Word
+    from docforensics.pipeline import Ctx
+    rng = np.random.default_rng(1)
+    Image.fromarray(np.clip(rng.normal(200, 3, (2339, 1654)), 0, 255).astype(np.uint8)).save(tmp_path / "p1.png")
+    page = Page(n=1, width=1654, height=2339, image_path="p1.png", read_mode=mode, quality_class=quality,
+                words=[Word(id=f"w{i}", text=t, box=b) for i, (t, b) in enumerate(rows)])
+    doc = Document(id="D1", sha256="0" * 64, filename="s.jpg", stored_path="s.jpg", kind="image", pages=[page])
+    return Case(id="C", created="2026-11-07T00:00:00Z", documents=[doc]), doc, Ctx(SimpleNamespace(root=tmp_path), None, Thresholds())
+
+
+def three_a_line(off=0.0):
+    """Six lines of three words; the middle word of the fourth line sits `off` px lower than the others on its line."""
+    return [("abc", (x, 300.0 + 60 * r + (off if (r, x) == (3, 400) else 0.0), x + 150.0, 330.0 + 60 * r + (off if (r, x) == (3, 400) else 0.0)))
+            for r in range(6) for x in (100.0, 400.0, 700.0)]
+
+
+def test_a_word_far_off_its_line_is_named_when_its_score_reaches_the_limit(tmp_path, monkeypatch):
+    monkeypatch.setattr(lp, "_weights", lambda: made_up_weights(line_mates=20.0))
+    case, doc, ctx = scanned(tmp_path, three_a_line(off=8.0))
+    found = lp.learned_patches(case, doc, ctx)
+    assert [(f.fclass, f.detector, f.family) for f in found] == [("observation", "learned_patches", "visual")]
+    ev = found[0].evidence
+    assert [e.box for e in ev] == [doc.pages[0].words[3 * 3 + 1].box] and ev[0].page == 1 and ev[0].doc == "D1"
+    assert "4" in found[0].detail and "limit" in found[0].detail  # the limit that was reached is in the text
+
+
+def test_a_straight_page_gets_nothing(tmp_path, monkeypatch):
+    monkeypatch.setattr(lp, "_weights", lambda: made_up_weights(line_mates=20.0))
+    assert lp.learned_patches(*scanned(tmp_path, three_a_line(off=0.0))) == []
+
+
+def test_the_text_of_a_finding_names_no_verdict_and_shows_no_percentage(tmp_path, monkeypatch):
+    monkeypatch.setattr(lp, "_weights", lambda: made_up_weights(line_mates=20.0))
+    f = lp.learned_patches(*scanned(tmp_path, three_a_line(off=8.0)))[0]
+    text = " ".join([f.title, f.detail, *(e.note for e in f.evidence)]).lower()
+    assert not any(w in text for w in ("forg", "fake", "tamper", "counterfeit", "fraud", "%"))
+
+
+def test_a_poor_page_is_not_measured_and_says_so_and_a_text_layer_page_is_left_alone(tmp_path, monkeypatch):
+    monkeypatch.setattr(lp, "_weights", lambda: made_up_weights(line_mates=20.0))
+    (tmp_path / "a").mkdir()
+    (tmp_path / "b").mkdir()
+    poor = lp.learned_patches(*scanned(tmp_path / "a", three_a_line(off=8.0), quality="poor"))
+    assert [f.fclass for f in poor] == ["processing_limitation"] and "poor" in poor[0].detail
+    assert lp.learned_patches(*scanned(tmp_path / "b", three_a_line(off=8.0), quality="text-layer", mode="text-layer")) == []
+
+
+def test_weights_made_for_another_feature_list_are_refused(tmp_path, monkeypatch):
+    w = made_up_weights(line_mates=20.0)
+    w["features"] = w["features"][:-1]
+    monkeypatch.setattr(lp, "_weights", lambda: w)
+    with pytest.raises(ValueError, match="feature"):
+        lp.learned_patches(*scanned(tmp_path, three_a_line(off=8.0)))

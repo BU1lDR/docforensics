@@ -1,5 +1,6 @@
 """The model and the judging of the learned patch detector (evaluation/train_patches.py): small, deterministic, no scans."""
 import numpy as np
+import pytest
 
 from evaluation import patches_data as pdta
 from evaluation import train_patches as tp
@@ -121,7 +122,6 @@ def test_a_detector_with_nothing_to_see_is_not_given_a_weights_file(tmp_path):
 
 def test_measurements_made_with_another_feature_list_are_refused_not_mixed_in(tmp_path):
     import pickle
-    import pytest
     fake_slice("old", tmp_path, 4, np.random.default_rng(0))
     path = tmp_path / "features" / "old.pkl"
     rows = pickle.load(path.open("rb"))
@@ -130,3 +130,28 @@ def test_measurements_made_with_another_feature_list_are_refused_not_mixed_in(tm
     pickle.dump(rows, path.open("wb"))
     with pytest.raises(SystemExit, match="another feature list"):
         tp.load(["old"], tmp_path)
+
+
+def test_a_margin_lifts_the_threshold_by_a_share_of_the_distance_from_the_median_page():
+    best = [0.0, 1.0, 2.0, 3.0, 4.0]
+    t0 = tp.threshold(best, 0)
+    assert tp.threshold(best, 0, margin=0.5) == pytest.approx(t0 + 0.5 * (t0 - 2.0))
+    assert tp.threshold(best, 5, margin=0.5) == float("-inf")  # nothing to hold back, so nothing to lift
+
+
+def test_the_threshold_set_on_the_other_folds_is_tried_on_the_fold_left_out_and_a_margin_keeps_the_top_page_out():
+    pages = [{"case": f"c{i}", "edit": None} for i in range(50)]
+    scores = [np.array([0.01 * i]) for i in range(50)]  # the last page is the highest, and nothing else comes near it
+    assert tp.held_out_false(pages, scores, range(50)) == 1  # it sits above the top of the other four folds
+    assert tp.held_out_false(pages, scores, range(50), margin=1.0) == 0
+
+
+def test_the_detector_scores_a_row_the_way_the_training_script_does():
+    from docforensics.forensics import learned_patches as lp
+    rng = np.random.default_rng(3)
+    X = rng.normal(0, 2, (50, len(tp.FEATURES)))
+    X[::7, 3] = np.nan
+    mu, sd = tp.standardiser(X)
+    beta = rng.normal(0, 1, len(tp.FEATURES) + 1)
+    w = {"mean": mu.tolist(), "scale": sd.tolist(), "clip": tp.CLIP, "beta": beta.tolist()}
+    assert lp.score(X, w) == pytest.approx(tp.decision(tp.prep(X, mu, sd), beta))
