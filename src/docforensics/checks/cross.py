@@ -13,7 +13,7 @@ from ..config import Thresholds
 from ..findings import add_findings, doc_evidence, field_evidence, limitation
 from ..model import Case, Document, Field, Finding
 from ..pipeline import Ctx
-from ..understand.normalise import _month, name_similarity, plain, text_similarity
+from ..understand.normalise import _month, name_lacks_a_part, name_similarity, plain, text_similarity
 from . import collect, inconsistency, maybe_demote, observation, poor_page, usable
 from .within import SHOWN, _amount, _cap, _cells, _day, _flow, _inr, _rows_text
 
@@ -74,8 +74,9 @@ _LEGAL = {"pvt", "ltd", "private", "limited", "inc", "llc", "llp", "co", "corp",
 
 
 def _core(employer: str) -> str:
-    """The employer's words without the legal form ('Pvt Ltd'); the whole name if nothing else is left."""
-    words = re.findall(r"[a-z0-9]+", employer.casefold())
+    """The employer's words without the legal form ('Pvt Ltd', and '(P) Ltd', where (P) stands for Private; a bare P is a word);
+    the whole name if nothing else is left."""
+    words = re.findall(r"[a-z0-9]+", re.sub(r"\(\s*p\s*\)", " pvt ", employer.casefold()))
     return " ".join([w for w in words if w not in _LEGAL] or words)
 
 
@@ -88,7 +89,9 @@ def _grade(identical: bool, form_only: bool, near: bool) -> str:
 
 def _same_name(a: str, b: str, th: Thresholds) -> tuple[str, str]:
     s = name_similarity(a, b)  # 1.0 only when the words are the same once order, titles and initials are put aside
-    return _grade(plain(a) == plain(b) != "", s == 1.0, s >= th.name_sim), f"similarity {s:.2f}"
+    part = name_lacks_a_part(a, b)  # a middle name left out is a small difference, whatever the similarity says
+    return (_grade(plain(a) == plain(b) != "", s == 1.0, s >= th.name_sim or part),
+            f"similarity {s:.2f}" + (", one of them has a part the other lacks" if part else ""))
 
 
 def _parts(address: str) -> list[str]:
@@ -121,13 +124,14 @@ ROLES = {  # role: (label, detector, grade(a, b, th) -> (SAME | FORM | MINOR | M
     "name": ("Name", "cross_name", _same_name,
              lambda th: "Case, spacing and punctuation are ignored; the same words in another order, with other titles or with "
                         f"initials are reported as written differently. Names with a similarity of {th.name_sim:g} or more that are "
-                        "still not identical are a minor mismatch; names further apart are a mismatch."),
+                        "still not identical are a minor mismatch, and so is a name that is the other with a whole word left out (a "
+                        "middle name) when two words or more are left; names further apart are a mismatch."),
     "address": ("Address", "cross_address", _same_address,
                 lambda th: "Case, spacing and punctuation are ignored; the same comma-separated parts in another order are reported "
                            f"as written differently. A text similarity of {th.text_sim:g} or more with the same numbers is a minor "
                            "mismatch; a lower similarity, or other numbers, is a mismatch."),
     "employer": ("Employer", "cross_employer", _same_employer,
-                 lambda th: "Case, spacing and punctuation are ignored, and words such as Pvt and Ltd are put aside and reported as "
+                 lambda th: "Case, spacing and punctuation are ignored, and words such as Pvt and Ltd ('(P)' is read as Pvt) are put aside and reported as "
                             f"written differently. A text similarity of {th.text_sim:g} or more between the rest is a minor "
                             "mismatch; a lower one is a mismatch."),
     "account": ("Account number", "cross_account", _same_account,

@@ -1,8 +1,8 @@
 from datetime import date
 from decimal import Decimal
 
-from docforensics.understand.normalise import (amount_in_words, amount_side, fmt_amount, name_similarity, parse_amount,
-                                               parse_date, parse_month, plain, text_similarity, weekday_of)
+from docforensics.understand.normalise import (amount_in_words, amount_side, fmt_amount, name_lacks_a_part, name_similarity,
+                                               parse_amount, parse_date, parse_month, plain, text_similarity, weekday_of)
 
 RUPEE, MINUS, NBSP = chr(0x20B9), chr(0x2212), chr(0xA0)
 
@@ -129,6 +129,15 @@ def test_name_similarity_tolerates_order_title_initial():
     assert name_similarity("Dr. Meera Varghese", "meera varghese") == 1.0
     assert name_similarity("", "Meera") == 0.0 and name_similarity("Mrs", "Mr") == 0.0
     assert name_similarity("Meera Varghese", "Anil Rao") == name_similarity("Anil Rao", "Meera Varghese")
+
+
+def test_a_name_lacks_a_part_when_it_is_the_other_with_a_whole_word_left_out():
+    for a, b in [("Rahul Kumar Sharma", "Rahul Sharma"), ("Asha Verma", "Asha Verma Singh"), ("Sharma, Rahul Kumar", "Rahul Sharma"),
+                 ("Dr. Meera Kumar Varghese", "Meera Varghese"), ("R. Kumar Sharma", "Rahul Sharma")]:
+        assert name_lacks_a_part(a, b) and name_lacks_a_part(b, a), (a, b)
+    for a, b in [("Rahul Kumar Sharma", "Rahul Verma"), ("Rahul", "Rahul Sharma"), ("Rahul Sharma", "Sharma Rahul"),
+                 ("Anil Rao", "Arun Rao"), ("Mrs", "Rahul Sharma"), ("", "")]:
+        assert not name_lacks_a_part(a, b) and not name_lacks_a_part(b, a), (a, b)
 
 
 def test_plain_keeps_lower_case_letters_and_digits_and_nothing_else():

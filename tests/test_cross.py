@@ -251,6 +251,20 @@ def test_a_name_with_a_word_left_out_is_a_minor_mismatch_and_not_a_form_differen
         ("inconsistency", "Minor mismatch: name differs between documents")]
 
 
+@pytest.mark.parametrize("a, b", [("Rahul Kumar Sharma", "Rahul Sharma"), ("Rahul Sharma", "Rahul Kumar Sharma"), ("Asha Verma", "Asha Verma Singh")])
+def test_a_name_with_a_whole_part_left_out_is_a_minor_mismatch_and_says_so(tmp_path, a, b):
+    """A middle name is dropped from one document and not from another (similarity 0.80 and 0.77, under the limit): a minor mismatch,
+    not a mismatch, and the finding says what differs."""
+    (f,) = by(check(tmp_path, pair(a, b)), "cross_name")
+    assert (f.fclass, f.title) == ("inconsistency", "Minor mismatch: name differs between documents")
+    assert "one of them has a part the other lacks" in f.detail
+
+
+def test_two_names_that_share_a_word_but_not_every_word_of_the_shorter_one_stay_a_mismatch(tmp_path):
+    assert graded(check(tmp_path, pair("Rahul Kumar Sharma", "Rahul Verma")), "cross_name") == [
+        ("inconsistency", "Mismatch: name differs between documents")]
+
+
 @pytest.mark.parametrize("other", ["Meera K. Kulkarni", "Rohan T. Kulkarni"])
 def test_names_further_apart_than_the_limit_are_a_plain_mismatch(tmp_path, other):
     assert graded(check(tmp_path, pair("Meera K. Varghese", other)), "cross_name") == [
@@ -284,6 +298,8 @@ def test_addresses_are_graded(tmp_path, other, expected):
     ("HARBORVIEW TEST PVT LTD", []),
     ("Harborview Test Private Limited", [("observation", "Employer is written differently in the documents")]),
     ("Harborview Test", [("observation", "Employer is written differently in the documents")]),
+    ("Harborview Test (P) Ltd.", [("observation", "Employer is written differently in the documents")]),  # (P) is Private
+    ("Harborview P Test Pvt Ltd", [("inconsistency", "Minor mismatch: employer differs between documents")]),  # a bare P is a word
     ("Harborview Tst Pvt Ltd", [("inconsistency", "Minor mismatch: employer differs between documents")]),
     ("Ironwood Test Pvt Ltd", [("inconsistency", "Mismatch: employer differs between documents")])])
 def test_employers_are_graded_and_the_legal_form_is_only_a_form(tmp_path, other, expected):

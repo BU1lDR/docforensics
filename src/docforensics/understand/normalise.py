@@ -2,6 +2,7 @@
 inside a number stays an O, and a date that reads two ways says so. Only ASCII digits and letters are read."""
 import re
 import unicodedata
+from collections import Counter
 from datetime import date
 from decimal import Decimal
 from difflib import SequenceMatcher
@@ -235,6 +236,15 @@ def name_similarity(a: str, b: str) -> float:
     if not ta or not tb:
         return 0.0
     return _ratio(" ".join(sorted(_expand(ta, tb))), " ".join(sorted(_expand(tb, ta))))
+
+
+def name_lacks_a_part(a: str, b: str) -> bool:
+    """True when one name is the other with a whole word left out (a middle name): every word of the shorter one, initials put
+    aside, is a word of the longer one, and the shorter one keeps two words or more. 'Rahul Kumar Sharma' against 'Rahul
+    Sharma' is; against 'Rahul Verma' it is not, and a lone 'Rahul' against 'Rahul Sharma' is not either."""
+    ta, tb = _name_tokens(a), _name_tokens(b)
+    short, long_ = sorted((_expand(ta, tb), _expand(tb, ta)), key=len)
+    return 2 <= len(short) < len(long_) and not Counter(short) - Counter(long_)
 
 
 def text_similarity(a: str, b: str) -> float:
