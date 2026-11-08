@@ -6,9 +6,9 @@ Eleven small cases to run the tool on. A case is one folder with the documents o
 
 Five of the cases come from the **development split** of the generator, the split on which the tool's thresholds were tuned. The other six come from the **ext-dev split** of the two packs made for the two newer checks, the reused-signature check ([datagen/reuse_pack.py](../datagen/reuse_pack.py)) and the compression-history check ([datagen/ela_pack.py](../datagen/ela_pack.py)); that is the split on which the limit and the constants of those two checks were set. Every case here is in-sample: the tool was set up on this data. Running them shows the tool working from files to dossier, with each finding traced to its place in a file. It is a demonstration, not evidence of how well the tool detects.
 
-- The two newer checks have their own reports on ext-dev, [eval/h/reuse-ext-dev.md](../eval/h/reuse-ext-dev.md) and [eval/e/ext-dev-tool.md](../eval/e/ext-dev-tool.md). Those figures are in-sample too.
-- On the whole development split the tool, as of commit d928be0, finds 52 of 54 planted changes and raises no flag on 78 genuine documents ([eval/dev.md](../eval/dev.md)); its first report said 50 of 54. Those are figures on the data the thresholds were tuned on and the learned word check was fitted on.
-- The figures that count are from the held-out test split, run once and reported whole in [eval/test.md](../eval/test.md): 79 of 96 changes found (82 %), 37 of the 48 that have a place on a page located, and 1 flag on 144 genuine documents (a 120 dpi scan). By medium, changes found: digital 58 of 60, mild scan 13 of 18, 150 dpi scan 6 of 9, 120 dpi scan 2 of 9. These held-out figures are those of the tool at spec-freeze plus two fixes, not of the final tool: the newer checks are not in them (main README, Evaluation).
+- The two newer checks have their own reports on ext-dev, [eval/h/reuse-ext-dev.md](../eval/h/reuse-ext-dev.md) and [eval/e/ext-dev-tool.md](../eval/e/ext-dev-tool.md). Those figures are in-sample too. A second pack of each, run once on the frozen code, has its own report: [eval/h/reuse-ext-test.md](../eval/h/reuse-ext-test.md) and [eval/e/ext-test-tool.md](../eval/e/ext-test-tool.md).
+- On the whole development split the tool, as of commit d928be0 and again on `freeze-2` ([eval/dev.md](../eval/dev.md), [eval/freeze-2/dev.md](../eval/freeze-2/dev.md)), finds 52 of 54 planted changes and raises no flag on 78 genuine documents; its first report said 50 of 54. Those are figures on the data the thresholds were tuned on and the learned word check was fitted on.
+- The figures that count are from the held-out test split, run twice and reported whole in [eval/test.md](../eval/test.md) (the first run, the tool at spec-freeze) and [eval/freeze-2/test.md](../eval/freeze-2/test.md) (the second run, the final pipeline at `freeze-2`). Second run: 83 of 96 changes found (86 %), 40 of the 48 that have a place on a page located, and 2 flags on 144 genuine documents, both on one page of one 120 dpi scan. First run: 79 of 96, 37 of 48 and 1 flag. By medium, changes found, first run then second: digital 58 of 60 and 58 of 60, mild scan 13 of 18 and 13 of 18, 150 dpi scan 6 of 9 and 7 of 9, 120 dpi scan 2 of 9 and 5 of 9. The second run is not a blind one: the first report had been read before the later work (main README, Evaluation, "What the second run is, and is not").
 - All eleven cases use the first of the generator's two page layouts. On the second layout, which only the test split has, extraction is weak: about half of its labels are wordings the spec files do not list, and a value under one of them is reported as missing, not guessed (on digital documents none of the ids and 34 % of the text values are read).
 - One generator drew everything, and its scans are simulated. The figures say little about documents drawn in other styles or scanned on other devices.
 
@@ -20,7 +20,7 @@ From the repository folder, after the set-up in the main README:
 python -m docforensics run sample_data/dev-0000
 ```
 
-It prints the case id, the documents it recognised and the findings, and writes the case, with `dossier.html` and `dossier.json`, to `data/cases/<case id>/`. The last line shows how to follow a finding to its source (`trace`); `verify-audit` checks the audit trail. Run another case the same way, with its folder. A scanned case takes longer, because OCR reads its pages (0.53 s per digital page and 4.39 s per scanned page in the held-out run at spec-freeze on a CPU-only laptop; the same split run again, in a report that is not kept, took 0.35 s and 2.33 s). Those runs are from before the JPEG-history check was added. On 6 Nov, with it in, `run` took 4 to 5 s for a case of one scanned JPEG and 10 s for a case of three (single runs on the same laptop; how much of that is the check was not measured).
+It prints the case id, the documents it recognised and the findings, and writes the case, with `dossier.html` and `dossier.json`, to `data/cases/<case id>/`. The last line shows how to follow a finding to its source (`trace`); `verify-audit` checks the audit trail. Run another case the same way, with its folder. A scanned case takes longer, because OCR reads its pages (on the held-out test split, CPU-only laptop: 0.53 s per digital page and 4.39 s per scanned page in the first run, at spec-freeze, and 0.41 s and 3.41 s in the second, at freeze-2; the split run again after two fixes, in a report that is not kept, took 0.35 s and 2.33 s). The first run and the run after two fixes are from before the JPEG-history check was added. On 6 Nov, with it in, `run` took 4 to 5 s for a case of one scanned JPEG and 10 s for a case of three (single runs on the same laptop; how much of that is the check was not measured).
 
 The date and time in a case id, in the audit trail and in the dossier are UTC. IST is UTC+05:30, so a run at 16:00 IST has 10:30 in its id.
 
@@ -48,13 +48,13 @@ Both findings point at the changed figure. Found and located.
 
 ### dev-0002: a genuine case
 
-Nothing was changed. The tool raises no finding and no limitation. Genuine cases can still raise findings: the held-out run has one on 144 genuine documents (test-0143, a 120 dpi scan, listed in [eval/test.md](../eval/test.md)).
+Nothing was changed. The tool raises no finding and no limitation. Genuine cases can still raise findings: the held-out runs have a flag on one scan of the 144 genuine documents (test-0143, a 120 dpi scan, one flag in the first run and two in the second, listed in [eval/test.md](../eval/test.md) and [eval/freeze-2/test.md](../eval/freeze-2/test.md)).
 
 ### dev-0006: a spliced scan, found through arithmetic
 
 The gross earnings on the payslip (83,000.00) were replaced by the same place cut from another scan. The tool reads 118000.10 there and raises four findings: two inconsistencies on the payslip's own sums ("Net pay does not equal gross earnings less total deductions", "Gross earnings do not equal the earnings listed"), one across documents ("Declared income differs from the payslip gross earnings": the application declares 83000.00) and a group of those three, potential manipulation. Found and located.
 
-Look at how it was found: by arithmetic and by comparing figures, not by the pixels. Neither scan check (grain, alignment) reported anything about the pasted part. As [eval/test.md](../eval/test.md) notes, a change to an amount that the arithmetic checks cover is caught by those checks whatever the pixels show. A spliced scan is found in 4 of 5 cases on the development split (2 of them located, this one among them) and in 3 of 8 on the test split.
+Look at how it was found: by arithmetic and by comparing figures, not by the pixels. Neither scan check (grain, alignment) reported anything about the pasted part. As [eval/test.md](../eval/test.md) notes, a change to an amount that the arithmetic checks cover is caught by those checks whatever the pixels show. A spliced scan is found in 4 of 5 cases on the development split (2 of them located, this one among them) and in 3 of 8 on the test split in the first run and 4 of 8 in the second.
 
 ### dev-0009: a name that differs by one letter
 
@@ -62,7 +62,7 @@ The account holder on the statement reads "Divyu C. Menon"; the payslip and the 
 
 ### dev-0043: a miss
 
-The logo on the statement is the bank's design with one point moved by a tenth (C5, "logo, small"). The tool raises nothing: no finding and no limitation. That is a miss, and the development report lists it as one ([eval/dev.md](../eval/dev.md)). Small logo changes were missed on the test split as well (0 of 2).
+The logo on the statement is the bank's design with one point moved by a tenth (C5, "logo, small"). The tool raises nothing: no finding and no limitation. That is a miss, and the development report lists it as one ([eval/dev.md](../eval/dev.md)). Small logo changes were missed on the test split as well (0 of 2, in both runs).
 
 ## The six cases of the ext-dev split
 

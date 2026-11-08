@@ -206,7 +206,7 @@ Ceilings that stay (in the limitations and the Partial capability row): a stray 
 
 ## Dev split, first runs (Task 19, 4 Nov)
 
-Setup: `python -m evaluation.run_eval --split dev`. 80 cases of layout A (seeds 1,000,000 to 1,000,079): 26 genuine (every third) and 54 with one change each. The PDF edits (D1, D2, D4, D5) are digital; the splices (S1) are scans at mild, 150dpi or 120dpi; the other changes and the genuine cases alternate between digital and the three scan levels. D3 and S2 appear only in the held-out test split. The dev split is the only one anything was fitted or fixed against; the test split is run once, after the specs and detectors are frozen. Counting rules are printed in every report.
+Setup: `python -m evaluation.run_eval --split dev`. 80 cases of layout A (seeds 1,000,000 to 1,000,079): 26 genuine (every third) and 54 with one change each. The PDF edits (D1, D2, D4, D5) are digital; the splices (S1) are scans at mild, 150dpi or 120dpi; the other changes and the genuine cases alternate between digital and the three scan levels. D3 and S2 appear only in the held-out test split. The dev split is the only one anything was fitted or fixed against; the test split is run once, after the specs and detectors are frozen (it was in the end run twice, at spec-freeze and again at freeze-2; see the README). Counting rules are printed in every report.
 
 **First run (commit 1268b1b).** Detection: 50 of 54 changes found, 19 of 23 with a place on a page located. Genuine documents: 12 flags on 78 documents (5 of 26 genuine cases flagged), 46 limitations. Extraction on documents nobody changed, by medium:
 
@@ -294,7 +294,7 @@ With the first prompts the guard accepted 14 of 24 for qwen3 (refused: 5 verdict
 
 **For a demo.** A case with the model takes a minute or more and free RAM drops to about 2 GiB, so other apps should be closed. The explain stage has 120 s per document plus 120 s, and a call starts only if the client timeout (180 s) fits in what is left. Use 3 or more documents: a 1-document case (240 s) has its wording calls skipped ("skipped: time budget") once the reading took over 60 s.
 
-**Not measured:** Vulkan on the Radeon 740M (Ollama 0.40.14 drops an integrated GPU unless the server starts with `OLLAMA_IGPU_ENABLE=1`; the server was not restarted), a vision-language model on page images, and any model on the held-out split.
+**Not measured:** Vulkan on the Radeon 740M (Ollama 0.40.14 drops an integrated GPU unless the server starts with `OLLAMA_IGPU_ENABLE=1`; the server was not restarted), a vision-language model on page images, and the model's headline wording and reading of a case on any held-out split (the template-free reading was run once on the held-out ext-test split, see [spike-x-extraction.md](spike-x-extraction.md)).
 
 ## Implementation gotchas
 
@@ -307,7 +307,7 @@ With the first prompts the guard accepted 14 of 24 for qwen3 (refused: 5 verdict
 ## Not done
 
 - Tesseract was not benchmarked. RapidOCR was adopted because it was good enough on this material and installs from pip with its models inside; Tesseract stays a candidate second engine, and the only untested idea for flagging misreads by disagreement.
-- Language model: Vulkan on the Radeon 740M and any model on the held-out split were not measured; the figures in "Local language model" are CPU only, one run each, a small sample.
+- Language model: Vulkan on the Radeon 740M, and the model's headline wording and reading of a case on any held-out split, were not measured (the template-free reading was run once on the held-out ext-test split, see [spike-x-extraction.md](spike-x-extraction.md)); the figures in "Local language model" are CPU only, one run each, a small sample.
 - VLM: not tried (gemma3:4b was pulled and not run); default off.
 - Skewed pages: the first run checked recall only (0.8 and -1.8 degrees, all tokens found) and did not measure IoU. Task 19 measured field extraction on scans turned by 0.5 to 2 degrees (see "Dev split, first runs"). Pages with perspective, curl or an uneven skew, and turns beyond 10 degrees, are untried.
 - Models measured: phi4-mini (3.8B, MIT) and qwen3-4b-instruct-2507 (Apache-2.0). Other candidates seen on the Ollama library page (a summarised web page, tags and licences unverified, none measured): qwen3.5 (0.8B, 2B, 4B), gemma4 (E2B, E4B), granite4.2 (3B, Apache 2.0 stated), llama3.2 (1B, 3B), smollm2 (1.7B). Check the tag and licence at pull time.
