@@ -1,0 +1,1754 @@
+{
+ "run": {
+  "date": "2026-11-08 11:24 India Standard Time",
+  "commit": "bb08c8e",
+  "dirty": false,
+  "seeds": [
+   4300000,
+   4300119
+  ],
+  "machine": "Windows 10, Python 3.11.9, 6 cores, CPU only"
+ },
+ "rows": [
+  {
+   "case": "ext-test-s-0000",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 14330,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0001",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9280,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0002",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 14423,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0003",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 683554,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 4.4
+  },
+  {
+   "case": "ext-test-s-0004",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 679559,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.7
+  },
+  {
+   "case": "ext-test-s-0005",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2315977,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.4
+  },
+  {
+   "case": "ext-test-s-0006",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 14296,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0007",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 14669,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0008",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 14418,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.7
+  },
+  {
+   "case": "ext-test-s-0009",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 14702,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0010",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 14382,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0011",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 678741,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.5
+  },
+  {
+   "case": "ext-test-s-0012",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 15620,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0013",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9496,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0014",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 16121,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0015",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 697677,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.5
+  },
+  {
+   "case": "ext-test-s-0016",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 698238,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 4.0
+  },
+  {
+   "case": "ext-test-s-0017",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2327790,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.5
+  },
+  {
+   "case": "ext-test-s-0018",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 15894,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0019",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 16303,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0020",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 17260,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.7
+  },
+  {
+   "case": "ext-test-s-0021",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 16769,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0022",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 15602,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0023",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 694823,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.6
+  },
+  {
+   "case": "ext-test-s-0024",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 14146,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0025",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9429,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0026",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 13191,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0027",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 681030,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.3
+  },
+  {
+   "case": "ext-test-s-0028",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 681364,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.6
+  },
+  {
+   "case": "ext-test-s-0029",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2312472,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.1
+  },
+  {
+   "case": "ext-test-s-0030",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 12743,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0031",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 13200,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0032",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 15600,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0033",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 14773,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0034",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 14467,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0035",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 679770,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.4
+  },
+  {
+   "case": "ext-test-s-0036",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 15179,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0037",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9273,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0038",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 15107,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0039",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 700299,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.3
+  },
+  {
+   "case": "ext-test-s-0040",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 694565,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.6
+  },
+  {
+   "case": "ext-test-s-0041",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2327418,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.1
+  },
+  {
+   "case": "ext-test-s-0042",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 15697,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0043",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 15042,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0044",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 17404,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0045",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 15511,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0046",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 15625,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0047",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 694376,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.6
+  },
+  {
+   "case": "ext-test-s-0048",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 13999,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0049",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9201,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0050",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 14418,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0051",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 684696,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.2
+  },
+  {
+   "case": "ext-test-s-0052",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 681340,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.4
+  },
+  {
+   "case": "ext-test-s-0053",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2317955,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.0
+  },
+  {
+   "case": "ext-test-s-0054",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 13255,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0055",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 14548,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0056",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 15434,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0057",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 14049,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0058",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 12742,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0059",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 680232,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.4
+  },
+  {
+   "case": "ext-test-s-0060",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 15646,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0061",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9272,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0062",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 15983,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0063",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 698171,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.3
+  },
+  {
+   "case": "ext-test-s-0064",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 691286,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.6
+  },
+  {
+   "case": "ext-test-s-0065",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2332207,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.3
+  },
+  {
+   "case": "ext-test-s-0066",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 15565,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0067",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 15996,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0068",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 17610,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0069",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 15978,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0070",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 14557,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0071",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 697737,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.6
+  },
+  {
+   "case": "ext-test-s-0072",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 14192,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0073",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9369,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0074",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 14186,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0075",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 681714,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.1
+  },
+  {
+   "case": "ext-test-s-0076",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 680215,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.4
+  },
+  {
+   "case": "ext-test-s-0077",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2315304,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.0
+  },
+  {
+   "case": "ext-test-s-0078",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 14364,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0079",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 13597,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0080",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 15594,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0081",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 13092,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0082",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 14179,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0083",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 681300,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.5
+  },
+  {
+   "case": "ext-test-s-0084",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 16197,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0085",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9363,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0086",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 14654,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0087",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 698666,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.4
+  },
+  {
+   "case": "ext-test-s-0088",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 693204,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.6
+  },
+  {
+   "case": "ext-test-s-0089",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2332086,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.2
+  },
+  {
+   "case": "ext-test-s-0090",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 16214,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0091",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 16577,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0092",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 17545,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0093",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 16383,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0094",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 16128,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0095",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 694208,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.6
+  },
+  {
+   "case": "ext-test-s-0096",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 14272,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0097",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9232,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0098",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 14030,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0099",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 684903,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.1
+  },
+  {
+   "case": "ext-test-s-0100",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 677333,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.4
+  },
+  {
+   "case": "ext-test-s-0101",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2315966,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.0
+  },
+  {
+   "case": "ext-test-s-0102",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 13744,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0103",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 14537,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0104",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 15026,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0105",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 13106,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0106",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 13709,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0107",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 678573,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.4
+  },
+  {
+   "case": "ext-test-s-0108",
+   "kind": "statement",
+   "file": "document.pdf",
+   "bytes": 15107,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0109",
+   "kind": "payslip",
+   "file": "document.pdf",
+   "bytes": 9217,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0110",
+   "kind": "padded",
+   "file": "document.pdf",
+   "bytes": 16287,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0111",
+   "kind": "scan-pdf",
+   "file": "document.pdf",
+   "bytes": 697891,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.3
+  },
+  {
+   "case": "ext-test-s-0112",
+   "kind": "scan-jpeg",
+   "file": "document.jpg",
+   "bytes": 695594,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.8
+  },
+  {
+   "case": "ext-test-s-0113",
+   "kind": "scan-png",
+   "file": "document.png",
+   "bytes": 2330033,
+   "expect": [],
+   "shown": [],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.3
+  },
+  {
+   "case": "ext-test-s-0114",
+   "kind": "tail",
+   "file": "document.pdf",
+   "bytes": 15964,
+   "expect": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "shown": [
+    "Bytes follow the last end-of-file marker"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0115",
+   "kind": "records",
+   "file": "document.pdf",
+   "bytes": 16578,
+   "expect": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "shown": [
+    "The /Info record and the XMP packet disagree"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.5
+  },
+  {
+   "case": "ext-test-s-0116",
+   "kind": "signed-then-added",
+   "file": "document.pdf",
+   "bytes": 17361,
+   "expect": [
+    "Content follows the signed byte range"
+   ],
+   "shown": [
+    "Content follows the signed byte range"
+   ],
+   "limitations": [
+    "Signature present, not verified"
+   ],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0117",
+   "kind": "attached",
+   "file": "document.pdf",
+   "bytes": 16537,
+   "expect": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "shown": [
+    "PDF carries action keys",
+    "PDF carries an embedded file"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0118",
+   "kind": "rebuilt",
+   "file": "document.pdf",
+   "bytes": 16169,
+   "expect": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "shown": [
+    "The file's index had to be rebuilt to be read"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 0.6
+  },
+  {
+   "case": "ext-test-s-0119",
+   "kind": "image-tail",
+   "file": "document.jpg",
+   "bytes": 693193,
+   "expect": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "shown": [
+    "Bytes follow the end of the image",
+    "Image metadata names image-editing software"
+   ],
+   "limitations": [],
+   "missed": [],
+   "stray": [],
+   "seconds": 3.7
+  }
+ ]
+}
