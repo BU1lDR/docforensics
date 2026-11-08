@@ -65,7 +65,7 @@ Where it falls short, from the list of facts not read right:
 - One misnamed fact: a bank account named `invoice_number`. The name is the model's word; no check reads it.
 - Extras: 22 fields at no listed fact and 54 at cells of the invoice table. They are real text from the page under the model's own names (document title, tax rate, line items); counting them as neither right nor wrong is the rule, and a reviewer sees them marked as model-read.
 
-Time: a page takes 58 to 123 s (mean 84 s), a case of two pages about three minutes, and the model is loaded for each call. A document is limited to its first two pages and a page to its first 60 lines; what is left out is a limitation in the dossier. The model sees page text only, never boxes or images.
+Time: a page takes 58 to 123 s (mean 88 s over the 14 calls), a case of two pages about three minutes, and the model is loaded for each call. A document is limited to its first two pages and a page to its first 60 lines; what is left out is a limitation in the dossier. The model sees page text only, never boxes or images.
 
 ## What this supports
 
