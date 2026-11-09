@@ -1,10 +1,92 @@
 # docforensics
 
+![docforensics: documents of one case in, a dossier of cited findings out](docs/img/banner.svg)
+
+[Project details](#project-details) | [How it works](#how-it-works) | [What it looks like](#what-it-looks-like) | [Quick start](#quick-start) | [Evaluation](#evaluation) | [Capability matrix](#capability-matrix) | [Limitations](#limitations) | [Architecture](docs/architecture.md)
+
 Offline document forensics for a human investigator. A case of scanned and digital documents goes in. An investigation dossier comes out. Each finding in it points to the stored source file it came from and, where the evidence is a place on a page, to the box on that page; a finding about a whole document points at the document, and a limitation about a file that could not be read has no evidence.
 
 It is a solo entry by Aryan to the DataOps Innovation Hackathon 2026 (Hack The Core), for the problem statement on AI-powered document forensics and contextual intelligence.
 
 The tool lists anomalies for a reviewer. It does not decide whether a document is authentic and it does not name intent. Observations, inconsistencies, candidates for closer review and limits of the analysis are kept apart, and what a finding means is the reviewer's decision. **Every document used to build and test it is synthetic:** read [docs/limitations.md](docs/limitations.md) before reading anything into a result.
+
+## Project details
+
+| | |
+|---|---|
+| **Problem statement** | PS-2, AI-powered document forensics and contextual intelligence. DataOps Innovation Hackathon 2026 (Hack The Core), solo entry by Aryan. |
+| **What it is** | An offline tool that reads the documents of one case, checks each against itself and against the others, and writes an investigation dossier for a human reviewer. |
+| **Takes in** | PDF, PNG and JPEG files, digital or scanned. Bank statements, payslips and loan applications are understood; any other type is reported as `unknown`. |
+| **Gives out** | `dossier.html` and `dossier.json`, a review desk in the browser, and a hash-chained audit trail with signed checkpoints. |
+| **Findings** | Four kinds, kept apart: observations, inconsistencies, potential manipulation (for review) and limitations of the analysis. Each cites its source file and, where the evidence is a place on a page, the box. |
+| **Does not do** | Decide whether a document is authentic, or name intent. There is no verdict and no score. |
+| **Stack** | Python 3.11+, PyMuPDF, RapidOCR (PP-OCRv6 on ONNX Runtime), OpenCV, NumPy, Pillow, FastAPI and Uvicorn, pydantic, cryptography (Ed25519). An optional local model through Ollama (phi4-mini 3.8B). All of them are credited under [Credits and licences](#credits-and-licences). |
+| **Offline** | After install nothing uses the network (the optional model is one download). The review desk answers on 127.0.0.1 only. |
+| **Tests** | 1,534 automated tests: `python -m pytest`, about fourteen minutes. |
+| **Measured on** | Synthetic documents only. On the 144 held-out cases of the test split, in the second run: 83 of 96 planted changes found (86 %) and 2 flags on 144 genuine documents. That run is not a blind test; see [Evaluation](#evaluation). |
+| **Capabilities** | 35 in the [matrix](#capability-matrix): 8 Implemented, 22 Partial, 2 Planned, 3 Unsupported. |
+| **Licence** | AGPL-3.0. The use of an AI assistant and every library and model are disclosed under [AI assistance](#ai-assistance) and [Credits and licences](#credits-and-licences). |
+
+### Where to find things
+
+| Looking for | It is here |
+|---|---|
+| Architecture and design | [docs/architecture.md](docs/architecture.md), with a Mermaid diagram of the stages |
+| A sample dossier | [sample_data/dossier-dev-0000.html](sample_data/dossier-dev-0000.html) (open it in a browser after cloning; GitHub shows only its source) and [its JSON](sample_data/dossier-dev-0000.json) |
+| Demonstration documents | [sample_data/](sample_data/) keeps eleven small cases; [datagen/](datagen/) draws the rest, genuine cases and cases with one planted change ([Demonstration documents](#demonstration-documents)) |
+| Following a finding to its source | `trace` under [Use](#use), and the Findings tab of the review desk |
+| Held-out results | [Evaluation](#evaluation) and the reports in [eval/](eval/) |
+| What is built and what is not | [Capability matrix](#capability-matrix) |
+| Limitations, assumptions and likely false positives | [docs/limitations.md](docs/limitations.md) |
+
+## How it works
+
+A case goes through ingest and then nine stages, with the audit trail written under every one. A stage that fails becomes a visible limitation in the dossier, not a crash. The diagram of the stages and the design notes are in [docs/architecture.md](docs/architecture.md).
+
+![The pipeline: ingest, then read, classify, extract, forensics, checks, link, explain, crops and dossier, with an audit trail under every stage](docs/img/pipeline.svg)
+
+What comes out is a list of findings of four kinds. The review desk and the dossier keep them in separate places and name the kind in words as well as in colour.
+
+![The four kinds of finding: observation, inconsistency, potential manipulation (for review) and limitation of the analysis](docs/img/classes.svg)
+
+## What it looks like
+
+Screenshots of real runs on synthetic cases (fictional people and a fictional bank). The review desk is the page in the browser that `serve` starts on this computer.
+
+**Findings.** The findings listed by kind, beside the scanned statement with word, field and finding boxes drawn on it.
+
+![The Findings tab of the review desk: findings grouped by kind beside the scanned statement with word, field and finding boxes drawn on it](docs/img/desk-findings.png)
+
+**Relationships.** The names, addresses, employers and account numbers the documents write, and the findings that touch them. It is a map of what was read, not a conclusion.
+
+![The Relationships tab: three documents joined to the entities they write](docs/img/desk-relationships.png)
+
+**Audit trail.** The hash chain and the signed checkpoints, checked, with the events of the run.
+
+![The Audit trail tab: the hash chain intact, five signed checkpoints and the first events of the run](docs/img/desk-audit.png)
+
+**Dossier.** `dossier.html` is one self-contained file: dark on screen, light on paper.
+
+![The first sections of the investigation dossier: overview, documents and extracted information](docs/img/dossier.png)
+
+The diagrams are drawn by [docs/img/make_figures.py](docs/img/make_figures.py) (standard library only) from `capabilities.json` and the figures of the two held-out reports; the screenshots are of the real pages.
+
+## Quick start
+
+Python 3.11 or newer. It was developed and tested on Windows 11 with Python 3.11.9; no other system has been tried.
+
+```
+git clone https://github.com/BU1lDR/docforensics.git
+cd docforensics
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+pip install -e .
+python -m docforensics run sample_data/dev-0000
+python -m docforensics serve
+```
+
+`run` analyses a kept sample case, prints its three findings and writes `dossier.html` and `dossier.json` under `data/cases/<case id>/`. `serve` starts the review desk: open http://127.0.0.1:8000/ in a browser and upload the files of `sample_data/dev-0000/` on the Documents tab. Installing needs the internet once; after that nothing uses it. On a system other than Windows, activate with `source .venv/bin/activate`. [Set up](#set-up), [Use](#use) and [Try it on the sample data](#try-it-on-the-sample-data) give the details, including `trace` and `verify-audit`.
 
 ## What it does
 
@@ -134,6 +216,8 @@ The figures below come from `python -m evaluation.run_eval --split dev` and `--s
 | Time per page on the author's laptop (6 cores, CPU only) | 0.53 s digital, 4.39 s scanned | 0.41 s digital, 3.41 s scanned |
 | Peak memory | 866 MB | 875 MB |
 
+![Planted changes found by medium in the first and the second run, with the headline counts of the test split](docs/img/results.svg)
+
 The two runs are of different pipelines on the same cases with the same scorer; what that does and does not show is under "What the second run is, and is not" below. The second run was made on mains power. Timing depends on what else the machine is doing: the same splits run again after the two later fixes (the reports of those two runs are not kept) took 0.35 s and 2.33 s per page for the test split (peak 868 MB), and 2.37 s per scanned page for the development split, which took 4.16 s in its first committed report; the development report made again at d928be0 gives 0.43 s per digital page and 3.52 s per scanned page, and its repeat on `freeze-2` 0.40 s and 3.39 s (peak 817 MB). The cause of the differences was not established.
 
 | Change | What | Found (of 8), first run | Found, second run | Located, first run | Located, second run |
@@ -207,6 +291,9 @@ Since the tag, only documentation, the text of the capability matrix, the sample
 
 The relationship view, the signed checkpoints and the reviewer-decision counts add no finding of their own and have no accuracy figure.
 
+<details>
+<summary>The newer checks in detail: raw file structure, the learned word check, the declared existing EMI, and two probes on documents printed by other programs (long; each paragraph states its limits)</summary>
+
 **Raw file structure.** Besides what a page shows, the tool reads the stored bytes of every PDF, JPEG and PNG and reports facts about the file itself (`src/docforensics/forensics/structure.py`), each as an observation with a byte offset or object number and at most 32 bytes shown as hex and ASCII: bytes after the last end-of-file marker of a PDF or after the end of a picture (also for the JPEG pictures inside a PDF); an /Info record that differs from the XMP packet; a signature byte range that stops short of the end of the file or runs past it; embedded files and the names of action keys (/JavaScript, /JS, /OpenAction, /AA, /Launch), never opened or run; a file whose index had to be rebuilt to be read; an image-editor name in picture metadata and an EXIF save time later than the time taken. It is not a malware scanner and does not check any signature's cryptography (a signed PDF carries a limitation saying so), and ordinary files carry the same facts. It was measured on 120 files that the same author built for the purpose with `datagen/structure_pack.py` (60 untouched, 60 with one planted change): no observation on the untouched ones, all 80 expected observations on the others, none unexpected ([report](eval/structure/ext-dev.md)). Those figures are by construction: they show what the check does with the changes it was written for, are not a detection rate, and say nothing about files made by other programs. A second pack of 120 files from the same generator (ext-test), run once on the frozen code, gave the same counts ([report](eval/structure/ext-test.md)); it is no more independent than the first.
 
 **Learned word check.** One scan check is fitted to data instead of written by hand (`src/docforensics/forensics/learned_patches.py`; the weights are `learned_patches.json`, made by `evaluation/train_patches.py` with numpy only, no new dependency). For each word of a scanned page it takes fourteen measures against the rest of the page (grain, edges, strokes, ink, JPEG block grid, baseline, placement, and how far the word sits off the line of its neighbours) and weighs them with a logistic regression fitted to synthetic edits from the project's own generator (295 development cases, 46,290 words, 319 inside an edit; the test splits were not used). Words whose score reaches a limit fixed on development data are listed in one observation per page, each with its box, its score and the three measures that raised it most; the score is not a probability. The bar it had to meet was written into the training script before the first model was fitted, and it went in because it met it on pages held out from fitting: 16 of 36 pages with a part of another scan pasted in against 3 for the grain and placement checks, and 59 of 72 pages of the compression-history pack against 19, with none of 195 unedited pages flagged ([report](eval/patches/acceptance.md), [design record](eval/patches/design.md)). Its weak points are in the same report: retyped amounts are found 12 of 18 times where the grain and placement checks find 18 of 18, most of the gain on pasted-in parts rests on two hand-written alignment measures, and the figures are by construction, since the generator, the edits and the check have one author. They show that these edits are found, not that edits made by anyone else would be. On the test split, which was not used to fit it, it is named among the finders of 2 of the 4 pasted scans and 3 of the 6 retyped scans found in the second run, and it raised one of the two flags on genuine documents (page 1 of test-0143, a 120 dpi scan; [report](eval/freeze-2/test.md)). A page that carries no scanner grain, such as one printed or rendered to an image, is not given to it (nor to the grain and placement checks); the document gets one limitation that says so.
@@ -217,9 +304,13 @@ The relationship view, the signed checkpoints and the reviewer-decision counts a
 
 **A second probe: other page designs, no edits.** 24 further synthetic cases of the same three documents were written by three programs (headless Edge, Word and PyMuPDF Story) in seven statement, five payslip and four application designs, and also rendered as pictures at 150 and 200 dpi ([docs/probe.md](docs/probe.md), second probe). Nothing in them was edited. The probe asks whether genuine documents in designs the readers were not written for are read, and whether the tool raises findings on them that it should not. It found the tables of 4 of the 7 statement designs and of all 5 payslip designs read in part or not at all; the dossier names the values it could not read and says that the statement or payslip cannot be fully verified, and no inconsistency came from those gaps. The first look raised 9 false inconsistency findings on the digital pass (an account number read from a neighbouring label, a year read as the opening balance, a tenure read as the employer) and further ones on the pictures; they were fixed with these documents in view, so the figures after the fixes are not independent. On the build in this repository every inconsistency finding on the 24 cases is a difference the pack plants on purpose (a middle initial left out or an address written in another form: 5 in each of the three passes), and there is no potential-manipulation finding. The pack also plants differences that the tool reports as observations (a legal form written another way, a name in another order), so its genuine cases are not scored "no flag" the way the development report scores its own. Some values are wrong at a high confidence and are compared by no check: narrations read in part, the bank name read as another line of page 1, deduction names with an amount in front, an account number with a colon in front, and a design colour that the font check reports (8 observations on 4 genuine payslips of one design); they are in limitations 65 to 68. This is development data from one author on synthetic documents, and a clone cannot repeat the run: the pack and the tooling that ran it are not in the repository.
 
+</details>
+
 ## Capability matrix
 
 Each capability is marked Implemented, Partial, Planned or Unsupported. A status changes only when the evidence for it does, and Evidence counts the automated tests that back the row and, for six rows (template-free extraction, compression history, a signature that is the same image on two documents, raw file structure, the learned word check and the declared existing EMI), the evaluation reports under `eval/` as well. The table is written from [capabilities.json](src/docforensics/capabilities.json), the file the dossier and the review desk print. After that file changes, rebuild this table with `python -m docforensics.capabilities --update` from the repository folder.
+
+![The 35 capabilities, one mark each, grouped by status: 8 Implemented, 22 Partial, 2 Planned, 3 Unsupported](docs/img/capabilities.svg)
 
 <!-- capabilities:start -->
 | Capability | Status | Evidence | Note |
