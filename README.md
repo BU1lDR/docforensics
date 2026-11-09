@@ -2,7 +2,7 @@
 
 ![docforensics: documents of one case in, a dossier of cited findings out](docs/img/banner.svg)
 
-[Project details](#project-details) | [How it works](#how-it-works) | [What it looks like](#what-it-looks-like) | [Quick start](#quick-start) | [Evaluation](#evaluation) | [Capability matrix](#capability-matrix) | [Limitations](#limitations) | [Architecture](docs/architecture.md)
+[Project details](#project-details) | [How it works](#how-it-works) | [What it looks like](#what-it-looks-like) | [Quick start](#quick-start) | [Evaluation](#evaluation) | [Capability matrix](#capability-matrix) | [Limitations](#limitations) | [Architecture](docs/architecture.md) | [Slides](https://docs.google.com/presentation/d/1BnV-XsASkf4mXryGDx3ddxQuDPEas-jH/edit?usp=sharing) | [Demo video](https://drive.google.com/file/d/1S2M0Sch7mu3rM5Eug9RFxzw1RwQ4fmXf/view?usp=sharing)
 
 Offline document forensics for a human investigator. A case of scanned and digital documents goes in. An investigation dossier comes out. Each finding in it points to the stored source file it came from and, where the evidence is a place on a page, to the box on that page; a finding about a whole document points at the document, and a limitation about a file that could not be read has no evidence.
 
@@ -15,6 +15,8 @@ The tool lists anomalies for a reviewer. It does not decide whether a document i
 | | |
 |---|---|
 | **Problem statement** | PS-2, AI-powered document forensics and contextual intelligence. DataOps Innovation Hackathon 2026 (Hack The Core), solo entry by Aryan. |
+| **Slides** | [13 slides on Google Drive](https://docs.google.com/presentation/d/1BnV-XsASkf4mXryGDx3ddxQuDPEas-jH/edit?usp=sharing). |
+| **Demo video** | [3 min 21 s on Google Drive](https://drive.google.com/file/d/1S2M0Sch7mu3rM5Eug9RFxzw1RwQ4fmXf/view?usp=sharing): a real run of the tool on a synthetic case. How it was made is under [AI assistance](#ai-assistance). |
 | **What it is** | An offline tool that reads the documents of one case, checks each against itself and against the others, and writes an investigation dossier for a human reviewer. |
 | **Takes in** | PDF, PNG and JPEG files, digital or scanned. Bank statements, payslips and loan applications are understood; any other type is reported as `unknown`. |
 | **Gives out** | `dossier.html` and `dossier.json`, a review desk in the browser, and a hash-chained audit trail with signed checkpoints. |
@@ -391,6 +393,8 @@ Everything used here is synthetic: fictional people and institutions, no real cu
 ## AI assistance
 
 This project was built with an AI assistant, and most of the code, the tests and the documents in it, this README included, are its output. The assistant is Claude, from Anthropic, used through Claude Code. It drafted the design and the task plan, wrote the source, the tests, the document generator and the documentation, and ran the test suite and the measurements the repository quotes. For part of the build two or three Claude Code sessions worked side by side, each in its own git worktree on its own tasks and branches; one of them merged and published.
+
+The slides and the demo video were made with the same assistant. The footage is a real run of the tool on a synthetic case, captured by script. The narration is Aryan's own voice, cleaned and levelled by signal processing only, with no voice conversion and no synthetic speech. The music and sound effects were synthesised with NumPy, and no third-party audio is used. Camera moves, transitions and callouts are presentation devices over unaltered footage, and sped-up parts are labelled on screen.
 
 Aryan, the author, chose the problem statement, set the requirements and constraints (offline, synthetic data only, findings for a reviewer and no verdicts) and is responsible for what is submitted.
 
